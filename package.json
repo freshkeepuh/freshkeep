@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "next.js": "^1.0.3"
+  },
+  "devDependencies": {
+    "jest": "^30.1.1",
+    "playwright": "^1.55.0"
+  }
+}
