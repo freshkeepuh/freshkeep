@@ -76,13 +76,13 @@ export default function RootLayout({
 
         {/* Footer */}
         <footer style={footerStyle}>
-          <div style={{ textAlign: "left", display: "flex", flexDirection: "row", alignItems: "left" }}>
+          <div style={{ textAlign: "left", display: "flex", flexDirection: "row", alignItems: "flex-start" }}>
             <a href="https://github.com/freshkeepuh/freshkeep">Source Code</a>
           </div>
           <div style={{ textAlign: "center", display: "flex", flexDirection: "row", alignItems: "center" }}>
             <p>&copy; 2025 FreshKeep UH. All rights reserved.</p>
           </div>
-          <div style={{ textAlign: "right", display: "flex", flexDirection: "row", alignItems: "right" }}>
+          <div style={{ textAlign: "right", display: "flex", flexDirection: "row", alignItems: "flex-end" }}>
             <a href="https://freshkeepuh.github.io">About Us</a>
           </div>
         </footer>
