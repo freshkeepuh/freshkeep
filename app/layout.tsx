@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "FreshKeep",
-  description: "A modern web application for managing your pan.",
+  description: "A modern web application for managing your pantry.",
 };
 
 export default function RootLayout({
