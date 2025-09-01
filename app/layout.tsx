@@ -42,7 +42,7 @@ export default function RootLayout({
 
   // Define footer style
   const footerStyle: React.CSSProperties = {
-    background: "#000",
+    background: "#e5e5e5",
     padding: "1rem",
     textAlign: "center",
     borderTop: "1px solid #ddd",
@@ -55,23 +55,23 @@ export default function RootLayout({
         <header className="header row">
           <div className="row">
             <div className="col align-items-start">
-              <nav className="header-nav">
-                <a href="/"><Image className="invert"
-                  src="/home.svg"
+              <nav className="header-nav align-items-start">
+                <a id="home-link" href="/"><Image
+                  src="/icons/home.svg"
                   alt="Home"
-                  width={20}
-                  height={20}
+                  width={30}
+                  height={30}
                 /></a>
               </nav>
             </div>
             <div className="header-title col align-items-center"><h1>FreshKeep</h1></div>
             <div className="col align-items-end">
-              <nav className="header-nav">
-                <a href="/"><Image
-                  src="/profile.svg"
-                  alt="Profile"
-                  width={20}
-                  height={20}
+              <nav className="header-nav align-items-end">
+                <a id="login-link" href="/login"><Image
+                  src="/icons/login.svg"
+                  alt="Login"
+                  width={30}
+                  height={30}
                 /></a>
               </nav>
             </div>
