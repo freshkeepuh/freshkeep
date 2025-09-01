@@ -52,7 +52,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         {/* Header */}
         <header style={headerStyle}>
-          <nav style={{ display: "flex", flexDirection: "row", justifyContent: "left" }}>
+          <nav style={{ display: "flex", flexDirection: "row", justifyContent: "flex-start" }}>
             <a href="/"><Image
               src="/home.svg"
               alt="Home"
