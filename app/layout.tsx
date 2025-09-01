@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -51,24 +52,30 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         {/* Header */}
-        <header style={headerStyle}>
-          <nav style={{ display: "flex", flexDirection: "row", justifyContent: "flex-start" }}>
-            <a href="/"><Image
-              src="/home.svg"
-              alt="Home"
-              width={20}
-              height={20}
-            /></a>
-          </nav>
-          <div style={{ textAlign: "center", display: "flex", flexDirection: "row", alignItems: "center" }}><h1>FreshKeep</h1></div>
-          <nav style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end" }}>
-            <a href="/"><Image
-              src="/profile.svg"
-              alt="Profile"
-              width={20}
-              height={20}
-            /></a>
-          </nav>
+        <header className="header row">
+          <div className="row">
+            <div className="col align-items-start">
+              <nav className="header-nav">
+                <a href="/"><Image className="invert"
+                  src="/home.svg"
+                  alt="Home"
+                  width={20}
+                  height={20}
+                /></a>
+              </nav>
+            </div>
+            <div className="header-title col align-items-center"><h1>FreshKeep</h1></div>
+            <div className="col align-items-end">
+              <nav className="header-nav">
+                <a href="/"><Image
+                  src="/profile.svg"
+                  alt="Profile"
+                  width={20}
+                  height={20}
+                /></a>
+              </nav>
+            </div>
+          </div>
         </header>
 
         {/* Main Content */}
@@ -76,14 +83,16 @@ export default function RootLayout({
 
         {/* Footer */}
         <footer style={footerStyle}>
-          <div style={{ textAlign: "left", display: "flex", flexDirection: "row", alignItems: "flex-start" }}>
-            <a href="https://github.com/freshkeepuh/freshkeep">Source Code</a>
-          </div>
-          <div style={{ textAlign: "center", display: "flex", flexDirection: "row", alignItems: "center" }}>
-            <p>&copy; 2025 FreshKeep UH. All rights reserved.</p>
-          </div>
-          <div style={{ textAlign: "right", display: "flex", flexDirection: "row", alignItems: "flex-end" }}>
-            <a href="https://freshkeepuh.github.io">About Us</a>
+          <div className="row">
+            <div className="col align-items-start">
+              <a href="https://github.com/freshkeepuh/freshkeep">Source Code</a>
+            </div>
+            <div className="col align-items-center">
+              <p>&copy; 2025 FreshKeep UH. All rights reserved.</p>
+            </div>
+            <div className="col align-items-end">
+              <a href="https://freshkeepuh.github.io">About Us</a>
+            </div>
           </div>
         </footer>
       </body>
