@@ -61,7 +61,7 @@ export default function RootLayout({
             /></a>
           </nav>
           <div style={{ textAlign: "center", display: "flex", flexDirection: "row", alignItems: "center" }}><h1>FreshKeep</h1></div>
-          <nav style={{ display: "flex", flexDirection: "row", justifyContent: "right" }}>
+          <nav style={{ display: "flex", flexDirection: "row", justifyContent: "flex-end" }}>
             <a href="/"><Image
               src="/profile.svg"
               alt="Profile"
