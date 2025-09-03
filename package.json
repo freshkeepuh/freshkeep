@@ -6,7 +6,6 @@
     "dev": "next dev",
     "dev-https": "next dev --experimental-https",
     "build": "prisma generate && next build",
-    "prestart": "npm run build",
     "start": "next start",
     "lint": "next lint",
     "playwright-development": "npx playwright test"
