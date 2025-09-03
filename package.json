@@ -3,9 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "predev": "npm run build",
     "dev": "next dev",
-    "predev-https": "npm run build",
     "dev-https": "next dev --experimental-https",
     "build": "prisma generate && next build",
     "prestart": "npm run build",
