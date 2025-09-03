@@ -1,0 +1,50 @@
+{
+  "name": "nextjs-application-template-1",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "dev-https": "next dev --experimental-https",
+    "build": "prisma generate && next build",
+    "start": "next start",
+    "lint": "next lint",
+    "playwright-development": "npx playwright test"
+  },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^3.6.0",
+    "@ngneat/falso": "^7.2.0",
+    "@prisma/client": "^5.16.1",
+    "bcrypt": "^5.1.1",
+    "bootstrap": "^5.3.3",
+    "multiselect-react-dropdown": "^2.0.25",
+    "next": "^14.2.24",
+    "next-auth": "^4.24.7",
+    "react": "^18",
+    "react-bootstrap": "^2.10.4",
+    "react-bootstrap-icons": "^1.11.4",
+    "react-dom": "^18",
+    "react-hook-form": "^7.52.0",
+    "sweetalert": "^2.1.2",
+    "ts-node": "10.9.2",
+    "yup": "^1.4.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.48.2",
+    "@types/bcrypt": "^5.0.2",
+    "@types/node": "^22.5.4",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-typescript": "^18.0.0",
+    "eslint-config-next": "14.2.10",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.3.1",
+    "prettier-eslint": "^16.3.0",
+    "prisma": "^5.19.1",
+    "typescript": "^5.4.5"
+  }
+}
