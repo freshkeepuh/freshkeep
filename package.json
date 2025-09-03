@@ -1,5 +1,5 @@
 {
-  "name": "nextjs-application-template-1",
+  "name": "freshkeep",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -16,7 +16,7 @@
   "dependencies": {
     "@hookform/resolvers": "^3.6.0",
     "@ngneat/falso": "^7.2.0",
-    "@prisma/client": "^5.16.1",
+    "@prisma/client": "^6.15.0",
     "bcrypt": "^5.1.1",
     "bootstrap": "^5.3.3",
     "multiselect-react-dropdown": "^2.0.25",
@@ -44,7 +44,7 @@
     "eslint-config-prettier": "^9.1.0",
     "prettier": "^3.3.1",
     "prettier-eslint": "^16.3.0",
-    "prisma": "^5.19.1",
+    "prisma": "^6.15.0",
     "typescript": "^5.4.5"
   }
 }
