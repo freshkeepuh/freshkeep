@@ -14,11 +14,12 @@ Are the files named according to our conventions?
 Are files located in the appropriate directory?
 
 ```
-app/
-    imports/
-            api/
-            startup/
-            ui/
+src/
+    app/
+        api/
+    components/
+    lib/
+test/
 ```
 
 ### AR-03: Are new directories consistent with existing directories?
