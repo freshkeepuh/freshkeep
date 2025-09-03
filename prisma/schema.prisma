@@ -10,43 +10,36 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  // for local development
   url      = env("DATABASE_URL")
+  // for Vercel
+  // url       = env("POSTGRES_PRISMA_URL")
+  // directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
-model EnrollmentData {
-  id       Int      @id @default(autoincrement())
-  email    String   @unique
-  enrolled DateTime
+enum Role {
+  USER
+  ADMIN
 }
 
-enum Hobby {
-  Surfing
-  Running
-  Biking
-  Paddling
+model User {
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  password String
+  role     Role   @default(USER)
 }
 
-enum Level {
-  Freshman
-  Sophomore
-  Junior
-  Senior
+enum Condition {
+  excellent
+  good
+  fair
+  poor
 }
 
-enum Major {
-  Physics
-  Math
-  Chemistry
-  ComputerScience
-}
-
-model StudentData {
-  id      Int     @id @default(autoincrement())
-  name    String
-  email   String  @unique
-  bio     String?
-  hobbies Hobby[]
-  level   Level
-  gpa     Int
-  major   Major
+model Stuff {
+  id        Int       @id @default(autoincrement())
+  name      String
+  quantity  Int
+  condition Condition @default(good)
+  owner     String
 }

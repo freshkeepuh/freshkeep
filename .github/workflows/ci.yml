@@ -1,4 +1,4 @@
-name: ci-nextjs-example-form
+name: ci-nextjs-application-template
 on:
   push:
     branches: [main, master]
