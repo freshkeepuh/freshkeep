@@ -1,0 +1,154 @@
+// TODO translate to tsx. Add js to bring buttons to life.
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>User Settings</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <!-- Page CSS -->
+  <link rel="stylesheet" href="userSettings.css" />
+</head>
+
+<body class="fk-bg" id="body">
+  <!-- Body -->
+  <main class="container py-4 py-md-5">
+    <!-- Title  -->
+    <section class="mb-4 mb-md-5 fade-in">
+      <h2 class="fw-bold fs-3 text-dark mb-1">User Settings</h2>
+      <p class="text-muted m-0">Manage your account preferences and settings</p>
+    </section>
+
+    <div class="row g-4">
+      <!-- === Profile Settings Slot === -->
+      <div class="col-lg-6">
+        <section class="card border-0 shadow-sm fade-in h-100">
+          <div class="card-body">
+            <div class="d-flex align-items-center gap-3 mb-4">
+              <div class="icon-chip">
+                <svg width="24" height="24" class="text-primary" fill="none" stroke="currentColor" >
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                </svg>
+              </div>
+              <h3 class="h5 m-0 text-dark">User Information</h3>
+            </div>
+
+            <form id="profileForm" class="vstack gap-3" novalidate>
+              <div>
+                <label for="userName" class="form-label">Full Name</label>
+                <input type="text" id="userName" class="form-control" placeholder="Enter your full name" value="" />
+              </div>
+
+              <div>
+                <label for="userEmail" class="form-label">Email Address</label>
+                <input type="email" id="userEmail" class="form-control" value="" placeholder="Enter your email here" readonly />
+                <div class="form-text">Email cannot be changed</div>
+              </div>
+
+              <button type="submit" class="btn btn-primary w-100" >Update Profile</button>
+            </form>
+          </div>
+        </section>
+      </div>
+
+      <!-- Security Settings Slot -->
+      <div class="col-lg-6">
+        <section class="card border-0 shadow-sm fade-in h-100">
+          <div class="card-body">
+            <div class="d-flex align-items-center gap-3 mb-4">
+              <div class="icon-chip">
+                <svg width="24" height="24" class="text-danger" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                </svg>
+              </div>
+              <h3 class="h5 m-0 text-dark">Security</h3>
+            </div>
+            <form id="passwordForm" class="vstack gap-3" novalidate>
+              <div>
+                <label for="currentPassword" class="form-label">Current Password</label>
+                <input type="password" id="currentPassword" class="form-control" placeholder="Enter current password" />
+              </div>
+              <div>
+                <label for="newPassword" class="form-label">New Password</label>
+                <input type="password" id="newPassword" class="form-control" placeholder="Enter new password" />
+              </div>
+              <div>
+                <label for="confirmPassword" class="form-label">Confirm New Password</label>
+                <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm new password" />
+              </div>
+              <button type="submit" class="btn btn-danger w-100">Change Password</button>
+            </form>
+          </div>
+        </section>
+      </div>
+
+      <!-- Theme Settings -->
+      <div class="col-lg-6">
+        <section class="card border-0 shadow-sm fade-in h-100">
+          <div class="card-body">
+            <div class="d-flex align-items-center gap-3 mb-4">
+              <div class="icon-chip">
+                <svg width="24" height="24" class="text-primary-emphasis" fill="none" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z"></path>
+                </svg>
+              </div>
+              <h3 class="h5 m-0 text-dark">Appearance</h3>
+            </div>
+
+            <div class="vstack gap-2">
+              <label class="form-label mb-1">Theme Preference</label>
+
+              <div class="row g-2">
+                <div class="col-6">
+                  <button type="button" id="lightTheme"
+                          class="w-100 btn btn-outline-success d-flex align-items-center justify-content-start gap-3">
+                    <span class="swatch swatch-light rounded-3 border"></span>
+                    <span>Light</span>
+                  </button>
+                </div>
+                <div class="col-6">
+                  <button type="button" id="darkTheme"
+                          class="w-100 btn btn-outline-secondary d-flex align-items-center justify-content-start gap-3">
+                    <span class="swatch swatch-dark rounded-3"></span>
+                    <span>Dark</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Account Actions -->
+      <div class="col-lg-6">
+        <section class="card border-0 shadow-sm fade-in h-100">
+          <div class="card-body">
+            <div class="d-flex align-items-center gap-3 mb-4">
+              <div class="icon-chip">
+                <svg width="24" height="24" class="text-warning" fill="none" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+              </div>
+              <h3 class="h5 m-0 text-dark">Account Actions</h3>
+            </div>
+
+              <button type="button" class="btn btn-outline-danger w-100 d-flex align-items-center justify-content-center gap-2"
+                      onclick="signOut()">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                </svg>
+                <span>Sign Out</span>
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
