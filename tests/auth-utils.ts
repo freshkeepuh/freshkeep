@@ -24,7 +24,7 @@ async function authenticateWithUI(
   page: Page,
   email: string,
   password: string,
-  sessionName: string
+  sessionName: string,
 ): Promise<void> {
   const sessionPath = path.join(SESSION_STORAGE_PATH, `${sessionName}.json`);
 
@@ -115,7 +115,7 @@ async function authenticateWithUI(
  */
 async function fillFormWithRetry(
   page: Page,
-  fields: Array<{ selector: string; value: string }>
+  fields: Array<{ selector: string; value: string }>,
 ): Promise<void> {
   for (const field of fields) {
     let attempts = 0;
