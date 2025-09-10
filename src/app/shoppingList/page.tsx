@@ -18,7 +18,7 @@ const ShoppingListPage = () => {
       store: 'Foodland',
       storageType: 'Counter',
       productType: 'Fruit',
-      inList: false,
+      inList: true,
     },
     {
       id: 'product-2',
@@ -37,7 +37,7 @@ const ShoppingListPage = () => {
       store: 'Target',
       storageType: 'Pantry',
       productType: 'Bakery',
-      inList: false,
+      inList: true,
     },
     {
       id: 'product-4',
@@ -56,7 +56,7 @@ const ShoppingListPage = () => {
       store: 'Walmart',
       storageType: 'Spice Rack',
       productType: 'Spices',
-      inList: false,
+      inList: true,
     },
     {
       id: 'product-6',
@@ -66,7 +66,7 @@ const ShoppingListPage = () => {
       store: 'Foodland',
       storageType: 'Refrigerator',
       productType: 'Meat',
-      inList: false,
+      inList: true,
     },
     {
       id: 'product-7',
@@ -85,7 +85,7 @@ const ShoppingListPage = () => {
       store: 'Walmart',
       storageType: 'Pantry',
       productType: 'Snacks',
-      inList: false,
+      inList: true,
     },
   ];
 
