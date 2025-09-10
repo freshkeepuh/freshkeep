@@ -21,11 +21,5 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Set up Prisma
-        run: npx prisma generate
-
-      - name: Build the application
-        run: npx next build
-
       - name: Run lint
         run: npx next lint
