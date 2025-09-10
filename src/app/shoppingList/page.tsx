@@ -98,7 +98,7 @@ const ShoppingListPage = () => {
           height: '75px',
           margin: '0 auto',
         }}
-        className="d-flex justify-content-center bg-success p-1 rounded-4 mb-4 "
+        className="d-flex justify-content-center bg-success p-1 rounded mb-4 "
       >
         <Row className=" align-items-center justify-content-center py-3" style={{ height: '50px' }}>
           <Col xs="auto" className="px-1">
@@ -108,7 +108,9 @@ const ShoppingListPage = () => {
             <Button variant="light">Filters</Button>
           </Col>
           <Col xs="auto" className="ps-1">
-            <Button variant="light">Add To List</Button>
+            <Button variant="light" href="/store">
+              Add To List
+            </Button>
           </Col>
         </Row>
       </div>
