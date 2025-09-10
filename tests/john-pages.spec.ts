@@ -14,5 +14,4 @@ test('can authenticate a specific user', async ({ getUserPage }) => {
   await expect(customUserPage.getByRole('heading', { name: 'Add Stuff' })).toBeVisible();
   await customUserPage.getByRole('link', { name: 'List Stuff' }).click();
   await expect(customUserPage.getByRole('heading', { name: 'Stuff' })).toBeVisible();
-
 });
