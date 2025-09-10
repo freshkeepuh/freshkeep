@@ -56,6 +56,9 @@ jobs:
       - name: Build the application
         run: npx next build
 
+      - name: Run lint
+        run: npx next lint
+
       - name: Install Playwright
         run: npx playwright install --with-deps
 
