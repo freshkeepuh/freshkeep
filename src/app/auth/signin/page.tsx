@@ -1,9 +1,8 @@
 'use client';
 
 import { signIn } from 'next-auth/react';
-import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
+import { Button, Card, Col, Container, Form, Row, Image } from 'react-bootstrap';
 
-/** The sign in page. */
 const SignIn = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -13,6 +12,7 @@ const SignIn = () => {
     };
     const email = target.email.value;
     const password = target.password.value;
+
     const result = await signIn('credentials', {
       callbackUrl: '/list',
       email,
@@ -27,28 +27,58 @@ const SignIn = () => {
   return (
     <main>
       <Container>
-        <Row className="justify-content-center">
-          <Col xs={5}>
-            <h1 className="text-center">Sign In</h1>
+        <Row className="justify-content-center mt-5">
+          <Col xs={12} md={6} lg={5}>
+            {/* Logo + Title */}
+            <div className="d-flex align-items-center justify-content-center mb-3">
+              <Image
+                src="/multicolor-leaf2.png" // <-- Place your logo in public/images/
+                alt="Fresh Keep Logo"
+                width={40}
+                height={40}
+                className="me-2"
+              />
+              <h1 className="text-center m-0">Fresh Keep</h1>
+            </div>
+
+            <h2 className="text-left mb-3 fw-bold">Sign In</h2>
+
             <Card>
               <Card.Body>
                 <Form method="post" onSubmit={handleSubmit}>
-                  <Form.Group controlId="formBasicEmail">
+                  <Form.Group controlId="formBasicEmail" className="mb-3">
                     <Form.Label>Email</Form.Label>
-                    <input name="email" type="text" className="form-control" />
+                    <Form.Control
+                      name="email"
+                      type="text"
+                      placeholder="Username or Email"
+                      required
+                    />
                   </Form.Group>
-                  <Form.Group>
+
+                  <Form.Group controlId="formBasicPassword" className="mb-3">
                     <Form.Label>Password</Form.Label>
-                    <input name="password" type="password" className="form-control" />
+                    <Form.Control
+                      name="password"
+                      type="password"
+                      placeholder="Password"
+                      required
+                    />
                   </Form.Group>
-                  <Button type="submit" className="mt-3">
-                    Signin
-                  </Button>
+
+                  <div className="d-grid">
+                    <Button type="submit" variant="success">
+                      Sign In
+                    </Button>
+                  </div>
                 </Form>
               </Card.Body>
-              <Card.Footer>
-                Don&apos;t have an account?
-                <a href="/auth/signup">Sign up</a>
+              <Card.Footer className="text-center">
+                New around here?
+                {' '}
+                <a href="/auth/signup" className="fw-bold text-success">
+                  Sign up
+                </a>
               </Card.Footer>
             </Card>
           </Col>
