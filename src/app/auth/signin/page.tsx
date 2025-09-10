@@ -6,13 +6,15 @@ import { Button, Card, Col, Container, Form, Row, Image } from 'react-bootstrap'
 const SignIn = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     const target = e.target as typeof e.target & {
       email: { value: string };
       password: { value: string };
+      rememberMe?: { checked: boolean };
     };
+
     const email = target.email.value;
     const password = target.password.value;
-
     const result = await signIn('credentials', {
       callbackUrl: '/list',
       email,
@@ -32,7 +34,7 @@ const SignIn = () => {
             {/* Logo + Title */}
             <div className="d-flex align-items-center justify-content-center mb-3">
               <Image
-                src="/multicolor-leaf2.png" // <-- Place your logo in public/images/
+                src="/multicolor-leaf2.png"
                 alt="Fresh Keep Logo"
                 width={40}
                 height={40}
@@ -66,6 +68,19 @@ const SignIn = () => {
                     />
                   </Form.Group>
 
+                  {/* Remember me + Forgot password */}
+                  <div className="d-flex justify-content-between align-items-center mb-3">
+                    <Form.Check
+                      type="checkbox"
+                      id="rememberMe"
+                      name="rememberMe"
+                      label="Remember me"
+                    />
+                    <a href="/forgot-password" className="fw-semibold text-success text-decoration-none">
+                      Forgot Password?
+                    </a>
+                  </div>
+
                   <div className="d-grid">
                     <Button type="submit" variant="success">
                       Sign In
@@ -73,6 +88,7 @@ const SignIn = () => {
                   </div>
                 </Form>
               </Card.Body>
+
               <Card.Footer className="text-center">
                 New around here?
                 {' '}
