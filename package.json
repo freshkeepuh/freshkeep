@@ -19,6 +19,7 @@
     "@prisma/client": "^6.15.0",
     "bcrypt": "^5.1.1",
     "bootstrap": "^5.3.3",
+    "bootstrap-icons": "^1.13.1",
     "multiselect-react-dropdown": "^2.0.25",
     "next": "^14.2.24",
     "next-auth": "^4.24.7",
