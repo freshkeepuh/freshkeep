@@ -37,7 +37,7 @@
     "@types/node": "^22.5.4",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "eslint": "^8",
+    "eslint": "^8.57.1",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^18.0.0",
     "eslint-config-next": "14.2.10",
@@ -46,5 +46,22 @@
     "prettier-eslint": "^16.3.0",
     "prisma": "^6.15.0",
     "typescript": "^5.4.5"
-  }
+  },
+  "description": "[![ci-nextjs-application-template](https://github.com/ics-software-engineering/nextjs-application-template/actions/workflows/ci.yml/badge.svg)](https://github.com/ics-software-engineering/nextjs-application-template/actions/workflows/ci.yml)",
+  "main": "index.js",
+  "directories": {
+    "doc": "doc",
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/freshkeepuh/freshkeep.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/freshkeepuh/freshkeep/issues"
+  },
+  "homepage": "https://github.com/freshkeepuh/freshkeep#readme"
 }

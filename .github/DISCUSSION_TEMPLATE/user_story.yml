@@ -1,0 +1,25 @@
+title: "[User Story] "
+labels: ["User Story"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## User Story
+        Please fill out this template to help us understand your needs.
+        This will help us prioritize our work and make sure we're building the right features.
+  - type: input
+    id: user-story
+    attributes:
+      label: User Story
+      description: "As a <type of user>, I want <some goal> so that <some reason>."
+      placeholder: "As a ____, I want ____ so that ____."
+    validations:
+      required: true
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: "Is there any other context or information that would be helpful to know?"
+      placeholder: "Add any other context or screenshots about the feature request here."
+    validations:
+      required: true
