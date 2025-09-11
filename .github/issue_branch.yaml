@@ -1,5 +1,5 @@
 mode: auto
-branchName: 'short'
+branchName: 'issue-${issue.number}'
 autoLinkIssue: true
 autoCloseIssue: true
 autoDeleteBranch: true
