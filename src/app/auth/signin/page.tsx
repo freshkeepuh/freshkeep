@@ -27,25 +27,31 @@ const SignIn = () => {
   };
 
   return (
-  <main
-    style={{
-    backgroundImage: "url('/images/sign-in/Sign-in-bg-photo.png')",
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    minHeight: '100vh',
-    display: 'flex',
-  }}>
-    <Container>
-      <Row className="justify-content-center mt-5 gap-5">
-        {/* #region Image Section */}
-        <Col xs={12} md={7} lg={5} className="d-flex flex-column justify-content-center align-items-center text-white p-5">
-          <h1 className="fw-bold">Welcome back!</h1>
-          <h2 className="fs-5">Sign in and see what's in your fridge.</h2>
-        </Col>
-        {/* #endregion Image Section */}
-        
+    <main
+      style={{
+        backgroundImage: "url('/images/sign-in/Sign-in-bg-photo.png')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        minHeight: '100vh',
+        display: 'flex',
+      }}
+    >
+      <Container>
+        <Row className="justify-content-center mt-5 gap-5">
+          {/* #region Image Section */}
+          <Col
+            xs={12}
+            md={7}
+            lg={5}
+            className="d-flex flex-column justify-content-center align-items-center text-white p-5"
+          >
+            <h1 className="fw-bold">Welcome back!</h1>
+            <h2 className="fs-5">Sign in and see what&apos;s in your fridge.</h2>
+          </Col>
+          {/* #endregion Image Section */}
+
           {/* #region Sign In Form  */}
-          <Col xs={12} md={6} lg={5} className="bg-white p-5 rounded shadow mt-5 ms-md-5 pl-5 pt-5">
+          <Col xs={12} md={6} lg={5} className="bg-white p-5 rounded shadow mt-5 ms-md-5">
             {/* Logo + Title */}
             <div className="d-flex align-items-center justify-content-center mb-3">
               <Image
@@ -63,7 +69,6 @@ const SignIn = () => {
               <Card.Body>
                 <Form method="post" onSubmit={handleSubmit}>
                   <Form.Group controlId="formBasicEmail" className="mb-3">
-                    {/* <Form.Label>Email</Form.Label> */}
                     <Form.Control
                       name="email"
                       type="text"
@@ -73,7 +78,6 @@ const SignIn = () => {
                   </Form.Group>
 
                   <Form.Group controlId="formBasicPassword" className="mb-3">
-                    {/* <Form.Label>Password</Form.Label> */}
                     <Form.Control
                       name="password"
                       type="password"
