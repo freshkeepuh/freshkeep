@@ -43,7 +43,7 @@ model Units {
   name         String        @unique
   abbr         String        @unique
   base         Units?        @relation("UnitsToUnits", fields: [baseId], references: [id])
-  baseId       String
+  baseId       String?
   factor       Float         @default(1.0)
   children     Units[]       @relation("UnitsToUnits")
   country      Country       @default(USA)
