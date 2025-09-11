@@ -1,8 +1,5 @@
-mode: auto
+mode: immediate
 branchName: 'issue-${issue.number}'
 autoLinkIssue: true
 autoCloseIssue: true
 autoDeleteBranch: true
-branches:
-  - label: question
-    skip: true
