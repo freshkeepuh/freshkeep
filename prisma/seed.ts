@@ -5,15 +5,13 @@ import { seed } from '@ngneat/falso';
 
 const prisma = new PrismaClient();
 
-const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
 async function main() {
   console.log('Seeding the database');
   const seedUsers = await prisma.user.findMany();
   // Hash the default password for all users
   const password = await hash('changeme', 10);
   // Wait for all user creations to complete
-  await config.defaultAccounts.forEach(async (account) => {
+  for (const account of config.defaultAccounts) {
     const role = (account.role as Role) || Role.USER;
     const user = await prisma.user.upsert({
       where: { email: account.email },
@@ -26,9 +24,9 @@ async function main() {
     });
     seedUsers.push(user);
     console.log(`  Created user: ${user.email} with role: ${user.role}`);
-  });
+  };
   const seedUnits = await prisma.units.findMany();
-  await config.defaultUnits.filter(unit => unit.name == unit.baseName).forEach(async (unit) => {
+  for (const unit of config.defaultUnits.filter(unit => unit.name == unit.baseName)) {
     const createdUnit = await prisma.units.upsert({
       where: { name: unit.name },
       update: {},
@@ -46,9 +44,8 @@ async function main() {
     });
     seedUnits.push(createdUnit);
     console.log(`  Created unit: ${createdUnit.name}`);
-  });
-  await sleep(1000); // Wait for base units to be created
-  await config.defaultUnits.filter(unit => unit.name != unit.baseName).forEach(async (unit) => {
+  };
+  for (const unit of config.defaultUnits.filter(unit => unit.name != unit.baseName)) {
     const parentUnit = unit.baseName ? seedUnits.find((u) => u.name === unit.baseName) : null;
     const createdUnit = await prisma.units.upsert({
       where: { name: unit.name },
@@ -62,10 +59,9 @@ async function main() {
     });
     seedUnits.push(createdUnit);
     console.log(`  Created unit: ${createdUnit.name}; base unit: ${unit.baseName}`);
-  });
-  await sleep(1000); // Wait for all units to be created
+  };
   const seedGroceryItems = await prisma.groceryItem.findMany();
-  await config.defaultGroceryItems.forEach(async (groceryItem) => {
+  for (const groceryItem of config.defaultGroceryItems) {
     const unit = seedUnits.find((u) => u.name === groceryItem.unitsName);
     const category = (groceryItem.category as GroceryCategory) || GroceryCategory.Other;
     const createdGroceryItem = await prisma.groceryItem.upsert({
@@ -82,10 +78,9 @@ async function main() {
     });
     seedGroceryItems.push(createdGroceryItem);
     console.log(`  Created grocery item: ${createdGroceryItem.name}`);
-  });
-  await sleep(1000); // Wait for all grocery items to be created
+  };
   const seedLocations = await prisma.location.findMany();
-  await config.defaultLocations.forEach(async (location) => {
+  for (const location of config.defaultLocations) {
     const country = (location.country as Country) || Country.USA;
     const createdLocation = await prisma.location.upsert({
       where: { name: location.name },
@@ -103,10 +98,9 @@ async function main() {
     });
     seedLocations.push(createdLocation);
     console.log(`  Created location: ${createdLocation.name}`);
-  });
-  await sleep(1000); // Wait for all locations to be created
+  };
   const seedContainers = await prisma.container.findMany();
-  await config.defaultContainers.forEach(async (container) => {
+  for (const container of config.defaultContainers) {
     const locationId = seedLocations.find((loc) => loc.name === container.locationName)?.id || seedLocations[0].id;
     const containerType = (container.type as ContainerType) || ContainerType.Pantry;
     const createdContainer = await prisma.container.upsert({
@@ -121,10 +115,9 @@ async function main() {
     });
     seedContainers.push(createdContainer);
     console.log(`  Created container: ${createdContainer.name}`);
-  });
-  await sleep(1000); // Wait for all containers to be created
+  };
   const seedItems = await prisma.item.findMany();
-  await config.defaultItems.forEach(async (item) => {
+  for (const item of config.defaultItems) {
     const locationId = seedLocations.find((loc) => loc.name === item.locationName)?.id || seedLocations[0].id;
     const containerId = seedContainers.find((con) => con.name === item.containerName)?.id || seedContainers[0].id;
     const groceryItemId = seedGroceryItems.find((groc) => groc.name === item.groceryItemName)?.id || seedGroceryItems[0].id;
@@ -144,8 +137,7 @@ async function main() {
     });
     seedItems.push(createdItem);
     console.log(`  Created item: ${item.locationName}/${item.containerName}/${item.groceryItemName}`);
-  });
-  await sleep(5000); // Wait for all seeds to be created
+  };
   console.log('Seeding completed');
 }
 main()
