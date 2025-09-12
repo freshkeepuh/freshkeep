@@ -18,28 +18,128 @@ datasource db {
 }
 
 enum Role {
-  USER
-  ADMIN
+  USER // Can use all features, except managing users
+  ADMIN // Can use all features, including managing users
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
-  password String
-  role     Role   @default(USER)
+  id        String   @id @default(uuid()) @map("_id")
+  email     String   @unique
+  password  String
+  role      Role     @default(USER)
+  settings  Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-enum Condition {
-  excellent
-  good
-  fair
-  poor
+// TODO: Create Icons in pulbic/icons/{country}.svg, flags?
+enum Country {
+  USA
+  CAN
 }
 
-model Stuff {
-  id        Int       @id @default(autoincrement())
-  name      String
-  quantity  Int
-  condition Condition @default(good)
-  owner     String
+model Units {
+  id           String        @id @default(uuid()) @map("_id")
+  name         String        @unique
+  abbr         String        @unique
+  base         Units?        @relation("UnitsToUnits", fields: [baseId], references: [id])
+  baseId       String?
+  factor       Float         @default(1.0)
+  children     Units[]       @relation("UnitsToUnits")
+  groceryItems GroceryItem[]
+  items        Item[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+// TODO: Create Icon in public/icons/location.svg
+model Location {
+  id         String      @id @default(uuid()) @map("_id")
+  name       String      @unique
+  address1   String
+  address2   String?
+  city       String
+  state      String
+  zipcode    String
+  country    Country     @default(USA)
+  picture    String?
+  containers Container[]
+  items      Item[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+// TODO: Create Icons in public/icons/{containertype}.svg
+enum ContainerType {
+  Refrigerator
+  Freezer
+  Pantry
+  SpiceRack
+}
+
+model Container {
+  id        String        @id @default(uuid()) @map("_id")
+  location  Location      @relation(fields: [locId], references: [id])
+  locId     String
+  name      String        @unique
+  type      ContainerType
+  picture   String?
+  items     Item[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+// TODO: Create Icons in public/icons/{category}.svg
+// QUESTION: Or should this be a table?
+enum GroceryCategory {
+  Fruits // — Apples, bananas,  grapes, oranges, strawberries, avocados, peaches, etc.
+  Vegetables // — Potatoes, onions, carrots, salad greens, broccoli, peppers, tomatoes, cucumbers, etc.
+  CannedGoods // Canned Goods — Soup, tuna, fruit, beans, vegetables, pasta sauce, etc.
+  Dairy // — Butter, cheese, eggs, milk, yogurt, etc.
+  Meat // — Chicken, beef, pork, sausage, bacon etc.
+  FishSeafood // Fish & Seafood — Shrimp, crab, cod, tuna, salmon, etc.
+  Deli // — Cheese, salami, ham, turkey, etc.
+  Condiments // — Olive oil, ketchup, mayonnaise, etc.
+  Spices // — Black pepper, oregano, cinnamon, etc.
+  Snacks // — Chips, pretzels, popcorn, crackers, nuts, etc.
+  Bakery // — Bread, tortillas, pies, muffins, bagels, cookies, etc.
+  Beverages // — Coffee, teabags, juice, soda, beer, wine, etc.
+  Pasta // — Macaroni, noodles, etc.
+  Grains // — Brown rice, white rice, etc.
+  Cereal // — Cheerios, Oats, granola, etc.
+  Baking // — Flour, sugar, powdered sugar, baking powder, cocoa etc.
+  FrozenFoods // Frozen Foods — Pizza, fish, potatoes, ready meals, ice cream, etc.
+  Other // — Anything else
+}
+
+model GroceryItem {
+  id         String          @id @default(uuid()) @map("_id")
+  name       String          @unique
+  category   GroceryCategory
+  units      Units           @relation(fields: [unitsId], references: [id])
+  unitsId    String
+  defaultQty Float           @default(1.0)
+  isNeeded   Boolean         @default(false)
+  picture    String?
+  items      Item[]
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+}
+
+model Item {
+  id          String      @id @default(uuid()) @map("_id")
+  location    Location    @relation(fields: [locId], references: [id])
+  locId       String
+  container   Container   @relation(fields: [conId], references: [id])
+  conId       String
+  groceryItem GroceryItem @relation(fields: [grocId], references: [id])
+  grocId      String
+  units       Units       @relation(fields: [unitsId], references: [id])
+  unitsId     String
+  quantity    Float       @default(0.0)
+  expiresAt   DateTime?
+  picture     String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  @@unique([locId, conId, grocId], name: "itemIdentifier")
 }
