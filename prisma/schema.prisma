@@ -46,7 +46,6 @@ model Units {
   baseId       String?
   factor       Float         @default(1.0)
   children     Units[]       @relation("UnitsToUnits")
-  country      Country       @default(USA)
   groceryItems GroceryItem[]
   items        Item[]
   createdAt    DateTime      @default(now())
@@ -84,8 +83,8 @@ model Container {
   locId     String
   name      String        @unique
   type      ContainerType
-  items     Item[]
   picture   String?
+  items     Item[]
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
 }
@@ -106,10 +105,11 @@ enum GroceryCategory {
   Bakery // — Bread, tortillas, pies, muffins, bagels, cookies, etc.
   Beverages // — Coffee, teabags, juice, soda, beer, wine, etc.
   Pasta // — Macaroni, noodles, etc.
-  Rice // — Brown rice, white rice, etc.
+  Grains // — Brown rice, white rice, etc.
   Cereal // — Cheerios, Oats, granola, etc.
   Baking // — Flour, sugar, powdered sugar, baking powder, cocoa etc.
   FrozenFoods // Frozen Foods — Pizza, fish, potatoes, ready meals, ice cream, etc.
+  Other // — Anything else
 }
 
 model GroceryItem {
@@ -119,9 +119,9 @@ model GroceryItem {
   units      Units           @relation(fields: [unitsId], references: [id])
   unitsId    String
   defaultQty Float           @default(1.0)
-  items      Item[]
   isNeeded   Boolean         @default(false)
   picture    String?
+  items      Item[]
   createdAt  DateTime        @default(now())
   updatedAt  DateTime        @updatedAt
 }
@@ -141,4 +141,5 @@ model Item {
   picture     String?
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
+  @@unique([locId, conId, grocId], name: "itemIdentifier")
 }
