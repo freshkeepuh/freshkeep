@@ -25,7 +25,7 @@ async function main() {
     console.log(`  Created user: ${user.email} with role: ${user.role}`);
   };
   const seedUnits = await prisma.units.findMany();
-  for (const unit of config.defaultUnits.filter(unit => unit.name == unit.baseName)) {
+  for (const unit of config.defaultUnits.filter(unit => unit.name === unit.baseName)) {
     const createdUnit = await prisma.units.upsert({
       where: { name: unit.name },
       update: {},
