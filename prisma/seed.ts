@@ -44,7 +44,7 @@ async function main() {
     seedUnits.push(createdUnit);
     console.log(`  Created unit: ${createdUnit.name}`);
   };
-  for (const unit of config.defaultUnits.filter(unit => unit.name != unit.baseName)) {
+  for (const unit of config.defaultUnits.filter(unit => unit.name !== unit.baseName)) {
     const parentUnit = unit.baseName ? seedUnits.find((u) => u.name === unit.baseName) : null;
     const createdUnit = await prisma.units.upsert({
       where: { name: unit.name },
