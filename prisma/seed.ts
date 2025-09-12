@@ -143,7 +143,7 @@ async function main() {
        },
     });
     seedItems.push(createdItem);
-    console.log(`  Created item: ${createdItem.id}`);
+    console.log(`  Created item: ${item.locationName}/${item.containerName}/${item.groceryItemName}`);
   });
   await sleep(5000); // Wait for all seeds to be created
   console.log('Seeding completed');
