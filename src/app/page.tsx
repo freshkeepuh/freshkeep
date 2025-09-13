@@ -1,4 +1,4 @@
-import { Col, Container, Row } from 'react-bootstrap';
+import { Col, Container, Row, Image } from 'react-bootstrap';
 
 /** The Home page. */
 const Home = () => (
@@ -6,7 +6,7 @@ const Home = () => (
     <Container id="landing-page" fluid className="py-3">
       <Row className="align-middle text-center">
         <Col xs={4}>
-          Logo
+          <Image src="logo.svg" width="150px" alt="" />
         </Col>
 
         <Col xs={8} className="d-flex flex-column justify-content-center">

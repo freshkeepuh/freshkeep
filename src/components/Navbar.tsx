@@ -25,7 +25,8 @@ const NavBar: React.FC = () => {
                 href="/dashboard"
                 active={pathName === '/dashboard'}
               >
-                <App size={22} className="me-2" />
+                <App size={32} className="me-2" />
+                Dashboard
               </Nav.Link>
             )}
           </Nav>
