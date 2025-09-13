@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import swal from 'sweetalert';
 import { Card, Col, Container, Button, Form, Row } from 'react-bootstrap';
-import { changePassword } from '@/lib/dbActions';
+import { changePassword } from '@/lib/dbUserActions';
 import LoadingSpinner from '@/components/LoadingSpinner';
 
 type ChangePasswordForm = {
