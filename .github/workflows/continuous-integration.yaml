@@ -60,11 +60,9 @@ jobs:
         run: npx next lint
 
       - name: Install Playwright
-        if: steps.check_test_files.outputs.exists == 'true'
         run: npx playwright install --with-deps
 
       - name: Run Playwright Tests
-        if: steps.check_test_files.outputs.exists == 'true'
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/freshkeepuh
           NEXTAUTH_SECRET: dqkvSTdgMChdtJdwk-8V?K#YURCuq$SSBEb-XjA?2PTEYUtas4HpADWaZGj7??gF
