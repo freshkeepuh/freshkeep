@@ -5,21 +5,19 @@
 import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
-import { BoxArrowRight, HouseFill, Lock, PersonFill, PersonPlusFill } from 'react-bootstrap-icons';
-
+import { BoxArrowRight, Lock, App } from 'react-bootstrap-icons';
+// import { Combo } from 'next/dist/compiled/@next/font/dist/google';
+// TODO: custom colors https://getbootstrap.com/docs/5.3/customize/color-modes/
 const NavBar: React.FC = () => {
   const { data: session } = useSession();
   const currentUser = session?.user?.email;
   const pathName = usePathname();
   return (
-    <Navbar bg="secondary" expand="lg" variant="dark">
+    <Navbar bg="success" expand="lg" data-bs-theme="dark">
       <Container>
       <Navbar.Brand href="/" className="d-flex align-items-center">
-  <HouseFill size={22} className="me-2" />
-  FreshKeep
+      FreshKeep
       </Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mx-auto">
           {currentUser && (
               <Nav.Link
@@ -27,36 +25,50 @@ const NavBar: React.FC = () => {
                 href="/dashboard"
                 active={pathName === '/dashboard'}
               >
-                Dashboard
+                <App size={22} className="me-2" />
               </Nav.Link>
             )}
           </Nav>
-          <Nav>
-            {session ? (
-              <NavDropdown id="login-dropdown" title={currentUser}>
+        <Nav>
+          {session && <Navbar.Toggle aria-controls="basic-navbar-nav" />}
+          {session ? (
+            <Navbar.Collapse id="basic-navbar-nav">
+            <NavDropdown id="login-dropdown" title={currentUser}>
                 <NavDropdown.Item id="login-dropdown-sign-out" href="/api/auth/signout">
                   <BoxArrowRight />
+                  {' '}
                   Sign Out
                 </NavDropdown.Item>
                 <NavDropdown.Item id="login-dropdown-change-password" href="/auth/change-password">
                   <Lock />
+                  {' '}
                   Change Password
                 </NavDropdown.Item>
-              </NavDropdown>
+            </NavDropdown>
+            </Navbar.Collapse>
             ) : (
-              <NavDropdown id="login-dropdown" title="Login">
-                <NavDropdown.Item id="login-dropdown-sign-in" href="/auth/signin">
-                  <PersonFill />
+             /* <NavDropdown id="login-dropdown" title="Login">
+                  <NavDropdown.Item id="login-dropdown-sign-in" href="/auth/signin">
+                    <Person />
+                  {' '}
                   Sign in
-                </NavDropdown.Item>
+                  </NavDropdown.Item>
                 <NavDropdown.Item id="login-dropdown-sign-up" href="/auth/signup">
-                  <PersonPlusFill />
+                  <PersonAdd />
+                  {' '}
                   Sign up
                 </NavDropdown.Item>
-              </NavDropdown>
+              </NavDropdown> */
+              <Nav.Link
+                id="login-dropdown-sign-in"
+                title="Login"
+                href="/auth/signin"
+                active={pathName === '/auth/signin'}
+              >
+                Login
+              </Nav.Link>
             )}
-          </Nav>
-        </Navbar.Collapse>
+        </Nav>
       </Container>
     </Navbar>
   );
