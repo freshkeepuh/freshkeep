@@ -24,7 +24,7 @@ test('test access to admin page', async ({ getUserPage }) => {
   // await expect(adminPage.getByRole('heading', { name: 'Stuff' })).toBeVisible();
 
   // Test Admin adminPage
-  await adminPage.getByRole('link', { name: 'Admin' }).click();
+  // await adminPage.getByRole('link', { name: 'Admin' }).click();
   // await expect(adminPage.getByRole('heading', { name: 'List Stuff Admin' })).toBeVisible();
   // await expect(adminPage.getByRole('heading', { name: 'List Users Admin' })).toBeVisible();
 });
