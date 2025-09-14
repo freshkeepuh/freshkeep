@@ -1,4 +1,4 @@
-import { test, expect } from './auth-utils';
+import { test, expect, BASE_URL } from './auth-utils';
 
 test.slow();
 test('test access to user page', async ({ getUserPage }) => {
@@ -6,6 +6,6 @@ test('test access to user page', async ({ getUserPage }) => {
   const customUserPage = await getUserPage('john@foo.com', 'changeme');
 
   // Navigate to the home customUserPage
-  await customUserPage.goto('http://localhost:3000/');
+  await customUserPage.goto(`${BASE_URL}/`);
   await expect(customUserPage.getByRole('button', { name: 'john@foo.com' })).toBeVisible();
 });

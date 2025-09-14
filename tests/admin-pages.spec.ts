@@ -1,4 +1,4 @@
-import { test, expect } from './auth-utils';
+import { test, expect, BASE_URL } from './auth-utils';
 
 test.slow();
 test('test access to admin page', async ({ getUserPage }) => {
@@ -6,7 +6,7 @@ test('test access to admin page', async ({ getUserPage }) => {
   const adminPage = await getUserPage('admin@foo.com', 'changeme');
 
   // Navigate to the home adminPage
-  await adminPage.goto('http://localhost:3000/');
+  await adminPage.goto(`${BASE_URL}/`);
   // Check for navigation elements
   await expect(adminPage.getByRole('button', { name: 'admin@foo.com' })).toBeVisible();
 });
