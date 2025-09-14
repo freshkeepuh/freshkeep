@@ -1,21 +1,28 @@
-[![ci-nextjs-application-template](https://github.com/ics-software-engineering/nextjs-application-template/actions/workflows/ci.yml/badge.svg)](https://github.com/ics-software-engineering/nextjs-application-template/actions/workflows/ci.yml)
+# FreshKeep
+[![Continuous Integration](https://github.com/freshkeepuh/freshkeep/actions/workflows/continuous-integration.yaml/badge.svg?branch=main)](https://github.com/freshkeepuh/freshkeep/actions/workflows/continuous-integration.yaml)
 
-For details, please see http://ics-software-engineering.github.io/nextjs-application-template/.
+## Description
 
-Fast start:
+FreshKeep is a project designed to help users manage and track the freshness of their food and other perishable items. It aims to reduce waste and improve organization by providing tools to monitor expiration dates and receive timely reminders.
 
-0. Clone this repository
+## Installation
 
-1. Install and run PostgreSQL
+1. Clone the repository:
+    ```sh
+    git clone https://github.com/freshkeepuh/freshkeep.git
+    ```
+2. Navigate to the project directory:
+    ```sh
+    cd freshkeep
+    ```
+3. Install dependencies:
+    ```sh
+    npm install
+    ```
 
-2. $ createdb freshkeepuh              # create a database
+## Usage
 
-3. Create a .env file from the sample.env. Set the DATABASE_URL
+After installation, you can start the application with:
 
-4. $ npm install                       # install dependencies
-
-5. $ npx prisma migrate dev            # create the database schema
-
-6. $ npx prisma db seed                # demo data
-
-7. $ npm run dev                       # start the local development server
+```sh
+npm start
