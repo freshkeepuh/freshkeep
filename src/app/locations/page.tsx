@@ -1,13 +1,13 @@
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 
-const LocationManagement = () => (
+const Locations = () => (
   <main style={{ background: '#f4f4f4', minHeight: '100vh', paddingTop: '2rem', paddingBottom: '2rem' }}>
     <Container>
       {/* Title Row */}
       <Row className="mb-4 align-items-center" style={{ minHeight: '80px' }}>
-          <Col>
-            <h1 className="m-0">Location Management</h1>
-          </Col>
+        <Col>
+          <h1 className="m-0">Location Management</h1>
+        </Col>
       </Row>
       <Row>
         {/* Location List */}
@@ -81,7 +81,7 @@ const LocationManagement = () => (
           <div className="mb-3 d-flex justify-content-center">
             <img
               src="https://developers.google.com/static/maps/images/landing/hero_geocoding_api.png"
-              alt="Image not found"
+              alt="not found"
               style={{
                 width: '80%',
                 height: 'auto',
@@ -95,4 +95,4 @@ const LocationManagement = () => (
   </main>
 );
 
-export default LocationManagement;
+export default Locations;
