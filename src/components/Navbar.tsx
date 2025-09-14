@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { BoxArrowRight, Lock, App } from 'react-bootstrap-icons';
-// import { Combo } from 'next/dist/compiled/@next/font/dist/google';
+
 // TODO: custom colors https://getbootstrap.com/docs/5.3/customize/color-modes/
 const NavBar: React.FC = () => {
   const { data: session } = useSession();
@@ -48,18 +48,6 @@ const NavBar: React.FC = () => {
             </NavDropdown>
             </Navbar.Collapse>
             ) : (
-             /* <NavDropdown id="login-dropdown" title="Login">
-                  <NavDropdown.Item id="login-dropdown-sign-in" href="/auth/signin">
-                    <Person />
-                  {' '}
-                  Sign in
-                  </NavDropdown.Item>
-                <NavDropdown.Item id="login-dropdown-sign-up" href="/auth/signup">
-                  <PersonAdd />
-                  {' '}
-                  Sign up
-                </NavDropdown.Item>
-              </NavDropdown> */
               <Nav.Link
                 id="login-dropdown-sign-in"
                 title="Login"
