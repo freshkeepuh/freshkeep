@@ -1,5 +1,5 @@
 mode: immediate
-branchName: 'issue-${issue.number}'
+branchName: 'issue-${issue.number%3}'
 autoLinkIssue: true
 autoCloseIssue: true
 autoDeleteBranch: true
