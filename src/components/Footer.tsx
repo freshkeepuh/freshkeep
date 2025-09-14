@@ -1,8 +1,9 @@
 import { Col, Container, Row } from 'react-bootstrap';
+import Link from 'next/link';
 
 /** The Footer appears at the bottom of every page. Rendered by the App Layout component. */
 const Footer = () => (
-  <footer className="mt-auto py-3 bg-light border-top">
+  <footer className="mt-auto py-3 bg-success border-top">
     <Container>
       <Row className="justify-content-center text-center">
         <Col md="auto">
@@ -10,9 +11,7 @@ const Footer = () => (
           <br />
           <small className="text-muted">Where Organizing Meets Fresh</small>
           <br />
-          <a href="https://docs.freshkeepuh.live/" target="_blank" rel="noopener noreferrer">
-            About Us
-          </a>
+          <Link href="https://docs.freshkeepuh.live" className="link-light">About</Link>
         </Col>
       </Row>
       <Row className="mt-2">
