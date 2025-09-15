@@ -245,9 +245,9 @@ async function seedItems(
   return items;
 }
 
- /**
-  * Main seeding function
-  */
+/**
+ * Main seeding function
+ */
 async function main() {
   await seedUsers();
   const units = await seedUnits();
