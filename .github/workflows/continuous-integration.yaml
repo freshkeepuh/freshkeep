@@ -66,4 +66,5 @@ jobs:
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/freshkeepuh
           NEXTAUTH_SECRET: dqkvSTdgMChdtJdwk-8V?K#YURCuq$SSBEb-XjA?2PTEYUtas4HpADWaZGj7??gF
+          NEXTAUTH_URL: http://localhost:3000
         run: npx playwright test
