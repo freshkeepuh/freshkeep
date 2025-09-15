@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 /**
  * Prisma Client Generator
  */
@@ -159,7 +156,7 @@ enum GroceryCategory {
 
 /**
  * The Grocery Item (Product?) the represents an item found in a Grocery Store
- * Something the user Buys but may not stock.
+ * Something the user Buys but may not stock or have at hand.
  * Used By: Item
  * Uses: GroceryCategory, Unit
  */
@@ -175,6 +172,8 @@ model GroceryItem {
   items      Item[]
   createdAt  DateTime        @default(now())
   updatedAt  DateTime        @updatedAt
+
+  @@index([category, name], name: "category_name_idx")
 }
 
 /**
@@ -198,5 +197,4 @@ model Item {
   picture     String?
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
-  @@unique([locId, conId, grocId], name: "itemIdentifier")
 }

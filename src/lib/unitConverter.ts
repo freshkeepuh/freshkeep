@@ -8,16 +8,16 @@ import { Unit } from '@prisma/client';
  * @returns The Quantity in the To Unit
  */
 export const unitConverter = ({
-    fromUnit,
-    fromQty,
-    toUnit,
+  fromUnit,
+  fromQty,
+  toUnit,
 }: {
-    fromUnit: Unit,
-    fromQty: number,
-    toUnit: Unit,
+  fromUnit: Unit,
+  fromQty: number,
+  toUnit: Unit,
 }): number => {
-    if (fromUnit.id === toUnit.id) {
-        return fromQty;
-    }
-    return fromQty * fromUnit.factor / toUnit.factor;
+  if (fromUnit.id === toUnit.id) {
+    return fromQty;
+  }
+  return fromQty * (fromUnit.factor / toUnit.factor);
 };
