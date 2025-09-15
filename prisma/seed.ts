@@ -224,13 +224,9 @@ async function seedItems(
     const groceryItemId = groceryItems.find((groc) => groc.name === defaultItem.groceryItemName)?.id || groceryItems[0].id;
     // Get the Unit
     const unitId = units.find((u) => u.name === defaultItem.unitsName)?.id || units[0].id;
-    // Upsert the Item to avoid duplicates
-    const item = await prisma.item.upsert({
-      where: {
-        itemIdentifier: { locId: locationId, conId: containerId, grocId: groceryItemId },
-      },
-      update: {},
-      create: {
+    // Create the Item
+    const item = await prisma.item.create({
+      data: {
         locId: locationId,
         conId: containerId,
         grocId: groceryItemId,
