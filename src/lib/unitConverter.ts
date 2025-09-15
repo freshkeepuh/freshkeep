@@ -7,7 +7,7 @@ import { Unit } from '@prisma/client';
  * @param toUnit The To Unit
  * @returns The Quantity in the To Unit
  */
-export const unitConverter = ({
+const unitConverter = ({
   fromUnit,
   fromQty,
   toUnit,
@@ -21,3 +21,5 @@ export const unitConverter = ({
   }
   return fromQty * (fromUnit.factor / toUnit.factor);
 };
+
+export default unitConverter;
