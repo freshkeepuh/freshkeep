@@ -5,6 +5,27 @@ import * as config from '../config/settings.development.json';
 const prisma = new PrismaClient();
 
 /**
+ * Resolve an item from an array by its 'name' property.
+ * @param array The array to search.
+ * @param name The name to find.
+ * @returns The found item.
+ * @throws If the array is empty, name is empty, or item is not found.
+ */
+const findByName = <T>(array: Array<T>, name: string) : T => {
+  if (!array || array.length === 0) {
+    throw new Error('Array is empty or undefined.');
+  }
+  if (!name) {
+    throw new Error('Name is empty or undefined.');
+  }
+  let item = array.find((i: any) => i.name === name);
+  if (!item) {
+    throw new Error(`Item with name "${name}" not found in array.`);
+  }
+  return item;
+};
+
+/**
  * Seed users into the database
  * This function creates users based on the default accounts specified in the configuration file.
  * It hashes their passwords and assigns roles.
@@ -72,15 +93,7 @@ async function seedUnits() : Promise<Array<Unit>> {
   // Then, create all derived units
   for (const defaultUnit of config.defaultUnits.filter(unit => unit.name !== unit.baseName)) {
     // Find the parent unit to establish the relationship
-    let parentUnit: Unit;
-    if (defaultUnit.baseName) {
-      parentUnit = units.find((u) => u.name === defaultUnit.baseName);
-      if (!parentUnit) {
-        throw new Error(`Base unit "${defaultUnit.baseName}" for derived unit "${defaultUnit.name}" not found in units array.`);
-      }
-    } else {
-      parentUnit = units[0];
-    }
+    const parentUnit = findByName(units, defaultUnit.baseName);
     // Upsert derived unit to avoid duplicates
     const unit = await prisma.unit.upsert({
       where: { name: defaultUnit.name },
@@ -112,15 +125,7 @@ async function seedGroceryItems(units: Array<Unit>) : Promise<Array<GroceryItem>
   // Wait for all Grocery Items to complete
   for (const defaultGroceryItem of config.defaultGroceryItems) {
     // Find the unit to associate with the grocery item
-    let unit: Unit | undefined;
-    if (defaultGroceryItem.unitsName) {
-      unit = units.find((u) => u.name === defaultGroceryItem.unitsName);
-      if (!unit) {
-        throw new Error(`Unit "${defaultGroceryItem.unitsName}" not found for grocery item "${defaultGroceryItem.name}". Please check your configuration.`);
-      }
-    } else {
-      unit = units[0];
-    }
+    const unit = findByName(units, defaultGroceryItem.unitName);
     // Set the category, defaulting to Other if not specified
     const category = (defaultGroceryItem.category as GroceryCategory) || GroceryCategory.Other;
     // Upsert grocery item to avoid duplicates
@@ -190,13 +195,7 @@ async function seedContainers(locations: Array<Location>) : Promise<Array<Contai
   // Process the default containers
   for (const defaultContainer of config.defaultContainers) {
     // Find the Location in which the container belongs
-    let locationId: string;
-    if (defaultContainer.locationName) {
-      const foundLocation = locations.find((loc) => loc.name === defaultContainer.locationName);
-      locationId = foundLocation ? foundLocation.id : locations[0].id;
-    } else {
-      locationId = locations[0].id;
-    }
+    const location = findByName(locations, defaultContainer.locationName);
     // Get the Container Type
     const containerType = (defaultContainer.type as ContainerType) || ContainerType.Pantry;
     // Upsert the Container to avoid duplicates
@@ -206,7 +205,7 @@ async function seedContainers(locations: Array<Location>) : Promise<Array<Contai
       create: {
         name: defaultContainer.name,
         type: containerType,
-        locId: locationId,
+        locId: location.id,
         picture: defaultContainer.picture || undefined,
       },
     });
@@ -238,20 +237,20 @@ async function seedItems(
   // Process the Default Items
   for (const defaultItem of config.defaultItems) {
     // Get the Location
-    const locationId = locations.find((loc) => loc.name === defaultItem.locationName)?.id || locations[0].id;
+    const location = findByName(locations, defaultItem.locationName);
     // Get the Container
-    const containerId = containers.find((con) => con.name === defaultItem.containerName)?.id || containers[0].id;
+    const container = findByName(containers, defaultItem.containerName);
     // Get the Grocery Item
-    const groceryItemId = groceryItems.find((groc) => groc.name === defaultItem.groceryItemName)?.id || groceryItems[0].id;
+    const groceryItem = findByName(groceryItems, defaultItem.groceryItemName);
     // Get the Unit
-    const unitId = units.find((u) => u.name === defaultItem.unitsName)?.id || units[0].id;
+    const unit = findByName(units, defaultItem.unitName);
     // Create the Item
     const item = await prisma.item.create({
       data: {
-        locId: locationId,
-        conId: containerId,
-        grocId: groceryItemId,
-        unitId: unitId,
+        locId: location.id,
+        conId: container.id,
+        grocId: groceryItem.id,
+        unitId: unit.id,
         quantity: defaultItem.quantity || 0.0,
        },
     });
