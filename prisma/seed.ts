@@ -18,7 +18,7 @@ async function seedUsers() : Promise<Array<User>> {
   const password = await hash('changeme', 10);
   // Wait for all user creations to complete
   for (const account of config.defaultAccounts) {
-    // Set tjhe role, defaulting to USER if not specified
+    // Set the role, defaulting to USER if not specified
     const role = (account.role as Role) || Role.USER;
     // Upsert user to avoid duplicates
     const user = await prisma.user.upsert({
