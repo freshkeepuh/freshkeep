@@ -212,7 +212,7 @@ async function seedItems(
   groceryItems: Array<GroceryItem>,
   units: Array<Unit>,
 ) : Promise<Array<Item>> {
-  const items:Array<Item> = [];
+  const items: Array<Item> = [];
   // Process the Default Items
   for (const defaultItem of config.defaultItems) {
     // Get the Location
