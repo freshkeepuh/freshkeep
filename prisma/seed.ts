@@ -72,7 +72,15 @@ async function seedUnits() : Promise<Array<Unit>> {
   // Then, create all derived units
   for (const defaultUnit of config.defaultUnits.filter(unit => unit.name !== unit.baseName)) {
     // Find the parent unit to establish the relationship
-    const parentUnit = defaultUnit.baseName ? units.find((u) => u.name === defaultUnit.baseName) || units[0] : units[0];
+    let parentUnit: Unit;
+    if (defaultUnit.baseName) {
+      parentUnit = units.find((u) => u.name === defaultUnit.baseName);
+      if (!parentUnit) {
+        throw new Error(`Base unit "${defaultUnit.baseName}" for derived unit "${defaultUnit.name}" not found in units array.`);
+      }
+    } else {
+      parentUnit = units[0];
+    }
     // Upsert derived unit to avoid duplicates
     const unit = await prisma.unit.upsert({
       where: { name: defaultUnit.name },
@@ -104,7 +112,15 @@ async function seedGroceryItems(units: Array<Unit>) : Promise<Array<GroceryItem>
   // Wait for all Grocery Items to complete
   for (const defaultGroceryItem of config.defaultGroceryItems) {
     // Find the unit to associate with the grocery item
-    const unit = defaultGroceryItem.unitsName ? units.find((u) => u.name === defaultGroceryItem.unitsName) || units[0] : units[0];
+    let unit: Unit | undefined;
+    if (defaultGroceryItem.unitsName) {
+      unit = units.find((u) => u.name === defaultGroceryItem.unitsName);
+      if (!unit) {
+        throw new Error(`Unit "${defaultGroceryItem.unitsName}" not found for grocery item "${defaultGroceryItem.name}". Please check your configuration.`);
+      }
+    } else {
+      unit = units[0];
+    }
     // Set the category, defaulting to Other if not specified
     const category = (defaultGroceryItem.category as GroceryCategory) || GroceryCategory.Other;
     // Upsert grocery item to avoid duplicates
@@ -174,7 +190,13 @@ async function seedContainers(locations: Array<Location>) : Promise<Array<Contai
   // Process the default containers
   for (const defaultContainer of config.defaultContainers) {
     // Find the Location in which the container belongs
-    const locationId = defaultContainer.locationName ? locations.find((loc) => loc.name === defaultContainer.locationName)?.id || locations[0].id : locations[0].id;
+    let locationId: string;
+    if (defaultContainer.locationName) {
+      const foundLocation = locations.find((loc) => loc.name === defaultContainer.locationName);
+      locationId = foundLocation ? foundLocation.id : locations[0].id;
+    } else {
+      locationId = locations[0].id;
+    }
     // Get the Container Type
     const containerType = (defaultContainer.type as ContainerType) || ContainerType.Pantry;
     // Upsert the Container to avoid duplicates
