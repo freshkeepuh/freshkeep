@@ -11,14 +11,14 @@ const prisma = new PrismaClient();
  * @returns The found item.
  * @throws If the array is empty, name is empty, or item is not found.
  */
-const findByName = <T>(array: Array<T>, name: string) : T => {
+const findByName = <T extends { name: string }>(array: Array<T>, name: string) : T => {
   if (!array || array.length === 0) {
     throw new Error('Array is empty or undefined.');
   }
   if (!name) {
     throw new Error('Name is empty or undefined.');
   }
-  let item = array.find((i: any) => i.name === name);
+  let item = array.find((i) => i.name === name);
   if (!item) {
     throw new Error(`Item with name "${name}" not found in array.`);
   }
