@@ -1,7 +1,6 @@
 import { ContainerType, Country, GroceryCategory, PrismaClient, Role, User, Unit, GroceryItem, Item, Location, Container } from '@prisma/client';
 import { hash } from 'bcrypt';
 import * as config from '../config/settings.development.json';
-import { seed } from '@ngneat/falso';
 
 const prisma = new PrismaClient();
 
