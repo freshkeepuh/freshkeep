@@ -68,7 +68,7 @@ model Unit {
 // TODO: Create Icons in public/icons/{country}.svg, flags?
 /**
  * Country
- * Limited to USA and Canada so that we don't have to worry about internation addressing
+ * Limited to USA and Canada so that we don't have to worry about international addressing
  * Used By: Location
  */
 enum Country {
