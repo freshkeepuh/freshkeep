@@ -3,7 +3,7 @@ import { Unit } from '@prisma/client';
 /**
  * Converts the From Unit/Qty to the To Unit.
  * @param fromUnit The From Unit
- * @param fromQty The From Quanity
+ * @param fromQty The From Quantity
  * @param toUnit The To Unit
  * @returns The Quantity in the To Unit
  */
