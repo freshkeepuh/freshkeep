@@ -49,7 +49,7 @@ const SignIn = () => {
             <h2 className="fs-5">Sign in and see what&apos;s in your fridge.</h2>
           </Col>
           {/* #endregion Image Section */}
-
+          
           {/* #region Sign In Form  */}
           <Col xs={12} md={6} lg={5} className="bg-white p-5 rounded shadow mt-5 ms-md-5">
             {/* Logo + Title */}
