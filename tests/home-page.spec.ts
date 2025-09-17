@@ -31,17 +31,10 @@ test('test access to home page (not signed in)', async ({ page }) => {
 });
 
 test('dashboard is accessible after sign-in (simple)', async ({ page }) => {
-  const email = process.env.TEST_USER_EMAIL ?? 'john@foo.com';
-  const password = process.env.TEST_USER_PASSWORD ?? 'changeme';
+  // Call the getUserPage fixture with users signin info to get authenticated session for user
+  const customUserPage = await getUserPage('john@foo.com', 'changeme');
 
-  // Go to sign-in and authenticate
-  await page.goto(`${BASE_URL}/auth/signin`);
-  await page.fill('input[name="email"]', email);
-  await page.fill('input[name="password"]', password);
-  await page.getByRole('button', { name: /sign in/i }).click();
-
-  // After login, navigate directly to the protected route
-  await page.waitForLoadState('networkidle');
-  await page.goto(`${BASE_URL}/dashboard`);
-  await expect(page).toHaveURL(new RegExp(`^${BASE_URL}/dashboard/?$`));
+  // Navigate to the home customUserPage
+  await customUserPage.goto(`${BASE_URL}/dashboard`);
+  await expect(customUserPage.getByRole('button', { name: 'john@foo.com' })).toBeVisible();
 });
