@@ -8,22 +8,18 @@ test('test sign in page', async ({ page }) => {
 
   const email = page.locator('input[name="email"], input[type="email"], input#email').first();
   const password = page.locator('input[name="password"], input[type="password"], input#password').first();
-  // const confirm = page.locator('input[name="confirm"], input[type="password"], input#confirm').first();
 
   // Expect the fields to be visible
   await expect(email).toBeVisible();
   await expect(password).toBeVisible();
-  // await expect(confirm).toBeVisible();
 
   // Fill in credentials
   await email.fill('john@foo.com');
   await password.fill('changeme');
-  // await confirm.fill('changeme');
 
   // Expect the fields to have the correct values
   await expect(email).toHaveValue('john@foo.com');
   await expect(password).toHaveValue('changeme');
-  // await expect(confirm).toHaveValue('changeme');
 
   // Submit the form
   await page.getByRole('button', { name: 'Sign In' }).click();
@@ -38,17 +34,14 @@ test('test sign in page with Remember me option', async ({ page }) => {
 
   const email = page.locator('input[name="email"], input[type="email"], input#email').first();
   const password = page.locator('input[name="password"], input[type="password"], input#password').first();
-  // const confirm = page.locator('input[name="confirm"], input[type="password"], input#confirm').first();
 
   // Expect the fields to be visible
   await expect(email).toBeVisible();
   await expect(password).toBeVisible();
-  // await expect(confirm).toBeVisible();
 
   // Fill in credentials
   await email.fill('john@foo.com');
   await password.fill('changeme');
-  // await confirm.fill('changeme');
 
   // Check "Remember me option"
   await page.getByLabel('Remember me').check();
@@ -56,7 +49,6 @@ test('test sign in page with Remember me option', async ({ page }) => {
   // Expect the fields to have the correct values
   await expect(email).toHaveValue('john@foo.com');
   await expect(password).toHaveValue('changeme');
-  // await expect(confirm).toHaveValue('changeme');
   await expect(page.getByLabel('Remember me')).toBeChecked();
 
   // Submit the form
