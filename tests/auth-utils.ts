@@ -5,8 +5,8 @@ import fs from 'fs';
 import path from 'path';
 
 // Base configuration
-const BASE_URL = process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:3000';
-const SESSION_STORAGE_PATH = path.join(__dirname, 'playwright-auth-sessions');
+export const BASE_URL = process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:3000';
+export const SESSION_STORAGE_PATH = path.join(__dirname, 'playwright-auth-sessions');
 
 // Ensure session directory exists
 if (!fs.existsSync(SESSION_STORAGE_PATH)) {
@@ -24,7 +24,7 @@ async function authenticateWithUI(
   page: Page,
   email: string,
   password: string,
-  sessionName: string
+  sessionName: string,
 ): Promise<void> {
   const sessionPath = path.join(SESSION_STORAGE_PATH, `${sessionName}.json`);
 
@@ -115,7 +115,7 @@ async function authenticateWithUI(
  */
 async function fillFormWithRetry(
   page: Page,
-  fields: Array<{ selector: string; value: string }>
+  fields: Array<{ selector: string; value: string }>,
 ): Promise<void> {
   for (const field of fields) {
     let attempts = 0;
