@@ -1,13 +1,16 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
+/**
+ * Prisma Client Generator
+ */
 generator client {
   provider = "prisma-client-js"
 }
 
+/**
+ * The DB Datasource
+ */
 datasource db {
   provider = "postgresql"
   // for local development
@@ -17,29 +20,181 @@ datasource db {
   // directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
+/**
+ * Roles
+ * Used By: User
+ */
 enum Role {
-  USER
-  ADMIN
+  USER // Can use all features, except managing users
+  ADMIN // Can use all features, including managing users
 }
 
+/**
+ * Users
+ * Represents a user with their settings JSON-encoded
+ * Uses: Role
+ */
 model User {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
-  password String
-  role     Role   @default(USER)
+  id        String   @id @default(uuid()) @map("_id")
+  email     String   @unique
+  password  String
+  role      Role     @default(USER)
+  settings  Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-enum Condition {
-  excellent
-  good
-  fair
-  poor
+/**
+ * Unit of Measure
+ * Factor is how many of the base unit are in one quantity of child unit.
+ * Example: 128 Oz in a Gallon, so Gallon has a Factor of 128
+ * Used By: GroceryItem, Item, Unit
+ * Uses: Unit
+ */
+model Unit {
+  id           String        @id @default(uuid()) @map("_id")
+  name         String        @unique
+  abbr         String        @unique
+  base         Unit?         @relation("UnitsToUnits", fields: [baseId], references: [id])
+  baseId       String?
+  factor       Float         @default(1.0)
+  children     Unit[]        @relation("UnitsToUnits")
+  groceryItems GroceryItem[]
+  items        Item[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 }
 
-model Stuff {
-  id        Int       @id @default(autoincrement())
-  name      String
-  quantity  Int
-  condition Condition @default(good)
-  owner     String
+// TODO: Create Icons in public/icons/{country}.svg, flags?
+/**
+ * Country
+ * Limited to USA and Canada so that we don't have to worry about international addressing
+ * Used By: Location
+ */
+enum Country {
+  USA
+  CAN
+}
+
+// TODO: Create Icon in public/icons/location.svg
+/**
+ * The Location
+ * Used By: Container, Item
+ * Uses: Country, Container, Item
+ */
+model Location {
+  id         String      @id @default(uuid()) @map("_id")
+  name       String      @unique
+  address1   String
+  address2   String?
+  city       String
+  state      String
+  zipcode    String
+  country    Country     @default(USA)
+  picture    String?
+  containers Container[]
+  items      Item[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+// TODO: Create Icons in public/icons/{containertype}.svg
+/**
+ * Container Type
+ * Used By: Container
+ */
+enum ContainerType {
+  Refrigerator
+  Freezer
+  Pantry
+  SpiceRack
+}
+
+/**
+ * The Container (Fridge, Freezer, Pantry or Spice Rack) in the Location
+ * Used By: Item
+ * Uses: ContainerType, Location, Item
+ */
+model Container {
+  id        String        @id @default(uuid()) @map("_id")
+  location  Location      @relation(fields: [locId], references: [id])
+  locId     String
+  name      String        @unique
+  type      ContainerType
+  picture   String?
+  items     Item[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+// TODO: Create Icons in public/icons/{category}.svg
+/**
+ * The Category of the Grocery Item.
+ * Shopping Lists should be grouped by this.
+ * Used By: GroceryItem
+ */
+enum GroceryCategory {
+  Fruits
+  Vegetables
+  CannedGoods
+  Dairy
+  Meat
+  FishSeafood
+  Deli
+  Condiments
+  Spices
+  Snacks
+  Bakery
+  Beverages
+  Pasta
+  Grains
+  Cereal
+  Baking
+  FrozenFoods
+  Other
+}
+
+/**
+ * The Grocery Item (Product?) the represents an item found in a Grocery Store
+ * Something the user Buys but may not stock or have at hand.
+ * Used By: Item
+ * Uses: GroceryCategory, Unit
+ */
+model GroceryItem {
+  id         String          @id @default(uuid()) @map("_id")
+  name       String          @unique
+  category   GroceryCategory
+  unit       Unit            @relation(fields: [unitId], references: [id])
+  unitId     String
+  defaultQty Float           @default(1.0)
+  isNeeded   Boolean         @default(false)
+  picture    String?
+  items      Item[]
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+
+  @@index([category, name], name: "category_name_idx")
+}
+
+/**
+ * The instance of the Grocery Item
+ * Represents a physical item. It has its own units and records a quantity and expiration date.
+ * Used By: Location, Container, GroceryItem, and Unit
+ * Uses: Location, Container, GroceryItem, and Unit
+ */
+model Item {
+  id          String      @id @default(uuid()) @map("_id")
+  location    Location    @relation(fields: [locId], references: [id])
+  locId       String
+  container   Container   @relation(fields: [conId], references: [id])
+  conId       String
+  groceryItem GroceryItem @relation(fields: [grocId], references: [id])
+  grocId      String
+  unit        Unit        @relation(fields: [unitId], references: [id])
+  unitId      String
+  quantity    Float       @default(0.0)
+  expiresAt   DateTime?
+  picture     String?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 }

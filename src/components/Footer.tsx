@@ -1,18 +1,26 @@
-import { Col, Container } from 'react-bootstrap';
+import { Col, Container, Row } from 'react-bootstrap';
+import Link from 'next/link';
 
 /** The Footer appears at the bottom of every page. Rendered by the App Layout component. */
 const Footer = () => (
-  <footer className="mt-auto py-3 bg-light">
+  <footer className="mt-auto py-3 bg-success border-top">
     <Container>
-      <Col className="text-center">
-        Department of Information and Computer Sciences
-        <br />
-        University of Hawaii
-        <br />
-        Honolulu, HI 96822
-        <br />
-        <a href="http://ics-software-engineering.github.io/nextjs-application-template">Template Home Page</a>
-      </Col>
+      <Row className="justify-content-center text-center">
+        <Col md="auto">
+          <strong>FreshKeep UH</strong>
+          <br />
+          <small className="text-muted">Where Organizing Meets Fresh</small>
+          <br />
+          <Link href="https://docs.freshkeepuh.live" className="link-light">About</Link>
+        </Col>
+      </Row>
+      <Row className="mt-2">
+        <Col className="text-center">
+          <small className="text-muted">
+            © FreshKeep UH. All rights reserved.
+          </small>
+        </Col>
+      </Row>
     </Container>
   </footer>
 );
