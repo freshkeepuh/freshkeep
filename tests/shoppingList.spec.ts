@@ -1,8 +1,9 @@
 import { test } from '@playwright/test';
 
-test('test', async ({ page }) => {
+// TODO: Create Test for Page to be inaccessible if not signed in
+// TODO: Modify test to use authenticated session
+test('test access to shopping list', async ({ page }) => {
   await page.goto('http://localhost:3000/shoppingList');
-  await page.getByText('FreshKeepLogin').click();
   await page.getByRole('searchbox', { name: 'Search products...' }).click();
   await page
     .locator('div')
@@ -60,5 +61,4 @@ test('test', async ({ page }) => {
   await page.getByText('Dairy').click();
   await page.locator('div:nth-child(2) > .rounded-5.bg-success > .rounded-5 > .card-body > .px-3 > .btn').click();
   await page.getByRole('button', { name: 'Add To List' }).click();
-  await page.getByRole('link', { name: 'Login' }).click();
 });
