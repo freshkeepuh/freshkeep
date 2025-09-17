@@ -1,6 +1,8 @@
 import { test } from '@playwright/test';
 
-test('test', async ({ page }) => {
+test('ShoppingList components present, navbar shows up, product cards show up with product images, with fields and tags', async ({
+  page,
+}) => {
   await page.goto('http://localhost:3000/shoppingList');
   await page.getByText('FreshKeepLogin').click();
   await page.getByRole('searchbox', { name: 'Search products...' }).click();

@@ -13,9 +13,11 @@ test('Sign Up renders and fields work', async ({ page }) => {
   // Robust selectors (works even if labels/placeholders aren’t associated)
   const email = page.locator('input[name="email"], input[type="email"], input#email').first();
   const password = page.locator('input[name="password"], input#password, input[type="password"]').first();
-  const confirm = page.locator(
-    'input[name="confirmPassword"], input#confirmPassword, input[aria-label*="confirm" i], input[placeholder*="confirm" i]'
-  ).first();
+  const confirm = page
+    .locator(
+      'input[name="confirmPassword"], input#confirmPassword, input[aria-label*="confirm" i], input[placeholder*="confirm" i]',
+    )
+    .first();
 
   // Ensure inputs exist
   await expect(email).toBeVisible();
@@ -23,12 +25,12 @@ test('Sign Up renders and fields work', async ({ page }) => {
   await expect(confirm).toBeVisible();
 
   // Fill + verify
-  await email.fill('josh@foo.com');
-  await password.fill('sixer1');
-  await confirm.fill('sixer1');
-  await expect(email).toHaveValue('josh@foo.com');
-  await expect(password).toHaveValue('sixer1');
-  await expect(confirm).toHaveValue('sixer1');
+  await email.fill('john@foo.com');
+  await password.fill('changeme');
+  await confirm.fill('changeme');
+  await expect(email).toHaveValue('john@foo.com');
+  await expect(password).toHaveValue('changeme');
+  await expect(confirm).toHaveValue('changeme');
 
   // Reset clears
   await page.getByRole('button', { name: /reset/i }).click();
