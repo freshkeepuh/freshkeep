@@ -30,8 +30,6 @@ test('test access to home page (not signed in)', async ({ page }) => {
   await expect(page).toHaveURL('https://docs.freshkeepuh.live/');
 });
 
-test.slow();
-test.use({ viewport: { width: 1280, height: 800 } });
 test('dashboard is accessible after sign-in (simple)', async ({ getUserPage }) => {
   // Call the getUserPage fixture with users signin info to get authenticated session for user
   const customUserPage = await getUserPage('john@foo.com', 'changeme');
