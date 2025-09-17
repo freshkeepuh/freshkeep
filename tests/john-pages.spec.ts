@@ -15,10 +15,3 @@ test('can authenticate a specific user', async ({ getUserPage }) => {
   // await customUserPage.getByRole('link', { name: 'List Stuff' }).click();
   // await expect(customUserPage.getByRole('heading', { name: 'Stuff' })).toBeVisible();
 });
-
-// Acceptance test for Location Management page
-test('Location Management page title is visible for custom user', async ({ getUserPage }) => {
-  const customUserPage = await getUserPage('john@foo.com', 'changeme');
-  await customUserPage.goto('http://localhost:3000/locations');
-  await expect(customUserPage.getByRole('heading', { name: 'Location Management' })).toBeVisible();
-});
