@@ -10,12 +10,8 @@
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
-    "playwright-development": "npx playwright test"
+    "test": "npx playwright test"
   },
-  "prisma": {
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
-    "test": "npx playwright test"  },
   "dependencies": {
     "@hookform/resolvers": "^3.6.0",
     "@ngneat/falso": "^7.2.0",
