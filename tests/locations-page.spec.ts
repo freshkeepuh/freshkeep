@@ -1,6 +1,7 @@
 import { test, expect } from './auth-utils';
 
-const URL = `http://localhost:3000/locations`;
+const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
+const URL = `${BASE_URL}/locations`;
 
 test.slow();
 test('test locations page', async ({ page }) => {
