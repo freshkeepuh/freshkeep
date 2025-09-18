@@ -50,11 +50,11 @@ const NavBar: React.FC = () => {
             ) : (
               <Nav.Link
                 id="login-dropdown-sign-in"
-                title="Login"
+                title="Sing-in"
                 href="/auth/signin"
                 active={pathName === '/auth/signin'}
               >
-                Login
+                Sing in
               </Nav.Link>
             )}
         </Nav>
