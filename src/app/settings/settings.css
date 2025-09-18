@@ -1,0 +1,46 @@
+:root {
+    --fk-grad-1: #EBEDF2;
+    --fk-grad-2: #3b82f6;
+  }
+ 
+  body { font-family: 'Inter', sans-serif; }
+
+  body.fk-bg {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #EBEDF2 0%, #eff6ff 100%);
+    transition: background 0.3s ease-in-out;
+  }
+
+  .btn-gradient:hover {
+    filter: brightness(0.95);
+    color: #fff;
+  }
+  
+  .dark {
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%) !important;
+  }
+  .dark .card,
+  .dark .bg-white,
+  .dark .navbar,
+  .dark header {
+    background-color: #374151 !important;
+    color: #f9fafb !important;
+    border-color: #4b5563 !important;
+  }
+  .dark .text-dark  { color: #f9fafb !important; }
+  .dark .text-muted { color: #d1d5db !important; }
+  .dark .form-control,
+  .dark .form-select {
+    background-color: #4b5563 !important;
+    color: #f9fafb !important;
+    border-color: #6b7280 !important;
+  }
+  .dark .form-control::placeholder { color: #e5e7eb !important; }
+  .dark .btn-outline-secondary { color: #e5e7eb; border-color: #6b7280; }
+  .dark .btn-outline-secondary:hover { background-color: #6b7280; color: #fff; }
+  
+  .swatch { width: 32px; height: 32px; display: inline-block; }
+  .swatch-light { background: linear-gradient(135deg, #ecfdf5, #eff6ff); }
+  .swatch-dark  { background: linear-gradient(135deg, #1f2937, #111827); }
+  
+  .toast-layer { z-index: 1080; }
