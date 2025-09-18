@@ -7,18 +7,7 @@ FreshKeep is a project designed to help users manage and track the freshness of 
 
 ## Installation
 
-1. Clone the repository:
-    ```sh
-    git clone https://github.com/freshkeepuh/freshkeep.git
-    ```
-2. Navigate to the project directory:
-    ```sh
-    cd freshkeep
-    ```
-3. Install dependencies:
-    ```sh
-    npm install
-    ```
+See the instructions in the [developers guide](https://freshkeepuh.github.io/dev-guide.html).
 
 ## Usage
 
