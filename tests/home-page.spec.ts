@@ -7,13 +7,15 @@ test('test access to welcome page (not signed in)', async ({ page }) => {
   await page.goto(`${BASE_URL}`);
 
   await page.waitForLoadState('networkidle');
+  await expect(page).toHaveURL(`${BASE_URL}/`);
   await expect(page.getByRole('heading', { name: 'Welcome' })).toBeVisible();
 });
 
 test('test access to dashboard page (sign in)', async ({ getUserPage }) => {
   // Call the getUserPage fixture with users signin info to get authenticated session for user
-  const customUserPage = await getUserPage('john@foo.com', 'changeme');
+  const page = await getUserPage('john@foo.com', 'changeme');
 
-  await customUserPage.waitForLoadState('networkidle');
-  await expect(customUserPage.getByRole('heading', { name: 'Dashboard' })).toBeVisible();
+  await page.waitForLoadState('networkidle');
+  await expect(page).toHaveURL(`${BASE_URL}/`);
+  await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible();
 });
