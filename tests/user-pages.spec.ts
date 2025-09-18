@@ -6,7 +6,6 @@ test('test access to user page', async ({ getUserPage }) => {
   const customUserPage = await getUserPage('john@foo.com', 'changeme');
 
   // Navigate to the home customUserPage
-  await customUserPage.goto(`${BASE_URL}`);
-  await customUserPage.waitForLoadState('networkidle');
+   await customUserPage.waitForLoadState('networkidle');
   await expect(customUserPage.getByRole('button', { name: 'john@foo.com' })).toBeVisible();
 });
