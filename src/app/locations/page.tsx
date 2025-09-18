@@ -1,4 +1,4 @@
-import { Button, Col, Container, Form, Row } from 'react-bootstrap';
+import { Button, Col, Container, Form, Row, Image } from 'react-bootstrap';
 
 const Locations = () => (
   <main style={{ background: '#f4f4f4', minHeight: '100vh', paddingTop: '2rem', paddingBottom: '2rem' }}>
@@ -79,14 +79,11 @@ const Locations = () => (
           </Form>
           {/* Google Maps Placeholder */}
           <div className="mb-3 d-flex justify-content-center">
-            <img
-              src="https://developers.google.com/static/maps/images/landing/hero_geocoding_api.png"
+            <Image
+              src="/map-placeholder.png"
               alt="not found"
-              style={{
-                width: '80%',
-                height: 'auto',
-                borderRadius: '8px',
-              }}
+              width={625}
+              height={400}
             />
           </div>
         </Col>
