@@ -44,3 +44,8 @@
   .swatch-dark  { background: linear-gradient(135deg, #1f2937, #111827); }
   
   .toast-layer { z-index: 1080; }
+
+  .highlight-text {
+    color: black;
+  }
+  
