@@ -6,7 +6,6 @@ test('test access to admin page', async ({ getUserPage }) => {
   const adminPage = await getUserPage('admin@foo.com', 'changeme');
 
   // Navigate to the home adminPage
-  await adminPage.goto(`${BASE_URL}/`);
-  // Check for navigation elements
+  await adminPage.waitForLoadState('networkidle');
   await expect(adminPage.getByRole('button', { name: 'admin@foo.com' })).toBeVisible();
 });

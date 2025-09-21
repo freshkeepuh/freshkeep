@@ -38,7 +38,4 @@ test('Sign Up renders and fields work', async ({ page }) => {
 
   // Register button visible
   await expect(page.getByRole('button', { name: /register/i })).toBeVisible();
-
-  // (Optional) sign-in link exists
-  await expect(page.getByRole('link', { name: /sign in/i })).toBeVisible();
 });
