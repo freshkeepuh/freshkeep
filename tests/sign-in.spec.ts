@@ -1,10 +1,9 @@
 import { test, expect } from './auth-utils';
-
 const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
 
-test.slow();
 test('test sign in page', async ({ page }) => {
-    await page.goto(`${BASE_URL}/auth/signin`);
+  await page.goto(`${BASE_URL}/auth/signin`);
+  await page.waitForLoadState('networkidle');
 
   const email = page.locator('input[name="email"], input[type="email"], input#email').first();
   const password = page.locator('input[name="password"], input[type="password"], input#password').first();
@@ -24,13 +23,16 @@ test('test sign in page', async ({ page }) => {
   // Submit the form
   await page.getByRole('button', { name: 'Sign In' }).click();
 
+  // Wait for navigation and check we're not on error page
+  await page.waitForLoadState('networkidle');
+
   // Expect to be redirected to the homepage
-  await page.goto(`${BASE_URL}/`);
+  await expect(page).toHaveURL(`${BASE_URL}/`);
 });
 
-test.slow();
 test('test sign in page with Remember me option', async ({ page }) => {
-    await page.goto(`${BASE_URL}/auth/signin`);
+  await page.goto(`${BASE_URL}/auth/signin`);
+  await page.waitForLoadState('networkidle');
 
   const email = page.locator('input[name="email"], input[type="email"], input#email').first();
   const password = page.locator('input[name="password"], input[type="password"], input#password').first();
@@ -53,14 +55,14 @@ test('test sign in page with Remember me option', async ({ page }) => {
 
   // Submit the form
   await page.getByRole('button', { name: 'Sign In' }).click();
+  await page.waitForLoadState('networkidle');
 
   // Expect to be redirected to the homepage
-  await page.goto(`${BASE_URL}/`);
+  await expect(page).toHaveURL(`${BASE_URL}/`);
 });
 
-test.slow();
 test('test sign in page with sign up option', async ({ page }) => {
-    await page.goto(`${BASE_URL}/auth/signin`);
+  await page.goto(`${BASE_URL}/auth/signin`);
 
   // Click on the "Sign Up" link
   await page.getByRole('link', { name: 'Sign Up' }).click();
