@@ -48,6 +48,8 @@ async function seedUsers() : Promise<Array<User>> {
         email: account.email,
         password,
         role,
+        firstName,
+        lastName,
       },
     });
     // Add the user to the array
