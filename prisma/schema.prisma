@@ -35,27 +35,18 @@ enum Role {
  * Uses: Role
  */
 model User {
-  id        String   @id @default(uuid()) @map("_id")
-  email     String   @unique
-  password  String
-  role      Role     @default(USER)
-  settings  Json?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  UserSettings UserSettings[]
-}
-
-/**
-* An extension of the User but focuses on settings requirements
-*/
-model UserSettings {
-  userId          String            @id
-  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id              String   @id @default(uuid()) @map("_id")
+  email           String   @unique
+  password        String
   firstName       String
   lastName        String
   profileImageUrl String?
-  country         Country           @default(USA)
+  role            Role     @default(USER)
   measure         MeasurementSystem @default(Imperial)
+  country         Country           @default(USA)
+  settings        Json?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
 /**
@@ -211,4 +202,9 @@ model Item {
   picture     String?
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
+}
+
+enum MeasurementSystem {
+  Imperial 
+  Metric
 }
