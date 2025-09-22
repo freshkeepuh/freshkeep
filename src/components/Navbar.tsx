@@ -28,7 +28,7 @@ const NavBar: React.FC = () => {
           <Navbar.Offcanvas
             id={offcanvasId}
             placement="end"
-            style={{ backgroundColor: '#198754', color: 'white' }}
+            style={{ backgroundColor: 'var(--bs-success)', color: 'white' }}
           >
             <Offcanvas.Header closeButton closeVariant="white">
               <Offcanvas.Title>Menu</Offcanvas.Title>
@@ -46,7 +46,7 @@ const NavBar: React.FC = () => {
                 <Nav.Link as={Link} href="/shoppingList" active={isActive('/shoppingList')} style={{ color: 'white' }}>
                   Shopping List
                 </Nav.Link>
-                <Nav.Link as={Link} href="/" active={isActive('/recipes')} style={{ color: 'white' }}>
+                <Nav.Link as={Link} href="/" active={isActive('/')} style={{ color: 'white' }}>
                   Recipes
                 </Nav.Link>
               </Nav>
