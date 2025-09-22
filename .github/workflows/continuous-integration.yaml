@@ -75,7 +75,7 @@ jobs:
         if: steps.playwright-cache.outputs.cache-hit != 'true'
 
       - run: npx playwright install-deps
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
 
       - name: Run Playwright Tests
         env:
