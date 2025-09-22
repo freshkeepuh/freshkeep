@@ -6,7 +6,6 @@ import { usePathname } from 'next/navigation';
 import { Container, Nav, Navbar, NavDropdown, Offcanvas } from 'react-bootstrap';
 import { BoxArrowRight, Lock, Gear } from 'react-bootstrap-icons';
 
-// TODO: custom colors https://getbootstrap.com/docs/5.3/customize/color-modes/
 const NavBar: React.FC = () => {
   const { data: session } = useSession();
   const currentUser = session?.user?.email ?? 'Account';
@@ -22,7 +21,7 @@ const NavBar: React.FC = () => {
           FreshKeep
         </Navbar.Brand>
 
-        {/* Only show hamburger & drawer when logged in */}
+        {/* Only show the links when signed in */}
         {session && <Navbar.Toggle aria-controls={offcanvasId} />}
 
         {session ? (
@@ -76,7 +75,7 @@ const NavBar: React.FC = () => {
             </Offcanvas.Body>
           </Navbar.Offcanvas>
         ) : (
-          // Logged out: only show Sign In
+          // Signed out: only show Sign In
           <Nav className="ms-auto">
             <Nav.Link as={Link} href="/auth/signin" active={isActive('/auth/signin')}>
               Sign In
