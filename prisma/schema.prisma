@@ -38,8 +38,6 @@ model User {
   id              String   @id @default(uuid()) @map("_id")
   email           String   @unique
   password        String
-  firstName       String
-  lastName        String
   profileImageUrl String?
   role            Role     @default(USER)
   measure         MeasurementSystem @default(Imperial)
