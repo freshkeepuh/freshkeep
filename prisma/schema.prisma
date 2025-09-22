@@ -42,6 +42,20 @@ model User {
   settings  Json?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  UserSettings UserSettings[]
+}
+
+/**
+* An extension of the User but focuses on settings requirements
+*/
+model UserSettings {
+  userId          String            @id
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  firstName       String
+  lastName        String
+  profileImageUrl String?
+  country         Country           @default(USA)
+  measure         MeasurementSystem @default(Imperial)
 }
 
 /**
