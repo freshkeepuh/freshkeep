@@ -1,6 +1,7 @@
 /* page */
-.rpPage { min-height: 100vh; background: #ffffff;  --footer-h: 96px; /* <- set this to your footer’s actual height */
-  padding-bottom: calc(var(--footer-h) + 16px); }
+.rpPage { min-height: 100vh; background: #ffffff;
+  /* padding-bottom uses --footer-h, which should be set on the footer element */
+  padding-bottom: calc(var(--footer-h, 96px) + 16px); }
 
 /* layout */
 .rpMain { padding: 32px 16px; }
