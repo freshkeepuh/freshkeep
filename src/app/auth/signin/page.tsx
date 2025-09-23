@@ -1,6 +1,7 @@
 'use client';
 
 import { signIn } from 'next-auth/react';
+import Link from 'next/link';
 import { Button, Card, Form, Image } from 'react-bootstrap';
 
 const SignIn = () => {
@@ -15,6 +16,7 @@ const SignIn = () => {
 
     const email = target.email.value;
     const password = target.password.value;
+
     const result = await signIn('credentials', {
       callbackUrl: '/',
       email,
@@ -37,12 +39,13 @@ const SignIn = () => {
       {/* Sign In form section */}
       <div className="signin-card-wrap">
         <Card className="shadow rounded-4">
-          <Card.Body className="p-5"> {/* increased padding */}
+          {/* increased padding */}
+          <Card.Body className="p-5">
             <div className="d-flex align-items-center justify-content-center mb-4">
               <Image
                 src="/multicolor-leaf2.png"
                 alt="Fresh Keep Logo"
-                width={50}  /* bigger logo */
+                width={50} /* bigger logo */
                 height={50}
                 className="me-2"
               />
@@ -57,7 +60,7 @@ const SignIn = () => {
                   type="text"
                   placeholder="👤 Username or Email"
                   required
-                  size="lg"  /* larger input */
+                  size="lg" /* larger input */
                 />
               </Form.Group>
 
@@ -78,9 +81,9 @@ const SignIn = () => {
                   name="rememberMe"
                   label="Remember me"
                 />
-                <a href="/forgot-password" className="fw-semibold text-success">
+                <Link href="/forgot-password" className="fw-semibold text-success">
                   Forgot Password?
-                </a>
+                </Link>
               </div>
 
               <div className="d-grid">
@@ -92,80 +95,84 @@ const SignIn = () => {
           </Card.Body>
 
           <Card.Footer className="text-center py-3">
-            New around here?{' '}
-            <a href="/auth/signup" className="fw-bold text-success">
+            <span>New around here?</span>
+            {' '}
+            <Link href="/auth/signup" className="fw-bold text-success">
               Sign up
-            </a>
+            </Link>
           </Card.Footer>
         </Card>
       </div>
 
-      {/* Styles */}
-      <style jsx>{`
-        .signin-hero {
-          background-image: url('/images/sign-in/Sign-in-bg-photo.png');
-          background-size: cover;
-          background-position: center;
-          min-height: 100vh;
-          display: flex;
-          align-items: center;
-          padding: 5vh 4rem;
-        }
-
-        .welcome-section {
-          color: white;
-          text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-          max-width: 500px;
-          margin-right: 3rem;
-        }
-
-        .welcome-title {
-          font-size: 4rem;
-          font-weight: 800;
-          margin-bottom: 0.5rem;
-        }
-
-        .welcome-subtitle {
-          font-size: 2.5rem;
-          font-weight: 500;
-        }
-
-        .signin-card-wrap {
-          width: 500px; /* bigger card */
-          flex-shrink: 0;
-          margin-left: auto;
-          margin-right: 6rem;
-        }
-
-        /* Mobile: stack vertically */
-        @media (max-width: 992px) {
+      <style>
+        {`
           .signin-hero {
-            flex-direction: column;
-            justify-content: center;
-            gap: 2rem;
-            text-align: center;
+            background-image: url('/images/sign-in/Sign-in-bg-photo.png');
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 5vh 4rem;
           }
 
           .welcome-section {
-            margin-right: 0;
-            text-align: center;
+            color: white;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+            max-width: 500px;
+            margin-right: 3rem;
           }
 
           .welcome-title {
-            font-size: 2.25rem;
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
           }
 
           .welcome-subtitle {
-            font-size: 1.2rem;
+            font-size: 2.5rem;
+            font-weight: 500;
           }
 
           .signin-card-wrap {
-            width: 100%;
-            max-width: 500px; /* responsive but bigger */
-            margin-left: 0;
+            width: 500px;
+            flex-shrink: 0;
+            margin-left: auto;
+            margin-right: 6rem; /* pushes the card farther from the edge */
           }
-        }
-      `}</style>
+
+          /* Mobile: stack vertically */
+          @media (max-width: 992px) {
+            .signin-hero {
+              flex-direction: column;
+              justify-content: center;
+              gap: 2rem;
+              text-align: center;
+              padding: 5vh 1.25rem;
+            }
+
+            .welcome-section {
+              margin-right: 0;
+              text-align: center;
+            }
+
+            .welcome-title {
+              font-size: 2.25rem;
+            }
+
+            .welcome-subtitle {
+              font-size: 1.2rem;
+            }
+
+            .signin-card-wrap {
+              width: 100%;
+              max-width: 500px;
+              margin-left: 0;
+              margin-right: 0;
+            }
+          }
+        `}
+      </style>
     </main>
   );
 };
