@@ -55,14 +55,17 @@ const NavBar: React.FC = () => {
               <Nav>
                 <NavDropdown title={currentUser} align="end">
                   <NavDropdown.Item as={Link} href="/settings">
-                    <Gear className="me-2" /> Settings
+                    <Gear className="me-2" />
+                    Settings
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
                   <NavDropdown.Item as={Link} href="/auth/change-password">
-                    <Lock className="me-2" /> Change Password
+                    <Lock className="me-2" />
+                    Change Password
                   </NavDropdown.Item>
                   <NavDropdown.Item onClick={() => signOut({ callbackUrl: '/' })}>
-                    <BoxArrowRight className="me-2" /> Sign Out
+                    <BoxArrowRight className="me-2" />
+                    Sign Out
                   </NavDropdown.Item>
                 </NavDropdown>
               </Nav>
