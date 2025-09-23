@@ -319,7 +319,7 @@ export default function RecipesPage() {
                       <span>{r.difficulty}</span>
                     </div>
                     <div>
-                      <span>{getDietEmoji((r.diet as any) ?? 'Any')}</span>
+                      <span>{getDietEmoji(r.diet)}</span>
                       <span>{r.diet}</span>
                     </div>
                   </div>
