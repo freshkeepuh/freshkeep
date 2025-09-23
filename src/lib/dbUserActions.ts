@@ -38,7 +38,7 @@ export async function changePassword(credentials: { email: string; password: str
  * @param credentials an object with the following properties: email.
  * Returns true if found, otherwise null.
  */
-export async function checkUser(credentials:{ email: string }) {
+export async function checkUser(credentials: { email: string }) {
   const user = await prisma.user.findUnique({
     where: { email: credentials.email },
   });
