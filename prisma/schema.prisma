@@ -42,6 +42,7 @@ model User {
   settings  Json?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  Shop      Shop[]
 }
 
 /**
@@ -133,6 +134,7 @@ model Container {
  * Shopping Lists should be grouped by this.
  * Used By: GroceryItem
  */
+
 enum GroceryCategory {
   Fruits
   Vegetables
@@ -172,6 +174,7 @@ model GroceryItem {
   items      Item[]
   createdAt  DateTime        @default(now())
   updatedAt  DateTime        @updatedAt
+  Shop       Shop[]
 
   @@index([category, name], name: "category_name_idx")
 }
@@ -197,4 +200,19 @@ model Item {
   picture     String?
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
+}
+
+/**
+ * Shopping List Items
+ * Uses: User, GroceryItem
+ */
+
+model Shop {
+  id            Int         @id @default(autoincrement()) @map("_id")
+  userId        String
+  groceryItemId String
+  user          User        @relation(fields: [userId], references: [id])
+  groceryItem   GroceryItem @relation(fields: [groceryItemId], references: [id])
+
+  @@unique([userId, groceryItemId])
 }
