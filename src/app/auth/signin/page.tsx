@@ -29,6 +29,8 @@ const SignIn = () => {
     if (result?.error) {
       console.error('Sign in failed: ', result.error);
       setShowError(true);
+    } else if (result?.url) {
+      window.location.href = result.url;
     }
   };
 
@@ -76,7 +78,7 @@ const SignIn = () => {
               <Form.Group controlId="formBasicEmail" className="mb-4">
                 <Form.Control
                   name="email"
-                  type="text"
+                  type="email"
                   placeholder="👤 Username or Email"
                   required
                   size="lg" /* larger input */
