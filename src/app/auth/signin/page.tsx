@@ -3,7 +3,15 @@
 import { signIn } from 'next-auth/react';
 import { Button, Card, Col, Container, Form, Row, Image } from 'react-bootstrap';
 
-const SignIn = () => {
+/**
+ * Sign-in page component for Fresh Keep website.
+ * 
+ * Renders a sign-in form with email, password, and an optional
+ * "Remember me" checkbox. Uses NextAuth `signIn` with the "credentials" provider.
+ * If authentication fails, a modal is displayed and the error is logged to the console.
+ */
+
+const SignInPage = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -122,4 +130,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default SignInPage;
