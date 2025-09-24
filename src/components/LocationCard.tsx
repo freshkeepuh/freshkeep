@@ -136,7 +136,7 @@ const LocationCard = ({ id, name, address, onEdit, onDelete }: LocationCardProps
       </div>
       {/* Address */}
       <div className="text-muted small">
-        <strong>Address:</strong>
+        <strong>Address: </strong>
         {address}
       </div>
     </li>
