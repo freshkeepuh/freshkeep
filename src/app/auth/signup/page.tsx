@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Button, Card, Col, Form, Image, Row } from 'react-bootstrap';
-import { createUser } from '@/lib/dbUserActions';
+import { createUser, checkUser } from '@/lib/dbUserActions';
 
 type SignUpForm = {
   email: string;
@@ -16,7 +16,13 @@ type SignUpForm = {
 
 const SignUp = () => {
   const validationSchema = Yup.object().shape({
-    email: Yup.string().required('Email is required').email('Email is invalid'),
+    email: Yup.string()
+      .required('Email is required')
+      .email('Email is invalid')
+      .test('unique-email', 'Email already exists', async (value) => {
+        if (!value) return false;
+        return !(await checkUser({ email: value }));
+      }),
     password: Yup.string()
       .required('Password is required')
       .min(6, 'Password must be at least 6 characters')
@@ -36,8 +42,8 @@ const SignUp = () => {
   });
 
   const onSubmit = async (data: SignUpForm) => {
-    await createUser({ email: data.email, password: data.password, confirmPassword: data.confirmPassword });
-    await signIn('credentials', { callbackUrl: '/', email: data.email, password: data.password });
+    await createUser(data);
+    await signIn('credentials', { callbackUrl: '/', ...data });
   };
 
   return (
@@ -53,7 +59,13 @@ const SignUp = () => {
         <Card className="shadow rounded-4">
           <Card.Body className="p-5">
             <div className="d-flex align-items-center justify-content-center mb-4">
-              <Image src="/multicolor-leaf2.png" alt="Fresh Keep Logo" width={50} height={50} className="me-2" />
+              <Image
+                src="/multicolor-leaf2.png"
+                alt="Fresh Keep Logo"
+                width={50}
+                height={50}
+                className="me-2"
+              />
               <h1 className="text-center m-0">Fresh Keep</h1>
             </div>
 
@@ -109,7 +121,7 @@ const SignUp = () => {
           </Card.Body>
 
           <Card.Footer className="text-center py-3">
-            <span>Already have an account?</span>{' '}
+            <span>Already have an account?</span>
             <Link href="/auth/signin" className="fw-bold text-success">
               Sign in
             </Link>
@@ -117,7 +129,7 @@ const SignUp = () => {
         </Card>
       </div>
 
-      {/* Styles with gradient overlay */}
+      {/* Styles */}
       <style>
         {`
           .auth-hero {

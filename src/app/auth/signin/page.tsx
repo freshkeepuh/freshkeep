@@ -2,9 +2,11 @@
 
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
-import { Button, Card, Form, Image } from 'react-bootstrap';
+import { useState } from 'react';
+import { Button, Card, Form, Image, Modal } from 'react-bootstrap';
 
 const SignIn = () => {
+  const [showError, setShowError] = useState(false);
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -21,17 +23,36 @@ const SignIn = () => {
       callbackUrl: '/',
       email,
       password,
+      redirect: false,
     });
 
     if (result?.error) {
       console.error('Sign in failed: ', result.error);
+      setShowError(true);
+    } else if (result?.url) {
+      window.location.href = result.url;
     }
   };
 
   return (
     <main className="signin-hero">
+      {/* Authentication error pop-up */}
+      <Modal show={showError} onHide={() => setShowError(false)} centered>
+        <Modal.Header className="bg-danger text-white" closeButton>
+          <Modal.Title>Sign In Error</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>The email or passsword you entered is incorrect. Please check your credentials and try again.</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowError(false)}>
+            OK
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
       {/* Welcome section */}
-      <div className="welcome-section">
+      <div className="welcome-section justify-content-center">
         <h1 className="welcome-title">Welcome back!</h1>
         <h2 className="welcome-subtitle">Sign in and see what&apos;s in your fridge.</h2>
       </div>
@@ -57,7 +78,7 @@ const SignIn = () => {
               <Form.Group controlId="formBasicEmail" className="mb-4">
                 <Form.Control
                   name="email"
-                  type="text"
+                  type="email"
                   placeholder="👤 Username or Email"
                   required
                   size="lg" /* larger input */
@@ -120,7 +141,7 @@ const SignIn = () => {
             color: white;
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
             max-width: 500px;
-            margin-right: 3rem;
+            // margin-right: 3rem;
           }
 
           .welcome-title {

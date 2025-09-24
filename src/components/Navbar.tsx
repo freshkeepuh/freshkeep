@@ -75,7 +75,7 @@ const NavBar: React.FC = () => {
           // Signed out: only show Sign In
           <Nav className="ms-auto">
             <Nav.Link as={Link} href="/auth/signin" active={isActive('/auth/signin')}>
-              Sign In
+              Sign in
             </Nav.Link>
           </Nav>
         )}
