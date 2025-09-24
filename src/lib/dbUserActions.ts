@@ -36,7 +36,7 @@ export async function changePassword(credentials: { email: string; password: str
 /**
  * Check if user email exists in the database.
  * @param credentials an object with the following properties: email.
- * Returns true if found, otherwise null.
+ * Returns true if found, otherwise false.
  */
 export async function checkUser(credentials: { email: string }) {
   const user = await prisma.user.findUnique({
