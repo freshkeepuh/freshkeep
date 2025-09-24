@@ -40,7 +40,6 @@ const LocationsPage = () => {
   };
   const handleAddLocation = () => {
     // TODO: add function
-    console.log('Add location clicked');
   };
 
   return (
