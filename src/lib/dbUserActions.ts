@@ -5,7 +5,7 @@ import { prisma } from './prisma';
 
 /**
  * Creates a new user in the database.
- * @param credentials, an object with the following properties: email, password.
+ * @param credentials an object with the following properties: email, password.
  */
 export async function createUser(credentials: { email: string; password: string }) {
   // console.log(`createUser data: ${JSON.stringify(credentials, null, 2)}`);
@@ -20,7 +20,7 @@ export async function createUser(credentials: { email: string; password: string 
 
 /**
  * Changes the password of an existing user in the database.
- * @param credentials, an object with the following properties: email, password.
+ * @param credentials an object with the following properties: email, password.
  */
 export async function changePassword(credentials: { email: string; password: string }) {
   // console.log(`changePassword data: ${JSON.stringify(credentials, null, 2)}`);
@@ -31,4 +31,16 @@ export async function changePassword(credentials: { email: string; password: str
       password,
     },
   });
+}
+
+/**
+ * Check if user email exists in the database.
+ * @param credentials an object with the following properties: email.
+ * Returns true if found, otherwise false.
+ */
+export async function checkUser(credentials: { email: string }) {
+  const user = await prisma.user.findUnique({
+    where: { email: credentials.email },
+  });
+  return user !== null;
 }
