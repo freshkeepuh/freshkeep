@@ -136,6 +136,7 @@ model Container {
  * Shopping Lists should be grouped by this.
  * Used By: GroceryItem
  */
+
 enum GroceryCategory {
   Fruits
   Vegetables
@@ -175,6 +176,7 @@ model GroceryItem {
   items      Item[]
   createdAt  DateTime        @default(now())
   updatedAt  DateTime        @updatedAt
+  Shop       Shop[]
 
   @@index([category, name], name: "category_name_idx")
 }
@@ -202,7 +204,23 @@ model Item {
   updatedAt   DateTime    @updatedAt
 }
 
+
 enum MeasurementSystem {
   Imperial 
   Metric
+/**
+ * Shopping List Items
+ * Uses: User, GroceryItem
+ */
+
+model Shop {
+  id            String      @id @default(uuid()) @map("_id")
+  userId        String
+  groceryItemId String
+  user          User        @relation(fields: [userId], references: [id])
+  groceryItem   GroceryItem @relation(fields: [groceryItemId], references: [id])
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@unique([userId, groceryItemId])
 }
