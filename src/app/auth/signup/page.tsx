@@ -1,11 +1,10 @@
 'use client';
 
 import { signIn } from 'next-auth/react';
-import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { Button, Card, Col, Container, Button, Form, Row } from 'react-bootstrap';
+import { Button, Card, Col, Container, Form, Row } from 'react-bootstrap';
 import { createUser, checkUser } from '@/lib/dbUserActions';
 
 type SignUpForm = {
@@ -36,7 +35,7 @@ const SignUp = () => {
     register,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<SignUpForm>({
     resolver: yupResolver(validationSchema),
   });
