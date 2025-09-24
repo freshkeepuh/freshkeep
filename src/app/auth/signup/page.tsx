@@ -1,20 +1,19 @@
 'use client';
 
 import { signIn } from 'next-auth/react';
+import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { Card, Col, Container, Button, Form, Row } from 'react-bootstrap';
+import { Button, Card, Col, Container, Button, Form, Row } from 'react-bootstrap';
 import { createUser, checkUser } from '@/lib/dbUserActions';
 
 type SignUpForm = {
   email: string;
   password: string;
   confirmPassword: string;
-  // acceptTerms: boolean;
 };
 
-/** The sign up page. */
 const SignUp = () => {
   const validationSchema = Yup.object().shape({
     email: Yup.string()
@@ -30,14 +29,14 @@ const SignUp = () => {
       .max(40, 'Password must not exceed 40 characters'),
     confirmPassword: Yup.string()
       .required('Confirm Password is required')
-      .oneOf([Yup.ref('password'), ''], 'Confirm Password does not match'),
+      .oneOf([Yup.ref('password')], 'Confirm Password does not match'),
   });
 
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<SignUpForm>({
     resolver: yupResolver(validationSchema),
   });
