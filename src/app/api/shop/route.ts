@@ -3,7 +3,6 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-// 👇 add a non-default export so ESLint is happy
 export const runtime = 'nodejs';
 
 export async function GET(request: NextRequest) {
