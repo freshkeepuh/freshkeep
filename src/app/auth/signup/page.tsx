@@ -36,22 +36,8 @@ const SignUp = () => {
   });
 
   const onSubmit = async (data: SignUpForm) => {
-    try {
-      await createUser({
-        email: data.email,
-        password: data.password,
-        confirmPassword: data.confirmPassword,
-      });
-
-      // Sign in immediately after successful account creation
-      await signIn('credentials', {
-        callbackUrl: '/',
-        email: data.email,
-        password: data.password,
-      });
-    } catch (err) {
-      console.error('Sign up failed:', err);
-    }
+    await createUser({ email: data.email, password: data.password, confirmPassword: data.confirmPassword });
+    await signIn('credentials', { callbackUrl: '/', email: data.email, password: data.password });
   };
 
   return (
@@ -59,9 +45,7 @@ const SignUp = () => {
       {/* Left hero copy */}
       <div className="welcome-section">
         <h1 className="welcome-title">Create your account</h1>
-        <h2 className="welcome-subtitle">
-          Join Fresh Keep and never let food go to waste.
-        </h2>
+        <h2 className="welcome-subtitle">Join Fresh Keep and never let food go to waste.</h2>
       </div>
 
       {/* Right card */}
@@ -90,9 +74,7 @@ const SignUp = () => {
                   isInvalid={!!errors.email}
                   {...register('email')}
                 />
-                <Form.Control.Feedback type="invalid">
-                  {errors.email?.message}
-                </Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">{errors.email?.message}</Form.Control.Feedback>
               </Form.Group>
 
               <Form.Group controlId="signupPassword" className="mb-4">
@@ -103,9 +85,7 @@ const SignUp = () => {
                   isInvalid={!!errors.password}
                   {...register('password')}
                 />
-                <Form.Control.Feedback type="invalid">
-                  {errors.password?.message}
-                </Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">{errors.password?.message}</Form.Control.Feedback>
               </Form.Group>
 
               <Form.Group controlId="signupConfirm" className="mb-4">
@@ -116,28 +96,17 @@ const SignUp = () => {
                   isInvalid={!!errors.confirmPassword}
                   {...register('confirmPassword')}
                 />
-                <Form.Control.Feedback type="invalid">
-                  {errors.confirmPassword?.message}
-                </Form.Control.Feedback>
+                <Form.Control.Feedback type="invalid">{errors.confirmPassword?.message}</Form.Control.Feedback>
               </Form.Group>
 
               <Row className="align-items-center mb-4">
                 <Col xs="auto">
-                  <Button
-                    type="submit"
-                    variant="success"
-                    size="lg"
-                    disabled={isSubmitting}
-                  >
+                  <Button type="submit" variant="success" size="lg" disabled={isSubmitting}>
                     {isSubmitting ? 'Creating…' : 'Create Account'}
                   </Button>
                 </Col>
                 <Col className="text-end">
-                  <Button
-                    type="button"
-                    variant="outline-secondary"
-                    onClick={() => reset()}
-                  >
+                  <Button type="button" variant="outline-secondary" onClick={() => reset()}>
                     Reset
                   </Button>
                 </Col>
