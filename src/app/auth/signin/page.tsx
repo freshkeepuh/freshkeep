@@ -36,7 +36,7 @@ const SignIn = () => {
     <main className="signin-hero">
       {/* Authentication error pop-up */}
       <Modal show={showError} onHide={() => setShowError(false)} centered>
-        <Modal.Header closeButton>
+        <Modal.Header className="bg-danger text-white" closeButton>
           <Modal.Title>Sign In Error</Modal.Title>
         </Modal.Header>
         <Modal.Body>
