@@ -40,8 +40,8 @@ const NavBar: React.FC = () => {
                 <Nav.Link as={Link} href="/locations" active={isActive('/locations')} style={{ color: 'white' }}>
                   Locations
                 </Nav.Link>
-                <Nav.Link as={Link} href="/store" active={isActive('/store')} style={{ color: 'white' }}>
-                  Store
+                <Nav.Link as={Link} href="/shop" active={isActive('/shop')} style={{ color: 'white' }}>
+                  Shop
                 </Nav.Link>
                 <Nav.Link as={Link} href="/shoppingList" active={isActive('/shoppingList')} style={{ color: 'white' }}>
                   Shopping List
@@ -56,18 +56,15 @@ const NavBar: React.FC = () => {
                 <NavDropdown title={currentUser} align="end">
                   <NavDropdown.Item as={Link} href="/settings">
                     <Gear className="me-2" />
-                    {' '}
                     Settings
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
                   <NavDropdown.Item as={Link} href="/auth/change-password">
                     <Lock className="me-2" />
-                    {' '}
                     Change Password
                   </NavDropdown.Item>
                   <NavDropdown.Item onClick={() => signOut({ callbackUrl: '/' })}>
                     <BoxArrowRight className="me-2" />
-                    {' '}
                     Sign Out
                   </NavDropdown.Item>
                 </NavDropdown>
