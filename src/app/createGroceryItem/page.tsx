@@ -22,6 +22,36 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
+enum GroceryCategory {
+  PRODUCE = 'produce',
+  DAIRY = 'dairy',
+  MEAT = 'meat',
+  BAKERY = 'bakery',
+  PANTRY = 'pantry',
+  FROZEN = 'frozen',
+  BEVERAGES = 'beverages',
+  SNACKS = 'snacks',
+  HOUSEHOLD = 'household',
+  OTHER = 'other',
+}
+
+// Helper function to get display name for category
+const getCategoryDisplayName = (category: GroceryCategory): string => {
+  const displayNames: Record<GroceryCategory, string> = {
+    [GroceryCategory.PRODUCE]: 'Produce',
+    [GroceryCategory.DAIRY]: 'Dairy',
+    [GroceryCategory.MEAT]: 'Meat',
+    [GroceryCategory.BAKERY]: 'Bakery',
+    [GroceryCategory.PANTRY]: 'Pantry',
+    [GroceryCategory.FROZEN]: 'Frozen',
+    [GroceryCategory.BEVERAGES]: 'Beverages',
+    [GroceryCategory.SNACKS]: 'Snacks',
+    [GroceryCategory.HOUSEHOLD]: 'Household',
+    [GroceryCategory.OTHER]: 'Other',
+  };
+  return displayNames[category];
+};
+
 const CreateGroceryItemForm = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -78,21 +108,16 @@ const CreateGroceryItemForm = () => {
               <Form.Label>Category</Form.Label>
               <Form.Select name="category" value={formData.category} onChange={handleChange} required>
                 <option value="">Select a category</option>
-                <option value="produce">Produce</option>
-                <option value="dairy">Dairy</option>
-                <option value="meat">Meat</option>
-                <option value="bakery">Bakery</option>
-                <option value="pantry">Pantry</option>
-                <option value="frozen">Frozen</option>
-                <option value="beverages">Beverages</option>
-                <option value="snacks">Snacks</option>
-                <option value="household">Household</option>
-                <option value="other">Other</option>
+                {Object.values(GroceryCategory).map((category) => (
+                  <option key={category} value={category}>
+                    {getCategoryDisplayName(category)}
+                  </option>
+                ))}
               </Form.Select>
             </Form.Group>
 
             <div className="d-grid gap-2">
-              <Button variant="primary" type="submit" size="lg">
+              <Button variant="success" type="submit" size="lg">
                 Create Grocery Item
               </Button>
             </div>
