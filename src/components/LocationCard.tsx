@@ -66,7 +66,7 @@ const LocationCard = ({ id, name, address, onEdit, onDelete }: LocationCardProps
               variant="success"
               size="sm"
               className="me-2 p-1"
-              aria-label={`Save ${name}`}
+              aria-label={`Save ${editName}`}
               onClick={handleSaveClick}
             >
               <Check />
