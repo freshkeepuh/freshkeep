@@ -79,7 +79,7 @@ const CreateGroceryItemForm = () => {
         userId: session.user.email, // Pass the current user's email as userId
       });
 
-      setMessage({ type: 'success', text: 'Grocery item created and added to shopping list!' });
+      setMessage({ type: 'success', text: 'Grocery item created and added to your shop!' });
 
       setFormData({
         name: '',
