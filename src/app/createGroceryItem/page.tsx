@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -38,6 +39,7 @@ const getCategoryDisplayName = (category: GroceryCategory): string => {
 
 const CreateGroceryItemForm = () => {
   const { data: session } = useSession();
+  const router = useRouter();
   const [formData, setFormData] = useState({
     name: '',
     soldAt: '',
@@ -79,13 +81,19 @@ const CreateGroceryItemForm = () => {
         userId: session.user.email, // Pass the current user's email as userId
       });
 
-      setMessage({ type: 'success', text: 'Grocery item created and added to your shop!' });
+      setMessage({ type: 'success', text: 'Grocery item created successfully! Redirecting...' });
 
+      // Reset form
       setFormData({
         name: '',
         soldAt: '',
         category: '',
       });
+
+      // Redirect to shop page after a short delay to show success message
+      setTimeout(() => {
+        router.push('/shop');
+      }, 1500);
     } catch (error) {
       console.error('Error creating grocery item:', error);
       setMessage({ type: 'error', text: 'Failed to create grocery item. Please try again.' });
@@ -112,6 +120,7 @@ const CreateGroceryItemForm = () => {
                 onChange={handleChange}
                 placeholder="Enter grocery item name"
                 required
+                disabled={loading}
               />
             </Form.Group>
 
@@ -124,12 +133,19 @@ const CreateGroceryItemForm = () => {
                 onChange={handleChange}
                 placeholder="Enter store name"
                 required
+                disabled={loading}
               />
             </Form.Group>
 
             <Form.Group className="mb-3">
               <Form.Label>Category *</Form.Label>
-              <Form.Select name="category" value={formData.category} onChange={handleChange} required>
+              <Form.Select
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                required
+                disabled={loading}
+              >
                 <option value="">Select a category</option>
                 {Object.values(GroceryCategory).map((category) => (
                   <option key={category} value={category}>
@@ -142,6 +158,16 @@ const CreateGroceryItemForm = () => {
             <div className="d-grid gap-2">
               <Button variant="success" type="submit" size="lg" disabled={loading}>
                 {loading ? 'Creating...' : 'Create Grocery Item'}
+              </Button>
+
+              <Button
+                variant="outline-secondary"
+                type="button"
+                size="lg"
+                disabled={loading}
+                onClick={() => router.push('/shop')}
+              >
+                Cancel
               </Button>
             </div>
           </Form>

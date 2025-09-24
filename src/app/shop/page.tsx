@@ -1,97 +1,150 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import ProductCard from '../../components/ProductCard';
+import GroceryItemCard from '../../components/GroceryItemCard';
+
+// Define the type for your shop model data
+interface ShopItem {
+  id: string;
+  name: string;
+  soldAt: string;
+  category: string;
+  userId: string;
+}
 
 const ShopPage = () => {
-  // Sample product data
-  const sampleProducts = [
-    {
-      id: 'product-1',
-      productImage: 'https://images.cdn.shop.foodland.com/detail/4011.jpg',
-      productTitle: 'Bananas',
-      store: 'Foodland',
-      storageType: 'Counter',
-      productType: 'Fruit',
-      inList: false,
-    },
-    {
-      id: 'product-2',
-      productImage: 'https://bit.ly/464OM4c',
-      productTitle: 'Greek Yogurt',
-      store: 'Walmart',
-      storageType: 'Refrigerator',
-      productType: 'Dairy',
-      inList: true,
-    },
-    {
-      id: 'product-3',
-      productImage:
-        'https://target.scene7.com/is/image/Target/GUEST_ed5b1220-2654-467f-bb70-0a4ad8fe9c13?wid=750&qlt=80',
-      productTitle: 'Whole Wheat Bread',
-      store: 'Target',
-      storageType: 'Pantry',
-      productType: 'Bakery',
-      inList: true,
-    },
-    {
-      id: 'product-4',
-      productImage:
-        'https://www.instacart.com/assets/domains/product-image/file/large_3e047fa4-5235-4235-a5b8-a2a758ac0322.jpeg',
-      productTitle: 'Salmon',
-      store: 'Costco',
-      storageType: 'Freezer',
-      productType: 'Seafood',
-      inList: false,
-    },
-    {
-      id: 'product-5',
-      productImage: 'https://bit.ly/4npYvJI',
-      productTitle: 'Garlic Powder',
-      store: 'Walmart',
-      storageType: 'Spice Rack',
-      productType: 'Spices',
-      inList: true,
-    },
-    {
-      id: 'product-6',
-      productImage:
-        'https://target.scene7.com/is/image/Target/GUEST_ea9257fa-2303-4444-b10f-57e2937a1b4e?wid=750&qlt=80',
-      productTitle: 'Chicken Breast',
-      store: 'Foodland',
-      storageType: 'Refrigerator',
-      productType: 'Meat',
-      inList: true,
-    },
-    {
-      id: 'product-7',
-      productImage:
-        'https://target.scene7.com/is/image/Target/GUEST_5ae5aa78-6d3d-4691-add6-e74acd3c45d4?wid=750&qlt=80',
-      productTitle: 'Pasta',
-      store: 'Target',
-      storageType: 'Pantry',
-      productType: 'Grain',
-      inList: false,
-    },
-    {
-      id: 'product-8',
-      productImage: 'https://target.scene7.com/is/image/Target/GUEST_8cc36efc-6e13-4cd6-aac4-dc0d79de2851',
-      productTitle: 'Oreos',
-      store: 'Walmart',
-      storageType: 'Pantry',
-      productType: 'Snacks',
-      inList: true,
-    },
-  ];
+  const { data: session, status } = useSession();
+  const [shopItems, setShopItems] = useState<ShopItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Get current user email from session (use email as identifier)
+  const currentUserId = session?.user?.id;
+
+  useEffect(() => {
+    const fetchShopItems = async () => {
+      if (!currentUserId) return; // Don't fetch if no user
+
+      try {
+        setLoading(true);
+        console.log('Fetching shop items for user:', currentUserId);
+
+        const response = await fetch(`/api/shop?userId=${currentUserId}`);
+        console.log('Response status:', response.status);
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('API Error:', errorText);
+          throw new Error(`Failed to fetch shop items: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('Received data:', data);
+
+        setShopItems(data);
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching shop items:', err);
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+        setError(`Failed to load shop items: ${errorMessage}`);
+        setShopItems([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (status === 'loading') return; // Still loading session
+    fetchShopItems();
+  }, [currentUserId, status]);
+
+  // Map shop model data to GroceryItemCard props
+  const mapShopItemToCardProps = (shopItem: ShopItem) => ({
+    groceryItemImage: 'https://images.cdn.shop.foodland.com/detail/4011.jpg', // Hardcoded placeholder
+    groceryItemTitle: shopItem.name,
+    store: shopItem.soldAt,
+    storageType: 'Pantry', // Hardcoded
+    groceryItemType: shopItem.category,
+    inList: false, // Hardcoded
+  });
+
+  // Show loading while session is loading
+  if (status === 'loading') {
+    return (
+      <Container fluid className="p-5">
+        <h1>Shop</h1>
+        <div className="text-center py-5">
+          <div className="spinner-border text-success" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+          <p className="mt-3">Loading...</p>
+        </div>
+      </Container>
+    );
+  }
+
+  // Show sign-in prompt if not authenticated
+  if (!session) {
+    return (
+      <Container fluid className="p-5">
+        <h1>Shop</h1>
+        <div className="text-center py-5">
+          <div className="mb-4">
+            <i className="bi bi-person-circle" style={{ fontSize: '4rem', color: '#6c757d' }} />
+          </div>
+          <h3 className="text-muted">Please sign in to view your grocery items</h3>
+          <p className="text-muted mb-4">You need to be logged in to access your personal shop.</p>
+          <Button variant="success" href="/api/auth/signin" size="lg">
+            <i className="bi bi-box-arrow-in-right me-2" />
+            Sign In
+          </Button>
+        </div>
+      </Container>
+    );
+  }
+
+  // Show loading while fetching data
+  if (loading) {
+    return (
+      <Container fluid className="p-5">
+        <h1>Shop</h1>
+        <div className="text-center py-5">
+          <div className="spinner-border text-success" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </div>
+          <p className="mt-3">Loading your items...</p>
+        </div>
+      </Container>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <Container fluid className="p-5">
+        <h1>Shop</h1>
+        <div className="text-center py-5">
+          <div className="alert alert-danger" role="alert">
+            <h4 className="alert-heading">Oops! Something went wrong</h4>
+            <p>{error}</p>
+            <hr />
+            <Button variant="outline-danger" onClick={() => window.location.reload()} type="button">
+              Try Again
+            </Button>
+          </div>
+        </div>
+      </Container>
+    );
+  }
 
   return (
     <Container fluid className="p-5">
-      <h1>Store</h1>
+      <h1>Shop</h1>
       <div
         style={{
           width: '800px',
@@ -102,7 +155,7 @@ const ShopPage = () => {
       >
         <Row className=" align-items-center justify-content-center py-3" style={{ height: '50px' }}>
           <Col xs="auto" className="px-1">
-            <Form.Control type="search" placeholder="Search products..." style={{ width: '400px' }} />
+            <Form.Control type="search" placeholder="Search groceryItems..." style={{ width: '400px' }} />
           </Col>
           <Col xs="auto" className="ps-1">
             <Button variant="light">Filters</Button>
@@ -120,20 +173,37 @@ const ShopPage = () => {
         </Row>
       </div>
 
-      <Row>
-        {sampleProducts.map((product) => (
-          <Col key={product.id} lg={3} md={4} sm={6} className="mb-4">
-            <ProductCard
-              productImage={product.productImage}
-              productTitle={product.productTitle}
-              store={product.store}
-              storageType={product.storageType}
-              productType={product.productType}
-              inList={product.inList}
-            />
-          </Col>
-        ))}
-      </Row>
+      {shopItems.length === 0 ? (
+        <div className="text-center py-5">
+          <div className="mb-4">
+            <i className="bi bi-basket" style={{ fontSize: '4rem', color: '#6c757d' }} />
+          </div>
+          <h3 className="text-muted">No items found</h3>
+          <p className="text-muted mb-4">You haven&apos;t added any grocery items yet.</p>
+          <Button variant="success" href="/createGroceryItem" size="lg">
+            <i className="bi bi-plus-circle me-2" />
+            Add Your First Item
+          </Button>
+        </div>
+      ) : (
+        <Row>
+          {shopItems.map((shopItem) => {
+            const cardProps = mapShopItemToCardProps(shopItem);
+            return (
+              <Col key={shopItem.id} lg={3} md={4} sm={6} className="mb-4">
+                <GroceryItemCard
+                  groceryItemImage={cardProps.groceryItemImage}
+                  groceryItemTitle={cardProps.groceryItemTitle}
+                  store={cardProps.store}
+                  storageType={cardProps.storageType}
+                  groceryItemType={cardProps.groceryItemType}
+                  inList={cardProps.inList}
+                />
+              </Col>
+            );
+          })}
+        </Row>
+      )}
     </Container>
   );
 };
