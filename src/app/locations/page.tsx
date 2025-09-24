@@ -1,6 +1,14 @@
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
+import { Plus, Pencil, Trash } from 'react-bootstrap-icons';
+import Image from 'next/image';
 
-const Locations = () => (
+const sampleLocations = [
+  'Sample Location 1',
+  'Sample Location 2',
+  'Sample Location 3',
+];
+
+const LocationsPage = () => (
   <main style={{ background: '#f4f4f4', minHeight: '100vh', paddingTop: '2rem', paddingBottom: '2rem' }}>
     <Container>
       {/* Title Row */}
@@ -25,36 +33,47 @@ const Locations = () => (
         >
           <div>
             <h4>Locations</h4>
-            <ul>
-              <li>Sample Location 1</li>
-              <li>Sample Location 2</li>
-              <li>Sample Location 3</li>
+            <ul className="list-unstyled">
+              {sampleLocations.map((loc) => (
+                <li
+                  key={loc}
+                  className="d-flex align-items-center justify-content-between mb-3 p-2"
+                  style={{
+                    background: '#f8f9fa',
+                    borderRadius: '6px',
+                  }}
+                >
+                  <span>{loc}</span>
+                  <span>
+                    <Button
+                      variant="outline-dark"
+                      size="sm"
+                      className="me-2 p-1"
+                      aria-label={`Edit ${loc}`}
+                    >
+                      <Pencil />
+                    </Button>
+                    <Button
+                      variant="outline-danger"
+                      size="sm"
+                      className="p-1"
+                      aria-label={`Delete ${loc}`}
+                    >
+                      <Trash />
+                    </Button>
+                  </span>
+                </li>
+              ))}
             </ul>
           </div>
-          {/* Location Management Buttons */}
-          <div className="mt-auto d-flex">
+          {/* Add Location Button */}
+          <div className="mt-auto d-flex justify-content-end">
             <Button
               variant="success"
-              className="me-2"
               size="sm"
-              style={{ minWidth: '90px' }}
+              aria-label="Add Location"
             >
-              Add
-            </Button>
-            <Button
-              variant="outline-dark"
-              className="me-2"
-              size="sm"
-              style={{ minWidth: '90px' }}
-            >
-              Edit
-            </Button>
-            <Button
-              variant="outline-danger"
-              size="sm"
-              style={{ minWidth: '90px' }}
-            >
-              Delete
+              <Plus />
             </Button>
           </div>
         </Col>
@@ -79,14 +98,11 @@ const Locations = () => (
           </Form>
           {/* Google Maps Placeholder */}
           <div className="mb-3 d-flex justify-content-center">
-            <img
-              src="https://developers.google.com/static/maps/images/landing/hero_geocoding_api.png"
+            <Image
+              src="/map-placeholder.png"
               alt="not found"
-              style={{
-                width: '80%',
-                height: 'auto',
-                borderRadius: '8px',
-              }}
+              width={625}
+              height={400}
             />
           </div>
         </Col>
@@ -95,4 +111,4 @@ const Locations = () => (
   </main>
 );
 
-export default Locations;
+export default LocationsPage;

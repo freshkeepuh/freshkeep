@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import ProductCard from '../../components/ProductCard';
 
-const StorePage = () => {
+const ShopPage = () => {
   // Sample product data
   const sampleProducts = [
     {
@@ -138,4 +138,4 @@ const StorePage = () => {
   );
 };
 
-export default StorePage;
+export default ShopPage;
