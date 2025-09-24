@@ -36,7 +36,7 @@ const SignUp = () => {
   });
 
   const onSubmit = async (data: SignUpForm) => {
-    await createUser({ email: data.email, password: data.password, confirmPassword: data.confirmPassword });
+    await createUser({ email: data.email, password: data.password });
     await signIn('credentials', { callbackUrl: '/', email: data.email, password: data.password });
   };
 
