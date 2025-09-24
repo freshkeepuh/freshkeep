@@ -175,6 +175,7 @@ model GroceryItem {
   createdAt  DateTime        @default(now())
   updatedAt  DateTime        @updatedAt
   Shop       Shop[]
+  soldAt     String?
 
   @@index([category, name], name: "category_name_idx")
 }
