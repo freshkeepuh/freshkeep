@@ -53,13 +53,7 @@ const SignUp = () => {
         <Card className="shadow rounded-4">
           <Card.Body className="p-5">
             <div className="d-flex align-items-center justify-content-center mb-4">
-              <Image
-                src="/multicolor-leaf2.png"
-                alt="Fresh Keep Logo"
-                width={50}
-                height={50}
-                className="me-2"
-              />
+              <Image src="/multicolor-leaf2.png" alt="Fresh Keep Logo" width={50} height={50} className="me-2" />
               <h1 className="text-center m-0">Fresh Keep</h1>
             </div>
 
@@ -115,8 +109,7 @@ const SignUp = () => {
           </Card.Body>
 
           <Card.Footer className="text-center py-3">
-            <span>Already have an account?</span>
-            {' '}
+            <span>Already have an account?</span>{' '}
             <Link href="/auth/signin" className="fw-bold text-success">
               Sign in
             </Link>

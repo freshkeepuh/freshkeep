@@ -166,8 +166,8 @@ model GroceryItem {
   id         String          @id @default(uuid()) @map("_id")
   name       String          @unique
   category   GroceryCategory
-  unit       Unit            @relation(fields: [unitId], references: [id])
-  unitId     String
+  unit       Unit?           @relation(fields: [unitId], references: [id])
+  unitId     String?
   defaultQty Float           @default(1.0)
   isNeeded   Boolean         @default(false)
   picture    String?

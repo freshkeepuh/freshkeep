@@ -114,7 +114,7 @@ const ShopPage = () => {
           </Col>
           <Col xs="auto" className="ps-1">
             <Button variant="light" href="/createGroceryItem">
-              Add to Store
+              Add to Shop
             </Button>
           </Col>
         </Row>

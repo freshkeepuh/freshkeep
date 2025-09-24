@@ -1,63 +1,51 @@
-// 'use client';
-
-// import React from 'react';
-// import Container from 'react-bootstrap/Container';
-
-// const CreateGroceryItemForm = () => {
-//   return (
-//     <Container fluid className="p-5">
-//       <h1>Create a Grocery Item </h1>
-//     </Container>
-//   );
-// };
-
-// export default CreateGroceryItemForm;
-
 'use client';
 
 import React, { useState } from 'react';
+import { useSession } from 'next-auth/react';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-
-enum GroceryCategory {
-  PRODUCE = 'produce',
-  DAIRY = 'dairy',
-  MEAT = 'meat',
-  BAKERY = 'bakery',
-  PANTRY = 'pantry',
-  FROZEN = 'frozen',
-  BEVERAGES = 'beverages',
-  SNACKS = 'snacks',
-  HOUSEHOLD = 'household',
-  OTHER = 'other',
-}
+import Alert from 'react-bootstrap/Alert';
+import { GroceryCategory } from '@prisma/client';
+import { createGroceryItem } from '@/lib/dbShopActions';
 
 // Helper function to get display name for category
 const getCategoryDisplayName = (category: GroceryCategory): string => {
   const displayNames: Record<GroceryCategory, string> = {
-    [GroceryCategory.PRODUCE]: 'Produce',
-    [GroceryCategory.DAIRY]: 'Dairy',
-    [GroceryCategory.MEAT]: 'Meat',
-    [GroceryCategory.BAKERY]: 'Bakery',
-    [GroceryCategory.PANTRY]: 'Pantry',
-    [GroceryCategory.FROZEN]: 'Frozen',
-    [GroceryCategory.BEVERAGES]: 'Beverages',
-    [GroceryCategory.SNACKS]: 'Snacks',
-    [GroceryCategory.HOUSEHOLD]: 'Household',
-    [GroceryCategory.OTHER]: 'Other',
+    [GroceryCategory.Fruits]: 'Fruits',
+    [GroceryCategory.Vegetables]: 'Vegetables',
+    [GroceryCategory.CannedGoods]: 'Canned Goods',
+    [GroceryCategory.Dairy]: 'Dairy',
+    [GroceryCategory.Meat]: 'Meat',
+    [GroceryCategory.FishSeafood]: 'Fish & Seafood',
+    [GroceryCategory.Deli]: 'Deli',
+    [GroceryCategory.Condiments]: 'Condiments',
+    [GroceryCategory.Spices]: 'Spices',
+    [GroceryCategory.Snacks]: 'Snacks',
+    [GroceryCategory.Bakery]: 'Bakery',
+    [GroceryCategory.Beverages]: 'Beverages',
+    [GroceryCategory.Pasta]: 'Pasta',
+    [GroceryCategory.Grains]: 'Grains',
+    [GroceryCategory.Cereal]: 'Cereal',
+    [GroceryCategory.Baking]: 'Baking',
+    [GroceryCategory.FrozenFoods]: 'Frozen Foods',
+    [GroceryCategory.Other]: 'Other',
   };
   return displayNames[category];
 };
 
 const CreateGroceryItemForm = () => {
+  const { data: session } = useSession();
   const [formData, setFormData] = useState({
     name: '',
     soldAt: '',
-    category: '',
+    category: '' as GroceryCategory | '',
   });
+
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -67,10 +55,43 @@ const CreateGroceryItemForm = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    // Handle form submission here
+
+    if (!formData.name || !formData.category || !formData.soldAt) {
+      setMessage({ type: 'error', text: 'Please fill in all required fields.' });
+      return;
+    }
+
+    if (!session?.user?.email) {
+      setMessage({ type: 'error', text: 'You must be logged in to create items.' });
+      return;
+    }
+
+    setLoading(true);
+    setMessage(null);
+
+    try {
+      await createGroceryItem({
+        name: formData.name,
+        category: formData.category as GroceryCategory,
+        soldAt: formData.soldAt,
+        userId: session.user.email, // Pass the current user's email as userId
+      });
+
+      setMessage({ type: 'success', text: 'Grocery item created and added to shopping list!' });
+
+      setFormData({
+        name: '',
+        soldAt: '',
+        category: '',
+      });
+    } catch (error) {
+      console.error('Error creating grocery item:', error);
+      setMessage({ type: 'error', text: 'Failed to create grocery item. Please try again.' });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -79,9 +100,11 @@ const CreateGroceryItemForm = () => {
         <Col md={8} lg={6}>
           <h1 className="mb-4">Create a Grocery Item</h1>
 
+          {message && <Alert variant={message.type === 'success' ? 'success' : 'danger'}>{message.text}</Alert>}
+
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
-              <Form.Label>Grocery Item Name</Form.Label>
+              <Form.Label>Grocery Item Name *</Form.Label>
               <Form.Control
                 type="text"
                 name="name"
@@ -93,7 +116,7 @@ const CreateGroceryItemForm = () => {
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Label>Store</Form.Label>
+              <Form.Label>Store *</Form.Label>
               <Form.Control
                 type="text"
                 name="soldAt"
@@ -105,7 +128,7 @@ const CreateGroceryItemForm = () => {
             </Form.Group>
 
             <Form.Group className="mb-3">
-              <Form.Label>Category</Form.Label>
+              <Form.Label>Category *</Form.Label>
               <Form.Select name="category" value={formData.category} onChange={handleChange} required>
                 <option value="">Select a category</option>
                 {Object.values(GroceryCategory).map((category) => (
@@ -117,8 +140,8 @@ const CreateGroceryItemForm = () => {
             </Form.Group>
 
             <div className="d-grid gap-2">
-              <Button variant="success" type="submit" size="lg">
-                Create Grocery Item
+              <Button variant="success" type="submit" size="lg" disabled={loading}>
+                {loading ? 'Creating...' : 'Create Grocery Item'}
               </Button>
             </div>
           </Form>
