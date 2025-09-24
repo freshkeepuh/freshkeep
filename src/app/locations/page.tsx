@@ -10,17 +10,17 @@ const initialLocations = [
   {
     id: '1',
     name: 'Kitchen Pantry',
-    address: '123 Main St, Honolulu'
+    address: '123 Main St, Honolulu',
   },
   {
     id: '2',
     name: 'Home Pantry',
-    address: '123 Main St, Honolulu'
+    address: '123 Main St, Honolulu',
   },
   {
     id: '3',
     name: 'Parent Pantry',
-    address: '123 Main St, Honolulu'
+    address: '123 Main St, Honolulu',
   },
 ];
 
@@ -28,21 +28,16 @@ const LocationsPage = () => {
   const [locations, setLocations] = useState(initialLocations);
 
   const handleEditLocation = (id: string, name: string, address: string) => {
-    setLocations(prevLocations =>
-      prevLocations.map(location =>
-        location.id === id
-          ? { ...location, name, address }
-          : location
-      )
-    );
+    setLocations((prevLocations) => prevLocations.map((location) => (
+      location.id === id
+        ? { ...location, name, address }
+        : location
+    )));
   };
 
   const handleDeleteLocation = (id: string) => {
-    setLocations(prevLocations =>
-      prevLocations.filter(location => location.id !== id)
-    );
+    setLocations((prevLocations) => prevLocations.filter((location) => location.id !== id));
   };
-
   const handleAddLocation = () => {
     // TODO: add function
     console.log('Add location clicked');
@@ -73,16 +68,22 @@ const LocationsPage = () => {
               <div>
                 <h4>Locations</h4>
                 <ul className="list-unstyled">
-                  {locations.map((location) => (
-                    <LocationCard
-                      key={location.id}
-                      id={location.id}
-                      name={location.name}
-                      address={location.address}
-                      onEdit={handleEditLocation}
-                      onDelete={handleDeleteLocation}
-                    />
-                  ))}
+                  {locations.length > 0 ? (
+                    locations.map((location) => (
+                      <LocationCard
+                        key={location.id}
+                        id={location.id}
+                        name={location.name}
+                        address={location.address}
+                        onEdit={handleEditLocation}
+                        onDelete={handleDeleteLocation}
+                      />
+                    ))
+                  ) : (
+                    <li className="text-muted text-center p-3">
+                      No locations found.
+                    </li>
+                  )}
                 </ul>
               </div>
             </div>
@@ -117,7 +118,7 @@ const LocationsPage = () => {
                     onClick={handleAddLocation}
                     className="d-flex align-items-center"
                   >
-                    <Plus className="me-1"/>
+                    <Plus className="me-1" />
                     Add
                   </Button>
                 </Col>

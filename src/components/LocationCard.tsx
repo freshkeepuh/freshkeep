@@ -82,9 +82,8 @@ const LocationCard = ({ id, name, address, onEdit, onDelete }: LocationCardProps
             </Button>
           </span>
         </div>
-        
-        {/* Address edit */}
         <div>
+          {/* Address edit */}
           <Form.Control
             type="text"
             value={editAddress}
@@ -135,10 +134,10 @@ const LocationCard = ({ id, name, address, onEdit, onDelete }: LocationCardProps
           </Button>
         </span>
       </div>
-      
       {/* Address */}
       <div className="text-muted small">
-        <strong>Address:</strong> {address}
+        <strong>Address:</strong>
+        {address}
       </div>
     </li>
   );
