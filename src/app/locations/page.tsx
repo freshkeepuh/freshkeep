@@ -1,11 +1,12 @@
 'use client';
 
+import { useState } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { Plus } from 'react-bootstrap-icons';
 import Image from 'next/image';
 import LocationCard from '../../components/LocationCard';
 
-const sampleLocations = [
+const initialLocations = [
   {
     id: '1',
     name: 'Kitchen Pantry',
@@ -24,17 +25,27 @@ const sampleLocations = [
 ];
 
 const LocationsPage = () => {
-  // Placeholder functions for handling actions
-  const handleEditLocation = (id: string) => {
-    // TODO: edit 
+  const [locations, setLocations] = useState(initialLocations);
+
+  const handleEditLocation = (id: string, name: string, address: string) => {
+    setLocations(prevLocations =>
+      prevLocations.map(location =>
+        location.id === id
+          ? { ...location, name, address }
+          : location
+      )
+    );
   };
 
   const handleDeleteLocation = (id: string) => {
-    // TODO: delete 
+    setLocations(prevLocations =>
+      prevLocations.filter(location => location.id !== id)
+    );
   };
 
   const handleAddLocation = () => {
-    // TODO: add 
+    // TODO: add function
+    console.log('Add location clicked');
   };
 
   return (
@@ -62,7 +73,7 @@ const LocationsPage = () => {
               <div>
                 <h4>Locations</h4>
                 <ul className="list-unstyled">
-                  {sampleLocations.map((location) => (
+                  {locations.map((location) => (
                     <LocationCard
                       key={location.id}
                       id={location.id}
