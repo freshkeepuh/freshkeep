@@ -75,7 +75,7 @@ const LocationCard = ({ id, name, address, onEdit, onDelete }: LocationCardProps
               variant="danger"
               size="sm"
               className="p-1"
-              aria-label={`Cancel editing ${name}`}
+              aria-label="Cancel editing"
               onClick={handleCancelClick}
             >
               <X />
