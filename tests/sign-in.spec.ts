@@ -54,7 +54,7 @@ test('test sign in page with Remember me option', async ({ page }) => {
   await expect(page.getByLabel('Remember me')).toBeChecked();
 
   // Submit the form
-  await page.getByRole('button', { name: 'Sign In' }).click();
+  await page.getByRole('button', { name: /sign[ -]?in/i }).click();
 
   // Wait for navigation and check we're not on error page
   await page.waitForLoadState('networkidle');
@@ -67,6 +67,6 @@ test('test sign in page with sign up option', async ({ page }) => {
   await page.goto(`${BASE_URL}/auth/signin`);
 
   // Click on the "Sign Up" link
-  await page.getByRole('link', { name: 'Sign Up' }).click();
+  await page.getByRole('link', { name: /sign[ -]?up/i }).click();
   await expect(page).toHaveURL(`${BASE_URL}/auth/signup`);
 });
