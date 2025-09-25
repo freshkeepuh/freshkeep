@@ -1,8 +1,8 @@
 // tests/sign-up-page.spec.ts
 import { test, expect } from '@playwright/test';
 
-const BASE = 'http://localhost:3000';
-const SIGNUP_URL = `${BASE}/auth/signup`;
+const BASE_URL = 'http://localhost:3000';
+const SIGNUP_URL = `${BASE_URL}/auth/signup`;
 
 test('Sign Up renders and fields work', async ({ page }) => {
   await page.goto(SIGNUP_URL);

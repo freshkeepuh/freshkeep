@@ -42,8 +42,8 @@ async function authenticateWithUI(
       const isAuthenticated = await Promise.race([
         page.getByText(email).isVisible().then((visible) => visible),
         page.getByRole('button', { name: email }).isVisible().then((visible) => visible),
-        page.getByText('Sign out').isVisible().then((visible) => visible),
-        page.getByRole('button', { name: 'Sign out' }).isVisible().then((visible) => visible),
+        page.getByText(/sign[ -]?out/i).isVisible().then((visible) => visible),
+        page.getByRole('button', { name: /sign[ -]?out/i }).isVisible().then((visible) => visible),
         // eslint-disable-next-line no-promise-executor-return
         new Promise<boolean>((resolve) => setTimeout(() => resolve(false), 3000)),
       ]);
