@@ -38,7 +38,7 @@ test('Sign Up renders and fields work', async ({ page }) => {
   await expect(confirm).toHaveValue('');
 
   // Register button visible
-  await expect(page.getByRole('button', { name: /register/i })).toBeVisible();
+  await expect(page.getByRole('button', { name: /create account/i })).toBeVisible();
 
   // TODO: Delete the user after test run
 });
