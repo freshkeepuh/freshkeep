@@ -3,23 +3,23 @@
 import { useState } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { Plus } from 'react-bootstrap-icons';
-import Image from 'next/image';
 import LocationCard from '../../components/LocationCard';
+import MapComponent from '../../components/Map';
 
 const initialLocations = [
   {
     id: '1',
-    name: 'Kitchen Pantry',
-    address: '123 Main St, Honolulu',
+    name: 'School',
+    address: '2500 Campus Rd, Honolulu',
   },
   {
     id: '2',
-    name: 'Home Pantry',
+    name: 'Home',
     address: '123 Main St, Honolulu',
   },
   {
     id: '3',
-    name: 'Parent Pantry',
+    name: 'Parent\'s House',
     address: '123 Main St, Honolulu',
   },
 ];
@@ -125,11 +125,8 @@ const LocationsPage = () => {
               {/* Google Maps Placeholder */}
               <Row>
                 <Col className="text-center">
-                  <Image
-                    src="/map-placeholder.png"
-                    alt="not found"
-                    width={625}
-                    height={400}
+                  <MapComponent
+                    firstLocation={locations.length > 0 ? locations[0] : undefined}
                   />
                 </Col>
               </Row>
