@@ -43,6 +43,9 @@ jobs:
       - name: Set up Prisma
         run: npx prisma generate
 
+      - name: Run lint
+        run: npx next lint
+
       - name: Run database migrations
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/freshkeepuh
@@ -55,9 +58,6 @@ jobs:
 
       - name: Build the application
         run: npx next build
-
-      - name: Run lint
-        run: npx next lint
 
       - name: Get installed Playwright version
         id: playwright-version
@@ -75,7 +75,7 @@ jobs:
         if: steps.playwright-cache.outputs.cache-hit != 'true'
 
       - run: npx playwright install-deps
-        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
 
       - name: Run Playwright Tests
         env:
