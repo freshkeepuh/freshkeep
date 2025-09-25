@@ -28,8 +28,8 @@ async function emailResetlink(data: ForgotPasswordFormFields) {
 
     toast.success('Reset link sent to your email!');
   } catch (error) {
-    // Optionally handle error UI feedback here
-    // e.g., toast.error(error.message);
+    const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred.';
+    toast.error(errorMessage);
     console.error(error);
   }
 }
