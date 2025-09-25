@@ -1,16 +1,12 @@
 import * as Yup from 'yup';
+import { checkUser } from './dbUserActions';
 
-export const AddStuffSchema = Yup.object({
-  name: Yup.string().required(),
-  quantity: Yup.number().positive().required(),
-  condition: Yup.string().oneOf(['excellent', 'good', 'fair', 'poor']).required(),
-  owner: Yup.string().required(),
-});
-
-export const EditStuffSchema = Yup.object({
-  id: Yup.number().required(),
-  name: Yup.string().required(),
-  quantity: Yup.number().positive().required(),
-  condition: Yup.string().oneOf(['excellent', 'good', 'fair', 'poor']).required(),
-  owner: Yup.string().required(),
+export const forgotPasswordValidation = Yup.object().shape({
+  email: Yup.string()
+    .required('Email is required')
+    .email('Email is invalid')
+    .test('unique-email', 'Email exists', async (value) => {
+      if (!value) return false;
+      return (await checkUser({ email: value }));
+    }),
 });
