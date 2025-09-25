@@ -25,7 +25,7 @@ export const signUpValidation = Yup.object().shape({
     .max(20, 'Password must not exceed 20 characters'),
   confirmPassword: Yup.string()
     .required('Confirm Password is required')
-    .oneOf([Yup.ref('password'), Yup.ref('confirmPassword')], 'Passwords must match'),
+    .oneOf([Yup.ref('password')], 'Passwords must match'),
 });
 
 export const signInValidation = Yup.object().shape({
