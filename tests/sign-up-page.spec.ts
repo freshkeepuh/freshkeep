@@ -1,5 +1,5 @@
 import { deleteUser } from '@/lib/dbUserActions';
-import { test, expect, BASE_URL, SIGNUP_URL, RESET_REGEX, SIGNIN_REGEX, SIGNIN_URL, SIGNUP_REGEX, HOME_URL } from './auth-utils';
+import { test, expect, SIGNUP_URL, RESET_REGEX, SIGNIN_REGEX, SIGNIN_URL, SIGNUP_REGEX, HOME_URL } from './auth-utils';
 
 test('test sign up page with reset', async ({ page }) => {
   await page.goto(SIGNUP_URL);
@@ -41,25 +41,28 @@ test('test sign up page with create', async ({ page }) => {
   await page.waitForLoadState('networkidle');
   await expect(page).toHaveURL(`${SIGNUP_URL}`);
 
-  const email = page.locator('input[name="email"]');
-  const password = page.locator('input[name="password"]');
-  const confirm = page.locator('input[name="confirmPassword"]');
+  const email = page.locator('input[name="email"]').first();
+  const password = page.locator('input[name="password"]').first();
+  const confirm = page.locator('input[name="confirmPassword"]').first();
 
   // Expect the fields to be visible
   await expect(email).toBeVisible();
   await expect(password).toBeVisible();
   await expect(confirm).toBeVisible();
 
+  const rand = Math.floor((Math.random() * 10000) + 1);
+  const emailAddress = `josh${rand}@foo.com`;
+
   // Clean up - delete the user we are about to create
-  await deleteUser({ email: 'josh@foo.com' });
+  await deleteUser({ email: emailAddress });
 
   // Fill in credentials
-  await email.fill('josh@foo.com');
+  await email.fill(emailAddress);
   await password.fill('sixer1');
   await confirm.fill('sixer1');
 
   // Expect the fields to have the correct values
-  await expect(email).toHaveValue('josh@foo.com');
+  await expect(email).toHaveValue(emailAddress);
   await expect(password).toHaveValue('sixer1');
   await expect(confirm).toHaveValue('sixer1');
   
@@ -71,9 +74,10 @@ test('test sign up page with create', async ({ page }) => {
     // Expect to be redirected to the homepage
     await expect(page).toHaveURL(`${HOME_URL}`);
   } catch (error) {
-    // Clean up - delete the user we just created
-    await deleteUser({ email: 'josh@foo.com' });
     throw error;
+  } finally {
+    // Clean up - delete the user we just created
+    await deleteUser({ email: emailAddress });
   }
 });
 
@@ -83,7 +87,7 @@ test('test sign up page goto sign in', async ({ page }) => {
   await expect(page).toHaveURL(`${SIGNUP_URL}`);
 
   // Click on the "Sign In" link
-  await page.getByRole('link', { name: SIGNIN_REGEX }).click();
+  await page.getByRole('link', { name: SIGNIN_REGEX }).last().click();
   await page.waitForLoadState('networkidle');
 
   // Expect to be on the sign in page

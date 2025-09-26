@@ -43,7 +43,22 @@ const SignUp = () => {
 
   const onSubmit = async (data: SignUpForm) => {
     await createUser(data);
-    await signIn('credentials', { callbackUrl: '/', ...data });
+
+    const email = data.email;
+    const password = data.password;
+
+    const result = await signIn('credentials', {
+      callbackUrl: '/',
+      email,
+      password,
+      redirect: false,
+    });
+
+    if (result?.error) {
+      console.error('Sign up failed: ', result.error);
+    } else if (result?.url) {
+      window.location.href = result.url;
+    }
   };
 
   return (
@@ -117,9 +132,9 @@ const SignUp = () => {
           </Card.Body>
 
           <Card.Footer className="text-center py-3">
-            <span>Already have an account?</span>
+            <span>Already have an account?&nbsp;</span>
             <Link href="/auth/signin" className="fw-bold text-success">
-              Sign in
+              Sign In
             </Link>
           </Card.Footer>
         </Card>

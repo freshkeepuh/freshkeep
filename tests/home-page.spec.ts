@@ -1,4 +1,4 @@
-import { test, expect, BASE_URL } from './auth-utils';
+import { test, expect, BASE_URL, HOME_URL } from './auth-utils';
 
 test.slow();
 test.use({ viewport: { width: 1280, height: 800 } });
@@ -7,7 +7,7 @@ test('test access to welcome page (not signed in)', async ({ page }) => {
   await page.goto(`${BASE_URL}`);
 
   await page.waitForLoadState('networkidle');
-  await expect(page).toHaveURL(`${BASE_URL}/`);
+  await expect(page).toHaveURL(`${HOME_URL}`);
   await expect(page.getByRole('heading', { name: 'Welcome' })).toBeVisible();
 });
 
@@ -16,6 +16,6 @@ test('test access to dashboard page (sign in)', async ({ getUserPage }) => {
   const page = await getUserPage('john@foo.com', 'changeme');
 
   await page.waitForLoadState('networkidle');
-  await expect(page).toHaveURL(`${BASE_URL}/`);
+  await expect(page).toHaveURL(`${HOME_URL}`);
   await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible();
 });

@@ -17,10 +17,10 @@ export const FORGOT_PASSWORD_URL = `${BASE_URL}/auth/forgot-password`;
 export const SIGNIN_REGEX = /sign[ -]?in/i;
 export const SIGNUP_REGEX = /sign[ -]?up/i;
 export const SIGNOUT_REGEX = /sign[ -]?out/i;
-export const RESET_REGEX = /reset/i;
 export const CHANGE_PASSWORD_REGEX = /change[ -]?password/i;
 export const FORGOT_PASSWORD_REGEX = /forgot[ -]?password/i;
 export const REMEMBERME_REGEX = /remember[ -]?me/i;
+export const RESET_REGEX = /reset/i;
 
 // Ensure session directory exists
 if (!fs.existsSync(SESSION_STORAGE_PATH)) {
@@ -56,8 +56,8 @@ async function authenticateWithUI(
       const isAuthenticated = await Promise.race([
         page.getByText(email).isVisible().then((visible) => visible),
         page.getByRole('button', { name: email }).isVisible().then((visible) => visible),
-        page.getByText(/sign[ -]?out/i).isVisible().then((visible) => visible),
-        page.getByRole('button', { name: /sign[ -]?out/i }).isVisible().then((visible) => visible),
+        page.getByText(SIGNOUT_REGEX).isVisible().then((visible) => visible),
+        page.getByRole('button', { name: SIGNOUT_REGEX }).isVisible().then((visible) => visible),
         // eslint-disable-next-line no-promise-executor-return
         new Promise<boolean>((resolve) => setTimeout(() => resolve(false), 3000)),
       ]);
@@ -88,13 +88,8 @@ async function authenticateWithUI(
     ]);
 
     // Click submit button and wait for navigation
-    const submitButton = page.getByRole('button', { name: /sign[ -]?in/i });
-    if (!await submitButton.isVisible({ timeout: 1000 })) {
-      // Try alternative selector if the first one doesn't work
-      await page.getByRole('button', { name: /log[ -]?in/i }).click();
-    } else {
-      await submitButton.click();
-    }
+    const submitButton = page.getByRole('button', { name: SIGNIN_REGEX});
+    await submitButton.click();
 
     // Wait for navigation to complete
     await page.waitForLoadState('networkidle');
@@ -104,8 +99,8 @@ async function authenticateWithUI(
       const authState = await Promise.race([
         page.getByText(email).isVisible().then((visible) => ({ success: visible })),
         page.getByRole('button', { name: email }).isVisible().then((visible) => ({ success: visible })),
-        page.getByText('Sign out').isVisible().then((visible) => ({ success: visible })),
-        page.getByRole('button', { name: 'Sign out' }).isVisible().then((visible) => ({ success: visible })),
+        page.getByText(SIGNOUT_REGEX).isVisible().then((visible) => ({ success: visible })),
+        page.getByRole('button', { name: SIGNOUT_REGEX }).isVisible().then((visible) => ({ success: visible })),
         // eslint-disable-next-line no-promise-executor-return
         new Promise<{ success: boolean }>((resolve) => setTimeout(() => resolve({ success: false }), 5000)),
       ]);

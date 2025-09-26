@@ -6,9 +6,10 @@ test('test access to footer (not signed in)', async ({ page }) => {
   // Navigate to the home page
   await page.goto(`${BASE_URL}`);
   await page.waitForLoadState('networkidle');
+  await expect(page).toHaveURL(`${BASE_URL}/`);
 
   // Check that the About Link is visible and works
-  const aboutLink = await page.getByRole('link', { name: 'About' });
+  const aboutLink = await page.getByRole('link', { name: /about/i });
   await expect(aboutLink).toBeVisible();
   await aboutLink.click();
   await page.waitForLoadState('networkidle');
@@ -17,12 +18,14 @@ test('test access to footer (not signed in)', async ({ page }) => {
 
 test('test access to footer (signed in)', async ({ getUserPage }) => {
   // Call the getUserPage fixture with users signin info to get authenticated session for user
-  const customUserPage = await getUserPage('john@foo.com', 'changeme');
+  const page = await getUserPage('john@foo.com', 'changeme');
+  await page.waitForLoadState('networkidle');
+  await expect(page).toHaveURL(`${BASE_URL}/`);
 
   // Check that the About Link is visible and works
-  const aboutLink = await customUserPage.getByRole('link', { name: 'About' });
+  const aboutLink = await page.getByRole('link', { name: /about/i });
   await expect(aboutLink).toBeVisible();
   await aboutLink.click();
-  await customUserPage.waitForLoadState('networkidle');
-  await expect(customUserPage).toHaveURL('https://docs.freshkeepuh.live/');
+  await page.waitForLoadState('networkidle');
+  await expect(page).toHaveURL('https://docs.freshkeepuh.live/');
 });

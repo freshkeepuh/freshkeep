@@ -1,7 +1,7 @@
-import { test, expect, BASE_URL } from './auth-utils';
+import { test, expect, HOME_URL, SIGNUP_URL, SIGNIN_REGEX, SIGNIN_URL, SIGNUP_REGEX } from './auth-utils';
 
 test('test sign in page', async ({ page }) => {
-  await page.goto(`${BASE_URL}/auth/signin`);
+  await page.goto(`${SIGNIN_URL}`);
   await page.waitForLoadState('networkidle');
 
   const email = page.locator('input[name="email"], input[type="email"]').first();
@@ -20,17 +20,17 @@ test('test sign in page', async ({ page }) => {
   await expect(password).toHaveValue('changeme');
 
   // Submit the form
-  await page.getByRole('button', { name: /sign[ -]?in/i }).click();
+  await page.getByRole('button', { name: SIGNIN_REGEX }).click();
 
   // Wait for navigation and check we're not on error page
   await page.waitForLoadState('networkidle');
 
   // Expect to be redirected to the homepage
-  await expect(page).toHaveURL(`${BASE_URL}/`);
+  await expect(page).toHaveURL(`${HOME_URL}`);
 });
 
 test('test sign in page with Remember me option', async ({ page }) => {
-  await page.goto(`${BASE_URL}/auth/signin`);
+  await page.goto(`${SIGNIN_URL}`);
   await page.waitForLoadState('networkidle');
 
   const email = page.locator('input[name="email"], input[type="email"]').first();
@@ -53,19 +53,19 @@ test('test sign in page with Remember me option', async ({ page }) => {
   await expect(page.getByLabel('Remember me')).toBeChecked();
 
   // Submit the form
-  await page.getByRole('button', { name: /sign[ -]?in/i }).click();
+  await page.getByRole('button', { name: SIGNIN_REGEX }).click();
 
   // Wait for navigation and check we're not on error page
   await page.waitForLoadState('networkidle');
 
   // Expect to be redirected to the homepage
-  await expect(page).toHaveURL(`${BASE_URL}/`);
+  await expect(page).toHaveURL(`${HOME_URL}`);
 });
 
-test('test sign in page with sign up option', async ({ page }) => {
-  await page.goto(`${BASE_URL}/auth/signin`);
+test('test sign in page goto sign up', async ({ page }) => {
+  await page.goto(`${SIGNIN_URL}`);
 
   // Click on the "Sign Up" link
-  await page.getByRole('link', { name: /sign[ -]?up/i }).click();
-  await expect(page).toHaveURL(`${BASE_URL}/auth/signup`);
+  await page.getByRole('link', { name: SIGNUP_REGEX }).click();
+  await expect(page).toHaveURL(`${SIGNUP_URL}`);
 });

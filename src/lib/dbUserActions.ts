@@ -34,12 +34,11 @@ export async function createUser(credentials: { email: string; password: string 
  * @param credentials an object with the following properties: email.
  */
 export async function deleteUser(credentials: { email: string }) {
-  if (!checkUser({ email: credentials.email })) {
-    return;
+  if (await checkUser({ email: credentials.email })) {
+    await prisma.user.delete({
+      where: { email: credentials.email },
+    });
   }
-  await prisma.user.delete({
-    where: { email: credentials.email },
-  });
 }
 
 /**
