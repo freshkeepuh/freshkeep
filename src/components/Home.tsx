@@ -14,7 +14,16 @@ const Home = () => {
   }
 
   if (session) {
-    return <Dashboard session={session} />;
+    return (
+      <Dashboard session={{
+        user: {
+          email: session.user.email,
+          name: session.user.name,
+          image: session.user.image,
+        },
+      }}
+      />
+    );
   }
   return <Welcome />;
 };
