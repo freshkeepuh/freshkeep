@@ -4,6 +4,18 @@ import { hash } from 'bcrypt';
 import { prisma } from './prisma';
 
 /**
+ * Check if user email exists in the database.
+ * @param credentials an object with the following properties: email.
+ * Returns true if found, otherwise false.
+ */
+export async function checkUser(credentials: { email: string }) {
+  const user = await prisma.user.findUnique({
+    where: { email: credentials.email },
+  });
+  return user !== null;
+}
+
+/**
  * Creates a new user in the database.
  * @param credentials an object with the following properties: email, password.
  */
@@ -17,6 +29,10 @@ export async function createUser(credentials: { email: string; password: string 
   });
 }
 
+/**
+ * Deletes a user from the database.
+ * @param credentials an object with the following properties: email.
+ */
 export async function deleteUser(credentials: { email: string }) {
   if (!checkUser({ email: credentials.email })) {
     return;
@@ -38,16 +54,4 @@ export async function changePassword(credentials: { email: string; password: str
       password,
     },
   });
-}
-
-/**
- * Check if user email exists in the database.
- * @param credentials an object with the following properties: email.
- * Returns true if found, otherwise false.
- */
-export async function checkUser(credentials: { email: string }) {
-  const user = await prisma.user.findUnique({
-    where: { email: credentials.email },
-  });
-  return user !== null;
 }
