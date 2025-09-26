@@ -1,3 +1,5 @@
+'use client';
+
 import { Container, Row, Col, Image } from 'react-bootstrap';
 
 const Dashboard: React.FC = () => (
@@ -9,8 +11,13 @@ const Dashboard: React.FC = () => (
       <Col xs={8} className="d-flex flex-column justify-content-center">
         <>
           <h1>Dashboard</h1>
-          <p>This is where you can manage your food storage, </p>
-          <p>view recipes based on your items, and plan your grocery trips efficiently.</p>
+          <p>
+            This is where you can manage your food storage,
+            <br />
+            view recipes based on your items,
+            <br />
+            and plan your grocery trips efficiently.
+          </p>
         </>
       </Col>
     </Row>

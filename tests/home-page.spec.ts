@@ -8,7 +8,8 @@ test('test access to welcome page (not signed in)', async ({ page }) => {
 
   await page.waitForLoadState('networkidle');
   await expect(page).toHaveURL(`${HOME_URL}`);
-  await expect(page.getByRole('heading', { name: 'Welcome' })).toBeVisible();
+  const welcomeHeading = page.getByRole('heading', { name: 'Welcome' });
+  await expect(welcomeHeading).toBeVisible();
 });
 
 test('test access to dashboard page (sign in)', async ({ getUserPage }) => {
@@ -17,5 +18,6 @@ test('test access to dashboard page (sign in)', async ({ getUserPage }) => {
 
   await page.waitForLoadState('networkidle');
   await expect(page).toHaveURL(`${HOME_URL}`);
-  await expect(page.getByRole('heading', { name: 'Dashboard' })).toBeVisible();
+  const dashboardHeading = page.getByRole('heading', { name: 'Dashboard' });
+  await expect(dashboardHeading).toBeVisible();
 });
