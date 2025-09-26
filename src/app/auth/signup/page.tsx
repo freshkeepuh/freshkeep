@@ -44,8 +44,7 @@ const SignUp = () => {
   const onSubmit = async (data: SignUpForm) => {
     await createUser(data);
 
-    const email = data.email;
-    const password = data.password;
+    const { email, password } = data;
 
     const result = await signIn('credentials', {
       callbackUrl: '/',
