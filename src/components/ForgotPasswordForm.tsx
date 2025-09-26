@@ -6,10 +6,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Card, Col, Container, Form, Image, Row } from 'react-bootstrap';
 import { forgotPasswordValidation } from '@/lib/validationSchemas';
 import { toast } from 'react-toastify';
-import EmailAddressField, { EmailFields } from './EmailAddressField';
+import EmailAddressField, { IEmailAddressField } from './EmailAddressField';
 import '../styles/auth.css';
 
-export type ForgotPasswordFormFields = EmailFields;
+export type ForgotPasswordFormFields = IEmailAddressField;
 
 async function emailResetlink(data: ForgotPasswordFormFields) {
   try {

@@ -15,7 +15,7 @@ test('test access to navigation bar (not signed in)', async ({ page }) => {
   await expect(page).toHaveURL(`${BASE_URL}/`);
 
   // Check that the Login Link is visible and works
-  const loginLink = await page.getByRole('link', { name: 'Sign In' });
+  const loginLink = await page.getByRole('link', { name: /sign[ -]?in/i });
   await expect(loginLink).toBeVisible();
   await loginLink.click();
   await page.waitForLoadState('networkidle');

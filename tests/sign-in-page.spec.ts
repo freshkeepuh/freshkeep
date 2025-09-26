@@ -1,5 +1,4 @@
-import { test, expect } from './auth-utils';
-const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
+import { test, expect, BASE_URL } from './auth-utils';
 
 test('test sign in page', async ({ page }) => {
   await page.goto(`${BASE_URL}/auth/signin`);
@@ -21,7 +20,7 @@ test('test sign in page', async ({ page }) => {
   await expect(password).toHaveValue('changeme');
 
   // Submit the form
-  await page.getByRole('button', { name: 'Sign In' }).click();
+  await page.getByRole('button', { name: /sign[ -]?in/i }).click();
 
   // Wait for navigation and check we're not on error page
   await page.waitForLoadState('networkidle');

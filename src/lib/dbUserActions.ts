@@ -8,7 +8,6 @@ import { prisma } from './prisma';
  * @param credentials an object with the following properties: email, password.
  */
 export async function createUser(credentials: { email: string; password: string }) {
-  // console.log(`createUser data: ${JSON.stringify(credentials, null, 2)}`);
   const password = await hash(credentials.password, 10);
   await prisma.user.create({
     data: {
@@ -18,12 +17,20 @@ export async function createUser(credentials: { email: string; password: string 
   });
 }
 
+export async function deleteUser(credentials: { email: string }) {
+  if (!checkUser({ email: credentials.email })) {
+    return;
+  }
+  await prisma.user.delete({
+    where: { email: credentials.email },
+  });
+}
+
 /**
  * Changes the password of an existing user in the database.
  * @param credentials an object with the following properties: email, password.
  */
 export async function changePassword(credentials: { email: string; password: string }) {
-  // console.log(`changePassword data: ${JSON.stringify(credentials, null, 2)}`);
   const password = await hash(credentials.password, 10);
   await prisma.user.update({
     where: { email: credentials.email },

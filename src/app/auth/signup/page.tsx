@@ -2,14 +2,14 @@
 
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
-import { useForm } from 'react-hook-form';
+import { useForm, UseFormRegister } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Button, Card, Col, Form, Image, Row } from 'react-bootstrap';
 import { createUser, checkUser } from '@/lib/dbUserActions';
+import EmailAddressField, { IEmailAddressField } from '@/components/EmailAddressField';
 
-type SignUpForm = {
-  email: string;
+type SignUpForm = IEmailAddressField & {
   password: string;
   confirmPassword: string;
 };
@@ -73,14 +73,10 @@ const SignUp = () => {
 
             <Form onSubmit={handleSubmit(onSubmit)}>
               <Form.Group controlId="signupEmail" className="mb-4">
-                <Form.Control
-                  type="email"
-                  placeholder="📧 Email"
-                  size="lg"
-                  isInvalid={!!errors.email}
-                  {...register('email')}
+                <EmailAddressField
+                  errors={errors}
+                  register={register as unknown as UseFormRegister<IEmailAddressField>}
                 />
-                <Form.Control.Feedback type="invalid">{errors.email?.message}</Form.Control.Feedback>
               </Form.Group>
 
               <Form.Group controlId="signupPassword" className="mb-4">
@@ -108,7 +104,7 @@ const SignUp = () => {
               <Row className="align-items-center mb-4">
                 <Col xs="auto">
                   <Button type="submit" variant="success" size="lg" disabled={isSubmitting}>
-                    {isSubmitting ? 'Creating…' : 'Create Account'}
+                    {isSubmitting ? 'Creating…' : 'Sign Up'}
                   </Button>
                 </Col>
                 <Col className="text-end">

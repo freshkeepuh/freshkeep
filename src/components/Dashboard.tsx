@@ -7,9 +7,11 @@ const Dashboard: React.FC = () => (
         <Image src="logo.svg" width="150px" alt="FreshKeep logo" />
       </Col>
       <Col xs={8} className="d-flex flex-column justify-content-center">
-        <h1>Dashboard</h1>
-        <p>This is where you can manage your food storage, </p>
-        <p>view recipes based on your items, and plan your grocery trips efficiently.</p>
+        <>
+          <h1>Dashboard</h1>
+          <p>This is where you can manage your food storage, </p>
+          <p>view recipes based on your items, and plan your grocery trips efficiently.</p>
+        </>
       </Col>
     </Row>
   </Container>

@@ -8,6 +8,20 @@ import path from 'path';
 export const BASE_URL = process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:3000';
 export const SESSION_STORAGE_PATH = path.join(__dirname, 'playwright-auth-sessions');
 
+export const HOME_URL = `${BASE_URL}/`;
+export const SIGNIN_URL = `${BASE_URL}/auth/signin`;
+export const SIGNUP_URL = `${BASE_URL}/auth/signup`;
+export const SIGNOUT_URL = `${BASE_URL}/auth/signout`;
+export const CHANGE_PASSWORD_URL = `${BASE_URL}/auth/change-password`;
+export const FORGOT_PASSWORD_URL = `${BASE_URL}/auth/forgot-password`;
+export const SIGNIN_REGEX = /sign[ -]?in/i;
+export const SIGNUP_REGEX = /sign[ -]?up/i;
+export const SIGNOUT_REGEX = /sign[ -]?out/i;
+export const RESET_REGEX = /reset/i;
+export const CHANGE_PASSWORD_REGEX = /change[ -]?password/i;
+export const FORGOT_PASSWORD_REGEX = /forgot[ -]?password/i;
+export const REMEMBERME_REGEX = /remember[ -]?me/i;
+
 // Ensure session directory exists
 if (!fs.existsSync(SESSION_STORAGE_PATH)) {
   fs.mkdirSync(SESSION_STORAGE_PATH, { recursive: true });

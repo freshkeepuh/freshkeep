@@ -1,44 +1,91 @@
-// tests/sign-up-page.spec.ts
-import { test, expect } from '@playwright/test';
+import { deleteUser } from '@/lib/dbUserActions';
+import { test, expect, BASE_URL, SIGNUP_URL, RESET_REGEX, SIGNIN_REGEX, SIGNIN_URL, SIGNUP_REGEX, HOME_URL } from './auth-utils';
 
-const BASE_URL = 'http://localhost:3000';
-const SIGNUP_URL = `${BASE_URL}/auth/signup`;
-
-test('Sign Up renders and fields work', async ({ page }) => {
+test('test sign up page with reset', async ({ page }) => {
   await page.goto(SIGNUP_URL);
+  await page.waitForLoadState('networkidle');
+  await expect(page).toHaveURL(`${SIGNUP_URL}`);
 
-  // Page/heading present
-  await expect(page.getByRole('heading', { name: /sign[ -]?up/i })).toBeVisible();
+  const email = page.locator('input[name="email"]');
+  const password = page.locator('input[name="password"]');
+  const confirm = page.locator('input[name="confirmPassword"]');
 
-  // Robust selectors (works even if labels/placeholders aren’t associated)
-  const email = page.locator('input[name="email"], input[type="email"], input#email').first();
-  const password = page.locator('input[name="password"], input#password, input[type="password"]').first();
-  const confirm = page.locator(
-    'input[name="confirmPassword"], input#confirmPassword, input[aria-label*="confirm" i], input[placeholder*="confirm" i]'
-  ).first();
-
-  // Ensure inputs exist
+  // Expect the fields to be visible
   await expect(email).toBeVisible();
   await expect(password).toBeVisible();
   await expect(confirm).toBeVisible();
 
-  // TODO: Get this data from a config
-  // Fill + verify
-  await email.fill('josh@foo.com');
-  await password.fill('sixer1');
-  await confirm.fill('sixer1');
-  await expect(email).toHaveValue('josh@foo.com');
-  await expect(password).toHaveValue('sixer1');
-  await expect(confirm).toHaveValue('sixer1');
+  // Fill in credentials
+  await email.fill('john@foo.com');
+  await password.fill('changeme');
+  await confirm.fill('changeme');
 
-  // Reset clears
-  await page.getByRole('button', { name: /reset/i }).click();
+  // Expect the fields to have the correct values
+  await expect(email).toHaveValue('john@foo.com');
+  await expect(password).toHaveValue('changeme');
+  await expect(confirm).toHaveValue('changeme');
+
+  // Reset the form
+  await page.getByRole('button', { name: RESET_REGEX }).click();
+  await page.waitForLoadState('networkidle');
+  await expect(page).toHaveURL(`${SIGNUP_URL}`);
+
+  // Expect the fields to be cleared
   await expect(email).toHaveValue('');
   await expect(password).toHaveValue('');
   await expect(confirm).toHaveValue('');
+});
 
-  // Register button visible
-  await expect(page.getByRole('button', { name: /create account/i })).toBeVisible();
+test('test sign up page with create', async ({ page }) => {
+  await page.goto(SIGNUP_URL);
+  await page.waitForLoadState('networkidle');
+  await expect(page).toHaveURL(`${SIGNUP_URL}`);
 
-  // TODO: Delete the user after test run
+  const email = page.locator('input[name="email"]');
+  const password = page.locator('input[name="password"]');
+  const confirm = page.locator('input[name="confirmPassword"]');
+
+  // Expect the fields to be visible
+  await expect(email).toBeVisible();
+  await expect(password).toBeVisible();
+  await expect(confirm).toBeVisible();
+
+  // Clean up - delete the user we are about to create
+  await deleteUser({ email: 'josh@foo.com' });
+
+  // Fill in credentials
+  await email.fill('josh@foo.com');
+  await password.fill('sixer1');
+  await confirm.fill('sixer1');
+
+  // Expect the fields to have the correct values
+  await expect(email).toHaveValue('josh@foo.com');
+  await expect(password).toHaveValue('sixer1');
+  await expect(confirm).toHaveValue('sixer1');
+  
+  try {
+    // Submit the form
+    await page.getByRole('button', { name: SIGNUP_REGEX }).click();
+    await page.waitForLoadState('networkidle');
+
+    // Expect to be redirected to the homepage
+    await expect(page).toHaveURL(`${HOME_URL}`);
+  } catch (error) {
+    // Clean up - delete the user we just created
+    await deleteUser({ email: 'josh@foo.com' });
+    throw error;
+  }
+});
+
+test('test sign up page goto sign in', async ({ page }) => {
+  await page.goto(`${SIGNUP_URL}`);
+  await page.waitForLoadState('networkidle');
+  await expect(page).toHaveURL(`${SIGNUP_URL}`);
+
+  // Click on the "Sign In" link
+  await page.getByRole('link', { name: SIGNIN_REGEX }).click();
+  await page.waitForLoadState('networkidle');
+
+  // Expect to be on the sign in page
+  await expect(page).toHaveURL(`${SIGNIN_URL}`);
 });

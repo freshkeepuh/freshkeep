@@ -4,12 +4,12 @@ import React from 'react';
 import { Form } from 'react-bootstrap';
 import { UseFormRegister } from 'react-hook-form';
 
-export type EmailFields = {
+export interface IEmailAddressField {
   email: string;
-};
+}
 
 export interface EmailAddressFieldProps {
-  register: UseFormRegister<EmailFields>;
+  register: UseFormRegister<IEmailAddressField>;
   errors: { email?: { message?: string } };
 }
 
