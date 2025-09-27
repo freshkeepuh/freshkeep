@@ -2,7 +2,7 @@ import { test, expect, HOME_URL, SIGNUP_URL, SIGNIN_REGEX, SIGNIN_URL, SIGNUP_RE
 
 test('test sign in page', async ({ page }) => {
   await page.goto(`${SIGNIN_URL}`);
-  await page.waitForLoadState();
+  await page.waitForLoadState('domcontentloaded');
 
   const email = page.locator('input[name="email"], input[type="email"]').first();
   const password = page.locator('input[name="password"], input[type="password"]').first();
@@ -23,7 +23,7 @@ test('test sign in page', async ({ page }) => {
   await page.getByRole('button', { name: SIGNIN_REGEX }).click();
 
   // Wait for navigation and check we're not on error page
-  await page.waitForLoadState();
+  await page.waitForLoadState('domcontentloaded');
 
   // Expect to be redirected to the homepage
   await expect(page).toHaveURL(`${HOME_URL}`);
@@ -31,7 +31,7 @@ test('test sign in page', async ({ page }) => {
 
 test('test sign in page with Remember me option', async ({ page }) => {
   await page.goto(`${SIGNIN_URL}`);
-  await page.waitForLoadState();
+  await page.waitForLoadState('domcontentloaded');
 
   const email = page.locator('input[name="email"], input[type="email"]').first();
   const password = page.locator('input[name="password"], input[type="password"]').first();
@@ -56,7 +56,7 @@ test('test sign in page with Remember me option', async ({ page }) => {
   await page.getByRole('button', { name: SIGNIN_REGEX }).click();
 
   // Wait for navigation and check we're not on error page
-  await page.waitForLoadState();
+  await page.waitForLoadState('domcontentloaded');
 
   // Expect to be redirected to the homepage
   await expect(page).toHaveURL(`${HOME_URL}`);

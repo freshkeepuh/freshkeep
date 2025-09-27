@@ -3,7 +3,7 @@ import { test, expect, SIGNUP_URL, RESET_REGEX, SIGNIN_REGEX, SIGNIN_URL, SIGNUP
 
 test('test sign up page with reset', async ({ page }) => {
   await page.goto(SIGNUP_URL);
-  await page.waitForLoadState();
+  await page.waitForLoadState('domcontentloaded');
   await expect(page).toHaveURL(`${SIGNUP_URL}`);
 
   const email = page.locator('input[name="email"]');
@@ -27,7 +27,7 @@ test('test sign up page with reset', async ({ page }) => {
 
   // Reset the form
   await page.getByRole('button', { name: RESET_REGEX }).click();
-  await page.waitForLoadState();
+  await page.waitForLoadState('domcontentloaded');
   await expect(page).toHaveURL(`${SIGNUP_URL}`);
 
   // Expect the fields to be cleared
@@ -38,7 +38,7 @@ test('test sign up page with reset', async ({ page }) => {
 
 test('test sign up page with create', async ({ page }) => {
   await page.goto(SIGNUP_URL);
-  await page.waitForLoadState();
+  await page.waitForLoadState('domcontentloaded');
   await expect(page).toHaveURL(`${SIGNUP_URL}`);
 
   const email = page.locator('input[name="email"]').first();
@@ -69,7 +69,7 @@ test('test sign up page with create', async ({ page }) => {
   try {
     // Submit the form
     await page.getByRole('button', { name: SIGNUP_REGEX }).click();
-    await page.waitForLoadState();
+    await page.waitForLoadState('domcontentloaded');
 
     // Expect to be redirected to the homepage
     await expect(page).toHaveURL(`${HOME_URL}`);
@@ -83,12 +83,12 @@ test('test sign up page with create', async ({ page }) => {
 
 test('test sign up page goto sign in', async ({ page }) => {
   await page.goto(`${SIGNUP_URL}`);
-  await page.waitForLoadState();
+  await page.waitForLoadState('domcontentloaded');
   await expect(page).toHaveURL(`${SIGNUP_URL}`);
 
   // Click on the "Sign In" link
   await page.getByRole('link', { name: SIGNIN_REGEX }).last().click();
-  await page.waitForLoadState();
+  await page.waitForLoadState('domcontentloaded');
 
   // Expect to be on the sign in page
   await expect(page).toHaveURL(`${SIGNIN_URL}`);

@@ -50,7 +50,7 @@ async function authenticateWithUI(
 
       // Navigate to homepage to verify session
       await page.goto(BASE_URL);
-      await page.waitForLoadState();
+      await page.waitForLoadState('domcontentloaded');
 
       // Check if we're authenticated by looking for a sign-out option or user email
       const isAuthenticated = await Promise.race([
@@ -79,7 +79,7 @@ async function authenticateWithUI(
 
     // Navigate to login page
     await page.goto(`${BASE_URL}/auth/signin`);
-    await page.waitForLoadState();
+    await page.waitForLoadState('domcontentloaded');
 
     // Fill in credentials with retry logic
     await fillFormWithRetry(page, [
@@ -92,7 +92,7 @@ async function authenticateWithUI(
     await submitButton.click();
 
     // Wait for navigation to complete
-    await page.waitForLoadState();
+    await page.waitForLoadState('domcontentloaded');
 
     // Verify authentication was successful
     await expect(async () => {
