@@ -8,6 +8,9 @@ import * as Yup from 'yup';
 import { Button, Card, Col, Form, Image, Row } from 'react-bootstrap';
 import { createUser, checkUser } from '@/lib/dbUserActions';
 import EmailAddressField, { IEmailAddressField } from '@/components/EmailAddressField';
+import ErrorPopUp from '@/components/ErrorPopUp';
+import { useState } from 'react';
+import { signUpValidation } from '@/lib/validationSchemas';
 
 type SignUpForm = IEmailAddressField & {
   password: string;
@@ -15,22 +18,7 @@ type SignUpForm = IEmailAddressField & {
 };
 
 const SignUp = () => {
-  const validationSchema = Yup.object().shape({
-    email: Yup.string()
-      .required('Email is required')
-      .email('Email is invalid')
-      .test('unique-email', 'Email already exists', async (value) => {
-        if (!value) return false;
-        return !(await checkUser({ email: value }));
-      }),
-    password: Yup.string()
-      .required('Password is required')
-      .min(6, 'Password must be at least 6 characters')
-      .max(40, 'Password must not exceed 40 characters'),
-    confirmPassword: Yup.string()
-      .required('Confirm Password is required')
-      .oneOf([Yup.ref('password')], 'Confirm Password does not match'),
-  });
+  const [showError, setShowError] = useState(false);
 
   const {
     register,
@@ -38,7 +26,7 @@ const SignUp = () => {
     reset,
     formState: { errors, isSubmitting },
   } = useForm<SignUpForm>({
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(signUpValidation),
   });
 
   const onSubmit = async (data: SignUpForm) => {
@@ -47,25 +35,33 @@ const SignUp = () => {
     const { email, password } = data;
 
     const result = await signIn('credentials', {
-      callbackUrl: '/',
       email,
       password,
-      redirect: false,
     });
 
     if (result?.error) {
       console.error('Sign up failed: ', result.error);
+      setShowError(true);
     } else if (result?.url) {
       window.location.href = result.url;
     }
   };
 
   return (
-    <main className="auth-hero">
+    <main data-testid="sign-up-page" className="auth-hero">
+    {/* Authentication error pop-up */}
+      <ErrorPopUp
+        data-testid="sign-up-page-error-popup"
+        title='Sign Up Error'
+        body='The email you entered is already registered. Please use a different email or sign in.'
+        show={showError}
+        onClose={() => setShowError(false)}
+      />
+
       {/* Left hero copy */}
-      <div className="welcome-section">
-        <h1 className="welcome-title">Create your account</h1>
-        <h2 className="welcome-subtitle">Join Fresh Keep and never let food go to waste.</h2>
+      <div data-testid="sign-up-page-welcome-section" className="welcome-section">
+        <h1 data-testid="sign-up-page-welcome-title" className="welcome-title">Create your account</h1>
+        <h2 data-testid="sign-up-page-welcome-subtitle" className="welcome-subtitle">Join Fresh Keep and never let food go to waste.</h2>
       </div>
 
       {/* Right card */}
@@ -80,21 +76,22 @@ const SignUp = () => {
                 height={50}
                 className="me-2"
               />
-              <h1 className="text-center m-0">Fresh Keep</h1>
+              <h1 data-testid="sign-up-page-title" className="text-center m-0">Fresh Keep</h1>
             </div>
 
             <h2 className="mb-4 fw-bold">Sign Up</h2>
-
             <Form onSubmit={handleSubmit(onSubmit)}>
-              <Form.Group controlId="signupEmail" className="mb-4">
+              <Form.Group className="mb-4">
                 <EmailAddressField
+                  data-testid="sign-up-page-email-field"
                   errors={errors}
                   register={register as unknown as UseFormRegister<IEmailAddressField>}
                 />
               </Form.Group>
 
-              <Form.Group controlId="signupPassword" className="mb-4">
+              <Form.Group className="mb-4">
                 <Form.Control
+                  data-testid="sign-up-page-password-field"
                   type="password"
                   placeholder="🔒 Password"
                   size="lg"
@@ -104,8 +101,9 @@ const SignUp = () => {
                 <Form.Control.Feedback type="invalid">{errors.password?.message}</Form.Control.Feedback>
               </Form.Group>
 
-              <Form.Group controlId="signupConfirm" className="mb-4">
+              <Form.Group className="mb-4">
                 <Form.Control
+                  data-testid="sign-up-page-confirm-password-field"
                   type="password"
                   placeholder="🔁 Confirm Password"
                   size="lg"
@@ -117,12 +115,12 @@ const SignUp = () => {
 
               <Row className="align-items-center mb-4">
                 <Col xs="auto">
-                  <Button type="submit" variant="success" size="lg" disabled={isSubmitting}>
+                  <Button data-testid="sign-up-page-submit-button" type="submit" variant="success" size="lg" disabled={isSubmitting}>
                     {isSubmitting ? 'Creating…' : 'Sign Up'}
                   </Button>
                 </Col>
                 <Col className="text-end">
-                  <Button type="button" variant="outline-secondary" onClick={() => reset()}>
+                  <Button data-testid="sign-up-page-reset-button" type="button" variant="outline-secondary" onClick={() => reset()}>
                     Reset
                   </Button>
                 </Col>
@@ -132,7 +130,7 @@ const SignUp = () => {
 
           <Card.Footer className="text-center py-3">
             <span>Already have an account?&nbsp;</span>
-            <Link href="/auth/signin" className="fw-bold text-success">
+            <Link data-testid="sign-up-page-sign-in-link" href="/auth/signin" className="fw-bold text-success">
               Sign In
             </Link>
           </Card.Footer>

@@ -10,7 +10,7 @@ const Welcome: React.FC = () => (
       </Col>
       <Col xs={8} className="d-flex flex-column justify-content-center">
         <>
-          <h1>Welcome!</h1>
+          <h1 data-testid="welcome-header">Welcome!</h1>
           <p>
             This application helps you organize your food storage,
             <br />

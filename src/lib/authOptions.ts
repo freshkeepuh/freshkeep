@@ -15,7 +15,7 @@ const authOptions: NextAuthOptions = {
         email: {
           label: 'Email',
           type: 'email',
-          placeholder: 'john@foo.com',
+          placeholder: '👤 Username or Email',
         },
         password: { label: 'Password', type: 'password' },
       },
@@ -50,7 +50,7 @@ const authOptions: NextAuthOptions = {
     signOut: '/auth/signout',
     //   error: '/auth/error',
     //   verifyRequest: '/auth/verify-request',
-    //   newUser: '/auth/new-user'
+    //   newUser: '/auth/signup',
   },
   callbacks: {
     session: ({ session, token }) => {

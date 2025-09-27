@@ -16,6 +16,7 @@ export interface EmailAddressFieldProps {
 const EmailAddressField = ({ register, errors }: EmailAddressFieldProps) => (
   <>
     <Form.Control
+      id="email"
       type="email"
       placeholder="📧 Email"
       size="lg"

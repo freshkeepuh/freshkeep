@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   const classString = `${inter.className} wrapper`;
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <body className={classString}>
         <Providers>
           <div className="d-flex flex-column min-vh-100">

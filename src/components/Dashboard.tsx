@@ -15,7 +15,7 @@ const Dashboard: React.FC<DashboardProps> = ({ session }) => (
         <Image src="logo.svg" width="150px" alt="FreshKeep logo" />
       </Col>
       <Col xs={8} className="d-flex flex-column justify-content-center">
-        <h1>
+        <h1 data-testid="dashboard-header">
           Dashboard:&nbsp;
           {session.user.email}
         </h1>

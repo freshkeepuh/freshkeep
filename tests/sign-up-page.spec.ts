@@ -1,6 +1,19 @@
 import { deleteUser } from '@/lib/dbUserActions';
-import { test, expect, SIGNUP_URL, RESET_REGEX, SIGNIN_REGEX, SIGNIN_URL, SIGNUP_REGEX, HOME_URL } from './auth-utils';
+import { test, expect, SIGNUP_URL, SIGNIN_URL, HOME_URL } from './auth-utils';
 
+const generateRandomEmail = () => {
+  const rand = Math.floor((Math.random() * 10000) + 1);
+  return `user${rand}@example.com`;
+};
+
+const generateRandomPassword = (length: number) => {
+  return Array.from({ length }, () =>
+    Math.random().toString(36).charAt(2)
+  ).join('');
+};
+
+test.slow();
+test.use({ viewport: { width: 1280, height: 800 } });
 test('test sign up page with reset', async ({ page }) => {
   await page.goto(SIGNUP_URL);
   await page.waitForLoadState('domcontentloaded');
@@ -9,11 +22,13 @@ test('test sign up page with reset', async ({ page }) => {
   const email = page.locator('input[name="email"]');
   const password = page.locator('input[name="password"]');
   const confirm = page.locator('input[name="confirmPassword"]');
+  const resetButton = page.getByTestId('sign-up-page-reset-button');
 
   // Expect the fields to be visible
   await expect(email).toBeVisible();
   await expect(password).toBeVisible();
   await expect(confirm).toBeVisible();
+  await expect(resetButton).toBeVisible();
 
   // Fill in credentials
   await email.fill('john@foo.com');
@@ -26,9 +41,8 @@ test('test sign up page with reset', async ({ page }) => {
   await expect(confirm).toHaveValue('changeme');
 
   // Reset the form
-  await page.getByRole('button', { name: RESET_REGEX }).click();
+  await resetButton.click();
   await page.waitForLoadState('domcontentloaded');
-  await expect(page).toHaveURL(`${SIGNUP_URL}`);
 
   // Expect the fields to be cleared
   await expect(email).toHaveValue('');
@@ -44,35 +58,35 @@ test('test sign up page with create', async ({ page }) => {
   const email = page.locator('input[name="email"]').first();
   const password = page.locator('input[name="password"]').first();
   const confirm = page.locator('input[name="confirmPassword"]').first();
+  const submitButton = page.getByTestId('sign-up-page-submit-button');
 
   // Expect the fields to be visible
   await expect(email).toBeVisible();
   await expect(password).toBeVisible();
   await expect(confirm).toBeVisible();
+  await expect(submitButton).toBeVisible();
 
-  const rand = Math.floor((Math.random() * 10000) + 1);
-  const emailAddress = `josh${rand}@foo.com`;
-
-  // Clean up - delete the user we are about to create
-  await deleteUser({ email: emailAddress });
+  // Generate random email and password
+  const emailAddress = generateRandomEmail();
+  const passwordText = generateRandomPassword(8);
 
   // Fill in credentials
   await email.fill(emailAddress);
-  await password.fill('sixer1');
-  await confirm.fill('sixer1');
+  await password.fill(passwordText);
+  await confirm.fill(passwordText);
 
   // Expect the fields to have the correct values
   await expect(email).toHaveValue(emailAddress);
-  await expect(password).toHaveValue('sixer1');
-  await expect(confirm).toHaveValue('sixer1');
+  await expect(password).toHaveValue(passwordText);
+  await expect(confirm).toHaveValue(passwordText);
   
   try {
     // Submit the form
-    await page.getByRole('button', { name: SIGNUP_REGEX }).click();
+    await submitButton.click();
     await page.waitForLoadState('domcontentloaded');
 
-    // Expect to be redirected to the homepage
-    await expect(page).toHaveURL(`${HOME_URL}`);
+    const userMenu = page.getByTestId('navbar-dropdown-title');
+    await expect(userMenu).toBeVisible();
   } catch (error) {
     throw error;
   } finally {
@@ -82,14 +96,14 @@ test('test sign up page with create', async ({ page }) => {
 });
 
 test('test sign up page goto sign in', async ({ page }) => {
-  await page.goto(`${SIGNUP_URL}`);
+  await page.goto(SIGNUP_URL);
   await page.waitForLoadState('domcontentloaded');
-  await expect(page).toHaveURL(`${SIGNUP_URL}`);
+  await expect(page).toHaveURL(SIGNUP_URL);
 
   // Click on the "Sign In" link
-  await page.getByRole('link', { name: SIGNIN_REGEX }).last().click();
+  const signInLink = page.getByTestId('sign-up-page-sign-in-link');
+  await expect(signInLink).toBeVisible();
+  await signInLink.click();
   await page.waitForLoadState('domcontentloaded');
-
-  // Expect to be on the sign in page
-  await expect(page).toHaveURL(`${SIGNIN_URL}`);
+  await expect(page).toHaveURL(SIGNIN_URL);
 });

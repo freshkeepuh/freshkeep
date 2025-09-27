@@ -6,8 +6,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Card, Col, Container, Form, Image, Row } from 'react-bootstrap';
 import { forgotPasswordValidation } from '@/lib/validationSchemas';
 import { toast } from 'react-toastify';
-import EmailAddressField, { IEmailAddressField } from './EmailAddressField';
-import '../styles/auth.css';
+import EmailAddressField, { IEmailAddressField } from '@/components/EmailAddressField';
+import '@/styles/auth.css';
 
 export type ForgotPasswordFormFields = IEmailAddressField;
 
@@ -30,7 +30,6 @@ async function emailResetlink(data: ForgotPasswordFormFields) {
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred.';
     toast.error(errorMessage);
-    console.error(error);
   }
 }
 
@@ -49,14 +48,19 @@ const ForgotPasswordForm = () => {
   };
 
   return (
-    <main className="signin-hero">
+    <main data-testid="forgot-password-form" className="signin-hero">
       <Container className="vh-100 w-100 d-flex">
         <Row className="w-100">
           {/* Left welcome section */}
           <Col className="welcome-section d-flex align-items-center justify-content-left mx-auto text-white">
             <div>
-              <h1 className="welcome-title">Welcome Back!</h1>
-              <p className="welcome-subtitle">To keep connected with us enter your email to get a password reset</p>
+              <h1 data-testid="forgot-password-welcome-title" className="welcome-title">Welcome Back!</h1>
+              <p
+                data-testid="forgot-password-welcome-subtitle"
+                className="welcome-subtitle"
+              >
+                To keep connected with us enter your email to get a password reset
+              </p>
             </div>
           </Col>
           {/* Right card */}
@@ -65,31 +69,47 @@ const ForgotPasswordForm = () => {
               <Card.Header className="text-center bg-white py-3">
                 <div className="d-flex align-items-center justify-content-center mb-4">
                   <Image
+                    data-testid="forgot-password-logo"
                     src="/logo.svg"
                     alt="Fresh Keep Logo"
                     width={50}
                     height={50}
                     className="me-2"
                   />
-                  <h1 className="text-center m-0">Fresh Keep</h1>
+                  <h1 data-testid="forgot-password-title" className="text-center m-0">Fresh Keep</h1>
                 </div>
               </Card.Header>
               <Card.Body className="p-5">
-                <h2 className="mb-4 fw-bold">Forgot Password</h2>
+                <h2 data-testid="forgot-password-subtitle" className="mb-4 fw-bold">Forgot Password</h2>
 
                 <Form onSubmit={handleSubmit(onSubmit)}>
-                  <Form.Group controlId="forgotPasswordEmail" className="mb-4">
-                    <EmailAddressField register={register} errors={errors} />
+                  <Form.Group className="mb-4">
+                    <EmailAddressField
+                      data-testid="forgot-password-email-field"
+                      register={register}
+                      errors={errors}
+                    />
                   </Form.Group>
 
                   <Row className="align-items-center mb-4">
                     <Col xs="auto">
-                      <Button type="submit" variant="success" size="lg" disabled={isSubmitting}>
-                        {isSubmitting ? 'Sending...' : 'Send'}
+                      <Button
+                        data-testid="forgot-password-submit"
+                        type="submit"
+                        variant="success"
+                        size="lg"
+                        disabled={isSubmitting}
+                      >
+                        {isSubmitting ? 'Sending...' : 'Send Reset Link'}
                       </Button>
                     </Col>
                     <Col className="text-end">
-                      <Button type="button" variant="outline-secondary" onClick={() => reset()}>
+                      <Button
+                        data-testid="forgot-password-reset"
+                        type="button"
+                        variant="outline-secondary"
+                        onClick={() => reset()}
+                      >
                         Reset
                       </Button>
                     </Col>
@@ -99,7 +119,7 @@ const ForgotPasswordForm = () => {
 
               <Card.Footer className="text-center py-3">
                 <span>Remember your Password?&nbsp;</span>
-                <Link href="/auth/signin" className="fw-bold text-success">
+                <Link data-testid="forgot-password-signin-link" href="/auth/signin" className="fw-bold text-success">
                   Sign In
                 </Link>
               </Card.Footer>

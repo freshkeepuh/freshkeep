@@ -9,15 +9,15 @@ interface ErrorPopUpProps {
 }
 
 const ErrorPopUp: React.FC<ErrorPopUpProps> = ({ show, onClose, title, body }) => (
-  <Modal show={show} onHide={onClose} centered>
+  <Modal data-testid="error-popup" show={show} onHide={onClose} centered>
     <Modal.Header className="bg-danger text-white" closeButton>
-      <Modal.Title>{title}</Modal.Title>
+      <Modal.Title data-testid="error-popup-title">{title}</Modal.Title>
     </Modal.Header>
     <Modal.Body>
-      <p>{body}</p>
+      <p data-testid="error-popup-body">{body}</p>
     </Modal.Body>
     <Modal.Footer>
-      <Button variant="secondary" onClick={onClose}>
+      <Button data-testid="error-popup-ok-button" variant="primary" onClick={onClose}>
         OK
       </Button>
     </Modal.Footer>

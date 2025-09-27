@@ -1,9 +1,9 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import Welcome from '@/components/Welcome';
 import Dashboard from '@/components/Dashboard';
-import LoadingSpinner from './LoadingSpinner';
+import LoadingSpinner from '@/components/LoadingSpinner';
+import Welcome from '@/components/Welcome';
 
 /** The Home page. */
 const Home = () => {
