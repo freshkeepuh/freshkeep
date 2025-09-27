@@ -8,6 +8,20 @@ import path from 'path';
 export const BASE_URL = process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:3000';
 export const SESSION_STORAGE_PATH = path.join(__dirname, 'playwright-auth-sessions');
 
+export const HOME_URL = `${BASE_URL}/`;
+export const SIGNIN_URL = `${BASE_URL}/auth/signin`;
+export const SIGNUP_URL = `${BASE_URL}/auth/signup`;
+export const SIGNOUT_URL = `${BASE_URL}/auth/signout`;
+export const CHANGE_PASSWORD_URL = `${BASE_URL}/auth/change-password`;
+export const FORGOT_PASSWORD_URL = `${BASE_URL}/auth/forgot-password`;
+export const SIGNIN_REGEX = /sign[ -]?in/i;
+export const SIGNUP_REGEX = /sign[ -]?up/i;
+export const SIGNOUT_REGEX = /sign[ -]?out/i;
+export const CHANGE_PASSWORD_REGEX = /change[ -]?password/i;
+export const FORGOT_PASSWORD_REGEX = /forgot[ -]?password/i;
+export const REMEMBERME_REGEX = /remember[ -]?me/i;
+export const RESET_REGEX = /reset/i;
+
 // Ensure session directory exists
 if (!fs.existsSync(SESSION_STORAGE_PATH)) {
   fs.mkdirSync(SESSION_STORAGE_PATH, { recursive: true });
@@ -36,14 +50,14 @@ async function authenticateWithUI(
 
       // Navigate to homepage to verify session
       await page.goto(BASE_URL);
-      await page.waitForLoadState('networkidle');
+      await page.waitForLoadState('domcontentloaded');
 
       // Check if we're authenticated by looking for a sign-out option or user email
       const isAuthenticated = await Promise.race([
         page.getByText(email).isVisible().then((visible) => visible),
         page.getByRole('button', { name: email }).isVisible().then((visible) => visible),
-        page.getByText('Sign out').isVisible().then((visible) => visible),
-        page.getByRole('button', { name: 'Sign out' }).isVisible().then((visible) => visible),
+        page.getByText(SIGNOUT_REGEX).isVisible().then((visible) => visible),
+        page.getByRole('button', { name: SIGNOUT_REGEX }).isVisible().then((visible) => visible),
         // eslint-disable-next-line no-promise-executor-return
         new Promise<boolean>((resolve) => setTimeout(() => resolve(false), 3000)),
       ]);
@@ -65,7 +79,7 @@ async function authenticateWithUI(
 
     // Navigate to login page
     await page.goto(`${BASE_URL}/auth/signin`);
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('domcontentloaded');
 
     // Fill in credentials with retry logic
     await fillFormWithRetry(page, [
@@ -74,24 +88,19 @@ async function authenticateWithUI(
     ]);
 
     // Click submit button and wait for navigation
-    const submitButton = page.getByRole('button', { name: /sign[ -]?in/i });
-    if (!await submitButton.isVisible({ timeout: 1000 })) {
-      // Try alternative selector if the first one doesn't work
-      await page.getByRole('button', { name: /log[ -]?in/i }).click();
-    } else {
-      await submitButton.click();
-    }
+    const submitButton = page.getByRole('button', { name: SIGNIN_REGEX});
+    await submitButton.click();
 
     // Wait for navigation to complete
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('domcontentloaded');
 
     // Verify authentication was successful
     await expect(async () => {
       const authState = await Promise.race([
         page.getByText(email).isVisible().then((visible) => ({ success: visible })),
         page.getByRole('button', { name: email }).isVisible().then((visible) => ({ success: visible })),
-        page.getByText('Sign out').isVisible().then((visible) => ({ success: visible })),
-        page.getByRole('button', { name: 'Sign out' }).isVisible().then((visible) => ({ success: visible })),
+        page.getByText(SIGNOUT_REGEX).isVisible().then((visible) => ({ success: visible })),
+        page.getByRole('button', { name: SIGNOUT_REGEX }).isVisible().then((visible) => ({ success: visible })),
         // eslint-disable-next-line no-promise-executor-return
         new Promise<{ success: boolean }>((resolve) => setTimeout(() => resolve({ success: false }), 5000)),
       ]);

@@ -102,7 +102,7 @@ const SignIn = () => {
                   name="rememberMe"
                   label="Remember me"
                 />
-                <Link href="/forgot-password" className="fw-semibold text-success">
+                <Link href="/auth/forgot-password" className="fw-semibold text-success">
                   Forgot Password?
                 </Link>
               </div>

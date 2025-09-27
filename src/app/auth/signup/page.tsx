@@ -2,14 +2,14 @@
 
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
-import { useForm } from 'react-hook-form';
+import { useForm, UseFormRegister } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { Button, Card, Col, Form, Image, Row } from 'react-bootstrap';
 import { createUser, checkUser } from '@/lib/dbUserActions';
+import EmailAddressField, { IEmailAddressField } from '@/components/EmailAddressField';
 
-type SignUpForm = {
-  email: string;
+type SignUpForm = IEmailAddressField & {
   password: string;
   confirmPassword: string;
 };
@@ -43,7 +43,21 @@ const SignUp = () => {
 
   const onSubmit = async (data: SignUpForm) => {
     await createUser(data);
-    await signIn('credentials', { callbackUrl: '/', ...data });
+
+    const { email, password } = data;
+
+    const result = await signIn('credentials', {
+      callbackUrl: '/',
+      email,
+      password,
+      redirect: false,
+    });
+
+    if (result?.error) {
+      console.error('Sign up failed: ', result.error);
+    } else if (result?.url) {
+      window.location.href = result.url;
+    }
   };
 
   return (
@@ -73,14 +87,10 @@ const SignUp = () => {
 
             <Form onSubmit={handleSubmit(onSubmit)}>
               <Form.Group controlId="signupEmail" className="mb-4">
-                <Form.Control
-                  type="email"
-                  placeholder="📧 Email"
-                  size="lg"
-                  isInvalid={!!errors.email}
-                  {...register('email')}
+                <EmailAddressField
+                  errors={errors}
+                  register={register as unknown as UseFormRegister<IEmailAddressField>}
                 />
-                <Form.Control.Feedback type="invalid">{errors.email?.message}</Form.Control.Feedback>
               </Form.Group>
 
               <Form.Group controlId="signupPassword" className="mb-4">
@@ -108,7 +118,7 @@ const SignUp = () => {
               <Row className="align-items-center mb-4">
                 <Col xs="auto">
                   <Button type="submit" variant="success" size="lg" disabled={isSubmitting}>
-                    {isSubmitting ? 'Creating…' : 'Create Account'}
+                    {isSubmitting ? 'Creating…' : 'Sign Up'}
                   </Button>
                 </Col>
                 <Col className="text-end">
@@ -121,9 +131,9 @@ const SignUp = () => {
           </Card.Body>
 
           <Card.Footer className="text-center py-3">
-            <span>Already have an account?</span>
+            <span>Already have an account?&nbsp;</span>
             <Link href="/auth/signin" className="fw-bold text-success">
-              Sign in
+              Sign In
             </Link>
           </Card.Footer>
         </Card>
