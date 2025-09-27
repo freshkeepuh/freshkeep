@@ -4,7 +4,8 @@ import ErrorPopUp from '@/components/ErrorPopUp';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { useState } from 'react';
-import { Button, Card, Form, Image, Modal } from 'react-bootstrap';
+import { Button, Card, Form, Image } from 'react-bootstrap';
+import "@/styles/auth.css";
 
 const SignIn = () => {
   const [showError, setShowError] = useState(false);
@@ -19,7 +20,7 @@ const SignIn = () => {
 
     const email = target.email.value;
     const password = target.password.value;
-    const rememberMe = target.rememberMe?.checked || false;
+    // const rememberMe = target.rememberMe?.checked || false;
 
     const result = await signIn('credentials', {
       email,
@@ -40,8 +41,8 @@ const SignIn = () => {
       {/* Authentication error pop-up */}
       <ErrorPopUp
         data-testid="sign-in-page-error-popup"
-        title='Sign In Error'
-        body='The email or password you entered is incorrect. Please check your credentials and try again.'
+        title="Sign In Error"
+        body="The email or password you entered is incorrect. Please check your credentials and try again."
         show={showError}
         onClose={() => setShowError(false)}
       />
@@ -49,7 +50,12 @@ const SignIn = () => {
       {/* Welcome section */}
       <div data-testid="sign-in-page-welcome-section" className="welcome-section justify-content-center">
         <h1 data-testid="sign-in-page-welcome-title" className="welcome-title">Welcome back!</h1>
-        <h2 data-testid="sign-in-page-welcome-subtitle" className="welcome-subtitle">Sign in and see what&apos;s in your fridge.</h2>
+        <h2
+          data-testid="sign-in-page-welcome-subtitle"
+          className="welcome-subtitle"
+        >
+          Sign in and see what&apos;s in your fridge.
+        </h2>
       </div>
 
       {/* Sign In form section */}
@@ -102,7 +108,11 @@ const SignIn = () => {
                   name="rememberMe"
                   label="Remember me"
                 />
-                <Link data-testid="sign-in-page-forgot-password-link" href="/auth/forgot-password" className="fw-semibold text-success">
+                <Link
+                  data-testid="sign-in-page-forgot-password-link"
+                  href="/auth/forgot-password"
+                  className="fw-semibold text-success"
+                >
                   Forgot Password?
                 </Link>
               </div>
@@ -116,84 +126,13 @@ const SignIn = () => {
           </Card.Body>
 
           <Card.Footer className="text-center py-3">
-            <span>New around here?</span>
-            {' '}
+            <span>New around here?&nbsp;</span>
             <Link data-testid="sign-in-page-sign-up-link" href="/auth/signup" className="fw-bold text-success">
               Sign up
             </Link>
           </Card.Footer>
         </Card>
       </div>
-
-      <style>
-        {`
-          .signin-hero {
-            background-image: url('/images/sign-in/Sign-in-bg-photo.png');
-            background-size: cover;
-            background-position: center;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 5vh 4rem;
-          }
-
-          .welcome-section {
-            color: white;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-            max-width: 500px;
-            // margin-right: 3rem;
-          }
-
-          .welcome-title {
-            font-size: 4rem;
-            font-weight: 800;
-            margin-bottom: 0.5rem;
-          }
-
-          .welcome-subtitle {
-            font-size: 2.5rem;
-            font-weight: 500;
-          }
-
-          .signin-card-wrap {
-            width: 500px;
-            flex-shrink: 0;
-            margin-left: auto;
-            margin-right: 6rem; /* pushes the card farther from the edge */
-          }
-
-          /* Mobile: stack vertically */
-          @media (max-width: 992px) {
-            .signin-hero {
-              flex-direction: column;
-              justify-content: center;
-              gap: 2rem;
-              text-align: center;
-              padding: 5vh 1.25rem;
-            }
-
-            .welcome-section {
-              margin-right: 0;
-              text-align: center;
-            }
-
-            .welcome-title {
-              font-size: 2.25rem;
-            }
-
-            .welcome-subtitle {
-              font-size: 1.2rem;
-            }
-
-            .signin-card-wrap {
-              width: 100%;
-              max-width: 500px;
-              margin-left: 0;
-              margin-right: 0;
-            }
-          }
-        `}
-      </style>
     </main>
   );
 };

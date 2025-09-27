@@ -4,13 +4,13 @@ import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { useForm, UseFormRegister } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
 import { Button, Card, Col, Form, Image, Row } from 'react-bootstrap';
-import { createUser, checkUser } from '@/lib/dbUserActions';
+import { createUser } from '@/lib/dbUserActions';
 import EmailAddressField, { IEmailAddressField } from '@/components/EmailAddressField';
 import ErrorPopUp from '@/components/ErrorPopUp';
 import { useState } from 'react';
 import { signUpValidation } from '@/lib/validationSchemas';
+import "@/styles/auth.css";
 
 type SignUpForm = IEmailAddressField & {
   password: string;
@@ -49,11 +49,11 @@ const SignUp = () => {
 
   return (
     <main data-testid="sign-up-page" className="auth-hero">
-    {/* Authentication error pop-up */}
+      {/* Authentication error pop-up */}
       <ErrorPopUp
         data-testid="sign-up-page-error-popup"
-        title='Sign Up Error'
-        body='The email you entered is already registered. Please use a different email or sign in.'
+        title="Sign Up Error"
+        body="The email you entered is already registered. Please use a different email or sign in."
         show={showError}
         onClose={() => setShowError(false)}
       />
@@ -61,7 +61,12 @@ const SignUp = () => {
       {/* Left hero copy */}
       <div data-testid="sign-up-page-welcome-section" className="welcome-section">
         <h1 data-testid="sign-up-page-welcome-title" className="welcome-title">Create your account</h1>
-        <h2 data-testid="sign-up-page-welcome-subtitle" className="welcome-subtitle">Join Fresh Keep and never let food go to waste.</h2>
+        <h2
+          data-testid="sign-up-page-welcome-subtitle"
+          className="welcome-subtitle"
+        >
+          Join Fresh Keep and never let food go to waste.
+        </h2>
       </div>
 
       {/* Right card */}
@@ -70,7 +75,7 @@ const SignUp = () => {
           <Card.Body className="p-5">
             <div className="d-flex align-items-center justify-content-center mb-4">
               <Image
-                src="/multicolor-leaf2.png"
+                src="/logo.svg"
                 alt="Fresh Keep Logo"
                 width={50}
                 height={50}
@@ -105,7 +110,7 @@ const SignUp = () => {
                 <Form.Control
                   data-testid="sign-up-page-confirm-password-field"
                   type="password"
-                  placeholder="🔁 Confirm Password"
+                  placeholder="🔒 Confirm Password"
                   size="lg"
                   isInvalid={!!errors.confirmPassword}
                   {...register('confirmPassword')}
@@ -115,12 +120,23 @@ const SignUp = () => {
 
               <Row className="align-items-center mb-4">
                 <Col xs="auto">
-                  <Button data-testid="sign-up-page-submit-button" type="submit" variant="success" size="lg" disabled={isSubmitting}>
+                  <Button
+                    data-testid="sign-up-page-submit-button"
+                    type="submit"
+                    variant="success"
+                    size="lg"
+                    disabled={isSubmitting}
+                  >
                     {isSubmitting ? 'Creating…' : 'Sign Up'}
                   </Button>
                 </Col>
                 <Col className="text-end">
-                  <Button data-testid="sign-up-page-reset-button" type="button" variant="outline-secondary" onClick={() => reset()}>
+                  <Button
+                    data-testid="sign-up-page-reset-button"
+                    type="button"
+                    variant="outline-secondary"
+                    onClick={() => reset()}
+                  >
                     Reset
                   </Button>
                 </Col>
@@ -136,105 +152,6 @@ const SignUp = () => {
           </Card.Footer>
         </Card>
       </div>
-
-      {/* Styles */}
-      <style>
-        {`
-          .auth-hero {
-            position: relative;
-            background-image: url('/images/sign-up/w-b-gradient.png');
-            background-size: cover;
-            background-position: center;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 5vh 4rem;
-            overflow: hidden;
-          }
-
-          .auth-hero::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(
-              to right,
-              rgba(0,0,0,0.55) 0%,
-              rgba(0,0,0,0.25) 35%,
-              rgba(0,0,0,0) 60%
-            );
-            pointer-events: none;
-            z-index: 1;
-          }
-
-          .welcome-section {
-            position: relative;
-            z-index: 2;
-            color: white;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-            max-width: 500px;
-            margin-right: 3rem;
-          }
-
-          .welcome-title {
-            font-size: 4rem;
-            font-weight: 800;
-            margin-bottom: 0.5rem;
-          }
-
-          .welcome-subtitle {
-            font-size: 2.5rem;
-            font-weight: 500;
-          }
-
-          .auth-card-wrap {
-            position: relative;
-            z-index: 2;
-            width: 500px;
-            flex-shrink: 0;
-            margin-left: auto;
-            margin-right: 6rem;
-          }
-
-          @media (max-width: 992px) {
-            .auth-hero {
-              flex-direction: column;
-              justify-content: center;
-              gap: 2rem;
-              text-align: center;
-              padding: 5vh 1.25rem;
-            }
-
-            .auth-hero::before {
-              background: linear-gradient(
-                to bottom,
-                rgba(0,0,0,0.55) 0%,
-                rgba(0,0,0,0.25) 40%,
-                rgba(0,0,0,0) 70%
-              );
-            }
-
-            .welcome-section {
-              margin-right: 0;
-              text-align: center;
-            }
-
-            .welcome-title {
-              font-size: 2.25rem;
-            }
-
-            .welcome-subtitle {
-              font-size: 1.2rem;
-            }
-
-            .auth-card-wrap {
-              width: 100%;
-              max-width: 500px;
-              margin-left: 0;
-              margin-right: 0;
-            }
-          }
-        `}
-      </style>
     </main>
   );
 };
