@@ -10,7 +10,7 @@
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "npx playwright test --reporter=list"
+    "test": "npx playwright test"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.6.0",
