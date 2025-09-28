@@ -12,8 +12,7 @@ import ConfirmPasswordField, { IConfirmPasswordField } from '@/components/Confir
 import EmailAddressField, { IEmailAddressField } from '@/components/EmailAddressField';
 import ErrorPopUp from '@/components/ErrorPopUp';
 import PasswordField, { IPasswordField } from '@/components/PasswordField';
-import "@/styles/auth.css";
-import { Pass } from 'react-bootstrap-icons';
+import '@/styles/auth.css';
 
 type SignUpFormFields = IEmailAddressField & IPasswordField & IConfirmPasswordField;
 

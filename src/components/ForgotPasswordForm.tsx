@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -9,7 +10,6 @@ import { toast } from 'react-toastify';
 import EmailAddressField, { IEmailAddressField } from '@/components/EmailAddressField';
 import '@/styles/auth.css';
 import ErrorPopUp from './ErrorPopUp';
-import { useState } from 'react';
 
 export type ForgotPasswordFormFields = IEmailAddressField;
 
@@ -53,7 +53,7 @@ const ForgotPasswordForm = () => {
 
   return (
     <main data-testid="forgot-password-form" className="signin-hero">
-    {/* Forgot Password error pop-up */}
+      {/* Forgot Password error pop-up */}
       <ErrorPopUp
         data-testid="forgot-password-form-error-popup"
         title="Forgot Password Error"

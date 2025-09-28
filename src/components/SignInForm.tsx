@@ -5,14 +5,12 @@ import Link from 'next/link';
 import { useForm, UseFormRegister } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, Card, Col, Container, Form, Image, Row } from 'react-bootstrap';
-import { createUser } from '@/lib/dbUserActions';
 import { useState } from 'react';
 import { signInValidation } from '@/lib/validationSchemas';
 import EmailAddressField, { IEmailAddressField } from '@/components/EmailAddressField';
 import ErrorPopUp from '@/components/ErrorPopUp';
 import PasswordField, { IPasswordField } from '@/components/PasswordField';
-import "@/styles/auth.css";
-import { Pass } from 'react-bootstrap-icons';
+import '@/styles/auth.css';
 
 type SignInFormFields = IEmailAddressField & IPasswordField;
 
@@ -27,7 +25,6 @@ const SignInForm = () => {
   } = useForm<SignInFormFields>({
     resolver: yupResolver(signInValidation),
   });
-
 
   const onSubmit = async (data: SignInFormFields) => {
     const { email, password } = data;

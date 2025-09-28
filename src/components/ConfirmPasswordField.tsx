@@ -19,7 +19,7 @@ const ConfirmPasswordField = ({ register, errors, placeholder }: ConfirmPassword
     <Form.Control
       id="confirmPassword"
       type="password"
-      placeholder={ placeholder || "🔒 Confirm Password" }
+      placeholder={placeholder || '🔒 Confirm Password'}
       size="lg"
       isInvalid={!!errors.confirmPassword}
       {...register('confirmPassword')}

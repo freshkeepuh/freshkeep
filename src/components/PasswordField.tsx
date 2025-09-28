@@ -19,7 +19,7 @@ const PasswordField = ({ register, errors, placeholder }: PasswordFieldProps) =>
     <Form.Control
       id="password"
       type="password"
-      placeholder={ placeholder || "🔒 Password" }
+      placeholder={placeholder || '🔒 Password'}
       size="lg"
       isInvalid={!!errors.password}
       {...register('password')}

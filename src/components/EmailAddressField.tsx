@@ -19,7 +19,7 @@ const EmailAddressField = ({ register, errors, placeholder }: EmailAddressFieldP
     <Form.Control
       id="email"
       type="email"
-      placeholder={ placeholder || "📧 Email" }
+      placeholder={placeholder || '📧 Email'}
       size="lg"
       autoFocus
       isInvalid={!!errors.email}
