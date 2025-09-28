@@ -8,6 +8,8 @@ import { forgotPasswordValidation } from '@/lib/validationSchemas';
 import { toast } from 'react-toastify';
 import EmailAddressField, { IEmailAddressField } from '@/components/EmailAddressField';
 import '@/styles/auth.css';
+import ErrorPopUp from './ErrorPopUp';
+import { useState } from 'react';
 
 export type ForgotPasswordFormFields = IEmailAddressField;
 
@@ -34,6 +36,8 @@ async function emailResetlink(data: ForgotPasswordFormFields) {
 }
 
 const ForgotPasswordForm = () => {
+  const [showError, setShowError] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -49,6 +53,16 @@ const ForgotPasswordForm = () => {
 
   return (
     <main data-testid="forgot-password-form" className="signin-hero">
+    {/* Forgot Password error pop-up */}
+      <ErrorPopUp
+        data-testid="forgot-password-form-error-popup"
+        title="Forgot Password Error"
+        body="The email you entered is not registered. Please use a different email or sign up."
+        show={showError}
+        onClose={() => setShowError(false)}
+      />
+
+      {/* Welcome section */}
       <Container className="vh-100 w-100 d-flex">
         <Row className="w-100">
           {/* Left welcome section */}
@@ -59,7 +73,7 @@ const ForgotPasswordForm = () => {
                 data-testid="forgot-password-welcome-subtitle"
                 className="welcome-subtitle"
               >
-                To keep connected with us enter your email to get a password reset
+                Enter your email to get a password reset
               </p>
             </div>
           </Col>

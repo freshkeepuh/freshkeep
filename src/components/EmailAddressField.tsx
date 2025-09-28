@@ -11,15 +11,17 @@ export interface IEmailAddressField {
 export interface EmailAddressFieldProps {
   register: UseFormRegister<IEmailAddressField>;
   errors: { email?: { message?: string } };
+  placeholder?: string;
 }
 
-const EmailAddressField = ({ register, errors }: EmailAddressFieldProps) => (
+const EmailAddressField = ({ register, errors, placeholder }: EmailAddressFieldProps) => (
   <>
     <Form.Control
       id="email"
       type="email"
-      placeholder="📧 Email"
+      placeholder={ placeholder || "📧 Email" }
       size="lg"
+      autoFocus
       isInvalid={!!errors.email}
       {...register('email')}
     />

@@ -22,7 +22,7 @@ test('test sign up page with reset', async ({ page }) => {
   const email = page.locator('input[name="email"]');
   const password = page.locator('input[name="password"]');
   const confirm = page.locator('input[name="confirmPassword"]');
-  const resetButton = page.getByTestId('sign-up-page-reset-button');
+  const resetButton = page.getByTestId('sign-up-form-reset-button');
 
   // Expect the fields to be visible
   await expect(email).toBeVisible();
@@ -58,7 +58,7 @@ test('test sign up page with create', async ({ page }) => {
   const email = page.locator('input[name="email"]').first();
   const password = page.locator('input[name="password"]').first();
   const confirm = page.locator('input[name="confirmPassword"]').first();
-  const submitButton = page.getByTestId('sign-up-page-submit-button');
+  const submitButton = page.getByTestId('sign-up-form-submit-button');
 
   // Expect the fields to be visible
   await expect(email).toBeVisible();
@@ -101,7 +101,7 @@ test('test sign up page goto sign in', async ({ page }) => {
   await expect(page).toHaveURL(SIGNUP_URL);
 
   // Click on the "Sign In" link
-  const signInLink = page.getByTestId('sign-up-page-sign-in-link');
+  const signInLink = page.getByTestId('sign-up-form-sign-in-link');
   await expect(signInLink).toBeVisible();
   await signInLink.click();
   await page.waitForLoadState('domcontentloaded');

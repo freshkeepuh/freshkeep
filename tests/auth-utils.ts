@@ -81,7 +81,7 @@ async function authenticateWithUI(
     ]);
 
     // Click submit button and wait for navigation
-    const submitButton = page.getByTestId('sign-in-page-submit-button');
+    const submitButton = page.getByTestId('sign-in-form-submit-button');
     await submitButton.click();
 
     // Wait for navigation to complete

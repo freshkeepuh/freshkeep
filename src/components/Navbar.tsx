@@ -40,7 +40,7 @@ const NavBar: React.FC = () => {
               {/* App links (only when logged in) */}
               <Nav className="ms-auto">
                 <Nav.Link
-                  data-testid="navbar-link-locations"
+                  data-testid="navbar-locations-link"
                   as={Link}
                   href="/locations"
                   active={isActive('/locations')}
@@ -49,7 +49,7 @@ const NavBar: React.FC = () => {
                   Locations
                 </Nav.Link>
                 <Nav.Link
-                  data-testid="navbar-link-shop"
+                  data-testid="navbar-shop-link"
                   as={Link}
                   href="/shop"
                   active={isActive('/shop')}
@@ -58,7 +58,7 @@ const NavBar: React.FC = () => {
                   Shop
                 </Nav.Link>
                 <Nav.Link
-                  data-testid="navbar-link-shopping-list"
+                  data-testid="navbar-shopping-list-link"
                   as={Link}
                   href="/shoppingList"
                   active={isActive('/shoppingList')}
@@ -67,7 +67,7 @@ const NavBar: React.FC = () => {
                   Shopping List
                 </Nav.Link>
                 <Nav.Link
-                  data-testid="navbar-link-recipes"
+                  data-testid="navbar-recipes-link"
                   as={Link}
                   href="/recipes"
                   active={isActive('/recipes')}
@@ -77,7 +77,7 @@ const NavBar: React.FC = () => {
                 </Nav.Link>
                 {(session.user?.role === Role.ADMIN) ? (
                   <Nav.Link
-                    data-testid="navbar-link-users"
+                    data-testid="navbar-users-link"
                     as={Link}
                     href="/users"
                     active={isActive('/users')}
@@ -95,16 +95,16 @@ const NavBar: React.FC = () => {
                   title={session.user ? session.user.email : 'Account'}
                   align="end"
                 >
-                  <NavDropdown.Item data-testid="navbar-link-settings" as={Link} href="/settings">
+                  <NavDropdown.Item data-testid="navbar-settings-link" as={Link} href="/settings">
                     <Gear className="me-2" />
                     Settings
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
-                  <NavDropdown.Item data-testid="navbar-link-change-password" as={Link} href="/auth/change-password">
+                  <NavDropdown.Item data-testid="navbar-change-password-link" as={Link} href="/auth/change-password">
                     <Lock className="me-2" />
                     Change Password
                   </NavDropdown.Item>
-                  <NavDropdown.Item data-testid="navbar-link-sign-out" onClick={() => signOut({ callbackUrl: '/' })}>
+                  <NavDropdown.Item data-testid="navbar-sign-out-link" onClick={() => signOut({ callbackUrl: '/' })}>
                     <BoxArrowRight className="me-2" />
                     Sign Out
                   </NavDropdown.Item>

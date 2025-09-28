@@ -3,7 +3,7 @@ import { test, expect, HOME_URL, SIGNUP_URL, SIGNIN_URL } from './auth-utils';
 test.slow();
 test.use({ viewport: { width: 1280, height: 800 } });
 test('test sign in page', async ({ page }) => {
-  // Listen for all console logs
+  // DEBUG: Listen for all console logs
   page.on('console', msg => console.log(msg.text()));
 
   await page.goto(HOME_URL);
@@ -16,7 +16,7 @@ test('test sign in page', async ({ page }) => {
 
   const email = page.locator('input[name="email"]').first();
   const password = page.locator('input[name="password"]').first();
-  const submit = page.getByTestId('sign-in-page-submit-button');
+  const submit = page.getByTestId('sign-in-form-submit-button');
 
   // Expect the fields to be visible
   await expect(email).toBeVisible();
@@ -47,7 +47,7 @@ test('test sign in page goto sign up', async ({ page }) => {
   await expect(page).toHaveURL(SIGNIN_URL);
 
   // Click on the "Sign Up" link
-  const signUpLink = page.getByTestId('sign-in-page-sign-up-link');
+  const signUpLink = page.getByTestId('sign-in-form-sign-up-link');
   await expect(signUpLink).toBeVisible();
   await signUpLink.click();
   await page.waitForLoadState('domcontentloaded');
