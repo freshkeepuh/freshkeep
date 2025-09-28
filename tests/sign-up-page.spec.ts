@@ -15,9 +15,12 @@ const generateRandomPassword = (length: number) => {
 test.slow();
 test.use({ viewport: { width: 1280, height: 800 } });
 test('test sign up page with reset', async ({ page }) => {
+  // DEBUG: Listen for all console logs
+  page.on('console', msg => console.log(msg.text()));
+
   await page.goto(SIGNUP_URL);
   await page.waitForLoadState('domcontentloaded');
-  await expect(page).toHaveURL(`${SIGNUP_URL}`);
+  await expect(page).toHaveURL(SIGNUP_URL);
 
   const email = page.locator('input[name="email"]');
   const password = page.locator('input[name="password"]');
@@ -51,9 +54,12 @@ test('test sign up page with reset', async ({ page }) => {
 });
 
 test('test sign up page with create', async ({ page }) => {
+  // DEBUG: Listen for all console logs
+  page.on('console', msg => console.log(msg.text()));
+
   await page.goto(SIGNUP_URL);
   await page.waitForLoadState('domcontentloaded');
-  await expect(page).toHaveURL(`${SIGNUP_URL}`);
+  await expect(page).toHaveURL(SIGNUP_URL);
 
   const email = page.locator('input[name="email"]').first();
   const password = page.locator('input[name="password"]').first();
@@ -96,6 +102,9 @@ test('test sign up page with create', async ({ page }) => {
 });
 
 test('test sign up page goto sign in', async ({ page }) => {
+  // DEBUG: Listen for all console logs
+  page.on('console', msg => console.log(msg.text()));
+
   await page.goto(SIGNUP_URL);
   await page.waitForLoadState('domcontentloaded');
   await expect(page).toHaveURL(SIGNUP_URL);

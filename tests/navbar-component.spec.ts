@@ -9,13 +9,13 @@ test('test access to navigation bar (not signed in)', async ({ page }) => {
   await page.waitForLoadState('domcontentloaded');
 
   // Check that the FreshKeep Link is visible and works
-  const freshKeepLink = await page.getByTestId('navbar-brand');
+  const freshKeepLink = page.getByTestId('navbar-brand');
   await expect(freshKeepLink).toBeVisible();
   await freshKeepLink.click();
   await page.waitForLoadState('domcontentloaded');
 
   // Check that the Sign In Link is visible and works
-  const signinLink = await page.getByTestId('navbar-sign-in-link');
+  const signinLink = page.getByTestId('navbar-sign-in-link');
   await expect(signinLink).toBeVisible();
   await signinLink.click();
   await page.waitForLoadState('domcontentloaded');
@@ -29,7 +29,7 @@ test('test access to navigation bar (signed in)', async ({ getUserPage }) => {
     await page.waitForLoadState('domcontentloaded');
 
     // Check that the FreshKeep Link is visible and works
-    const freshKeepLink = await page.getByTestId('navbar-brand');
+    const freshKeepLink = page.getByTestId('navbar-brand');
     await expect(freshKeepLink).toBeVisible();
     await freshKeepLink.click();
     await page.waitForLoadState('domcontentloaded');
@@ -48,6 +48,7 @@ test('test access to navigation bar (signed in)', async ({ getUserPage }) => {
     await expect(signOutLink).toBeVisible();
     await signOutLink.click();
     await page.waitForLoadState('domcontentloaded');
-    await expect(page.getByTestId('navbar-sign-in-link')).toBeVisible();
+    const signInLink = page.getByTestId('navbar-sign-in-link');
+    await expect(signInLink).toBeVisible();
   }
 });

@@ -4,9 +4,9 @@ test.slow();
 test.use({ viewport: { width: 1280, height: 800 } });
 test('test access to welcome page (not signed in)', async ({ page }) => {
   // Navigate to the home page
-  await page.goto(`${BASE_URL}`);
+  await page.goto(BASE_URL);
   await page.waitForLoadState('domcontentloaded');
-  await expect(page).toHaveURL(`${HOME_URL}`);
+  await expect(page).toHaveURL(HOME_URL);
   const welcomeHeading = page.getByTestId('welcome-header');
   await expect(welcomeHeading).toBeVisible();
 });
@@ -15,7 +15,7 @@ test('test access to dashboard page (signed in)', async ({ getUserPage }) => {
   // Call the getUserPage fixture with users signin info to get authenticated session for user
   const page = await getUserPage('john@foo.com', 'changeme');
   await page.waitForLoadState('domcontentloaded');
-  await expect(page).toHaveURL(`${HOME_URL}`);
+  await expect(page).toHaveURL(HOME_URL);
   const dashboardHeading = page.getByTestId('dashboard-header');
   await expect(dashboardHeading).toBeVisible();
 });

@@ -42,8 +42,12 @@ const SignUpForm = () => {
     if (result?.error) {
       console.error('Sign up failed: ', result.error);
       setShowError(true);
-    } else if (result?.url) {
+    } else if (result?.url && result.url !== window.location.href) {
+      console.warn('Redirecting to: ', result.url);
       window.location.href = result.url;
+    } else {
+      console.warn('No redirect URL found, redirecting to home');
+      window.location.href = '/';
     }
   };
 

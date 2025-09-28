@@ -7,5 +7,6 @@ test('test access to admin page', async ({ getUserPage }) => {
 
   // Navigate to the home page
   await page.waitForLoadState('domcontentloaded');
-  await expect(page.getByTestId('navbar-dropdown-title')).toBeVisible();
+  const adminLink = page.getByTestId('navbar-dropdown-title');
+  await expect(adminLink).toBeVisible();
 });
