@@ -55,11 +55,13 @@ const ForgotPasswordForm = () => {
     <main data-testid="forgot-password-form" className="signin-hero">
       {/* Forgot Password error pop-up */}
       <ErrorPopUp
-        data-testid="forgot-password-form-error-popup"
-        title="Forgot Password Error"
-        body="The email you entered is not registered. Please use a different email or sign up."
-        show={showError}
-        onClose={() => setShowError(false)}
+        {...{
+          'data-testid': 'forgot-password-form-error-popup',
+          title: 'Forgot Password Error',
+          body: 'The email you entered is not registered. Please use a different email or sign up.',
+          show: showError,
+          onClose: () => setShowError(false),
+        }}
       />
 
       {/* Welcome section */}
@@ -99,9 +101,9 @@ const ForgotPasswordForm = () => {
                 <Form onSubmit={handleSubmit(onSubmit)}>
                   <Form.Group className="mb-4">
                     <EmailAddressField
-                      data-testid="forgot-password-email-field"
                       register={register}
                       errors={errors}
+                      data-testid="forgot-password-email-field"
                     />
                   </Form.Group>
 

@@ -5,7 +5,7 @@ export const forgotPasswordValidation = Yup.object().shape({
   email: Yup.string()
     .required('Email is required')
     .email('Email is invalid')
-    .test('unique-email', 'Email exists', async (value) => {
+    .test('unique-email', 'Email not found', async (value) => {
       if (!value) return false;
       return (checkUser({ email: value }));
     }),
