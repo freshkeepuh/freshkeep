@@ -1,15 +1,30 @@
+'use client';
+
+import React from 'react';
 import { Container, Row, Col, Image } from 'react-bootstrap';
 
-const Dashboard: React.FC = () => (
+interface DashboardProps {
+  session: { user: { email?: string | null; name?: string | null; image?: string | null } };
+}
+
+const Dashboard: React.FC<DashboardProps> = ({ session }) => (
   <Container id="dashboard-page" fluid className="py-3">
     <Row className="align-middle text-center">
       <Col xs={4}>
         <Image src="logo.svg" width="150px" alt="FreshKeep logo" />
       </Col>
       <Col xs={8} className="d-flex flex-column justify-content-center">
-        <h1>Dashboard</h1>
-        <p>This is where you can manage your food storage, </p>
-        <p>view recipes based on your items, and plan your grocery trips efficiently.</p>
+        <h1 data-testid="dashboard-header">
+          Dashboard:&nbsp;
+          {session.user.email}
+        </h1>
+        <p>
+          This is where you can manage your food storage,
+          <br />
+          view recipes based on your items,
+          <br />
+          and plan your grocery trips efficiently.
+        </p>
       </Col>
     </Row>
   </Container>
