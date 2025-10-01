@@ -190,17 +190,16 @@ model Product {
  */
 model ProductInstance {
   id          String      @id @default(uuid()) @map("_id")
-  location    Location    @relation(fields: [locId], references: [id])
   locId       String
-  container   Container   @relation(fields: [conId], references: [id])
   conId       String
-  product     Product     @relation(fields: [prodId], references: [id])
   prodId      String
-  unit        Unit        @relation(fields: [unitId], references: [id])
   unitId      String
   quantity    Float       @default(0.0)
   expiresAt   DateTime?
-  picture     String?
+  location    Location    @relation(fields: [locId], references: [id])
+  container   Container   @relation(fields: [conId], references: [id])
+  product     Product     @relation(fields: [prodId], references: [id])
+  unit        Unit        @relation(fields: [unitId], references: [id])
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
@@ -233,12 +232,10 @@ model ShoppingListItem {
   id            String       @id @default(uuid()) @map("_id")
   listId        String
   prodId        String
-  storeId       String
   quantity      Float        @default(1.0)
   unitId        String
   isPurchased   Boolean      @default(false)
   list          ShoppingList @relation(fields: [listId], references: [id])
-  store         Store        @relation(fields: [storeId], references: [id])
   product       Product      @relation(fields: [prodId], references: [id])
   unit          Unit         @relation(fields: [unitId], references: [id])
   createdAt     DateTime     @default(now())
@@ -264,7 +261,6 @@ model Store {
   website       String?
   picture       String?
   shoppingLists ShoppingList[]
-  shoppingListItems ShoppingListItem[]
   products      Product[]
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
