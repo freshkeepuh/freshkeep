@@ -2,12 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import { Container, Row, Col, Button, Form } from 'react-bootstrap';
-import { Store, Product } from '@prisma/client';
+import { Container, Row, Col } from 'react-bootstrap';
+import { Store } from '@prisma/client';
 import { loggedInProtectedPage } from '@/lib/page-protection';
 import LoadingSpinner from './LoadingSpinner';
-import { useSearchParams } from 'next/navigation';
-  
+
 type StoreFormProps = {
   id: string | null;
 };
@@ -25,10 +24,6 @@ const StoreForm = ({ id }: StoreFormProps) => {
 
         await loggedInProtectedPage(session);
 
-        const searchParams = useSearchParams();
-        if (!searchParams.get('id')) {
-          throw new Error('Missing required parameter: id');
-        }
         // Fetch the store associated with the current user
         const storeResponse = await fetch(`/api/store?id=${id}`);
         if (!storeResponse.ok) {
@@ -49,14 +44,19 @@ const StoreForm = ({ id }: StoreFormProps) => {
     };
 
     fetchStoreAndProducts();
-  }, [session]);
+  }, [session, id]);
 
   if (loading) {
     return <LoadingSpinner />;
   }
 
   if (error) {
-    return <div className="text-danger">Error: {error}</div>;
+    return (
+      <div className="text-danger">
+        Error:
+        {error}
+      </div>
+    );
   }
 
   return (

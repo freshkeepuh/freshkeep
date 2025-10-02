@@ -1,6 +1,7 @@
 /**
  * CRUD Actions for the Store Model.
  */
+
 'use server';
 
 import { Country } from '@prisma/client';
@@ -12,29 +13,29 @@ import { prisma } from './prisma';
  * @returns The created store.
  */
 export async function createStore(data: {
-  name:        string,
-  address1:    string | undefined,
-  address2:    string | undefined,
-  city:        string | undefined,
-  state:       string | undefined,
-  zipcode:     string | undefined,
-  country:     string | undefined,
-  phone:       string | undefined,
-  website:     string | undefined,
-  picture:     string | undefined,
+  name: string,
+  address1: string | undefined,
+  address2: string | undefined,
+  city: string | undefined,
+  state: string | undefined,
+  zipcode: string | undefined,
+  country: string | undefined,
+  phone: string | undefined,
+  website: string | undefined,
+  picture: string | undefined,
 }) {
   const newStore = await prisma.store.create({
     data: {
-      name:     data.name,
+      name: data.name,
       address1: data.address1,
       address2: data.address2,
-      city:     data.city,
-      state:    data.state,
-      zipcode:  data.zipcode,
-      country:  data.country as Country,
-      phone:    data.phone,
-      website:  data.website,
-      picture:  data.picture,
+      city: data.city,
+      state: data.state,
+      zipcode: data.zipcode,
+      country: data.country as Country,
+      phone: data.phone,
+      website: data.website,
+      picture: data.picture,
     },
   });
   return newStore;
@@ -69,30 +70,30 @@ export async function readStore(id: string | null | undefined) {
  * @returns The updated store if found, otherwise null.
  */
 export async function updateStore(id: string, data: {
-  name:        string,
-  address1:    string | undefined,
-  address2:    string | undefined,
-  city:        string | undefined,
-  state:       string | undefined,
-  zipcode:     string | undefined,
-  country:     string | undefined,
-  phone:       string | undefined,
-  website:     string | undefined,
-  picture:     string | undefined,
+  name: string,
+  address1: string | undefined,
+  address2: string | undefined,
+  city: string | undefined,
+  state: string | undefined,
+  zipcode: string | undefined,
+  country: string | undefined,
+  phone: string | undefined,
+  website: string | undefined,
+  picture: string | undefined,
 }) {
   const updatedStore = await prisma.store.update({
     where: { id },
     data: {
-      name:     data.name,
+      name: data.name,
       address1: data.address1,
       address2: data.address2,
-      city:     data.city,
-      state:    data.state,
-      zipcode:  data.zipcode,
-      country:  data.country as Country,
-      phone:    data.phone,
-      website:  data.website,
-      picture:  data.picture,
+      city: data.city,
+      state: data.state,
+      zipcode: data.zipcode,
+      country: data.country as Country,
+      phone: data.phone,
+      website: data.website,
+      picture: data.picture,
     },
   });
   return updatedStore;

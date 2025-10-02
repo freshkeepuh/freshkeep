@@ -2,10 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import { Container, Row, Col, Button, Form } from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 import { Store } from '@prisma/client';
 
-import StoreForm from '@/components/StoreForm';
 import { loggedInProtectedPage } from '@/lib/page-protection';
 import LoadingSpinner from './LoadingSpinner';
 
@@ -15,15 +14,14 @@ const StoresForm = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-
-  useEffect( () => {
+  useEffect(() => {
     const fetchStores = async () => {
       try {
         setLoading(true);
 
         await loggedInProtectedPage(session);
-    
-        const response = await fetch(`/api/stores`);
+
+        const response = await fetch('/api/stores');
 
         if (!response.ok) {
           throw new Error(response.statusText);
@@ -48,7 +46,12 @@ const StoresForm = () => {
   }
 
   if (error) {
-    return <div className="text-danger">Error: {error}</div>;
+    return (
+      <div className="text-danger">
+        Error:
+        {error}
+      </div>
+    );
   }
 
   return (
@@ -65,10 +68,18 @@ const StoresForm = () => {
                 <p>{store.address1}</p>
                 {store.address2 && <p>{store.address2}</p>}
                 <p>
-                  {store.city}, {store.state} {store.zipcode}
+                  {store.city},
+                  {store.state}
+                  {store.zipcode}
                 </p>
-                <p>Phone: {store.phone}</p>
-                <p>Website: {store.website}</p>
+                <p>
+                  Phone:
+                  {store.phone}
+                </p>
+                <p>
+                  Website:
+                  {store.website}
+                </p>
                 <Button variant="primary" href={`/store/${store.id}`}>
                   View Details
                 </Button>

@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
+import { Session } from 'next-auth';
 import { Role } from '@prisma/client';
 import { readUser } from './dbUserActions';
-import { Session } from 'next-auth';
 
 const getUserFromSession = async (session: Session | null) => {
   if (!session) return null;
