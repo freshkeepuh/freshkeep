@@ -40,7 +40,6 @@ model User {
   password  String
   role      Role     @default(USER)
   settings  Json?
-  shoppingLists ShoppingList[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -212,21 +211,21 @@ model ProductInstance {
   */
 model ShoppingList {
   id            String              @id @default(uuid()) @map("_id")
-  userId        String
+  name          String              @unique
   storeId       String
-  user          User                @relation(fields: [userId], references: [id])
+  isDefault     Boolean             @default(false)
   store         Store               @relation(fields: [storeId], references: [id])
   items         ShoppingListItem[]
   createdAt     DateTime            @default(now())
   updatedAt     DateTime            @updatedAt
 
-  @@unique([userId, storeId, createdAt])
+  @@unique([storeId, createdAt])
 }
  
  
  /**
  * Shopping List Items
- * Uses: User, Product
+ * Uses: Product, ShoppingList, Unit
  */
 model ShoppingListItem {
   id            String       @id @default(uuid()) @map("_id")
@@ -241,12 +240,13 @@ model ShoppingListItem {
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
 
-  @@unique([listId, prodId])
+  @@unique([listId, prodId, unitId])
 }
 
 /**
  * Grocery Stores
- * Uses: User
+ * Uses: Country, Product, ShoppingList
+ * Used By: Product, ShoppingList
  */
 model Store {
   id            String      @id @default(uuid()) @map("_id")
