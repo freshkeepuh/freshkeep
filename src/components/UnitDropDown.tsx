@@ -1,7 +1,6 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
 import { Unit } from '@prisma/client';
-import { prisma } from '@/lib/prisma';
 import { UseFormRegister } from 'react-hook-form';
 
 export interface IUnitField {
