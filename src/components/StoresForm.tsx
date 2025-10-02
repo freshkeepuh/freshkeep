@@ -2,11 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Container, Row, Col } from 'react-bootstrap';
 import { Store } from '@prisma/client';
 
 import { loggedInProtectedPage } from '@/lib/page-protection';
 import LoadingSpinner from './LoadingSpinner';
+import StoreCard from './StoreCard';
 
 const StoresForm = () => {
   const { data: session } = useSession();
@@ -63,27 +64,35 @@ const StoresForm = () => {
             <p>No stores found. Please add a store.</p>
           ) : (
             stores.map((store) => (
-              <div key={store.id} className="mb-3 p-3 border rounded">
-                <h5>{store.name}</h5>
-                <p>{store.address1}</p>
-                {store.address2 && <p>{store.address2}</p>}
-                <p>
-                  {store.city},
-                  {store.state}
-                  {store.zipcode}
-                </p>
-                <p>
-                  Phone:
-                  {store.phone}
-                </p>
-                <p>
-                  Website:
-                  {store.website}
-                </p>
-                <Button variant="primary" href={`/store/${store.id}`}>
-                  View Details
-                </Button>
-              </div>
+              <StoreCard
+                key={store.id}
+                store={store}
+                onSave={async (updatedStore) => {
+                  const response = await fetch('/api/store', {
+                    method: 'PUT',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(updatedStore),
+                  });
+                  if (response.ok) {
+                    const updated = await response.json();
+                    setStores((prevStores) => prevStores.map((s) => (s.id === updated.id ? updated : s)));
+                  } else {
+                    console.error('Failed to update store');
+                  }
+                }}
+                onDelete={async (id) => {
+                  const response = await fetch(`/api/store/${id}`, {
+                    method: 'DELETE',
+                  });
+                  if (response.ok) {
+                    setStores((prevStores) => prevStores.filter((s) => s.id !== id));
+                  } else {
+                    console.error('Failed to delete store');
+                  }
+                }}
+              />
             ))
           )}
         </Col>
