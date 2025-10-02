@@ -1,8 +1,8 @@
 import StoreForm from '@/components/StoreForm';
 import { randomUUID } from 'crypto';
 
-export default async function StorePage() {
-  // Replace with actual logic to get the store id, e.g. from params or context
-  const id = randomUUID();
+export default async function StorePage({ params }: { params: { id: string } }) {
+  // Use the actual store id from route params
+  const id = params.id;
   return <StoreForm id={id} />;
 }
