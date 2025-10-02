@@ -80,7 +80,7 @@ const StoresForm = () => {
                   }
                 }}
                 onDelete={async (id) => {
-                  const response = await fetch(`/api/store/${id}`, {
+                  const response = await fetch(`/api/store?id=${id}`, {
                     method: 'DELETE',
                   });
                   if (response.ok) {
