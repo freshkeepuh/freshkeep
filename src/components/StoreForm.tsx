@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Store } from '@prisma/client';
-import { loggedInProtectedPage } from '@/lib/page-protection';
 import LoadingSpinner from './LoadingSpinner';
 
 type StoreFormProps = {
@@ -21,8 +20,6 @@ const StoreForm = ({ id }: StoreFormProps) => {
     const fetchStoreAndProducts = async () => {
       try {
         setLoading(true);
-
-        await loggedInProtectedPage(session);
 
         // Fetch the store associated with the current user
         const storeResponse = await fetch(`/api/store?id=${id}`);

@@ -5,7 +5,6 @@ import { useSession } from 'next-auth/react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Store } from '@prisma/client';
 
-import { loggedInProtectedPage } from '@/lib/page-protection';
 import LoadingSpinner from './LoadingSpinner';
 import StoreCard from './StoreCard';
 
@@ -19,8 +18,6 @@ const StoresForm = () => {
     const fetchStores = async () => {
       try {
         setLoading(true);
-
-        await loggedInProtectedPage(session);
 
         const response = await fetch('/api/stores');
 

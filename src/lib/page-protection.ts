@@ -24,7 +24,7 @@ export const loggedInProtectedPage = async (session: Session | null) => {
  * Redirects to the not-authorized page if the user is not an admin.
  */
 export const adminProtectedPage = async (session: Session | null) => {
-  loggedInProtectedPage(session);
+  await loggedInProtectedPage(session);
   const user = await getUserFromSession(session);
   if (!user) {
     redirect('/auth/signin');
