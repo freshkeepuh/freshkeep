@@ -79,7 +79,7 @@ const StoresForm = () => {
                     const updated = await response.json();
                     setStores((prevStores) => prevStores.map((s) => (s.id === updated.id ? updated : s)));
                   } else {
-                    console.error('Failed to update store');
+                    setError('Failed to update store');
                   }
                 }}
                 onDelete={async (id) => {
@@ -89,7 +89,7 @@ const StoresForm = () => {
                   if (response.ok) {
                     setStores((prevStores) => prevStores.filter((s) => s.id !== id));
                   } else {
-                    console.error('Failed to delete store');
+                    setError('Failed to delete store');
                   }
                 }}
               />
