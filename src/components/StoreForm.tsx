@@ -15,7 +15,6 @@ type StoreFormProps = {
 const StoreForm = ({ id }: StoreFormProps) => {
   const { data: session } = useSession();
   const [store, setStore] = useState<Store | null>(null);
-  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -39,25 +38,11 @@ const StoreForm = ({ id }: StoreFormProps) => {
         const storeData = await storeResponse.json();
         setStore(storeData);
 
-        if (storeData && storeData.id) {
-          // Fetch products for the retrieved store
-          const productsResponse = await fetch(`/api/products?storeId=${storeData.id}`);
-          if (!productsResponse.ok) {
-            const errorText = await productsResponse.text();
-            throw new Error(`Failed to fetch products: ${productsResponse.status} - ${errorText}`);
-          }
-          const productsData = await productsResponse.json();
-          setProducts(productsData);
-        } else {
-          setProducts([]);
-        }
-
         setError(null);
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-        setError(`Failed to load store or products: ${errorMessage}`);
+        setError(`Failed to load store: ${errorMessage}`);
         setStore(null);
-        setProducts([]);
       } finally {
         setLoading(false);
       }
@@ -82,21 +67,9 @@ const StoreForm = ({ id }: StoreFormProps) => {
           {store ? (
             <div>
               <h2>{store.name}</h2>
-              <h3>Products</h3>
-              {products.length === 0 ? (
-                <p>No products found for this store.</p>
-              ) : (
-                <ul>
-                  {products.map((product) => (
-                    <li key={product.id}>
-                      {product.name}
-                    </li>
-                  ))}
-                </ul>
-              )}
             </div>
           ) : (
-            <p>No store found for your account.</p>
+            <p>No store found.</p>
           )}
         </Col>
       </Row>

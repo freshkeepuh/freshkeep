@@ -26,14 +26,14 @@ const StoresForm = () => {
         const response = await fetch(`/api/stores`);
 
         if (!response.ok) {
-          throw new Error(`Failed to fetch stores: ${response.status}`);
+          throw new Error(response.statusText);
         }
         const data = await response.json();
         setStores(data);
         setError(null);
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-        setError(`Failed to load stores: ${errorMessage}`);
+        setError(errorMessage);
         setStores([]);
       } finally {
         setLoading(false);
@@ -63,11 +63,15 @@ const StoresForm = () => {
               <div key={store.id} className="mb-3 p-3 border rounded">
                 <h5>{store.name}</h5>
                 <p>{store.address1}</p>
+                {store.address2 && <p>{store.address2}</p>}
                 <p>
                   {store.city}, {store.state} {store.zipcode}
                 </p>
                 <p>Phone: {store.phone}</p>
                 <p>Website: {store.website}</p>
+                <Button variant="primary" href={`/store/${store.id}`}>
+                  View Details
+                </Button>
               </div>
             ))
           )}
