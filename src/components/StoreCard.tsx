@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Button, Form, Image } from 'react-bootstrap';
-import { Pencil, Trash, Check, X, Link } from 'react-bootstrap-icons';
+import { Pencil, Trash, Check, X } from 'react-bootstrap-icons';
 import { Store } from '@prisma/client';
 
 interface StoreCardProps {
@@ -170,7 +170,13 @@ const StoreCard = ({ store, onSave, onDelete }: StoreCardProps) => {
       {/* Header with name and action buttons */}
       <div className="d-flex align-items-center justify-content-between mb-2">
         <h6 className="mb-0 fw-bold text-dark">
-          <Image src={store.picture ? store.picture : `${store.website}/favicon.ico`} alt={store.name} width={24} height={24} className="me-2" />
+          <Image
+            src={store.picture ? store.picture : `${store.website}/favicon.ico`}
+            alt={store.name}
+            width={24}
+            height={24}
+            className="me-2"
+          />
           <a href={store.website ? store.website : '#'} className="me-2" target="_blank" rel="noopener noreferrer">
             {store.name}
           </a>
