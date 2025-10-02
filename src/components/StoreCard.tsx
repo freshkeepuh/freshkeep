@@ -95,8 +95,8 @@ const StoreCard = ({ store, onSave, onDelete }: StoreCardProps) => {
       >
         {errors.length > 0 && (
           <div className="mb-2">
-            {errors.map((error) => (
-              <div className="text-danger">
+            {errors.map((error, idx) => (
+              <div className="text-danger" key={idx}>
                 {error}
               </div>
             ))}
