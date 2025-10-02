@@ -1,7 +1,7 @@
 import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/options';
-import StoreForm from '@/components/StoreForm';
+import authOptions from '@/lib/authOptions';
 import { loggedInProtectedPage } from '@/lib/page-protection';
+import StoreForm from '@/components/StoreForm';
 
 export default async function StorePage({ params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);

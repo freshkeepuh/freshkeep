@@ -1,9 +1,10 @@
-import { useSession } from 'next-auth/react';
-import StoresForm from '@/components/StoresForm';
+import { getServerSession } from 'next-auth';
+import authOptions from '@/lib/authOptions';
 import { loggedInProtectedPage } from '@/lib/page-protection';
+import StoresForm from '@/components/StoresForm';
 
-export default function StoresPage() {
-  const { data: session } = useSession();
+export default async function StoresPage() {
+  const session = await getServerSession(authOptions);
   loggedInProtectedPage(session);
 
   return <StoresForm />;
