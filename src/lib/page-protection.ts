@@ -26,6 +26,9 @@ export const loggedInProtectedPage = async (session: Session | null) => {
 export const adminProtectedPage = async (session: Session | null) => {
   await loggedInProtectedPage(session);
   const user = await getUserFromSession(session);
+  if (!user) {
+    redirect('/auth/signin');
+  }
   if (user.role !== Role.ADMIN) {
     redirect('/not-authorized');
   }
