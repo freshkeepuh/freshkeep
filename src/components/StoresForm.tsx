@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container, Row, Col, ListGroup } from 'react-bootstrap';
 import { Store } from '@prisma/client';
 
 import LoadingSpinner from './LoadingSpinner';
@@ -53,44 +53,48 @@ const StoresForm = () => {
   }
 
   return (
-    <Container className="my-4">
+    <Container className="d-flex flex-row my-4">
       <Row>
         <Col>
           <h1>Stores</h1>
           {stores.length === 0 ? (
             <p>No stores found. Please add a store.</p>
           ) : (
-            stores.map((store) => (
-              <StoreCard
-                key={store.id}
-                store={store}
-                onSave={async (updatedStore) => {
-                  const response = await fetch('/api/store', {
-                    method: 'PUT',
-                    headers: {
-                      'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(updatedStore),
-                  });
-                  if (response.ok) {
-                    const updated = await response.json();
-                    setStores((prevStores) => prevStores.map((s) => (s.id === updated.id ? updated : s)));
-                  } else {
-                    setError('Failed to update store');
-                  }
-                }}
-                onDelete={async (id) => {
-                  const response = await fetch(`/api/store/${id}`, {
-                    method: 'DELETE',
-                  });
-                  if (response.ok) {
-                    setStores((prevStores) => prevStores.filter((s) => s.id !== id));
-                  } else {
-                    setError('Failed to delete store');
-                  }
-                }}
-              />
-            ))
+            <ListGroup horizontal>
+              {stores.map((store) => (
+                <ListGroup.Item key={store.id} className="m-2">
+                  <StoreCard
+                    key={store.id}
+                    store={store}
+                    onSave={async (updatedStore) => {
+                      const response = await fetch('/api/store', {
+                        method: 'PUT',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(updatedStore),
+                      });
+                      if (response.ok) {
+                        const updated = await response.json();
+                        setStores((prevStores) => prevStores.map((s) => (s.id === updated.id ? updated : s)));
+                      } else {
+                        setError('Failed to update store');
+                      }
+                    }}
+                    onDelete={async (id) => {
+                      const response = await fetch(`/api/store/${id}`, {
+                        method: 'DELETE',
+                      });
+                      if (response.ok) {
+                        setStores((prevStores) => prevStores.filter((s) => s.id !== id));
+                      } else {
+                        setError('Failed to delete store');
+                      }
+                    }}
+                  />
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
           )}
         </Col>
       </Row>
