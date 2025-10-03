@@ -71,6 +71,7 @@ const AddressSubForm = ({ register, errors, onEdit, address }: AddressSubFormPro
       </Container>
     );
   }
+
   return (
     <Container>
       <Row>
@@ -84,6 +85,9 @@ const AddressSubForm = ({ register, errors, onEdit, address }: AddressSubFormPro
               size="lg"
               isInvalid={!!errors.address1}
               {...register('address1')}
+              defaultValue={address.address1}
+              value={editAddress.address1}
+              onChange={(e) => setEditAddress({ ...editAddress, address1: e.target.value })}
             />
             <Form.Control.Feedback type="invalid">
               {errors.address1?.message}
@@ -124,6 +128,9 @@ const AddressSubForm = ({ register, errors, onEdit, address }: AddressSubFormPro
               size="lg"
               isInvalid={!!errors.address2}
               {...register('address2')}
+              defaultValue={address.address2}
+              value={editAddress.address2}
+              onChange={(e) => setEditAddress({ ...editAddress, address2: e.target.value })}
             />
             <Form.Control.Feedback type="invalid">
               {errors.address2?.message}
@@ -142,6 +149,9 @@ const AddressSubForm = ({ register, errors, onEdit, address }: AddressSubFormPro
               size="lg"
               isInvalid={!!errors.city}
               {...register('city')}
+              defaultValue={address.city}
+              value={editAddress.city}
+              onChange={(e) => setEditAddress({ ...editAddress, city: e.target.value })}
             />
             <Form.Control.Feedback type="invalid">
               {errors.city?.message}
@@ -158,6 +168,9 @@ const AddressSubForm = ({ register, errors, onEdit, address }: AddressSubFormPro
               size="lg"
               isInvalid={!!errors.state}
               {...register('state')}
+              defaultValue={address.state}
+              value={editAddress.state}
+              onChange={(e) => setEditAddress({ ...editAddress, state: e.target.value })}
             />
             <Form.Control.Feedback type="invalid">
               {errors.state?.message}
@@ -174,6 +187,9 @@ const AddressSubForm = ({ register, errors, onEdit, address }: AddressSubFormPro
               size="lg"
               isInvalid={!!errors.zipcode}
               {...register('zipcode')}
+              defaultValue={address.zipcode}
+              value={editAddress.zipcode}
+              onChange={(e) => setEditAddress({ ...editAddress, zipcode: e.target.value })}
             />
             <Form.Control.Feedback type="invalid">
               {errors.zipcode?.message}
