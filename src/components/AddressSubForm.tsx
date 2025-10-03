@@ -17,11 +17,11 @@ export interface IAddressSubForm extends ICountryField {
 interface AddressSubFormProps {
   register: UseFormRegister<IAddressSubForm>;
   errors: { [key in keyof IAddressSubForm]?: { message?: string } };
-  onEdit: (data: IAddressSubForm) => void;
+  onSave: (data: IAddressSubForm) => void;
   address: IAddressSubForm;
 }
 
-const AddressSubForm = ({ register, errors, onEdit, address }: AddressSubFormProps) => {
+const AddressSubForm = ({ register, errors, onSave, address }: AddressSubFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editAddress, setEditAddress] = useState<IAddressSubForm>(address);
 
@@ -31,7 +31,7 @@ const AddressSubForm = ({ register, errors, onEdit, address }: AddressSubFormPro
   };
 
   const handleSaveClick = () => {
-    onEdit(editAddress);
+    onSave(editAddress);
     setIsEditing(false);
   };
 
