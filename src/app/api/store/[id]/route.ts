@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
-import { getResponseError } from '@/lib/routeHelpers';
+import getResponseError from '@/lib/routeHelpers';
 import { deleteStore, readStore } from '@/lib/dbStoreActions';
-
-const prisma = new PrismaClient();
 
 export const runtime = 'nodejs';
 

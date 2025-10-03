@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
 import { createStore, readStores, updateStore } from '@/lib/dbStoreActions';
-import { getResponseError } from '@/lib/routeHelpers';
-
-const prisma = new PrismaClient();
+import getResponseError from '@/lib/routeHelpers';
 
 export const runtime = 'nodejs';
 
@@ -61,7 +58,19 @@ export async function POST(request: NextRequest) {
  */
 export async function PUT(request: NextRequest) {
   try {
-    const { id, name, address1, address2, city, state, zipcode, country, phone, website, picture } = await request.json();
+    const {
+      id,
+      name,
+      address1,
+      address2,
+      city,
+      state,
+      zipcode,
+      country,
+      phone,
+      website,
+      picture,
+    } = await request.json();
 
     if (!id || !name || !address1 || !city || !state || !zipcode || !country) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });

@@ -4,8 +4,8 @@
 
 'use server';
 
-import { prisma } from './prisma';
 import { Country } from '@prisma/client';
+import { prisma } from './prisma';
 
 const shoppingListsSelect = { select: { id: true, name: true } };
 
@@ -66,7 +66,7 @@ export async function readStores() {
   const stores = await prisma.store.findMany(
     {
       select: storeSelect,
-    }
+    },
   );
   return stores;
 }
