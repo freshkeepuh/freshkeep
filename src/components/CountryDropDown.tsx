@@ -30,7 +30,6 @@ const CountryDropDown = ({ register, errors, disabled }: CountryDropDownProps) =
     <Form.Select
       id="country"
       size="lg"
-      as="select"
       aria-label="Country"
       {...register('country')}
       disabled={disabled}
