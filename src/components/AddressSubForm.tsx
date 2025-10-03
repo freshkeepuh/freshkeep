@@ -185,8 +185,8 @@ const AddressSubForm = ({ register, errors, onEdit, address }: AddressSubFormPro
       <Row>
         <Col md={4}>
           <CountryDropDown
-            register={register('country') as unknown as UseFormRegister<ICountryField>}
-            errors={errors as unknown as { [key in keyof ICountryField]?: { message?: string } }}
+            register={register('country')}
+            errors={{ country: errors.country }}
           />
         </Col>
       </Row>
