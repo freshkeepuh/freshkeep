@@ -37,7 +37,7 @@ const AddressSubForm = ({ register, errors, onEdit, address }: AddressSubFormPro
   };
 
   const handleCancelClick = () => {
-    setEditAddress(editAddress);
+    setEditAddress(address);
     setIsEditing(false);
   };
 
