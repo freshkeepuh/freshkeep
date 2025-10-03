@@ -5,7 +5,6 @@ import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { UseFormRegister } from 'react-hook-form';
 import CountryDropDown, { ICountryField } from '@/components/CountryDropDown';
 import { Check, Pencil, X } from 'react-bootstrap-icons';
-import { Country } from '@prisma/client';
 
 export interface IAddressSubForm extends ICountryField {
   address1: string;
@@ -185,7 +184,7 @@ const AddressSubForm = ({ register, errors, onEdit, address }: AddressSubFormPro
       <Row>
         <Col md={4}>
           <CountryDropDown
-            register={register('country')}
+            register={register('country') as unknown as UseFormRegister<ICountryField>}
             errors={{ country: errors.country }}
           />
         </Col>
