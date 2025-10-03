@@ -46,16 +46,16 @@ const AddressSubForm = ({ register, errors, onEdit, address }: AddressSubFormPro
       <Container>
         <Row className="mb-3">
           <Col>
-            <p className="fw-bold">{editAddress.address1 || 'No Address Provided'}</p>
-            <p className="mb-1">{editAddress.address2}</p>
+            <p className="fw-bold">{address.address1 || 'No Address Provided'}</p>
+            <p className="mb-1">{address.address2}</p>
             <p className="mb-1">
-              {editAddress.city}
+              {address.city}
               {', '}
-              {editAddress.state}
+              {address.state}
               {' '}
-              {editAddress.zipcode}
+              {address.zipcode}
             </p>
-            <p className="mb-0">{editAddress.country}</p>
+            <p className="mb-0">{address.country}</p>
           </Col>
           <Col>
             <Button
