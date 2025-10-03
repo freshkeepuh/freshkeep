@@ -19,22 +19,16 @@ interface AddressSubFormProps {
   register: UseFormRegister<IAddressSubForm>;
   errors: { [key in keyof IAddressSubForm]?: { message?: string } };
   onEdit: (data: IAddressSubForm) => void;
+  address: IAddressSubForm;
 }
 
-const AddressSubForm = ({ register, errors, onEdit }: AddressSubFormProps) => {
+const AddressSubForm = ({ register, errors, onEdit, address }: AddressSubFormProps) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [editAddress, setEditAddress] = useState<IAddressSubForm>({
-    address1: '',
-    address2: '',
-    city: '',
-    state: '',
-    zipcode: '',
-    country: Country.USA,
-  });
+  const [editAddress, setEditAddress] = useState<IAddressSubForm>(address);
 
   const handleEditClick = () => {
     setIsEditing(true);
-    setEditAddress(register as unknown as IAddressSubForm);
+    setEditAddress(address);
   };
 
   const handleSaveClick = () => {
