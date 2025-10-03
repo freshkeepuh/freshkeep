@@ -4,8 +4,24 @@
 
 'use server';
 
-import { Country } from '@prisma/client';
 import { prisma } from './prisma';
+import { Country } from '@prisma/client';
+
+const shoppingListsSelect = { select: { id: true, name: true } };
+
+const storeSelect = {
+  id: true,
+  name: true,
+  address1: true,
+  address2: true,
+  city: true,
+  state: true,
+  zipcode: true,
+  country: true,
+  phone: true,
+  website: true,
+  shoppingLists: shoppingListsSelect,
+};
 
 /**
  * Create a new store.
@@ -37,6 +53,7 @@ export async function createStore(data: {
       website: data.website,
       picture: data.picture,
     },
+    select: storeSelect,
   });
   return newStore;
 }
@@ -46,7 +63,11 @@ export async function createStore(data: {
  * @returns All stores.
  */
 export async function readStores() {
-  const stores = await prisma.store.findMany();
+  const stores = await prisma.store.findMany(
+    {
+      select: storeSelect,
+    }
+  );
   return stores;
 }
 
@@ -59,6 +80,7 @@ export async function readStore(id: string | null | undefined) {
   if (!id) return null;
   const store = await prisma.store.findUnique({
     where: { id },
+    select: storeSelect,
   });
   return store;
 }
@@ -95,6 +117,7 @@ export async function updateStore(id: string, data: {
       website: data.website,
       picture: data.picture,
     },
+    select: storeSelect,
   });
   return updatedStore;
 }
@@ -107,6 +130,7 @@ export async function updateStore(id: string, data: {
 export async function deleteStore(id: string) {
   const deletedStore = await prisma.store.delete({
     where: { id },
+    select: storeSelect,
   });
   return deletedStore;
 }

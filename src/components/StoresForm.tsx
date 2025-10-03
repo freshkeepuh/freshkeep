@@ -19,7 +19,7 @@ const StoresForm = () => {
       try {
         setLoading(true);
 
-        const response = await fetch('/api/stores');
+        const response = await fetch('/api/store');
 
         if (!response.ok) {
           throw new Error(response.statusText);
@@ -80,7 +80,7 @@ const StoresForm = () => {
                   }
                 }}
                 onDelete={async (id) => {
-                  const response = await fetch(`/api/store?id=${id}`, {
+                  const response = await fetch(`/api/store/${id}`, {
                     method: 'DELETE',
                   });
                   if (response.ok) {

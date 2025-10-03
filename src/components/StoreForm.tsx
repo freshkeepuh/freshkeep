@@ -22,7 +22,7 @@ const StoreForm = ({ id }: StoreFormProps) => {
         setLoading(true);
 
         // Fetch the store associated with the current user
-        const storeResponse = await fetch(`/api/store?id=${id}`);
+        const storeResponse = await fetch(`/api/store/${id}`);
         if (!storeResponse.ok) {
           const errorText = await storeResponse.text();
           throw new Error(`Failed to fetch store: ${storeResponse.status} - ${errorText}`);
