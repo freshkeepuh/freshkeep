@@ -12,7 +12,7 @@ const displayNames: Record<Country, string> = {
 
 // Helper function to get display name for country
 const getCountryDisplayName = (country: Country): string => (
-  displayNames[country]
+  displayNames[country] ?? country
 );
 
 export interface ICountryField {
