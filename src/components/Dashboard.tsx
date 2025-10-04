@@ -6,7 +6,6 @@ const Dashboard: React.FC = () => (
     <Row className="align-middle text-center">
       <Col xs={4}>
         <Image src="logo.svg" width="150px" alt="FreshKeep logo" />
-        <Storage />
       </Col>
       <Col xs={8} className="d-flex flex-column justify-content-center">
         <h1>Dashboard</h1>
@@ -15,6 +14,7 @@ const Dashboard: React.FC = () => (
           view recipes based on your items, and plan your grocery trips
           efficiently.
         </p>
+        <Storage />
       </Col>
     </Row>
   </Container>
