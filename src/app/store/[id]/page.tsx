@@ -5,7 +5,7 @@ import StoreForm from '@/components/StoreForm';
 
 export default async function StorePage({ params }: { params: { id: string } }) {
   const session = await getServerSession(authOptions);
-  loggedInProtectedPage(session);
+  await loggedInProtectedPage(session);
 
   // Use the actual store id from route params
   const { id } = params;
