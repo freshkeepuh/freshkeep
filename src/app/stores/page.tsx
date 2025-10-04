@@ -5,7 +5,7 @@ import StoresForm from '@/components/StoresForm';
 
 export default async function StoresPage() {
   const session = await getServerSession(authOptions);
-  loggedInProtectedPage(session);
+  await loggedInProtectedPage(session);
 
   return <StoresForm />;
 }
