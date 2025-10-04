@@ -3,14 +3,6 @@
 import { hash } from 'bcrypt';
 import { prisma } from './prisma';
 
-export async function getUser(email: string | null | undefined) {
-  if (!email) return null;
-  const user = await prisma.user.findUnique({
-    where: { email },
-  });
-  return user;
-}
-
 /**
  * Check if user email exists in the database.
  * @param credentials an object with the following properties: email.
@@ -35,6 +27,41 @@ export async function createUser(credentials: { email: string; password: string 
       password,
     },
   });
+}
+
+/**
+ * Reads all users from the database.
+ * @returns All users in the database.
+ */
+export async function readUsers() {
+  const users = await prisma.user.findMany();
+  return users;
+}
+
+/**
+ * Reads a user by their ID.
+ * @param id The ID of the user to read.
+ * @returns The user object or null if not found.
+ */
+export async function readUser(id: string | null | undefined) {
+  if (!id) return null;
+  const user = await prisma.user.findUnique({
+    where: { id },
+  });
+  return user;
+}
+
+/**
+ * Reads a user by their email.
+ * @param email The email of the user to read.
+ * @returns The user object or null if not found.
+ */
+export async function readUserByEmail(email: string | null | undefined) {
+  if (!email) return null;
+  const user = await prisma.user.findUnique({
+    where: { email },
+  });
+  return user;
 }
 
 /**
