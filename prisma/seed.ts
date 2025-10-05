@@ -26,33 +26,106 @@ const findByName = <T extends { name: string }>(array: Array<T>, name: string) :
 };
 
 /**
+ * Account type from the configuration file.
+ * This interface ensures that each account object
+ * has the expected properties used when seeding users.
+ * - email: The user's email (required).
+ * - password: Optional raw password from the config (defaults to 'changeme' if not provided).
+ * - role: Optional Role enum (defaults to USER if not provided).
+ * - settings: Optional JSON object containing user preferences
+ *   such as units, country, theme and profile picture.
+ */
+type AccountFromConfig = {
+  email: string;
+  password?: string;
+  role?: Role;
+  settings?: {
+    units?: 'imperial' | 'metric';
+    country?: 'USA' | 'CAN';
+    theme?: 'light' | 'dark';
+    profilePicture?: string;
+  };
+};
+
+/**
+ * Default settings applied when account is created
+ * Ensures a default profile for every user so that
+ * the UI has an image to render
+ */
+const DEFAULT_SETTINGS = {
+  profilePicture: '/images/avatars/default.jpg',
+} as const;
+
+/**
  * Seed users into the database
  * This function creates users based on the default accounts specified in the configuration file.
  * It hashes their passwords and assigns roles.
- * If a user already exists, it skips creation for that user.
+ * It also now applies default settings from the config JSON if provided.
+ * If a user already exists, it updates their password, role, and settings.
  * @returns {Promise<Array<User>>} A promise that resolves to an array of created or existing users.
  */
-async function seedUsers() : Promise<Array<User>> {
+async function seedUsers(): Promise<Array<User>> {
   const users: Array<User> = [];
-  // Hash the default password for all users
-  const password = await hash('changeme', 10);
+
+  // Tell TypeScript that the config accounts conform to AccountFromConfig
+  const accounts = config.defaultAccounts as AccountFromConfig[];
+
   // Wait for all user creations to complete
-  for (const account of config.defaultAccounts) {
+  for (const account of accounts) {
+    // Hash the provided password, or default to 'changeme'
+    const hashed = await hash(account.password ?? 'changeme', 10);
+
     // Set the role, defaulting to USER if not specified
     const role = (account.role as Role) || Role.USER;
-    // Upsert user to avoid duplicates
-    const user = await prisma.user.upsert({
+
+    // preserve user-edited settings on reseed
+    const existing = await prisma.user.findUnique({
       where: { email: account.email },
-      update: {},
-      create: {
-        email: account.email,
-        password,
-        role,
-      },
     });
-    // Add the user to the array
-    users.push(user);
+
+    if (!existing) {
+      // on first create, apply defaults + config settings
+      const settingsForCreate = {
+        ...DEFAULT_SETTINGS,
+        ...(account.settings ?? {}),
+      };
+
+      const created = await prisma.user.create({
+        data: {
+          email: account.email,
+          password: hashed,
+          role,
+          settings: settingsForCreate,
+        },
+      });
+
+      // Add the user to the array
+      users.push(created);
+    } else {
+      // on reseed, do NOT clobber existing settings (user changes win)
+      const prevSettings = (existing.settings as Record<string, any> | null) ?? {};
+      const settingsForUpdate = {
+        ...DEFAULT_SETTINGS,
+        ...(account.settings ?? {}),
+        ...prevSettings,
+      };
+
+      const updated = await prisma.user.update({
+        where: { email: account.email },
+        data: {
+          // also update password and role on re-seed
+          password: hashed,
+          role,
+          // merge settings with precedence to existing values
+          settings: settingsForUpdate,
+        },
+      });
+
+      // Add the user to the array
+      users.push(updated);
+    }
   }
+
   // Return the array of users
   return users;
 }

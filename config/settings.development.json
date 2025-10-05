@@ -1,7 +1,7 @@
 {
   "defaultAccounts": [
-    { "email": "admin@foo.com", "password": "changeme", "role": "ADMIN" },
-    { "email": "john@foo.com", "password": "changeme" }
+    { "email": "admin@foo.com", "password": "changeme", "role": "ADMIN", "settings": { "units": "imperial", "country": "USA", "theme": "light", "profilePicture": "/images/avatars/default.jpg"}},
+    { "email": "john@foo.com", "password": "changeme", "settings": { "units": "metric", "country": "CAN", "theme": "dark" }}
   ],
   "defaultUnits": [
     { "name": "each", "abbr": "ea", "baseName": "each", "factor": 1 },
