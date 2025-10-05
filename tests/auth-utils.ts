@@ -17,6 +17,37 @@ if (!fs.existsSync(SESSION_STORAGE_PATH)) {
 interface AuthFixtures {
   getUserPage: (email: string, password: string) => Promise<Page>;
 }
+
+/**
+ * Helper to fill form fields with retry logic
+ */
+async function fillFormWithRetry(
+  page: Page,
+  fields: Array<{ selector: string; value: string }>,
+): Promise<void> {
+  for (const field of fields) {
+    let attempts = 0;
+    const maxAttempts = 3;
+
+    while (attempts < maxAttempts) {
+      try {
+        const element = page.locator(field.selector);
+        await element.waitFor({ state: 'visible', timeout: 2000 });
+        await element.clear();
+        await element.fill(field.value);
+        await element.evaluate((el) => el.blur()); // Trigger blur event
+        break;
+      } catch (error) {
+        attempts++;
+        if (attempts >= maxAttempts) {
+          throw new Error(`Failed to fill field ${field.selector} after ${maxAttempts} attempts`);
+        }
+        await page.waitForTimeout(500);
+      }
+    }
+  }
+}
+
 /**
  * Authenticate using the UI with robust waiting and error handling
  */
@@ -107,36 +138,6 @@ async function authenticateWithUI(
     console.error(`× Authentication failed for ${email}:`, error);
 
     throw new Error(`Authentication failed: ${error}`);
-  }
-}
-
-/**
- * Helper to fill form fields with retry logic
- */
-async function fillFormWithRetry(
-  page: Page,
-  fields: Array<{ selector: string; value: string }>,
-): Promise<void> {
-  for (const field of fields) {
-    let attempts = 0;
-    const maxAttempts = 3;
-
-    while (attempts < maxAttempts) {
-      try {
-        const element = page.locator(field.selector);
-        await element.waitFor({ state: 'visible', timeout: 2000 });
-        await element.clear();
-        await element.fill(field.value);
-        await element.evaluate((el) => el.blur()); // Trigger blur event
-        break;
-      } catch (error) {
-        attempts++;
-        if (attempts >= maxAttempts) {
-          throw new Error(`Failed to fill field ${field.selector} after ${maxAttempts} attempts`);
-        }
-        await page.waitForTimeout(500);
-      }
-    }
   }
 }
 
