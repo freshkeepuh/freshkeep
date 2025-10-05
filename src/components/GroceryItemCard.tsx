@@ -4,19 +4,26 @@ import Badge from 'react-bootstrap/Badge';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-interface ProductCardProps {
-  productImage: string;
-  productTitle: string;
+interface GroceryItemCardProps {
+  groceryItemImage: string;
+  groceryItemTitle: string;
   store: string;
   storageType: string;
-  productType: string;
+  groceryItemType: string;
   inList: boolean;
 }
 
-const ProductCard = ({ productImage, productTitle, store, storageType, productType, inList }: ProductCardProps) => {
+const GroceryItemCard = ({
+  groceryItemImage,
+  groceryItemTitle,
+  store,
+  storageType,
+  groceryItemType,
+  inList,
+}: GroceryItemCardProps) => {
   // Placeholder function for handling add/remove button click
   const handleButtonClick = () => {
-    console.log(`${inList ? 'Removing' : 'Adding'} ${productTitle} ${inList ? 'from' : 'to'} list`);
+    console.log(`${inList ? 'Removing' : 'Adding'} ${groceryItemTitle} ${inList ? 'from' : 'to'} list`);
   };
 
   // Placeholder function for handling image error
@@ -38,7 +45,7 @@ const ProductCard = ({ productImage, productTitle, store, storageType, productTy
       <Card className="rounded-5" style={{ width: '18rem' }}>
         <Card.Img
           variant="top"
-          src={productImage}
+          src={groceryItemImage}
           className="mx-auto d-block"
           onError={handleImageError}
           style={{
@@ -50,7 +57,7 @@ const ProductCard = ({ productImage, productTitle, store, storageType, productTy
         />
 
         <Card.Body>
-          <Card.Title>{productTitle}</Card.Title>
+          <Card.Title>{groceryItemTitle}</Card.Title>
 
           <Row className="mb-2">
             <Col>
@@ -63,7 +70,7 @@ const ProductCard = ({ productImage, productTitle, store, storageType, productTy
             </Col>
             <Col>
               <Card.Text className="mb-1">Type:</Card.Text>
-              <Badge bg="secondary">{productType}</Badge>
+              <Badge bg="secondary">{groceryItemType}</Badge>
             </Col>
           </Row>
 
@@ -78,4 +85,4 @@ const ProductCard = ({ productImage, productTitle, store, storageType, productTy
   );
 };
 
-export default ProductCard;
+export default GroceryItemCard;
