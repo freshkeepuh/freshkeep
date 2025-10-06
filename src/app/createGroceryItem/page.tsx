@@ -77,7 +77,7 @@ const CreateGroceryItemForm = () => {
       await createGroceryItem({
         name: formData.name,
         category: formData.category as ProductCategory,
-        soldAt: formData.soldAt,
+        // soldAt: formData.soldAt,
         userId: session.user.email, // Pass the current user's email as userId
       });
 
