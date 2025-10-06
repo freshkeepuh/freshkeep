@@ -57,6 +57,19 @@ const DEFAULT_SETTINGS = {
 } as const;
 
 /**
+ * Runtime type validation for defaultAccounts.
+ * Ensures the JSON config matches the expected structure
+ * before seeding users.
+ */
+function assertAccounts(x: any): asserts x is AccountFromConfig[] {
+  if (!Array.isArray(x)) throw new Error('defaultAccounts must be an array');
+  x.forEach((a, i) => {
+    if (!a?.email || typeof a.email !== 'string') {
+      throw new Error(`defaultAccounts[${i}].email is required`);
+    }
+  });
+}
+/**
  * Seed users into the database
  * This function creates users based on the default accounts specified in the configuration file.
  * It hashes their passwords and assigns roles.
@@ -68,7 +81,9 @@ async function seedUsers(): Promise<Array<User>> {
   const users: Array<User> = [];
 
   // Tell TypeScript that the config accounts conform to AccountFromConfig
-  const accounts = config.defaultAccounts as AccountFromConfig[];
+  const accountsRaw: unknown = config.defaultAccounts;
+  assertAccounts(accountsRaw);
+  const accounts = accountsRaw;
 
   // Wait for all user creations to complete
   for (const account of accounts) {
