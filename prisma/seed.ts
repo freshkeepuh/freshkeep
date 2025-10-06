@@ -1,4 +1,4 @@
-import { ContainerType, Country, GroceryCategory, PrismaClient, Role, User, Unit, GroceryItem, Item, Location, Container } from '@prisma/client';
+import { ContainerType, Country, ProductCategory, PrismaClient, Role, User, Unit, Product, ProductInstance, Location, Container, Store, ShoppingList, ShoppingListItem } from '@prisma/client';
 import { hash } from 'bcrypt';
 import * as config from '../config/settings.development.json';
 
@@ -145,95 +145,31 @@ async function seedUsers(): Promise<Array<User>> {
   return users;
 }
 
-/**
- * Seed units into the database
- * This function creates measurement units based on the default units specified in the configuration file.
- * It handles both base units and derived units, ensuring proper relationships are established.
- * If a unit already exists, it skips creation for that unit.
- * @returns {Promise<Array<Unit>>} A promise that resolves to an array of created or existing units.
- */
-async function seedUnits() : Promise<Array<Unit>> {
-  const units: Array<Unit> = [];
-  // First, create all base units
-  for (const defaultUnit of config.defaultUnits.filter(unit => unit.name === unit.baseName)) {
-    // Upsert base unit to avoid duplicates
-    const unit = await prisma.unit.upsert({
-      where: { name: defaultUnit.name },
+async function seedStores() : Promise<Array<Store>> {
+  const stores: Array<Store> = [];
+  // Wait for all Stores to complete
+  for (const defaultStore of config.defaultStores) {
+    // Upsert the Store to avoid duplicates
+    const store = await prisma.store.upsert({
+      where: { name: defaultStore.name },
       update: {},
       create: {
-        name: defaultUnit.name,
-        abbr: defaultUnit.abbr,
-        baseId: null,
-        factor: defaultUnit.factor || 1.0,
+        name: defaultStore.name,
+        address1: defaultStore.address1 || undefined,
+        address2: defaultStore.address2 || undefined,
+        city: defaultStore.city || undefined,
+        state: defaultStore.state || undefined,
+        zipcode: defaultStore.zipcode || undefined,
+        country: (defaultStore.country as Country) || Country.USA,
+        website: defaultStore.website || undefined,
+        picture: defaultStore.picture || undefined,
       },
     });
-    // After creation, set the baseId to its own id for self reference
-    unit.baseId = unit.id;
-    // Update the unit with the new baseId
-    await prisma.unit.update({
-      where: { id: unit.id },
-      data: { baseId: unit.id },
-    });
-    // Add the unit to the array
-    units.push(unit);
+    // Push the Store onto the array
+    stores.push(store);
   };
-
-  // Then, create all derived units
-  for (const defaultUnit of config.defaultUnits.filter(unit => unit.name !== unit.baseName)) {
-    // Find the parent unit to establish the relationship
-    const parentUnit = findByName(units, defaultUnit.baseName);
-    // Upsert derived unit to avoid duplicates
-    const unit = await prisma.unit.upsert({
-      where: { name: defaultUnit.name },
-      update: {},
-      create: {
-        name: defaultUnit.name,
-        abbr: defaultUnit.abbr,
-        baseId: parentUnit.id,
-        factor: defaultUnit.factor || 1.0,
-      },
-    });
-    // Add the unit to the array
-    units.push(unit);
-  };
-  // Return the array of units
-  return units;
-}
-
-/**
- * Seed grocery items into the database
- * This function creates grocery items based on the default grocery items specified in the configuration file.
- * It assigns each grocery item to a category and a unit of measurement.
- * If a grocery item already exists, it skips creation for that item.
- * @param {Array<Unit>} units - An array of Unit objects to associate with grocery items.
- * @returns {Promise<Array<GroceryItem>>} A promise that resolves to an array of created or existing grocery items.
- */
-async function seedGroceryItems(units: Array<Unit>) : Promise<Array<GroceryItem>> {
-  const groceryItems: Array<GroceryItem> = [];
-  // Wait for all Grocery Items to complete
-  for (const defaultGroceryItem of config.defaultGroceryItems) {
-    // Find the unit to associate with the grocery item
-    const unit = findByName(units, defaultGroceryItem.unitName);
-    // Set the category, defaulting to Other if not specified
-    const category = (defaultGroceryItem.category as GroceryCategory) || GroceryCategory.Other;
-    // Upsert grocery item to avoid duplicates
-    const groceryItem = await prisma.groceryItem.upsert({
-      where: { name: defaultGroceryItem.name },
-      update: {},
-      create: {
-        name: defaultGroceryItem.name,
-        category: category,
-        unitId: unit.id,
-        defaultQty: defaultGroceryItem.defaultQty || 1.0,
-        isNeeded: defaultGroceryItem.isNeeded || false,
-        picture: defaultGroceryItem.picture || undefined,
-      },
-    });
-    // Add the grocery item to the array
-    groceryItems.push(groceryItem);
-  };
-  // Return the array of grocery items
-  return groceryItems;
+  // Return the Stores array
+  return stores;
 }
 
 /**
@@ -305,48 +241,203 @@ async function seedContainers(locations: Array<Location>) : Promise<Array<Contai
 }
 
 /**
+ * Seed units into the database
+ * This function creates measurement units based on the default units specified in the configuration file.
+ * It handles both base units and derived units, ensuring proper relationships are established.
+ * If a unit already exists, it skips creation for that unit.
+ * @returns {Promise<Array<Unit>>} A promise that resolves to an array of created or existing units.
+ */
+async function seedUnits() : Promise<Array<Unit>> {
+  const units: Array<Unit> = [];
+  // First, create all base units
+  for (const defaultUnit of config.defaultUnits.filter(unit => unit.name === unit.baseName)) {
+    // Upsert base unit to avoid duplicates
+    const unit = await prisma.unit.upsert({
+      where: { name: defaultUnit.name },
+      update: {},
+      create: {
+        name: defaultUnit.name,
+        abbr: defaultUnit.abbr,
+        baseId: null,
+        factor: defaultUnit.factor || 1.0,
+      },
+    });
+    // After creation, set the baseId to its own id for self reference
+    unit.baseId = unit.id;
+    // Update the unit with the new baseId
+    await prisma.unit.update({
+      where: { id: unit.id },
+      data: { baseId: unit.id },
+    });
+    // Add the unit to the array
+    units.push(unit);
+  };
+
+  // Then, create all derived units
+  for (const defaultUnit of config.defaultUnits.filter(unit => unit.name !== unit.baseName)) {
+    // Find the parent unit to establish the relationship
+    const parentUnit = findByName(units, defaultUnit.baseName);
+    // Upsert derived unit to avoid duplicates
+    const unit = await prisma.unit.upsert({
+      where: { name: defaultUnit.name },
+      update: {},
+      create: {
+        name: defaultUnit.name,
+        abbr: defaultUnit.abbr,
+        baseId: parentUnit.id,
+        factor: defaultUnit.factor || 1.0,
+      },
+    });
+    // Add the unit to the array
+    units.push(unit);
+  };
+  // Return the array of units
+  return units;
+}
+
+/**
+ * Seed products into the database
+ * This function creates products based on the default products specified in the configuration file.
+ * It assigns each product to a category and a unit of measurement.
+ * If a product already exists, it skips creation for that item.
+ * @param {Array<Unit>} units - An array of Unit objects to associate with products.
+ * @returns {Promise<Array<Product>>} A promise that resolves to an array of created or existing products.
+ */
+async function seedProducts(units: Array<Unit>, stores: Array<Store>) : Promise<Array<Product>> {
+  const products: Array<Product> = [];
+  // Wait for all Products to complete
+  for (const defaultProduct of config.defaultProducts) {
+    // Find the unit to associate with the product
+    const unit = findByName(units, defaultProduct.unitName);
+    // Find the store to associate with the product
+    const store = findByName(stores, defaultProduct.storeName);
+    // Set the category, defaulting to Other if not specified
+    const category = (defaultProduct.category as ProductCategory) || ProductCategory.Other;
+    // Upsert product to avoid duplicates
+    const product = await prisma.product.upsert({
+      where: { name: defaultProduct.name },
+      update: {},
+      create: {
+        name: defaultProduct.name,
+        category: category,
+        unitId: unit.id,
+        stores: {
+          connect: [store],
+        },
+        defaultQty: defaultProduct.defaultQty || 1.0,
+        isNeeded: defaultProduct.isNeeded || false,
+        picture: defaultProduct.picture || undefined,
+      },
+    });
+    // Add the product to the array
+    products.push(product);
+  };
+  // Return the array of products
+  return products;
+}
+
+/**
  * Seed items into the database
  * This function creates items based on the default items specified in the configuration file.
- * It associates each item with a location, container, grocery item, and unit.
+ * It associates each item with a location, container, product, and unit.
  * If an item already exists, it skips creation for that item.
  * @param locations The Locations in which the Items can reside.
  * @param containers The Containers in which the Items can be stored.
- * @param groceryItems The Grocery Items that the Items are based on.
+ * @param products The Products that the Items are based on.
  * @param units The Units of measurement for the Items.
  * @returns {Promise<Array<Item>>} A promise that resolves to an array of created or existing items.
  */
-async function seedItems(
+async function seedProductInstances(
   locations: Array<Location>,
   containers: Array<Container>,
-  groceryItems: Array<GroceryItem>,
+  products: Array<Product>,
   units: Array<Unit>,
-) : Promise<Array<Item>> {
-  const items: Array<Item> = [];
+) : Promise<void> {
   // Process the Default Items
-  for (const defaultItem of config.defaultItems) {
+  for (const defaultItem of config.defaultProductInstances) {
     // Get the Location
     const location = findByName(locations, defaultItem.locationName);
     // Get the Container
     const container = findByName(containers, defaultItem.containerName);
-    // Get the Grocery Item
-    const groceryItem = findByName(groceryItems, defaultItem.groceryItemName);
+    // Get the Product
+    const product = findByName(products, defaultItem.productName);
     // Get the Unit
     const unit = findByName(units, defaultItem.unitName);
     // Create the Item
-    const item = await prisma.item.create({
+    const instance = await prisma.productInstance.create({
       data: {
         locId: location.id,
         conId: container.id,
-        grocId: groceryItem.id,
+        prodId: product.id,
         unitId: unit.id,
         quantity: defaultItem.quantity || 0.0,
        },
     });
-    // Push the Item onto the Array
-    items.push(item);
   };
-  // Return the Items
-  return items;
+}
+
+/**
+ * Seed Shopping Lists
+ * @param stores The Stores to which the lists belong.
+ * @returns A promise that resolves to an array of created or existing Shopping Lists.
+ */
+const seedShoppingList = async (stores: Array<Store>) : Promise<Array<ShoppingList>> => {
+  const shoppingLists: Array<ShoppingList> = [];
+  for (const defaultList of config.defaultShoppingLists) {
+    const store = findByName(stores, defaultList.storeName);
+    // Upsert the Shopping List to avoid duplicates
+    const shoppingList = await prisma.shoppingList.upsert({
+      where: { name: defaultList.name },
+      update: {},
+      create: {
+        name: defaultList.name,
+        storeId: store.id,
+        isDefault: defaultList.isDefault || false,
+      },
+    });
+    // Push the Shopping List onto the array
+    shoppingLists.push(shoppingList);
+  };
+  // Return the Shopping Lists array
+  return shoppingLists;
+};
+
+/**
+ * Seed Shopping List Items
+ * @param shoppingLists The Shopping Lists to which the items belong.
+ * @param products The Products that the items are based on.
+ * @param units The Units of measurement for the items.
+ * @returns A promise that resolves to an array of created or existing Shopping List Items.
+ */
+const seedShoppingListItems = async (shoppingLists: Array<ShoppingList>, products: Array<Product>, units: Array<Unit>) : Promise<Array<ShoppingListItem>> => {
+  const shoppingListItems: Array<ShoppingListItem> = [];
+  for (const defaultItem of config.defaultShoppingListItems) {
+    // Find the Shopping List to which the item belongs
+    const shoppingList = findByName(shoppingLists, defaultItem.shoppingListName);
+    // Find the Product to associate with the item
+    const product = findByName(products, defaultItem.productName);
+    // Find the Unit to associate with the item
+    const unit = findByName(units, defaultItem.unitName);
+    // Create the Shopping List Item
+    const item = await prisma.shoppingListItem.upsert({
+      where: { listId_prodId_unitId: {
+          listId: shoppingList.id,
+          prodId: product.id,
+          unitId: unit.id,
+        },
+      },
+      update: {},
+      create: {
+        listId: shoppingList.id,
+        prodId: product.id,
+        unitId: unit.id,
+        quantity: defaultItem.quantity || 1.0,
+        isPurchased: defaultItem.isPurchased || false,
+      },
+    });
+    shoppingListItems.push(item);
+  };
+  return shoppingListItems;
 }
 
 /**
@@ -354,11 +445,14 @@ async function seedItems(
  */
 async function main() {
   await seedUsers();
-  const units = await seedUnits();
-  const groceryItems = await seedGroceryItems(units);
+  const stores = await seedStores();
   const locations = await seedLocations();
   const containers = await seedContainers(locations);
-  await seedItems(locations, containers, groceryItems, units);
+  const units = await seedUnits();
+  const products = await seedProducts(units, stores);
+  await seedProductInstances(locations, containers, products, units);
+  const shoppingList = await seedShoppingList(stores);
+  await seedShoppingListItems(shoppingList, products, units);
 }
 
 /**
