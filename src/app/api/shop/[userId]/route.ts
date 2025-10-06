@@ -5,34 +5,35 @@ const prisma = new PrismaClient();
 
 export const runtime = 'nodejs';
 
-export async function GET(request: NextRequest) {
+// export async function GET(request: NextRequest)
+export async function GET(request: NextRequest, { params }: { params: { userId: string } }) {
   try {
-    const { searchParams } = new URL(request.url);
-    const userId = searchParams.get('userId');
-
+    // const { searchParams } = new URL(request.url);
+    // const userId = searchParams.get('userId');
+    const { userId } = params;
     console.log('API called with userId:', userId);
 
     if (!userId) {
       return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
     }
 
-    const userGroceryItems = await prisma.groceryItem.findMany({
+    const userGroceryItems = await prisma.product.findMany({
       where: {
-        Shop: {
+        stores: {
           some: {
-            userId,
+          //  userId,
           },
         },
       },
       select: {
         id: true,
         name: true,
-        soldAt: true,
+        // soldAt: true,
         category: true,
-        Shop: {
-          select: {
-            userId: true,
-          },
+        stores: {
+        //  select: {
+          //  userId: true,
+        //  },
         },
       },
     });
@@ -42,7 +43,7 @@ export async function GET(request: NextRequest) {
     const formattedItems = userGroceryItems.map((item) => ({
       id: item.id,
       name: item.name,
-      soldAt: item.soldAt || 'Unknown Store',
+      soldAt: 'Unknown Store',
       category: item.category,
       userId,
     }));

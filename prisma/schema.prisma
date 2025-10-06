@@ -42,14 +42,13 @@ model User {
   settings  Json?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Shop      Shop[]
 }
 
 /**
  * Unit of Measure
  * Factor is how many of the base unit are in one quantity of child unit.
  * Example: 128 Oz in a Gallon, so Gallon has a Factor of 128
- * Used By: GroceryItem, Item, Unit
+ * Used By: Product, ProductInstance, Unit
  * Uses: Unit
  */
 model Unit {
@@ -60,8 +59,9 @@ model Unit {
   baseId       String?
   factor       Float         @default(1.0)
   children     Unit[]        @relation("UnitsToUnits")
-  groceryItems GroceryItem[]
-  items        Item[]
+  products     Product[]
+  instances    ProductInstance[]
+  shoppingListItems ShoppingListItem[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 }
@@ -80,8 +80,8 @@ enum Country {
 // TODO: Create Icon in public/icons/location.svg
 /**
  * The Location
- * Used By: Container, Item
- * Uses: Country, Container, Item
+ * Used By: Container, ProductInstance
+ * Uses: Country, Container, ProductInstance
  */
 model Location {
   id         String      @id @default(uuid()) @map("_id")
@@ -94,7 +94,7 @@ model Location {
   country    Country     @default(USA)
   picture    String?
   containers Container[]
-  items      Item[]
+  instances  ProductInstance[]
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
 }
@@ -113,8 +113,8 @@ enum ContainerType {
 
 /**
  * The Container (Fridge, Freezer, Pantry or Spice Rack) in the Location
- * Used By: Item
- * Uses: ContainerType, Location, Item
+ * Used By: ProductInstance
+ * Uses: ContainerType, Location, ProductInstance
  */
 model Container {
   id        String        @id @default(uuid()) @map("_id")
@@ -123,19 +123,19 @@ model Container {
   name      String        @unique
   type      ContainerType
   picture   String?
-  items     Item[]
+  items     ProductInstance[]
   createdAt DateTime      @default(now())
   updatedAt DateTime      @updatedAt
 }
 
 // TODO: Create Icons in public/icons/{category}.svg
 /**
- * The Category of the Grocery Item.
+ * The Category of the Product.
  * Shopping Lists should be grouped by this.
- * Used By: GroceryItem
+ * Used By: Product
  */
 
-enum GroceryCategory {
+enum ProductCategory {
   Fruits
   Vegetables
   CannedGoods
@@ -157,67 +157,115 @@ enum GroceryCategory {
 }
 
 /**
- * The Grocery Item (Product?) the represents an item found in a Grocery Store
+ * The Product the represents an item found in a Grocery Store
  * Something the user Buys but may not stock or have at hand.
- * Used By: Item
- * Uses: GroceryCategory, Unit
+ * Used By: ProductInstance
+ * Uses: ProductCategory, Unit
  */
-model GroceryItem {
+model Product {
   id         String          @id @default(uuid()) @map("_id")
   name       String          @unique
-  category   GroceryCategory
-  unit       Unit?           @relation(fields: [unitId], references: [id])
-  unitId     String?
+  brand      String?
+  category   ProductCategory
+  unitId     String
   defaultQty Float           @default(1.0)
   isNeeded   Boolean         @default(false)
   picture    String?
-  items      Item[]
+  unit       Unit            @relation(fields: [unitId], references: [id])
+  instances  ProductInstance[]
+  shoppingListItems ShoppingListItem[]
+  stores     Store[]
   createdAt  DateTime        @default(now())
   updatedAt  DateTime        @updatedAt
-  Shop       Shop[]
-  soldAt     String?
 
   @@index([category, name], name: "category_name_idx")
 }
 
 /**
- * The instance of the Grocery Item
+ * The instance of the Product
  * Represents a physical item. It has its own units and records a quantity and expiration date.
- * Used By: Location, Container, GroceryItem, and Unit
- * Uses: Location, Container, GroceryItem, and Unit
+ * Used By: Location, Container, Product, and Unit
+ * Uses: Location, Container, Product, and Unit
  */
-model Item {
+model ProductInstance {
   id          String      @id @default(uuid()) @map("_id")
-  location    Location    @relation(fields: [locId], references: [id])
   locId       String
-  container   Container   @relation(fields: [conId], references: [id])
   conId       String
-  groceryItem GroceryItem @relation(fields: [grocId], references: [id])
-  grocId      String
-  unit        Unit        @relation(fields: [unitId], references: [id])
+  prodId      String
   unitId      String
   quantity    Float       @default(0.0)
   expiresAt   DateTime?
-  picture     String?
+  location    Location    @relation(fields: [locId], references: [id])
+  container   Container   @relation(fields: [conId], references: [id])
+  product     Product     @relation(fields: [prodId], references: [id])
+  unit        Unit        @relation(fields: [unitId], references: [id])
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
+
+  @@unique([locId, conId, prodId, unitId, expiresAt])
+}
+
+ /**
+  * The Shopping List
+  * Uses: User, Store, ShoppingListItem
+  */
+model ShoppingList {
+  id            String              @id @default(uuid()) @map("_id")
+  name          String              @unique
+  storeId       String
+  isDefault     Boolean             @default(false)
+  store         Store               @relation(fields: [storeId], references: [id])
+  items         ShoppingListItem[]
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+
+  @@unique([storeId, createdAt])
+}
+ 
+ 
+ /**
+ * Shopping List Items
+ * Uses: Product, ShoppingList, Unit
+ */
+model ShoppingListItem {
+  id            String       @id @default(uuid()) @map("_id")
+  listId        String
+  prodId        String
+  quantity      Float        @default(1.0)
+  unitId        String
+  isPurchased   Boolean      @default(false)
+  list          ShoppingList @relation(fields: [listId], references: [id])
+  product       Product      @relation(fields: [prodId], references: [id])
+  unit          Unit         @relation(fields: [unitId], references: [id])
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  @@unique([listId, prodId, unitId])
 }
 
 /**
- * Shopping List Items
- * Uses: User, GroceryItem
+ * Grocery Stores
+ * Uses: Country, Product, ShoppingList
+ * Used By: Product, ShoppingList
  */
-
-model Shop {
+model Store {
   id            String      @id @default(uuid()) @map("_id")
-  userId        String
-  groceryItemId String
-  user          User        @relation(fields: [userId], references: [id])
-  groceryItem   GroceryItem @relation(fields: [groceryItemId], references: [id])
+  name          String
+  address1      String?
+  address2      String?
+  city          String?
+  state         String?
+  zipcode       String?
+  country       Country     @default(USA)
+  phone         String?
+  website       String?
+  picture       String?
+  shoppingLists ShoppingList[]
+  products      Product[]
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 
-  @@unique([userId, groceryItemId])
+  @@unique([name])
 }
 
 /**
