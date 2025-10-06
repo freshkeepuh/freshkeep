@@ -86,5 +86,23 @@
     { "groceryItemName": "Cheese", "containerName": "Fridge1", "locationName": "Main Home", "quantity": 0.5, "unitName": "pound", "expirationDate": null },
     { "groceryItemName": "Chicken Breast", "containerName": "Freezer1", "locationName": "Main Home", "quantity": 2, "unitName": "pound", "expirationDate": null },
     { "groceryItemName": "Broccoli", "containerName": "Fridge1", "locationName": "Main Home", "quantity": 1, "unitName": "pound", "expirationDate": null }
+  ],
+  "defaultRecipes": [
+    {
+      "title": "Recipe #1",
+      "cookTime": 30,
+      "difficulty": "EASY",
+      "diet": "VEGETARIAN",
+      "ingredients": ["ingredient 1", "ingredient 2", "ingredient 3", "ingredient 4"],
+      "image": null
+    },
+    {
+      "title": "Recipe #2",
+      "cookTime": 15,
+      "difficulty": "HARD",
+      "diet": "VEGETARIAN",
+      "ingredients": ["ingredient 1", "ingredient 2", "ingredient 3"],
+      "image": null
+    }
   ]
 }

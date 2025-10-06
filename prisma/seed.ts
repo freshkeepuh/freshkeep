@@ -1,4 +1,4 @@
-import { ContainerType, Country, GroceryCategory, PrismaClient, Role, User, Unit, GroceryItem, Item, Location, Container } from '@prisma/client';
+import { ContainerType, Country, GroceryCategory, PrismaClient, Role, User, Unit, GroceryItem, Item, Location, Container, RecipeDifficulty, RecipeDiet, Prisma } from '@prisma/client';
 import { hash } from 'bcrypt';
 import * as config from '../config/settings.development.json';
 
@@ -18,7 +18,7 @@ const findByName = <T extends { name: string }>(array: Array<T>, name: string) :
   if (!name) {
     throw new Error('Name is empty or undefined.');
   }
-  let item = array.find((i) => i.name === name);
+  const item = array.find((i) => i.name === name);
   if (!item) {
     throw new Error(`Item with name "${name}" not found in array.`);
   }
@@ -88,7 +88,7 @@ async function seedUnits() : Promise<Array<Unit>> {
     });
     // Add the unit to the array
     units.push(unit);
-  };
+  }
 
   // Then, create all derived units
   for (const defaultUnit of config.defaultUnits.filter(unit => unit.name !== unit.baseName)) {
@@ -107,7 +107,7 @@ async function seedUnits() : Promise<Array<Unit>> {
     });
     // Add the unit to the array
     units.push(unit);
-  };
+  }
   // Return the array of units
   return units;
 }
@@ -134,7 +134,7 @@ async function seedGroceryItems(units: Array<Unit>) : Promise<Array<GroceryItem>
       update: {},
       create: {
         name: defaultGroceryItem.name,
-        category: category,
+        category,
         unitId: unit.id,
         defaultQty: defaultGroceryItem.defaultQty || 1.0,
         isNeeded: defaultGroceryItem.isNeeded || false,
@@ -143,7 +143,7 @@ async function seedGroceryItems(units: Array<Unit>) : Promise<Array<GroceryItem>
     });
     // Add the grocery item to the array
     groceryItems.push(groceryItem);
-  };
+  }
   // Return the array of grocery items
   return groceryItems;
 }
@@ -171,13 +171,13 @@ async function seedLocations() : Promise<Array<Location>> {
         city: defaultLocation.city,
         state: defaultLocation.state,
         zipcode: defaultLocation.zipcode,
-        country: country,
+        country,
         picture: defaultLocation.picture || undefined,
       },
     });
     // Push the Location onto the array
     locations.push(location);
-  };
+  }
   // Return the Locations array
   return locations;
 }
@@ -211,7 +211,7 @@ async function seedContainers(locations: Array<Location>) : Promise<Array<Contai
     });
     // Push the container into the array
     containers.push(container);
-  };
+  }
   // Return the containers
   return containers;
 }
@@ -252,13 +252,44 @@ async function seedItems(
         grocId: groceryItem.id,
         unitId: unit.id,
         quantity: defaultItem.quantity || 0.0,
-       },
+      },
     });
     // Push the Item onto the Array
     items.push(item);
-  };
+  }
   // Return the Items
   return items;
+}
+
+/**
+ * Seeds the Recipe table with default data from settings.development.json.
+ * Creates a recipe if it does not exist or updates it if it already exists.
+ * @returns {Promise<void>} A promise that resolves when the seeding is complete.
+ */
+async function seedRecipes(): Promise<void> {
+  const recipes = (config as any).defaultRecipes ?? [];
+  for (const r of recipes) {
+    await prisma.recipe.upsert({
+      where: { title: r.title },
+      // update if exists
+      update: {
+        cookTime: r.cookTime,
+        difficulty: r.difficulty as RecipeDifficulty,
+        diet: r.diet as RecipeDiet,
+        ingredients: r.ingredients,
+        image: r.image ?? null,
+      },
+      // insert if missing
+      create: {
+        title: r.title,
+        cookTime: r.cookTime,
+        difficulty: r.difficulty as RecipeDifficulty,
+        diet: r.diet as RecipeDiet,
+        ingredients: r.ingredients,
+        image: r.image ?? null,
+      },
+    });
+  }
 }
 
 /**
@@ -271,6 +302,7 @@ async function main() {
   const locations = await seedLocations();
   const containers = await seedContainers(locations);
   await seedItems(locations, containers, groceryItems, units);
+  await seedRecipes();
 }
 
 /**

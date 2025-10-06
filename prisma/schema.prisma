@@ -219,3 +219,40 @@ model Shop {
 
   @@unique([userId, groceryItemId])
 }
+
+/**
+ * Enums for recipe difficulty and diet type
+ * These ensure only valid, pre-defined values are stored in the DB
+ * Used By: Recipe Page
+ */
+
+enum RecipeDifficulty {
+  EASY
+  NORMAL
+  HARD
+}
+
+enum RecipeDiet {
+  ANY
+  VEGAN
+  VEGETARIAN
+  PESCETARIAN
+}
+
+/**
+ * The Recipe
+ * Stores a single recipe with metadata and ingredients.
+ * Used By: Recipe Page
+ * Uses: RecipeDifficulty, RecipeDiet
+ */
+model Recipe {
+  id          String           @id @default(uuid()) @map("_id")
+  title       String           @unique
+  cookTime    Int
+  difficulty  RecipeDifficulty
+  diet        RecipeDiet
+  ingredients Json // string[]
+  image       String?
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
