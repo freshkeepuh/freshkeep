@@ -17,6 +17,37 @@ if (!fs.existsSync(SESSION_STORAGE_PATH)) {
 interface AuthFixtures {
   getUserPage: (email: string, password: string) => Promise<Page>;
 }
+
+/**
+ * Helper to fill form fields with retry logic
+ */
+async function fillFormWithRetry(
+  page: Page,
+  fields: Array<{ selector: string; value: string }>,
+): Promise<void> {
+  for (const field of fields) {
+    let attempts = 0;
+    const maxAttempts = 3;
+
+    while (attempts < maxAttempts) {
+      try {
+        const element = page.locator(field.selector);
+        await element.waitFor({ state: 'visible', timeout: 2000 });
+        await element.clear();
+        await element.fill(field.value);
+        await element.evaluate((el) => el.blur()); // Trigger blur event
+        break;
+      } catch (error) {
+        attempts++;
+        if (attempts >= maxAttempts) {
+          throw new Error(`Failed to fill field ${field.selector} after ${maxAttempts} attempts`);
+        }
+        await page.waitForTimeout(500);
+      }
+    }
+  }
+}
+
 /**
  * Authenticate using the UI with robust waiting and error handling
  */
@@ -33,11 +64,9 @@ async function authenticateWithUI(
     try {
       const sessionData = JSON.parse(fs.readFileSync(sessionPath, 'utf8'));
       await page.context().addCookies(sessionData.cookies);
-
       // Navigate to homepage to verify session
       await page.goto(BASE_URL);
       await page.waitForLoadState('networkidle');
-
       // Check if we're authenticated by looking for a sign-out option or user email
       const isAuthenticated = await Promise.race([
         page.getByText(email).isVisible().then((visible) => visible),
@@ -47,12 +76,10 @@ async function authenticateWithUI(
         // eslint-disable-next-line no-promise-executor-return
         new Promise<boolean>((resolve) => setTimeout(() => resolve(false), 3000)),
       ]);
-
       if (isAuthenticated) {
         console.log(`✓ Restored session for ${email}`);
         return;
       }
-
       console.log(`× Saved session for ${email} expired, re-authenticating...`);
     } catch (error) {
       console.log(`× Error restoring session: ${error}`);
@@ -107,36 +134,6 @@ async function authenticateWithUI(
     console.error(`× Authentication failed for ${email}:`, error);
 
     throw new Error(`Authentication failed: ${error}`);
-  }
-}
-
-/**
- * Helper to fill form fields with retry logic
- */
-async function fillFormWithRetry(
-  page: Page,
-  fields: Array<{ selector: string; value: string }>,
-): Promise<void> {
-  for (const field of fields) {
-    let attempts = 0;
-    const maxAttempts = 3;
-
-    while (attempts < maxAttempts) {
-      try {
-        const element = page.locator(field.selector);
-        await element.waitFor({ state: 'visible', timeout: 2000 });
-        await element.clear();
-        await element.fill(field.value);
-        await element.evaluate((el) => el.blur()); // Trigger blur event
-        break;
-      } catch (error) {
-        attempts++;
-        if (attempts >= maxAttempts) {
-          throw new Error(`Failed to fill field ${field.selector} after ${maxAttempts} attempts`);
-        }
-        await page.waitForTimeout(500);
-      }
-    }
   }
 }
 
