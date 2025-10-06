@@ -1,12 +1,12 @@
 'use server';
 
-import { GroceryCategory } from '@prisma/client';
+import { ProductCategory } from '@prisma/client';
 import { prisma } from './prisma';
 
 export interface CreateGroceryItemData {
   name: string;
-  category: GroceryCategory;
-  soldAt?: string;
+  category: ProductCategory;
+  // soldAt?: string;
   unitId?: string;
   defaultQty?: number;
   isNeeded?: boolean;
@@ -20,11 +20,12 @@ export interface CreateGroceryItemData {
  */
 export async function createGroceryItem(data: CreateGroceryItemData) {
   const result = await prisma.$transaction(async (tx) => {
-    const groceryItem = await tx.groceryItem.create({
+    const groceryItem = await tx.product.create({
       data: {
         name: data.name,
         category: data.category,
-        soldAt: data.soldAt,
+        unitId: data.unitId || 'default-unit', // Provide a default value or handle appropriately
+        // soldAt: data.soldAt,
         defaultQty: data.defaultQty || 1.0,
         isNeeded: data.isNeeded || false,
         picture: data.picture,
@@ -37,12 +38,12 @@ export async function createGroceryItem(data: CreateGroceryItemData) {
       });
 
       if (user) {
-        await tx.shop.create({
-          data: {
-            userId: user.id,
-            groceryItemId: groceryItem.id,
-          },
-        });
+      //  await tx.shop.create({
+      //    data: {
+      //      userId: user.id,
+      //      groceryItemId: groceryItem.id,
+      //    },
+      //  });
       }
     }
 
