@@ -64,11 +64,9 @@ async function authenticateWithUI(
     try {
       const sessionData = JSON.parse(fs.readFileSync(sessionPath, 'utf8'));
       await page.context().addCookies(sessionData.cookies);
-
       // Navigate to homepage to verify session
       await page.goto(BASE_URL);
       await page.waitForLoadState('networkidle');
-
       // Check if we're authenticated by looking for a sign-out option or user email
       const isAuthenticated = await Promise.race([
         page.getByText(email).isVisible().then((visible) => visible),
@@ -78,12 +76,10 @@ async function authenticateWithUI(
         // eslint-disable-next-line no-promise-executor-return
         new Promise<boolean>((resolve) => setTimeout(() => resolve(false), 3000)),
       ]);
-
       if (isAuthenticated) {
         console.log(`✓ Restored session for ${email}`);
         return;
       }
-
       console.log(`× Saved session for ${email} expired, re-authenticating...`);
     } catch (error) {
       console.log(`× Error restoring session: ${error}`);
