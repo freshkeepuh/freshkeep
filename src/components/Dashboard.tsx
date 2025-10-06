@@ -7,7 +7,7 @@ interface DashboardProps {
   session: { user: { email?: string | null; name?: string | null; image?: string | null } };
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ session }) => (
+const Dashboard: React.FC<DashboardProps> = () => (
   <Container id="dashboard-page" fluid className="py-3">
     <Row className="align-middle text-center">
       <Col xs={4}>
