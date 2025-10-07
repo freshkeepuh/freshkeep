@@ -57,6 +57,8 @@ jobs:
         run: npx prisma db seed
 
       - name: Build the application
+        env:
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/freshkeepuh
         run: npx next build
 
       - name: Get installed Playwright version
