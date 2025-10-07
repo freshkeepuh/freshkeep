@@ -1,4 +1,4 @@
-import { ContainerType, Country, ProductCategory, PrismaClient, Role, User, Unit, Product, ProductInstance, Location, Container, Store, ShoppingList, ShoppingListItem } from '@prisma/client';
+import { ContainerType, Country, ProductCategory, PrismaClient, Role, User, Unit, Product, ProductInstance, Location, Container, Store, ShoppingList, ShoppingListItem, RecipeDifficulty, RecipeDiet } from '@prisma/client';
 import { hash } from 'bcrypt';
 import * as config from '../config/settings.development.json';
 
@@ -18,7 +18,7 @@ const findByName = <T extends { name: string }>(array: Array<T>, name: string) :
   if (!name) {
     throw new Error('Name is empty or undefined.');
   }
-  let item = array.find((i) => i.name === name);
+  const item = array.find((i) => i.name === name);
   if (!item) {
     throw new Error(`Item with name "${name}" not found in array.`);
   }
@@ -107,13 +107,13 @@ async function seedLocations() : Promise<Array<Location>> {
         city: defaultLocation.city,
         state: defaultLocation.state,
         zipcode: defaultLocation.zipcode,
-        country: country,
+        country,
         picture: defaultLocation.picture || undefined,
       },
     });
     // Push the Location onto the array
     locations.push(location);
-  };
+  }
   // Return the Locations array
   return locations;
 }
@@ -147,7 +147,7 @@ async function seedContainers(locations: Array<Location>) : Promise<Array<Contai
     });
     // Push the container into the array
     containers.push(container);
-  };
+  }
   // Return the containers
   return containers;
 }
@@ -283,7 +283,7 @@ async function seedProductInstances(
         prodId: product.id,
         unitId: unit.id,
         quantity: defaultItem.quantity || 0.0,
-       },
+      },
     });
   };
 }
@@ -353,6 +353,54 @@ const seedShoppingListItems = async (shoppingLists: Array<ShoppingList>, product
 }
 
 /**
+ * Seeds the Recipe table with default data from settings.development.json.
+ * Creates a recipe if it does not exist or updates it if it already exists.
+ * @returns {Promise<void>} A promise that resolves when the seeding is complete.
+ */
+
+// Shape of a recipe in settings.development.json
+type SeedRecipe = {
+  title: string;
+  cookTime: number;
+  difficulty: 'EASY' | 'NORMAL' | 'HARD';
+  diet: 'ANY' | 'VEGAN' | 'VEGETARIAN' | 'PESCETARIAN';
+  ingredients: string[];
+  instructions?: { step: number; text: string }[];
+  image?: string | null;
+};
+
+type SettingsConfig = { defaultRecipes?: SeedRecipe[] };
+
+async function seedRecipes(): Promise<void> {
+  const { defaultRecipes = [] } = (config as unknown as SettingsConfig);
+  const recipes: SeedRecipe[] = defaultRecipes;
+  for (const r of recipes) {
+    await prisma.recipe.upsert({
+      where: { title: r.title },
+      // update if exists
+      update: {
+        cookTime: r.cookTime,
+        difficulty: r.difficulty as RecipeDifficulty,
+        diet: r.diet as RecipeDiet,
+        ingredients: r.ingredients,
+        instructions: r.instructions ?? undefined,
+        image: r.image ?? null,
+      },
+      // insert if missing
+      create: {
+        title: r.title,
+        cookTime: r.cookTime,
+        difficulty: r.difficulty as RecipeDifficulty,
+        diet: r.diet as RecipeDiet,
+        ingredients: r.ingredients,
+        instructions: r.instructions ?? undefined,
+        image: r.image ?? null,
+      },
+    });
+  }
+}
+
+/**
  * Main seeding function
  */
 async function main() {
@@ -365,6 +413,7 @@ async function main() {
   await seedProductInstances(locations, containers, products, units);
   const shoppingList = await seedShoppingList(stores);
   await seedShoppingListItems(shoppingList, products, units);
+  await seedRecipes();
 }
 
 /**
