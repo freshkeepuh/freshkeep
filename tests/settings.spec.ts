@@ -56,7 +56,8 @@ test.describe('Settings', () => {
     await page.getByRole('button', { name: 'Sign Out' }).click();
 
     // Accept either /auth or /auth/ (depending on routing config)
-    await expect(page).toHaveURL(new RegExp(`^${BASE_URL.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&')}/auth/?$`));
+    const url = await page.url();
+    expect([`${BASE_URL}/auth`, `${BASE_URL}/auth/`]).toContain(url);
   });
 
   test('basic UI is present', async ({ page }) => {
