@@ -35,7 +35,7 @@ const ShopPage = () => {
         setLoading(true);
         console.log('Fetching shop items for user:', currentUserId);
 
-        const response = await fetch(`/api/shop?userId=${currentUserId}`);
+        const response = await fetch(`/api/shop/${currentUserId}`);
         console.log('Response status:', response.status);
 
         if (!response.ok) {

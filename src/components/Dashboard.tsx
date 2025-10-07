@@ -7,7 +7,7 @@ interface DashboardProps {
   session: { user: { email?: string | null; name?: string | null; image?: string | null } };
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ session }) => (
+const Dashboard: React.FC<DashboardProps> = () => (
   <Container id="dashboard-page" fluid className="py-3">
     <Row className="align-middle text-center">
       <Col xs={4}>
@@ -15,8 +15,7 @@ const Dashboard: React.FC<DashboardProps> = ({ session }) => (
       </Col>
       <Col xs={8} className="d-flex flex-column justify-content-center">
         <h1 data-testid="dashboard-header">
-          Dashboard:&nbsp;
-          {session.user.email}
+          Dashboard
         </h1>
         <p>
           This is where you can manage your food storage,
