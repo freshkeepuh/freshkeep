@@ -102,12 +102,40 @@ export default function Dashboard({ session }: DashboardProps) {
             <Card.Body>
               <div className={styles.storageHeader}>
                 <h2>Your Storage Units</h2>
-                <Button className={`ms-2 ${styles.btnGreen}`}>+ Add Item</Button>
+                <Button
+                  className={`ms-2 ${styles.btnGreen}`}
+                  onClick={() => router.push('/locations')}
+                >
+                  + Add Item
+                </Button>
               </div>
               <div className="mt-3 d-flex gap-2 flex-wrap">
-                <Button className={styles.btnBlue}>+ Add Fridge</Button>
-                <Button className={styles.btnBlue}>+ Add Freezer</Button>
-                <Button className={styles.btnBlue}>+ Add Pantry</Button>
+                {/* TODO Make a modal for adding new storage with form inputs for name
+                and item count. Consider adding edit button on each storage card */}
+                <Button
+                  className={styles.btnBlue}
+                  onClick={() => setStorageTypes((
+                    prev,
+                  ) => [...prev, { id: Date.now(), type: 'Fridge', name: 'New Fridge', itemCount: 0 }])}
+                >
+                  + Add Fridge
+                </Button>
+                <Button
+                  className={styles.btnBlue}
+                  onClick={() => setStorageTypes((
+                    prev,
+                  ) => [...prev, { id: Date.now(), type: 'Freezer', name: 'New Freezer', itemCount: 0 }])}
+                >
+                  + Add Freezer
+                </Button>
+                <Button
+                  className={styles.btnBlue}
+                  onClick={() => setStorageTypes((
+                    prev,
+                  ) => [...prev, { id: Date.now(), type: 'Pantry', name: 'New Pantry', itemCount: 0 }])}
+                >
+                  + Add Pantry
+                </Button>
               </div>
 
               <Row xs={1} md={2} className={`g-3 mt-3 ${styles.storageGrid}`}>
@@ -132,6 +160,11 @@ export default function Dashboard({ session }: DashboardProps) {
                           variant="outline-none"
                           size="sm"
                           className={`me-2 ${styles.removeBtn}`}
+                          onClick={() => {
+                            // Handle remove storage unit
+                            setStorageTypes((prev) => prev.filter((s) => s.id !== storage.id));
+                            setTotalItems((prev) => prev - (storage.itemCount || 0));
+                          }}
                         >
                           Remove
                         </Button>
