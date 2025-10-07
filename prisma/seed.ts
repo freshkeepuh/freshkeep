@@ -1,4 +1,4 @@
-import { ContainerType, Country, ProductCategory, PrismaClient, Role, User,
+import { PrismaClient, Role, ContainerType, Country, ProductCategory, User,
   Unit, Product, Location, Container, Store } from '@prisma/client';
 import { hash } from 'bcrypt';
 import * as config from '../config/settings.development.json';
@@ -85,17 +85,16 @@ async function seedUsers(): Promise<Array<User>> {
   const accountsRaw: unknown = config.defaultAccounts;
   assertAccounts(accountsRaw);
   const accounts = accountsRaw;
+  const hashed = await hash('changeme', 10);
 
   // Wait for all user creations to complete
   for (const account of accounts) {
     // Hash the provided password, or default to 'changeme'
-    const hashed = hash(account.password ?? 'changeme', 10);
-
     // Set the role, defaulting to USER if not specified
     const role = (account.role as Role) || Role.USER;
 
     // preserve user-edited settings on reseed
-    const existing = prisma.user.findUnique({
+    const existing = await prisma.user.findUnique({
       where: { email: account.email },
     });
 
@@ -106,7 +105,7 @@ async function seedUsers(): Promise<Array<User>> {
         ...(account.settings ?? {}),
       };
 
-      const created = prisma.user.create({
+      const created = await prisma.user.create({
         data: {
           email: account.email,
           password: hashed,
@@ -168,7 +167,7 @@ async function seedStores() : Promise<Array<Store>> {
     });
     // Push the Store onto the array
     stores.push(store);
-  };
+  }
   // Return the Stores array
   return stores;
 }
@@ -184,9 +183,9 @@ async function seedLocations() : Promise<Array<Location>> {
   // Wait for all Locations to complete
   for (const defaultLocation of config.defaultLocations) {
     // Get the Country
-    const country = (defaultLocation.country as Country) || Country.USA;
+    // const country = (defaultLocation.country as Country) || Country.USA;
     // Upsert the Location to avoid duplicates
-    const location = prisma.location.upsert({
+    const location = await prisma.location.upsert({
       where: { name: defaultLocation.name },
       update: {},
       create: {
@@ -220,11 +219,11 @@ async function seedContainers(locations: Array<Location>) : Promise<Array<Contai
   // Process the default containers
   for (const defaultContainer of config.defaultContainers) {
     // Find the Location in which the container belongs
-    const location = findByName(locations, defaultContainer.locationName);
+    const location = await findByName(locations, defaultContainer.locationName);
     // Get the Container Type
     const containerType = (defaultContainer.type as ContainerType) || ContainerType.Pantry;
     // Upsert the Container to avoid duplicates
-    const container = prisma.container.upsert({
+    const container = await prisma.container.upsert({
       where: { name: defaultContainer.name },
       update: {},
       create: {
@@ -236,7 +235,7 @@ async function seedContainers(locations: Array<Location>) : Promise<Array<Contai
     });
     // Push the container into the array
     containers.push(container);
-  };
+  }
   // Return the containers
   return containers;
 }
@@ -272,14 +271,14 @@ async function seedUnits() : Promise<Array<Unit>> {
     });
     // Add the unit to the array
     units.push(unit);
-  };
+  }
 
   // Then, create all derived units
   for (const defaultUnit of config.defaultUnits.filter(unit => unit.name !== unit.baseName)) {
     // Find the parent unit to establish the relationship
-    const parentUnit = findByName(units, defaultUnit.baseName);
+    const parentUnit = await findByName(units, defaultUnit.baseName);
     // Upsert derived unit to avoid duplicates
-    const unit = prisma.unit.upsert({
+    const unit = await prisma.unit.upsert({
       where: { name: defaultUnit.name },
       update: {},
       create: {
@@ -291,7 +290,7 @@ async function seedUnits() : Promise<Array<Unit>> {
     });
     // Add the unit to the array
     units.push(unit);
-  };
+  }
   // Return the array of units
   return units;
 }
@@ -309,21 +308,21 @@ async function seedProducts(units: Array<Unit>, stores: Array<Store>) : Promise<
   // Wait for all Products to complete
   for (const defaultProduct of config.defaultProducts) {
     // Find the unit to associate with the product
-    const unit = findByName(units, defaultProduct.unitName);
+    const unit = await findByName(units, defaultProduct.unitName);
     // Find the store to associate with the product
-    const store = findByName(stores, defaultProduct.storeName);
+    const store = await findByName(stores, defaultProduct.storeName);
     // Set the category, defaulting to Other if not specified
-    const category = (defaultProduct.category as ProductCategory) || ProductCategory.Other;
+    // const category = (defaultProduct.category as ProductCategory) || ProductCategory.Other;
     // Upsert product to avoid duplicates
-    const product = prisma.product.upsert({
+    const product = await prisma.product.upsert({
       where: { name: defaultProduct.name },
       update: {},
       create: {
         name: defaultProduct.name,
-        // category: category,
+        category: ProductCategory.Other,
         unitId: unit.id,
         stores: {
-          connect: [store],
+          connect: [{ id: store.id }],
         },
         defaultQty: defaultProduct.defaultQty || 1.0,
         isNeeded: defaultProduct.isNeeded || false,
@@ -332,7 +331,7 @@ async function seedProducts(units: Array<Unit>, stores: Array<Store>) : Promise<
     });
     // Add the product to the array
     products.push(product);
-  };
+  }
   // Return the array of products
   return products;
 }
