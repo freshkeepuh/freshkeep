@@ -266,8 +266,23 @@ async function seedItems(
  * Creates a recipe if it does not exist or updates it if it already exists.
  * @returns {Promise<void>} A promise that resolves when the seeding is complete.
  */
+
+// Shape of a recipe in settings.development.json
+type SeedRecipe = {
+  title: string;
+  cookTime: number;
+  difficulty: 'EASY' | 'NORMAL' | 'HARD';
+  diet: 'ANY' | 'VEGAN' | 'VEGETARIAN' | 'PESCETARIAN';
+  ingredients: string[];
+  instructions?: { step: number; text: string }[];
+  image?: string | null;
+};
+
+type SettingsConfig = { defaultRecipes?: SeedRecipe[] };
+
 async function seedRecipes(): Promise<void> {
-  const recipes = (config as any).defaultRecipes ?? [];
+  const { defaultRecipes = [] } = (config as unknown as SettingsConfig);
+  const recipes: SeedRecipe[] = defaultRecipes;
   for (const r of recipes) {
     await prisma.recipe.upsert({
       where: { title: r.title },
@@ -277,6 +292,7 @@ async function seedRecipes(): Promise<void> {
         difficulty: r.difficulty as RecipeDifficulty,
         diet: r.diet as RecipeDiet,
         ingredients: r.ingredients,
+        instructions: r.instructions ?? undefined,
         image: r.image ?? null,
       },
       // insert if missing
@@ -286,6 +302,7 @@ async function seedRecipes(): Promise<void> {
         difficulty: r.difficulty as RecipeDifficulty,
         diet: r.diet as RecipeDiet,
         ingredients: r.ingredients,
+        instructions: r.instructions ?? undefined,
         image: r.image ?? null,
       },
     });

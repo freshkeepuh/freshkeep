@@ -88,21 +88,7 @@
     { "groceryItemName": "Broccoli", "containerName": "Fridge1", "locationName": "Main Home", "quantity": 1, "unitName": "pound", "expirationDate": null }
   ],
   "defaultRecipes": [
-    {
-      "title": "Recipe #1",
-      "cookTime": 30,
-      "difficulty": "EASY",
-      "diet": "VEGETARIAN",
-      "ingredients": ["ingredient 1", "ingredient 2", "ingredient 3", "ingredient 4"],
-      "image": null
-    },
-    {
-      "title": "Recipe #2",
-      "cookTime": 15,
-      "difficulty": "HARD",
-      "diet": "VEGETARIAN",
-      "ingredients": ["ingredient 1", "ingredient 2", "ingredient 3"],
-      "image": null
-    }
+    { "title": "Recipe #1", "cookTime": 30, "difficulty": "EASY", "diet": "VEGETARIAN", "ingredients": ["ingredient 1", "ingredient 2", "ingredient 3", "ingredient 4"], "instructions": [{ "step": 1, "text": "Prep ingredients." }, { "step": 2, "text": "Cook on medium heat for 10-15 min." }, { "step": 3, "text": "Season and serve." }],"image": null },
+    { "title": "Recipe #2", "cookTime": 15, "difficulty": "HARD", "diet": "VEGETARIAN", "ingredients": ["ingredient 1", "ingredient 2", "ingredient 3"], "instructions": [{ "step": 1, "text": "Boil water and prep." }, { "step": 2, "text": "Combine and cook until tender." }, { "step": 3, "text": "Plate and garnish." }], "image": null }
   ]
 }

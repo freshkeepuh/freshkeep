@@ -251,7 +251,8 @@ model Recipe {
   cookTime    Int
   difficulty  RecipeDifficulty
   diet        RecipeDiet
-  ingredients Json // string[]
+  ingredients Json             
+  instructions Json?
   image       String?
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
