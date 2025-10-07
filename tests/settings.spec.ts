@@ -3,8 +3,6 @@ import { test, expect } from './auth-utils';
 const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
 const SETTINGS_URL = `${BASE_URL}/settings`;
 
-const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
 test.describe('Settings', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(SETTINGS_URL);
@@ -21,6 +19,7 @@ test.describe('Settings', () => {
 
     // Switch to dark
     await page.locator('#darkTheme').click();
+
     await expect
       .poll(async () => await page.evaluate(() => document.body.classList.contains('dark')))
       .toBe(true);
@@ -29,6 +28,7 @@ test.describe('Settings', () => {
 
     // Switch back to light
     await page.locator('#lightTheme').click();
+
     await expect
       .poll(async () => await page.evaluate(() => document.body.classList.contains('dark')))
       .toBe(false);
@@ -47,7 +47,7 @@ test.describe('Settings', () => {
     // Submit
     await page.getByRole('button', { name: 'Update Profile' }).click();
 
-    // Form is client-side only right now; ensure we didn't navigate and value persisted
+    // Form is client-side only right now; ensure we didn't navigate
     await expect(page).toHaveURL(SETTINGS_URL);
     await expect(nameInput).toHaveValue('Josh Tester');
   });
@@ -55,9 +55,8 @@ test.describe('Settings', () => {
   test('sign out navigates to /auth', async ({ page }) => {
     await page.getByRole('button', { name: 'Sign Out' }).click();
 
-    // Accept /auth, /auth/, or /auth/signin and wait for router push to finish
-    const authRegex = new RegExp(`^${escapeRegExp(BASE_URL)}/auth(?:/signin)?/?$`);
-    await expect(page).toHaveURL(authRegex, { timeout: 15000 });
+    // Accept either /auth or /auth/ (depending on routing config)
+    await expect(page).toHaveURL(new RegExp(`^${BASE_URL.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&')}/auth/?$`));
   });
 
   test('basic UI is present', async ({ page }) => {
