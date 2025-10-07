@@ -1,5 +1,4 @@
-import { PrismaClient, Role, ContainerType, Country, ProductCategory, User,
-  Unit, Product, Location, Container, Store } from '@prisma/client';
+import { ContainerType, Country, ProductCategory, PrismaClient, Role, User, Unit, Product, ProductInstance, Location, Container, Store, ShoppingList, ShoppingListItem, RecipeDifficulty, RecipeDiet } from '@prisma/client';
 import { hash } from 'bcrypt';
 import * as config from '../config/settings.development.json';
 
@@ -183,7 +182,7 @@ async function seedLocations() : Promise<Array<Location>> {
   // Wait for all Locations to complete
   for (const defaultLocation of config.defaultLocations) {
     // Get the Country
-    // const country = (defaultLocation.country as Country) || Country.USA;
+    const country = (defaultLocation.country as Country) || Country.USA;
     // Upsert the Location to avoid duplicates
     const location = await prisma.location.upsert({
       where: { name: defaultLocation.name },
@@ -195,7 +194,7 @@ async function seedLocations() : Promise<Array<Location>> {
         city: defaultLocation.city,
         state: defaultLocation.state,
         zipcode: defaultLocation.zipcode,
-        // country: country,
+        country: country,
         picture: defaultLocation.picture || undefined,
       },
     });
@@ -383,7 +382,6 @@ async function seedProductInstances(
  * @param stores The Stores to which the lists belong.
  * @returns A promise that resolves to an array of created or existing Shopping Lists.
  */
-/* REDO whole thing
 const seedShoppingList = async (stores: Array<Store>) : Promise<Array<ShoppingList>> => {
   const shoppingLists: Array<ShoppingList> = [];
   for (const defaultList of config.defaultShoppingLists) {
@@ -404,7 +402,7 @@ const seedShoppingList = async (stores: Array<Store>) : Promise<Array<ShoppingLi
   // Return the Shopping Lists array
   return shoppingLists;
 };
-*/
+
 /**
  * Seed Shopping List Items
  * @param shoppingLists The Shopping Lists to which the items belong.
@@ -412,7 +410,6 @@ const seedShoppingList = async (stores: Array<Store>) : Promise<Array<ShoppingLi
  * @param units The Units of measurement for the items.
  * @returns A promise that resolves to an array of created or existing Shopping List Items.
  */
-/**  REDO this
  const seedShoppingListItems = async (shoppingLists: Array<ShoppingList>,
  products: Array<Product>, units: Array<Unit>) : Promise<Array<ShoppingListItem>> => {
   const shoppingListItems: Array<ShoppingListItem> = [];
@@ -445,7 +442,54 @@ const seedShoppingList = async (stores: Array<Store>) : Promise<Array<ShoppingLi
   }
   return shoppingListItems;
 };
+
+/**
+ * Seeds the Recipe table with default data from settings.development.json.
+ * Creates a recipe if it does not exist or updates it if it already exists.
+ * @returns {Promise<void>} A promise that resolves when the seeding is complete.
  */
+
+// Shape of a recipe in settings.development.json
+type SeedRecipe = {
+  title: string;
+  cookTime: number;
+  difficulty: 'EASY' | 'NORMAL' | 'HARD';
+  diet: 'ANY' | 'VEGAN' | 'VEGETARIAN' | 'PESCETARIAN';
+  ingredients: string[];
+  instructions?: { step: number; text: string }[];
+  image?: string | null;
+};
+
+type SettingsConfig = { defaultRecipes?: SeedRecipe[] };
+
+async function seedRecipes(): Promise<void> {
+  const { defaultRecipes = [] } = (config as unknown as SettingsConfig);
+  const recipes: SeedRecipe[] = defaultRecipes;
+  for (const r of recipes) {
+    await prisma.recipe.upsert({
+      where: { title: r.title },
+      // update if exists
+      update: {
+        cookTime: r.cookTime,
+        difficulty: r.difficulty as RecipeDifficulty,
+        diet: r.diet as RecipeDiet,
+        ingredients: r.ingredients,
+        instructions: r.instructions ?? undefined,
+        image: r.image ?? null,
+      },
+      // insert if missing
+      create: {
+        title: r.title,
+        cookTime: r.cookTime,
+        difficulty: r.difficulty as RecipeDifficulty,
+        diet: r.diet as RecipeDiet,
+        ingredients: r.ingredients,
+        instructions: r.instructions ?? undefined,
+        image: r.image ?? null,
+      },
+    });
+  }
+}
 
 /**
  * Main seeding function
@@ -458,8 +502,9 @@ async function main() {
   const units = await seedUnits();
   const products = await seedProducts(units, stores);
   await seedProductInstances(locations, containers, products, units);
-  // const shoppingList = await seedShoppingList(stores);
-  // await seedShoppingListItems(shoppingList, products, units);
+  const shoppingList = await seedShoppingList(stores);
+  await seedShoppingListItems(shoppingList, products, units);
+  await seedRecipes();
 }
 
 /**
