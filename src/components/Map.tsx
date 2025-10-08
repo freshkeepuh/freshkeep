@@ -20,7 +20,7 @@ const MapComponent = ({ firstLocation }: Props) => {
     // If no address or API key, show fallback immediately
     if (!apiKey || !address) {
       setReady(true);
-      return;
+      return () => {};
     }
 
     let cancelled = false;
