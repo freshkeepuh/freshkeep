@@ -1,5 +1,5 @@
 import { ContainerType, Country, ProductCategory, PrismaClient, Role, User, Unit, Product, Location,
-  Container, Store, ShoppingList, ShoppingListItem } from '@prisma/client';
+  Container, Store, ShoppingList, ShoppingListItem, RecipeDifficulty, RecipeDiet } from '@prisma/client';
 import { hash } from 'bcrypt';
 import * as config from '../config/settings.development.json';
 
