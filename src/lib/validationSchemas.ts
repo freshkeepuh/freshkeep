@@ -79,6 +79,7 @@ export const EditStorageSchema = Yup.object({
 });
 
 export const AddLocationSchema = Yup.object({
+  id: Yup.string().required('ID is required'),
   name: Yup.string().required('Name is required'),
   address1: Yup.string().required('Address is required'),
   address2: Yup.string().nullable(),

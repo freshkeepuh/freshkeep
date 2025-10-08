@@ -1,9 +1,11 @@
 'use client';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { useState } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { Plus } from 'react-bootstrap-icons';
 import Image from 'next/image';
+// import { Location } from '@prisma/client';
 import LocationCard from '../../components/LocationCard';
 import defaultLocations from '../../../config/settings.development.json';
 
@@ -28,23 +30,22 @@ const initialLocations = [
 
 const LocationsPage = () => {
   const [locations, setLocations] = useState(defaultLocations);
-
-  const handleEditLocation = (id: string, name: string, address: string) => {
-    setLocations((prevLocations) => prevLocations.map((location) => (
-      location.id === id
-        ? { ...location, name, address }
-        : location
+  /*
+  const handleEditLocation = (location: Location) => {
+    setLocations((settings.defaultLocations) => settings.defaultLocations.map((loc: Location) => (
+      loc.id === location.id
+        ? { ...loc, name: location.name, address: location.address1 }
+        : loc
     )));
   };
 
   const handleDeleteLocation = (id: string) => {
-    setLocations((prevLocations) => prevLocations.filter((location) => location.id !== id));
+    setLocations((prevLocations) => prevLocations.filter((location: Location) => location.id !== id));
   };
   const handleAddLocation = () => {
     // TODO: add function
   };
-
-  return (
+*/
     <main style={{ background: '#f4f4f4', minHeight: '100vh', paddingTop: '2rem', paddingBottom: '2rem' }}>
       <Container>
         {/* Title */}
@@ -69,13 +70,13 @@ const LocationsPage = () => {
               <div>
                 <h4>Locations</h4>
                 <ul className="list-unstyled">
-                  {locations.length > 0 ? (
+                  {locations.size > 0 ? (
                     locations.map((location) => (
                       <LocationCard
                         key={location.id}
                         id={location.id}
                         name={location.name}
-                        address={location.address}
+                        address1={location.address1}
                         onEdit={handleEditLocation}
                         onDelete={handleDeleteLocation}
                       />
@@ -139,8 +140,6 @@ const LocationsPage = () => {
           </Col>
         </Row>
       </Container>
-    </main>
-  );
+    </main>;
 };
-
 export default LocationsPage;

@@ -2,35 +2,37 @@
 
 import { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Pencil, Trash, Check, X, Plus } from 'react-bootstrap-icons';
+import { Location } from '@prisma/client';
 
-interface LocationCardProps {
+interface LocationCardProps extends Location {
   id: string;
   name: string;
-  address: string;
-  onEdit: (id: string, name: string, address: string) => void;
+  address1: string;
+  onEdit: (id: string, name: string, address1: string) => void;
   onDelete: (id: string) => void;
 }
 
-const LocationCard = ({ id, name, address, onEdit, onDelete }: LocationCardProps) => {
+const LocationCard = ({ id, name, address1, onEdit, onDelete }: LocationCardProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState(name);
-  const [editAddress, setEditAddress] = useState(address);
+  const [editAddress1, setEditAddress1] = useState(address1);
 
   const handleEditClick = () => {
     setIsEditing(true);
     setEditName(name);
-    setEditAddress(address);
+    setEditAddress1(address1);
   };
 
   const handleSaveClick = () => {
-    onEdit(id, editName, editAddress);
+    onEdit(id, editName, editAddress1);
     setIsEditing(false);
   };
 
   const handleCancelClick = () => {
     setEditName(name);
-    setEditAddress(address);
+    setEditAddress1(address1);
     setIsEditing(false);
   };
 
@@ -86,8 +88,8 @@ const LocationCard = ({ id, name, address, onEdit, onDelete }: LocationCardProps
           {/* Address edit */}
           <Form.Control
             type="text"
-            value={editAddress}
-            onChange={(e) => setEditAddress(e.target.value)}
+            value={editAddress1}
+            onChange={(e) => setEditAddress1(e.target.value)}
             size="sm"
             placeholder="Address"
             style={{
@@ -137,7 +139,7 @@ const LocationCard = ({ id, name, address, onEdit, onDelete }: LocationCardProps
       {/* Address */}
       <div className="text-muted small">
         <strong>Address: </strong>
-        {address}
+        {address1}
       </div>
     </li>
   );
