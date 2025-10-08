@@ -5,11 +5,11 @@
 'use server';
 
 import { Country } from '@prisma/client';
-import { prisma } from './prisma';
+import { prisma } from '@/lib/prisma';
+import { productSelect } from '@/lib/dbProductActions';
+import { shoppingListSelect } from '@/lib/dbShoppingListActions';
 
-const shoppingListsSelect = { select: { id: true, name: true } };
-
-const storeSelect = {
+export const storeSelect = {
   id: true,
   name: true,
   address1: true,
@@ -20,7 +20,17 @@ const storeSelect = {
   country: true,
   phone: true,
   website: true,
-  shoppingLists: shoppingListsSelect,
+  picture: true,
+};
+
+export const storeWithShoppingListsSelect = {
+  ...storeSelect,
+  shoppingLists: shoppingListSelect,
+};
+
+export const storeWithProductsSelect = {
+  ...storeSelect,
+  products: productSelect
 };
 
 /**
@@ -84,6 +94,34 @@ export async function readStore(id: string | null | undefined) {
   });
   return store;
 }
+
+/**
+ * Read a store and its shopping lists by store ID.
+ * @param id The ID of the store to read.
+ * @returns The store with its shopping lists if found, otherwise null.
+ */
+export async function readStoreWithShoppingLists(id: string | null | undefined) {
+  if (!id) return null;
+  const store = await prisma.store.findUnique({
+    where: { id },
+    select: storeWithShoppingListsSelect,
+  });
+  return store;
+}
+
+/**
+ * Read a store and its products by store ID.
+ * @param id The ID of the store to read.
+ * @returns The store with its products if found, otherwise null.
+ */
+export const readStoreWithProducts = async (id: string | null | undefined) => {
+  if (!id) return null;
+  const store = await prisma.store.findUnique({
+    where: { id },
+    select: storeWithProductsSelect,
+  });
+  return store;
+};
 
 /**
  * Update a store by ID.

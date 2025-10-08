@@ -4,7 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Store } from '@prisma/client';
-import LoadingSpinner from './LoadingSpinner';
+import LoadingSpinner from '@/components/LoadingSpinner';
+import { readStoreWithProducts } from '@/lib/dbStoreActions';
+import StoreCard from '@/components/StoreCard';
 
 type StoreFormProps = {
   id: string | null;
@@ -18,28 +20,12 @@ const StoreForm = ({ id }: StoreFormProps) => {
 
   useEffect(() => {
     const fetchStoreAndProducts = async () => {
-      try {
-        setLoading(true);
-
-        // Fetch the store associated with the current user
-        const storeResponse = await fetch(`/api/store/${id}`);
-        if (!storeResponse.ok) {
-          const errorText = await storeResponse.text();
-          throw new Error(`Failed to fetch store: ${storeResponse.status} - ${errorText}`);
-        }
-        const storeData = await storeResponse.json();
+      if (id) {
+        const storeData = await readStoreWithProducts(id);
         setStore(storeData);
-
-        setError(null);
-      } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-        setError(`Failed to load store: ${errorMessage}`);
-        setStore(null);
-      } finally {
-        setLoading(false);
       }
+      setLoading(false);
     };
-
     fetchStoreAndProducts();
   }, [session, id]);
 
@@ -60,12 +46,38 @@ const StoreForm = ({ id }: StoreFormProps) => {
     <Container className="my-4">
       <Row>
         <Col>
-          <h1>Your Store</h1>
+          <h1>Store</h1>
           {store ? (
-            <div>
-              <h2>{store.name}</h2>
-            </div>
-          ) : (
+                  <StoreCard
+                  key={store.id}
+                  store={store}
+                  onSave={async (updatedStore) => {
+                    const response = await fetch('/api/store', {
+                      method: 'PUT',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify(updatedStore),
+                    });
+                    if (response.ok) {
+                      const updated = await response.json();
+                      setStore((prevStore) => (prevStore?.id === updated.id ? updated : prevStore));
+                    } else {
+                      setError('Failed to update store');
+                    }
+                  }}
+                  onDelete={async (id) => {
+                    const response = await fetch(`/api/store/${id}`, {
+                      method: 'DELETE',
+                    });
+                    if (response.ok) {
+                      setStore(null);
+                    } else {
+                      setError('Failed to delete store');
+                    }
+                  }}
+                />
+        ) : (
             <p>No store found.</p>
           )}
         </Col>
