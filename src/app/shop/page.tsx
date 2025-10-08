@@ -59,7 +59,7 @@ const ShopPage = () => {
       }
     };
 
-    if (status === 'loading') return; // Still loading session
+    if (status === 'loading') return;
     fetchShopItems();
   }, [currentUserId, status]);
 
