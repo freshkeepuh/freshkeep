@@ -1,3 +1,5 @@
+'use client';
+
 import { Container, Row, Col, Image } from 'react-bootstrap';
 
 const Welcome: React.FC = () => (
@@ -7,9 +9,16 @@ const Welcome: React.FC = () => (
         <Image src="logo.svg" width="150px" alt="FreshKeep logo" />
       </Col>
       <Col xs={8} className="d-flex flex-column justify-content-center">
-        <h1>Welcome!</h1>
-        <p>This application helps you organize your food storage, </p>
-        <p>discover recipes based on what you have, and plan your grocery trips efficiently.</p>
+        <>
+          <h1 data-testid="welcome-header">Welcome!</h1>
+          <p>
+            This application helps you organize your food storage,
+            <br />
+            discover recipes based on what you have,
+            <br />
+            and plan your grocery trips efficiently.
+          </p>
+        </>
       </Col>
     </Row>
   </Container>

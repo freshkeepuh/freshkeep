@@ -1,4 +1,4 @@
-import { test, expect, BASE_URL } from './auth-utils';
+import { test, expect } from './auth-utils';
 
 test.slow();
 test('test access to admin page', async ({ getUserPage }) => {

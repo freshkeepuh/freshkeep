@@ -23,9 +23,13 @@ export default function RootLayout({
     <html lang="en">
       <body className={classString}>
         <Providers>
-          <NavBar />
-          {children}
-          <Footer />
+          <div className="d-flex flex-column min-vh-100">
+            <NavBar />
+            <main className="flex-grow-1">
+              {children}
+            </main>
+            <Footer />
+          </div>
         </Providers>
       </body>
     </html>

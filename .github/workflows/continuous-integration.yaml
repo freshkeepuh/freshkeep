@@ -43,28 +43,46 @@ jobs:
       - name: Set up Prisma
         run: npx prisma generate
 
+      - name: Run lint
+        run: npx next lint
+
+      - name: Set Database URL
+        run: echo "DATABASE_URL=postgres://postgres:postgres@localhost:5432/freshkeepuh" >> $GITHUB_ENV
+
       - name: Run database migrations
-        env:
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/freshkeepuh
         run: npx prisma migrate deploy
 
       - name: Seed the database
-        env:
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/freshkeepuh
         run: npx prisma db seed
 
       - name: Build the application
         run: npx next build
+        
+      - name: Get Playwright version
+        id: playwright-version
+        run: |
+          PLAYWRIGHT_VERSION=$(node -e "console.log(require('./package-lock.json').packages['node_modules/@playwright/test'].version)")
+          echo "PLAYWRIGHT_VERSION=${PLAYWRIGHT_VERSION}" >> $GITHUB_ENV
+          echo "PLAYWRIGHT_KEY=${{ runner.os }}-playwright-${PLAYWRIGHT_VERSION}" >> $GITHUB_ENV
 
-      - name: Run lint
-        run: npx next lint
+      - name: Cache playwright binaries
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: |
+            ~/.cache/ms-playwright
+          key: ${{ env.PLAYWRIGHT_KEY }}
 
       - name: Install Playwright
         run: npx playwright install --with-deps
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+
+      - name: Install Playwright dependencies
+        run: npx playwright install-deps
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
 
       - name: Run Playwright Tests
         env:
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/freshkeepuh
           NEXTAUTH_SECRET: dqkvSTdgMChdtJdwk-8V?K#YURCuq$SSBEb-XjA?2PTEYUtas4HpADWaZGj7??gF
           NEXTAUTH_URL: http://localhost:3000
         run: npx playwright test
