@@ -7,7 +7,7 @@ import { Plus } from 'react-bootstrap-icons';
 import Image from 'next/image';
 // import { Location } from '@prisma/client';
 import LocationCard from '../../components/LocationCard';
-import defaultLocations from '../../../config/settings.development.json';
+import { defaultLocations } from '../../../config/settings.development.json';
 
 /*
 const initialLocations = [
@@ -32,7 +32,7 @@ const LocationsPage = () => {
   const [locations, setLocations] = useState(defaultLocations);
   /*
   const handleEditLocation = (location: Location) => {
-    setLocations((settings.defaultLocations) => settings.defaultLocations.map((loc: Location) => (
+    setLocations((prevLocations) => prevLocations.map((loc: Location) => (
       loc.id === location.id
         ? { ...loc, name: location.name, address: location.address1 }
         : loc
@@ -70,7 +70,7 @@ const LocationsPage = () => {
               <div>
                 <h4>Locations</h4>
                 <ul className="list-unstyled">
-                  {locations.size > 0 ? (
+                  {locations.length > 0 ? (
                     locations.map((location) => (
                       <LocationCard
                         key={location.id}
@@ -78,7 +78,16 @@ const LocationsPage = () => {
                         name={location.name}
                         address1={location.address1}
                         onEdit={handleEditLocation}
+                        // eslint-disable-next-line max-len
                         onDelete={handleDeleteLocation}
+                        picture={location.picture || null}
+                        address2={location.address2 || ''}
+                        city={location.city || ''}
+                        state={location.state || ''}
+                        zipcode={location.zipcode || ''}
+                        country={location.country}
+                        createdAt={new Date()}
+                        updatedAt={new Date()}
                       />
                     ))
                   ) : (
