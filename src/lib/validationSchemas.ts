@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { ContainerType } from '@prisma/client';
+import { ContainerType, Country, ProductInstance } from '@prisma/client';
 import { checkUser } from './dbUserActions';
 
 export const forgotPasswordValidation = Yup.object().shape({
@@ -76,4 +76,17 @@ export const EditStorageSchema = Yup.object({
     quantity: Yup.number().positive().required(),
     expiresAt: Yup.date().nullable(),
   })),
+});
+
+export const AddLocationSchema = Yup.object({
+  name: Yup.string().required('Name is required'),
+  address1: Yup.string().required('Address is required'),
+  address2: Yup.string().nullable(),
+  city: Yup.string().required('City is required'),
+  state: Yup.string().required('State is required'),
+  zip: Yup.string().required('Zip code is required'),
+  country: Yup.mixed<Country>().oneOf(Object.values(Country)).required('Country is required'),
+  picture: Yup.string().url('Must be a valid URL').nullable(),
+  containers: Yup.array().of(Yup.mixed<ContainerType>().oneOf(Object.values(ContainerType))),
+  instances: Yup.array().of(Yup.object(ProductInstance)),
 });

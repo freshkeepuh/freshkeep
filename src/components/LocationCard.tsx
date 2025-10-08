@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
-import { Pencil, Trash, Check, X } from 'react-bootstrap-icons';
+import { Pencil, Trash, Check, X, Plus } from 'react-bootstrap-icons';
 
 interface LocationCardProps {
   id: string;

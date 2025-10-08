@@ -1,3 +1,4 @@
+// eslint-disable-next-line max-len, @typescript-eslint/no-unused-vars
 import { ContainerType, Country, ProductCategory, PrismaClient, Role, User, Unit, Product, ProductInstance, Location, Container, Store, ShoppingList, ShoppingListItem, RecipeDifficulty, RecipeDiet } from '@prisma/client';
 import { hash } from 'bcrypt';
 import * as config from '../config/settings.development.json';
@@ -79,7 +80,7 @@ async function seedStores() : Promise<Array<Store>> {
     });
     // Push the Store onto the array
     stores.push(store);
-  };
+  }
   // Return the Stores array
   return stores;
 }
@@ -183,7 +184,7 @@ async function seedUnits() : Promise<Array<Unit>> {
     });
     // Add the unit to the array
     units.push(unit);
-  };
+  }
 
   // Then, create all derived units
   for (const defaultUnit of config.defaultUnits.filter(unit => unit.name !== unit.baseName)) {
@@ -202,7 +203,7 @@ async function seedUnits() : Promise<Array<Unit>> {
     });
     // Add the unit to the array
     units.push(unit);
-  };
+  }
   // Return the array of units
   return units;
 }
@@ -231,7 +232,7 @@ async function seedProducts(units: Array<Unit>, stores: Array<Store>) : Promise<
       update: {},
       create: {
         name: defaultProduct.name,
-        category: category,
+        category,
         unitId: unit.id,
         stores: {
           connect: [store],
@@ -243,7 +244,7 @@ async function seedProducts(units: Array<Unit>, stores: Array<Store>) : Promise<
     });
     // Add the product to the array
     products.push(product);
-  };
+  }
   // Return the array of products
   return products;
 }
@@ -276,6 +277,7 @@ async function seedProductInstances(
     // Get the Unit
     const unit = findByName(units, defaultItem.unitName);
     // Create the Item
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const instance = await prisma.productInstance.create({
       data: {
         locId: location.id,
@@ -285,7 +287,7 @@ async function seedProductInstances(
         quantity: defaultItem.quantity || 0.0,
       },
     });
-  };
+  }
 }
 
 /**
@@ -309,7 +311,7 @@ const seedShoppingList = async (stores: Array<Store>) : Promise<Array<ShoppingLi
     });
     // Push the Shopping List onto the array
     shoppingLists.push(shoppingList);
-  };
+  }
   // Return the Shopping Lists array
   return shoppingLists;
 };
@@ -321,6 +323,7 @@ const seedShoppingList = async (stores: Array<Store>) : Promise<Array<ShoppingLi
  * @param units The Units of measurement for the items.
  * @returns A promise that resolves to an array of created or existing Shopping List Items.
  */
+// eslint-disable-next-line max-len
 const seedShoppingListItems = async (shoppingLists: Array<ShoppingList>, products: Array<Product>, units: Array<Unit>) : Promise<Array<ShoppingListItem>> => {
   const shoppingListItems: Array<ShoppingListItem> = [];
   for (const defaultItem of config.defaultShoppingListItems) {
@@ -333,10 +336,10 @@ const seedShoppingListItems = async (shoppingLists: Array<ShoppingList>, product
     // Create the Shopping List Item
     const item = await prisma.shoppingListItem.upsert({
       where: { listId_prodId_unitId: {
-          listId: shoppingList.id,
-          prodId: product.id,
-          unitId: unit.id,
-        },
+        listId: shoppingList.id,
+        prodId: product.id,
+        unitId: unit.id,
+      },
       },
       update: {},
       create: {
@@ -348,9 +351,9 @@ const seedShoppingListItems = async (shoppingLists: Array<ShoppingList>, product
       },
     });
     shoppingListItems.push(item);
-  };
+  }
   return shoppingListItems;
-}
+};
 
 /**
  * Seeds the Recipe table with default data from settings.development.json.

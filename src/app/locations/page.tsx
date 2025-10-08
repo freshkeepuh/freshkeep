@@ -5,7 +5,9 @@ import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { Plus } from 'react-bootstrap-icons';
 import Image from 'next/image';
 import LocationCard from '../../components/LocationCard';
+import defaultLocations from '../../../config/settings.development.json';
 
+/*
 const initialLocations = [
   {
     id: '1',
@@ -22,10 +24,10 @@ const initialLocations = [
     name: 'Parent Pantry',
     address: '123 Main St, Honolulu',
   },
-];
+]; */
 
 const LocationsPage = () => {
-  const [locations, setLocations] = useState(initialLocations);
+  const [locations, setLocations] = useState(defaultLocations);
 
   const handleEditLocation = (id: string, name: string, address: string) => {
     setLocations((prevLocations) => prevLocations.map((location) => (
