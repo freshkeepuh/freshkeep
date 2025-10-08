@@ -356,6 +356,55 @@ const CreateGroceryItemForm = () => {
     [imagePreview],
   );
 
+  // const uploadImageToS3 = async (file: File): Promise<string | null> => {
+  //   try {
+  //     setUploadProgress('Getting upload URL...');
+
+  //     // Get presigned URL from your API
+  //     const presignResponse = await fetch('/api/shop/image-upload', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({
+  //         fileName: file.name,
+  //         fileType: file.type,
+  //       }),
+  //     });
+
+  //     if (!presignResponse.ok) {
+  //       const error = await presignResponse.json();
+  //       throw new Error(error.error || 'Failed to get upload URL');
+  //     }
+
+  //     const { url, fields, fileUrl } = await presignResponse.json();
+
+  //     setUploadProgress('Uploading to S3...');
+
+  //     // Upload file to S3 using presigned POST
+  //     const formData = new FormData();
+  //     Object.entries(fields).forEach(([key, value]) => {
+  //       formData.append(key, value as string);
+  //     });
+  //     formData.append('file', file);
+
+  //     const uploadResponse = await fetch(url, {
+  //       method: 'POST',
+  //       body: formData,
+  //     });
+
+  //     if (!uploadResponse.ok) {
+  //       throw new Error('Failed to upload image to S3');
+  //     }
+
+  //     setUploadProgress('Upload complete!');
+  //     return fileUrl;
+  //   } catch (error) {
+  //     console.error('Image upload error:', error);
+  //     setUploadProgress(null);
+  //     throw error;
+  //   }
+  // };
+
+  // ...existing code...
   const uploadImageToS3 = async (file: File): Promise<string | null> => {
     try {
       setUploadProgress('Getting upload URL...');
@@ -380,15 +429,15 @@ const CreateGroceryItemForm = () => {
       setUploadProgress('Uploading to S3...');
 
       // Upload file to S3 using presigned POST
-      const formData = new FormData();
+      const uploadFormData = new FormData();
       Object.entries(fields).forEach(([key, value]) => {
-        formData.append(key, value as string);
+        uploadFormData.append(key, value as string);
       });
-      formData.append('file', file);
+      uploadFormData.append('file', file);
 
       const uploadResponse = await fetch(url, {
         method: 'POST',
-        body: formData,
+        body: uploadFormData,
       });
 
       if (!uploadResponse.ok) {
@@ -403,6 +452,76 @@ const CreateGroceryItemForm = () => {
       throw error;
     }
   };
+
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+
+  //   if (!formData.name || !formData.category || !formData.soldAt) {
+  //     setMessage({ type: 'error', text: 'Please fill in all required fields.' });
+  //     return;
+  //   }
+
+  //   if (!session?.user?.email) {
+  //     setMessage({ type: 'error', text: 'You must be logged in to create items.' });
+  //     return;
+  //   }
+
+  //   setLoading(true);
+  //   setMessage(null);
+  //   setUploadProgress(null);
+
+  //   try {
+  //     let imageUrl: string | null = null;
+
+  //     // Upload image if provided
+  //     if (imageFile) {
+  //       try {
+  //         imageUrl = await uploadImageToS3(imageFile);
+  //       } catch (uploadError) {
+  //         console.error('Image upload failed:', uploadError);
+  //         setMessage({
+  //           type: 'error',
+  //           text: 'Image upload failed. Please try again or create item without image.',
+  //         });
+  //         setLoading(false);
+  //         setUploadProgress(null);
+  //         return;
+  //       }
+  //     }
+
+  //     setUploadProgress('Creating grocery item...');
+
+  //     // Create grocery item with optional image URL
+  //     await createGroceryItem({
+  //       name: formData.name,
+  //       category: formData.category as ProductCategory,
+  //       // soldAt: formData.soldAt,
+  //       userId: session.user.email, // Pass the current user's email as userId
+  //     });
+
+  //     setMessage({ type: 'success', text: 'Grocery item created successfully! Redirecting...' });
+
+  //     // Reset form
+  //     setFormData({
+  //       name: '',
+  //       soldAt: '',
+  //       category: '',
+  //     });
+  //     setImageFile(null);
+  //     setImagePreview(null);
+
+  //     // Redirect to shop page after a short delay
+  //     setTimeout(() => {
+  //       router.push('/shop');
+  //     }, 1500);
+  //   } catch (error) {
+  //     console.error('Error creating grocery item:', error);
+  //     setMessage({ type: 'error', text: 'Failed to create grocery item. Please try again.' });
+  //   } finally {
+  //     setLoading(false);
+  //     setUploadProgress(null);
+  //   }
+  // };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -442,12 +561,12 @@ const CreateGroceryItemForm = () => {
 
       setUploadProgress('Creating grocery item...');
 
-      // Create grocery item with optional image URL
       await createGroceryItem({
         name: formData.name,
         category: formData.category as ProductCategory,
         // soldAt: formData.soldAt,
-        userId: session.user.email, // Pass the current user's email as userId
+        userId: session.user.email,
+        picture: imageUrl,
       });
 
       setMessage({ type: 'success', text: 'Grocery item created successfully! Redirecting...' });
