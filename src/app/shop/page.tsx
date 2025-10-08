@@ -16,6 +16,10 @@ interface ShopItem {
   soldAt: string;
   category: string;
   userId: string;
+  picture: string;
+  productId: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 const ShopPage = () => {
@@ -65,7 +69,8 @@ const ShopPage = () => {
 
   // Map shop model data to GroceryItemCard props
   const mapShopItemToCardProps = (shopItem: ShopItem) => ({
-    groceryItemImage: 'https://images.cdn.shop.foodland.com/detail/4011.jpg', // Hardcoded placeholder
+    groceryItemImage:
+      shopItem.picture || 'https://freshkeep-filestorage.s3.us-east-2.amazonaws.com/public/defaultimage.png',
     groceryItemTitle: shopItem.name,
     store: shopItem.soldAt,
     storageType: 'Pantry', // Hardcoded
@@ -192,7 +197,7 @@ const ShopPage = () => {
             return (
               <Col key={shopItem.id} lg={3} md={4} sm={6} className="mb-4">
                 <GroceryItemCard
-                  groceryItemImage={cardProps.groceryItemImage}
+                  picture={cardProps.groceryItemImage}
                   groceryItemTitle={cardProps.groceryItemTitle}
                   store={cardProps.store}
                   storageType={cardProps.storageType}

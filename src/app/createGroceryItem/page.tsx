@@ -82,33 +82,6 @@ const CreateGroceryItemForm = () => {
     [imagePreview],
   );
 
-  //   try {
-  //     setUploadProgress('Getting upload URL...');
-
-  //     // Get presigned URL from your API
-  //     const presignResponse = await fetch('/api/shop/image-upload', {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify({
-  //         fileName: file.name,
-  //         fileType: file.type,
-  //       }),
-  //     });
-
-  //     if (!presignResponse.ok) {
-  //       const error = await presignResponse.json();
-  //       throw new Error(error.error || 'Failed to get upload URL');
-  //     }
-
-  //     const { url, fields, fileUrl } = await presignResponse.json();
-
-  //     setUploadProgress('Uploading to S3...');
-
-  //     // Upload file to S3 using presigned POST
-  //     const formData = new FormData();
-  //     Object.entries(fields).forEach(([key, value]) => {
-  //       formData.append(key, value as string);
-  // ...existing code...
   const uploadImageToS3 = async (file: File): Promise<string | null> => {
     try {
       setUploadProgress('Getting upload URL...');
@@ -157,56 +130,6 @@ const CreateGroceryItemForm = () => {
     }
   };
 
-  // const handleSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-
-  //   if (!formData.name || !formData.category || !formData.soldAt) {
-  //     setMessage({ type: 'error', text: 'Please fill in all required fields.' });
-  //     return;
-  //   }
-
-  //   if (!session?.user?.email) {
-  //     setMessage({ type: 'error', text: 'You must be logged in to create items.' });
-  //     return;
-  //   }
-
-  //   setLoading(true);
-  //   setMessage(null);
-  //   setUploadProgress(null);
-
-  //   try {
-  //     let imageUrl: string | null = null;
-
-  //     // Upload image if provided
-  //     if (imageFile) {
-  //       try {
-  //         imageUrl = await uploadImageToS3(imageFile);
-  //       } catch (uploadError) {
-  //         console.error('Image upload failed:', uploadError);
-  //         setMessage({
-  //           type: 'error',
-  //           text: 'Image upload failed. Please try again or create item without image.',
-  //         });
-  //         setLoading(false);
-  //         setUploadProgress(null);
-  //         return;
-  //       }
-  //     }
-
-  //     setUploadProgress('Creating grocery item...');
-
-  //     // Create grocery item with optional image URL
-  //     await createGroceryItem({
-  //       name: formData.name,
-  //       category: formData.category as ProductCategory,
-  //       // soldAt: formData.soldAt,
-  //       userId: session.user.email, // Pass the current user's email as userId
-  //     });
-
-  //     setMessage({ type: 'success', text: 'Grocery item created successfully! Redirecting...' });
-
-  //     // Reset form
-  //     setFormData({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -215,10 +138,21 @@ const CreateGroceryItemForm = () => {
       return;
     }
 
-    if (!session?.user?.email) {
+    if (!session?.user) {
       setMessage({ type: 'error', text: 'You must be logged in to create items.' });
       return;
     }
+
+    // Get user ID from session - could be id, sub, or other field depending on auth setup
+    const userId = session.user.id || (session.user as any).sub || session.user.email;
+    
+    if (!userId) {
+      setMessage({ type: 'error', text: 'Unable to identify user. Please try logging out and back in.' });
+      console.error('Session user object:', session.user);
+      return;
+    }
+
+    console.log('Creating item for user:', userId);
 
     setLoading(true);
     setMessage(null);
@@ -248,8 +182,8 @@ const CreateGroceryItemForm = () => {
       await createGroceryItem({
         name: formData.name,
         category: formData.category as ProductCategory,
-        // soldAt: formData.soldAt,
-        userId: session.user.email,
+        soldAt: formData.soldAt,
+        userId, // Use the userId we determined above
         picture: imageUrl,
       });
 
@@ -264,7 +198,6 @@ const CreateGroceryItemForm = () => {
       setImageFile(null);
       setImagePreview(null);
 
-      // Redirect to shop page after a short delay
       setTimeout(() => {
         router.push('/shop');
       }, 1500);
