@@ -145,7 +145,7 @@ const CreateGroceryItemForm = () => {
 
     // Get user ID from session - could be id, sub, or other field depending on auth setup
     const userId = session.user.id || (session.user as any).sub || session.user.email;
-    
+
     if (!userId) {
       setMessage({ type: 'error', text: 'Unable to identify user. Please try logging out and back in.' });
       console.error('Session user object:', session.user);

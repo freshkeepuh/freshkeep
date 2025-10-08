@@ -5,14 +5,11 @@ const prisma = new PrismaClient();
 
 export const runtime = 'nodejs';
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { email: string } },
-) {
+export async function GET(request: NextRequest, { params }: { params: { email: string } }) {
   try {
     const { email } = params;
     const decodedEmail = decodeURIComponent(email);
-    
+
     console.log('Looking for user with email:', decodedEmail);
 
     if (!decodedEmail) {
@@ -38,10 +35,7 @@ export async function GET(
     return NextResponse.json(user);
   } catch (error) {
     console.error('Error fetching user by email:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   } finally {
     await prisma.$disconnect();
   }
