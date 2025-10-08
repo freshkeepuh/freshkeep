@@ -10,7 +10,7 @@ export interface CreateGroceryItemData {
   unitId?: string;
   defaultQty?: number;
   isNeeded?: boolean;
-  picture?: string;
+  picture?: string | null;
   userId?: string;
 }
 
@@ -20,11 +20,35 @@ export interface CreateGroceryItemData {
  */
 export async function createGroceryItem(data: CreateGroceryItemData) {
   const result = await prisma.$transaction(async (tx) => {
+    // First, get or create a default unit if none is provided
+    let { unitId } = data;
+
+    if (!unitId) {
+      // Try to find an existing unit or create a default one
+      let defaultUnit = await tx.unit.findFirst({
+        where: {
+          name: 'each',
+        },
+      });
+
+      if (!defaultUnit) {
+        // Create a default unit if it doesn't exist (only with name field)
+        defaultUnit = await tx.unit.create({
+          data: {
+            name: 'each',
+            abbr: 'ea',
+          },
+        });
+      }
+
+      unitId = defaultUnit.id;
+    }
+
     const groceryItem = await tx.product.create({
       data: {
         name: data.name,
         category: data.category,
-        unitId: data.unitId || 'default-unit', // Provide a default value or handle appropriately
+        unitId,
         // soldAt: data.soldAt,
         defaultQty: data.defaultQty || 1.0,
         isNeeded: data.isNeeded || false,
@@ -38,12 +62,12 @@ export async function createGroceryItem(data: CreateGroceryItemData) {
       });
 
       if (user) {
-      //  await tx.shop.create({
-      //    data: {
-      //      userId: user.id,
-      //      groceryItemId: groceryItem.id,
-      //    },
-      //  });
+        //  await tx.shop.create({
+        //    data: {
+        //      userId: user.id,
+        //      groceryItemId: groceryItem.id,
+        //    },
+        //  });
       }
     }
 
