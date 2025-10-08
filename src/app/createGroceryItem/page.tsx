@@ -228,26 +228,6 @@ const CreateGroceryItemForm = () => {
 
   //     // Reset form
   //     setFormData({
-  //       name: '',
-  //       soldAt: '',
-  //       category: '',
-  //     });
-  //     setImageFile(null);
-  //     setImagePreview(null);
-
-  //     // Redirect to shop page after a short delay
-  //     setTimeout(() => {
-  //       router.push('/shop');
-  //     }, 1500);
-  //   } catch (error) {
-  //     console.error('Error creating grocery item:', error);
-  //     setMessage({ type: 'error', text: 'Failed to create grocery item. Please try again.' });
-  //   } finally {
-  //     setLoading(false);
-  //     setUploadProgress(null);
-  //   }
-  // };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
