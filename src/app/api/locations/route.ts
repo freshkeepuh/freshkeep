@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
         city,
         state,
         zipcode,
-        country: country === 'CAN' ? 'CAN' : 'USA',
+        country,
         picture,
       },
       select: {
