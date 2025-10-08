@@ -108,27 +108,6 @@ const CreateGroceryItemForm = () => {
   //     const formData = new FormData();
   //     Object.entries(fields).forEach(([key, value]) => {
   //       formData.append(key, value as string);
-  //     });
-  //     formData.append('file', file);
-
-  //     const uploadResponse = await fetch(url, {
-  //       method: 'POST',
-  //       body: formData,
-  //     });
-
-  //     if (!uploadResponse.ok) {
-  //       throw new Error('Failed to upload image to S3');
-  //     }
-
-  //     setUploadProgress('Upload complete!');
-  //     return fileUrl;
-  //   } catch (error) {
-  //     console.error('Image upload error:', error);
-  //     setUploadProgress(null);
-  //     throw error;
-  //   }
-  // };
-
   // ...existing code...
   const uploadImageToS3 = async (file: File): Promise<string | null> => {
     try {
