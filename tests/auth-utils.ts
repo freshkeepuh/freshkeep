@@ -1,8 +1,9 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable import/no-extraneous-dependencies */
-import { test as base, expect, Page } from '@playwright/test';
+import { test as base, Cookie, expect, Page } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
+import { textSpanEnd } from 'typescript';
 
 // Base configuration
 export const BASE_URL = process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:3000';
@@ -21,7 +22,7 @@ interface AuthFixtures {
 /**
  * Helper to fill form fields with retry logic
  */
-async function fillFormWithRetry(
+export async function fillFormWithRetry(
   page: Page,
   fields: Array<{ selector: string; value: string }>,
 ): Promise<void> {
@@ -46,6 +47,41 @@ async function fillFormWithRetry(
       }
     }
   }
+}
+
+/**
+ * Expect the user to be signed in or redirected to the home page
+ * @param param0 - Object containing the page and optional timeout
+ * @returns {Promise<void>}
+ */
+export async function expectSignedInOrRedirected({
+  page,
+  url,
+  timeout = 30000,
+}: { page: Page; url: string; timeout?: number }) {
+  // Primary: redirect to /
+  const redirected = await page
+    .waitForURL(url, { timeout })
+    .then(() => true)
+    .catch(() => false);
+
+  if (redirected) {
+    await expect(page).toHaveURL(url);
+    return;
+  }
+
+  const newPage = await page.context().newPage();
+
+  await newPage.goto(url, { timeout });
+  await newPage.waitForLoadState('networkidle', { timeout });
+  // Fallback: check for session cookie
+  await expect(newPage).toBeTruthy();
+  const context = newPage.context();
+  await expect(context).toBeTruthy();
+  const cookies = await context.cookies();
+  await expect(cookies).toBeTruthy();
+  const hasSession = cookies.some((c: Cookie) => c.name.includes('next-auth') && c.value);
+  expect(hasSession, 'Expected a NextAuth session cookie if not redirected').toBeTruthy();
 }
 
 /**
@@ -129,10 +165,7 @@ async function authenticateWithUI(
     // Save session for future tests
     const cookies = await page.context().cookies();
     fs.writeFileSync(sessionPath, JSON.stringify({ cookies }));
-    console.log(`✓ Successfully authenticated ${email} and saved session`);
   } catch (error) {
-    console.error(`× Authentication failed for ${email}:`, error);
-
     throw new Error(`Authentication failed: ${error}`);
   }
 }

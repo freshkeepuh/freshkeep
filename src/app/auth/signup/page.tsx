@@ -4,9 +4,8 @@ import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
 import { Button, Card, Col, Form, Image, Row } from 'react-bootstrap';
-import { createUser, checkUser } from '@/lib/dbUserActions';
+import { createUser } from '@/lib/dbUserActions';
 import '@/styles/auth.css';
 import { signUpValidation } from '@/lib/validationSchemas';
 
@@ -68,7 +67,12 @@ const SignUp = () => {
                   isInvalid={!!errors.email}
                   {...register('email')}
                 />
-                <Form.Control.Feedback data-testid="sign-up-form-email-field-error" type="invalid">{errors.email?.message}</Form.Control.Feedback>
+                <Form.Control.Feedback
+                  data-testid="sign-up-form-email-field-error"
+                  type="invalid"
+                >
+                  {errors.email?.message}
+                </Form.Control.Feedback>
               </Form.Group>
 
               <Form.Group controlId="signupPassword" className="mb-4">
@@ -80,7 +84,12 @@ const SignUp = () => {
                   isInvalid={!!errors.password}
                   {...register('password')}
                 />
-                <Form.Control.Feedback data-testid="sign-up-form-password-field-error" type="invalid">{errors.password?.message}</Form.Control.Feedback>
+                <Form.Control.Feedback
+                  data-testid="sign-up-form-password-field-error"
+                  type="invalid"
+                >
+                  {errors.password?.message}
+                </Form.Control.Feedback>
               </Form.Group>
 
               <Form.Group controlId="signupConfirm" className="mb-4">
@@ -92,17 +101,35 @@ const SignUp = () => {
                   isInvalid={!!errors.confirmPassword}
                   {...register('confirmPassword')}
                 />
-                <Form.Control.Feedback data-testid="sign-up-form-confirm-password-field-error" type="invalid">{errors.confirmPassword?.message}</Form.Control.Feedback>
+                <Form.Control.Feedback
+                  data-testid="sign-up-form-confirm-password-field-error"
+                  type="invalid"
+                >
+                  {errors.confirmPassword?.message}
+                </Form.Control.Feedback>
               </Form.Group>
 
               <Row className="align-items-center mb-4">
                 <Col xs="auto">
-                  <Button data-testid="sign-up-form-submit" type="submit" variant="success" size="lg" disabled={isSubmitting}>
+                  <Button
+                    data-testid="sign-up-form-submit"
+                    type="submit"
+                    variant="success"
+                    size="lg"
+                    disabled={isSubmitting}
+                  >
                     {isSubmitting ? 'Creating…' : 'Create Account'}
                   </Button>
                 </Col>
                 <Col className="text-end">
-                  <Button data-testid="sign-up-form-reset" type="button" variant="outline-secondary" onClick={() => reset()}>
+                  <Button
+                    data-testid="sign-up-form-reset"
+                    type="button"
+                    variant="outline-secondary"
+                    onClick={() => reset()}
+                    size="lg"
+                    disabled={isSubmitting}
+                  >
                     Reset
                   </Button>
                 </Col>

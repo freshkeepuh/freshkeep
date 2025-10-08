@@ -1,5 +1,5 @@
-import { Cookie, Page } from '@playwright/test';
-import { test, expect, BASE_URL } from './auth-utils';
+import { Page } from '@playwright/test';
+import { test, expect, BASE_URL, expectSignedInOrRedirected, fillFormWithRetry } from './auth-utils';
 
 const SIGNUP_URL = `${BASE_URL}/auth/signup`;
 
@@ -7,36 +7,16 @@ function uniqueEmail() {
   return `playwright+${Date.now()}@example.com`;
 }
 
-async function expectSignedInOrRedirected({
-  page,
-  timeout = 20000,
-}: { page: any; timeout?: number }) {
-  // Primary: redirect to /
-  const redirected = await page
-    .waitForURL(`${BASE_URL}/`, { timeout })
-    .then(() => true)
-    .catch(() => false);
-
-  if (redirected) {
-    await expect(page).toHaveURL(`${BASE_URL}/`);
-    return;
-  }
-
-  await expect(page).toBeTruthy();
-  // Fallback: NextAuth session cookie present (Firefox sometimes lags redirect)
-  const cookies = await page.context().cookies();
-  const hasSession = cookies.some((c: Cookie) => c.name.includes('next-auth') && c.value);
-  expect(hasSession, 'Expected a NextAuth session cookie if not redirected').toBeTruthy();
-}
-
 async function submitSignup(page: Page) {
   await page.getByTestId('sign-up-form-submit').click();
 }
 
 async function fillSignup(page: Page, email: string, password: string = 'secret123', confirmPassword: string = password) {
-  await page.getByTestId('sign-up-form-email-field').fill(email);
-  await page.getByTestId('sign-up-form-password-field').fill(password);
-  await page.getByTestId('sign-up-form-confirm-password-field').fill(confirmPassword);
+  await fillFormWithRetry(page, [
+    { selector: '[data-testid="sign-up-form-email-field"]', value: email },
+    { selector: '[data-testid="sign-up-form-password-field"]', value: password },
+    { selector: '[data-testid="sign-up-form-confirm-password-field"]', value: confirmPassword },
+  ]);
 }
 
 async function fillAndSubmitSignup(page: Page, email: string, password: string = 'secret123', confirmPassword: string = password) {
@@ -58,9 +38,13 @@ test('sign up page — validation errors', async ({ page }) => {
   fillAndSubmitSignup(page, 'invalid-email');
   await expect(page.getByTestId('sign-up-form-email-field-error')).toBeVisible();
 
+  await page.getByTestId('sign-up-form-reset').click();
+
   // Short password
   await fillAndSubmitSignup(page, 'valid@mail.com', 'short', 'short');
   await expect(page.getByTestId('sign-up-form-password-field-error')).toBeVisible();
+  
+  await page.getByTestId('sign-up-form-reset').click();
 
   // Mismatched passwords
   await fillAndSubmitSignup(page, 'valid@mail.com', 'secret123', 'different123');
@@ -73,7 +57,7 @@ test('sign up page — successful account creation (redirect OR session cookie)'
   const email = uniqueEmail();
 
   await fillAndSubmitSignup(page, email);
-  await expectSignedInOrRedirected({ page });
+  await expectSignedInOrRedirected({ page, url: `${BASE_URL}/`, timeout: 30000 });
 });
 
 test('sign up page — Reset clears fields and errors', async ({ page }) => {
