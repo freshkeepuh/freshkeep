@@ -283,30 +283,30 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Alert from 'react-bootstrap/Alert';
-import { GroceryCategory } from '@prisma/client';
+import { ProductCategory } from '@prisma/client';
 import { createGroceryItem } from '@/lib/dbShopActions';
 
 // Helper function to get display name for category
-const getCategoryDisplayName = (category: GroceryCategory): string => {
-  const displayNames: Record<GroceryCategory, string> = {
-    [GroceryCategory.Fruits]: 'Fruits',
-    [GroceryCategory.Vegetables]: 'Vegetables',
-    [GroceryCategory.CannedGoods]: 'Canned Goods',
-    [GroceryCategory.Dairy]: 'Dairy',
-    [GroceryCategory.Meat]: 'Meat',
-    [GroceryCategory.FishSeafood]: 'Fish & Seafood',
-    [GroceryCategory.Deli]: 'Deli',
-    [GroceryCategory.Condiments]: 'Condiments',
-    [GroceryCategory.Spices]: 'Spices',
-    [GroceryCategory.Snacks]: 'Snacks',
-    [GroceryCategory.Bakery]: 'Bakery',
-    [GroceryCategory.Beverages]: 'Beverages',
-    [GroceryCategory.Pasta]: 'Pasta',
-    [GroceryCategory.Grains]: 'Grains',
-    [GroceryCategory.Cereal]: 'Cereal',
-    [GroceryCategory.Baking]: 'Baking',
-    [GroceryCategory.FrozenFoods]: 'Frozen Foods',
-    [GroceryCategory.Other]: 'Other',
+const getCategoryDisplayName = (category: ProductCategory): string => {
+  const displayNames: Record<ProductCategory, string> = {
+    [ProductCategory.Fruits]: 'Fruits',
+    [ProductCategory.Vegetables]: 'Vegetables',
+    [ProductCategory.CannedGoods]: 'Canned Goods',
+    [ProductCategory.Dairy]: 'Dairy',
+    [ProductCategory.Meat]: 'Meat',
+    [ProductCategory.FishSeafood]: 'Fish & Seafood',
+    [ProductCategory.Deli]: 'Deli',
+    [ProductCategory.Condiments]: 'Condiments',
+    [ProductCategory.Spices]: 'Spices',
+    [ProductCategory.Snacks]: 'Snacks',
+    [ProductCategory.Bakery]: 'Bakery',
+    [ProductCategory.Beverages]: 'Beverages',
+    [ProductCategory.Pasta]: 'Pasta',
+    [ProductCategory.Grains]: 'Grains',
+    [ProductCategory.Cereal]: 'Cereal',
+    [ProductCategory.Baking]: 'Baking',
+    [ProductCategory.FrozenFoods]: 'Frozen Foods',
+    [ProductCategory.Other]: 'Other',
   };
   return displayNames[category];
 };
@@ -317,7 +317,7 @@ const CreateGroceryItemForm = () => {
   const [formData, setFormData] = useState({
     name: '',
     soldAt: '',
-    category: '' as GroceryCategory | '',
+    category: '' as ProductCategory | '',
   });
 
   const [loading, setLoading] = useState(false);
@@ -445,10 +445,9 @@ const CreateGroceryItemForm = () => {
       // Create grocery item with optional image URL
       await createGroceryItem({
         name: formData.name,
-        category: formData.category as GroceryCategory,
-        soldAt: formData.soldAt,
-        userId: session.user.email,
-        imageUrl: imageUrl, // Add this to your createGroceryItem function
+        category: formData.category as ProductCategory,
+        // soldAt: formData.soldAt,
+        userId: session.user.email, // Pass the current user's email as userId
       });
 
       setMessage({ type: 'success', text: 'Grocery item created successfully! Redirecting...' });
@@ -522,7 +521,7 @@ const CreateGroceryItemForm = () => {
                 disabled={loading}
               >
                 <option value="">Select a category</option>
-                {Object.values(GroceryCategory).map((category) => (
+                {Object.values(ProductCategory).map((category) => (
                   <option key={category} value={category}>
                     {getCategoryDisplayName(category)}
                   </option>
