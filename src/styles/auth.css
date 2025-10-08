@@ -1,0 +1,64 @@
+.signin-hero,
+.auth-hero {
+  background-image: url('/images/sign-in/Sign-in.png');
+  background-color: #263324;
+  background-size: cover;
+  background-position: top;
+}
+
+.auth-hero {
+  background-image: url('/images/sign-up/Sign-up.png');
+}
+
+.welcome-section {
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.welcome-title {
+  font-size: 4rem;
+  font-weight: 800;
+  padding-bottom: 0.5rem;
+}
+
+.welcome-subtitle {
+  font-size: 2.5rem;
+  font-weight: 500;
+}
+
+.signin-card-wrap {
+  min-width: 500px;
+  background-color: #263324;
+}
+
+/* Mobile: stack vertically */
+@media (max-width: 1240px) {
+
+  .signin-hero,
+  .auth-hero {
+    background-image: none;
+    background-color: #263324;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+    text-align: center;
+    padding: 5vh 1.25rem;
+  }
+
+  .welcome-section {
+    text-align: center;
+  }
+
+  .welcome-title {
+    font-size: 2.25rem;
+  }
+
+  .welcome-subtitle {
+    font-size: 1.2rem;
+  }
+
+  .signin-card-wrap {
+    width: 100%;
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+}

@@ -134,7 +134,7 @@ const SignUp = () => {
         {`
           .auth-hero {
             position: relative;
-            background-image: url('/images/sign-up/Sign-up-bg2.png');
+            background-image: url('/images/sign-up/w-b-gradient.png');
             background-size: cover;
             background-position: center;
             min-height: 100vh;
