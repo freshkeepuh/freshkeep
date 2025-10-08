@@ -47,7 +47,7 @@
     "prettier": "^3.3.1",
     "prettier-eslint": "^16.3.0",
     "prisma": "^6.16.3",
-    "typescript": "^5.4.5"
+    "typescript": "^5.5.3"
   },
   "description": "[![ci-nextjs-application-template](https://github.com/ics-software-engineering/nextjs-application-template/actions/workflows/ci.yml/badge.svg)](https://github.com/ics-software-engineering/nextjs-application-template/actions/workflows/ci.yml)",
   "main": "index.js",

@@ -1,4 +1,5 @@
 import { test, expect } from './auth-utils';
+
 const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
 
 test('test sign in page', async ({ page }) => {
