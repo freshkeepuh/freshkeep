@@ -69,10 +69,10 @@ async function authenticateWithUI(
       await page.waitForLoadState('networkidle');
       // Check if we're authenticated by looking for a sign-out option or user email
       const isAuthenticated = await Promise.race([
-        page.getByText(email).isVisible().then((visible) => visible),
-        page.getByRole('button', { name: email }).isVisible().then((visible) => visible),
-        page.getByText('Sign out').isVisible().then((visible) => visible),
-        page.getByRole('button', { name: 'Sign out' }).isVisible().then((visible) => visible),
+        page.getByText(email).first().isVisible().then((visible) => visible),
+        page.getByRole('button', { name: email }).first().isVisible().then((visible) => visible),
+        page.getByText('Sign out').first().isVisible().then((visible) => visible),
+        page.getByRole('button', { name: 'Sign out' }).first().isVisible().then((visible) => visible),
         // eslint-disable-next-line no-promise-executor-return
         new Promise<boolean>((resolve) => setTimeout(() => resolve(false), 3000)),
       ]);
@@ -115,10 +115,10 @@ async function authenticateWithUI(
     // Verify authentication was successful
     await expect(async () => {
       const authState = await Promise.race([
-        page.getByText(email).isVisible().then((visible) => ({ success: visible })),
-        page.getByRole('button', { name: email }).isVisible().then((visible) => ({ success: visible })),
-        page.getByText('Sign out').isVisible().then((visible) => ({ success: visible })),
-        page.getByRole('button', { name: 'Sign out' }).isVisible().then((visible) => ({ success: visible })),
+        page.getByText(email).first().isVisible().then((visible) => ({ success: visible })),
+        page.getByRole('button', { name: email }).first().isVisible().then((visible) => ({ success: visible })),
+        page.getByText('Sign out').first().isVisible().then((visible) => ({ success: visible })),
+        page.getByRole('button', { name: 'Sign out' }).first().isVisible().then((visible) => ({ success: visible })),
         // eslint-disable-next-line no-promise-executor-return
         new Promise<{ success: boolean }>((resolve) => setTimeout(() => resolve({ success: false }), 5000)),
       ]);
