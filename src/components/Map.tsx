@@ -3,21 +3,14 @@
 import { APIProvider, Map } from '@vis.gl/react-google-maps';
 import { useEffect, useState } from 'react';
 
-interface Location {
-  id: string;
-  name: string;
-  address: string;
-}
-
-interface MapComponentProps {
-  firstLocation?: Location;
-}
-
 type LatLng = { lat: number; lng: number };
-
 const FALLBACK_CENTER: LatLng = { lat: 21.3099, lng: -157.8581 };
 
-const MapComponent = ({ firstLocation }: MapComponentProps) => {
+type Props = {
+  firstLocation?: { id: string; name: string; address: string };
+};
+
+const MapComponent = ({ firstLocation }: Props) => {
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
   const address = firstLocation?.address;
   const [center, setCenter] = useState<LatLng>(FALLBACK_CENTER);
