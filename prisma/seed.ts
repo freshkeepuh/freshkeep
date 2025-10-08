@@ -1,4 +1,5 @@
-import { ContainerType, Country, ProductCategory, PrismaClient, Role, User, Unit, Product, ProductInstance, Location, Container, Store, ShoppingList, ShoppingListItem, RecipeDifficulty, RecipeDiet } from '@prisma/client';
+import { ContainerType, Country, ProductCategory, PrismaClient, Role, User, Unit, Product, ProductInstance, Location,
+  Container, Store, ShoppingList, ShoppingListItem, RecipeDifficulty, RecipeDiet } from '@prisma/client';
 import { hash } from 'bcrypt';
 import * as config from '../config/settings.development.json';
 
@@ -218,7 +219,7 @@ async function seedContainers(locations: Array<Location>) : Promise<Array<Contai
   // Process the default containers
   for (const defaultContainer of config.defaultContainers) {
     // Find the Location in which the container belongs
-    const location = await findByName(locations, defaultContainer.locationName);
+    const location = findByName(locations, defaultContainer.locationName);
     // Get the Container Type
     const containerType = (defaultContainer.type as ContainerType) || ContainerType.Pantry;
     // Upsert the Container to avoid duplicates
@@ -251,7 +252,7 @@ async function seedUnits() : Promise<Array<Unit>> {
   // First, create all base units
   for (const defaultUnit of config.defaultUnits.filter(unit => unit.name === unit.baseName)) {
     // Upsert base unit to avoid duplicates
-    const unit = await prisma.unit.upsert({
+    let unit = await prisma.unit.upsert({
       where: { name: defaultUnit.name },
       update: {},
       create: {
@@ -264,7 +265,7 @@ async function seedUnits() : Promise<Array<Unit>> {
     // After creation, set the baseId to its own id for self reference
     unit.baseId = unit.id;
     // Update the unit with the new baseId
-    prisma.unit.update({
+    await prisma.unit.update({
       where: { id: unit.id },
       data: { baseId: unit.id },
     });
@@ -275,7 +276,7 @@ async function seedUnits() : Promise<Array<Unit>> {
   // Then, create all derived units
   for (const defaultUnit of config.defaultUnits.filter(unit => unit.name !== unit.baseName)) {
     // Find the parent unit to establish the relationship
-    const parentUnit = await findByName(units, defaultUnit.baseName);
+    const parentUnit = findByName(units, defaultUnit.baseName);
     // Upsert derived unit to avoid duplicates
     const unit = await prisma.unit.upsert({
       where: { name: defaultUnit.name },
@@ -307,9 +308,9 @@ async function seedProducts(units: Array<Unit>, stores: Array<Store>) : Promise<
   // Wait for all Products to complete
   for (const defaultProduct of config.defaultProducts) {
     // Find the unit to associate with the product
-    const unit = await findByName(units, defaultProduct.unitName);
+    const unit = findByName(units, defaultProduct.unitName);
     // Find the store to associate with the product
-    const store = await findByName(stores, defaultProduct.storeName);
+    const store = findByName(stores, defaultProduct.storeName);
     // Set the category, defaulting to Other if not specified
     // const category = (defaultProduct.category as ProductCategory) || ProductCategory.Other;
     // Upsert product to avoid duplicates
@@ -364,7 +365,7 @@ async function seedProductInstances(
     // Get the Unit
     const unit = findByName(units, defaultItem.unitName);
     // Create the Item
-    instance = prisma.productInstance.create({
+    instance = await prisma.productInstance.create({
       data: {
         locId: location.id,
         conId: container.id,
@@ -387,7 +388,7 @@ const seedShoppingList = async (stores: Array<Store>) : Promise<Array<ShoppingLi
   for (const defaultList of config.defaultShoppingLists) {
     const store = findByName(stores, defaultList.storeName);
     // Upsert the Shopping List to avoid duplicates
-    const shoppingList = prisma.shoppingList.upsert({
+    const shoppingList = await prisma.shoppingList.upsert({
       where: { name: defaultList.name },
       update: {},
       create: {
@@ -421,12 +422,12 @@ const seedShoppingList = async (stores: Array<Store>) : Promise<Array<ShoppingLi
     // Find the Unit to associate with the item
     const unit = findByName(units, defaultItem.unitName);
     // Create the Shopping List Item
-    const item = prisma.shoppingListItem.upsert({
+    const item = await prisma.shoppingListItem.upsert({
       where: {
-        //listId_prodId_unitId: {
-          //     listId: shoppingList.id,
-          //     prodId: product.id,
-          //     unitId: unit.id,
+        listId_prodId_unitId: {
+          listId: shoppingList.id,
+          prodId: product.id,
+          unitId: unit.id,
         },
       },
       update: {},
