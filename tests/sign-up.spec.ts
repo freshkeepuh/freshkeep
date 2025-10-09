@@ -43,7 +43,6 @@ test('sign up page — validation errors', async ({ page }) => {
   // Short password
   await fillAndSubmitSignup(page, 'valid@mail.com', 'short', 'short');
   await expect(page.getByTestId('sign-up-form-password-field-error')).toBeVisible();
-  
   await page.getByTestId('sign-up-form-reset').click();
 
   // Mismatched passwords
