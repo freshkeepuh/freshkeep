@@ -572,7 +572,7 @@ const CreateGroceryItemForm = () => {
         {/* Header Section */}
         <Row className="mb-5">
           <Col className="text-center">
-            <h1 className="display-4 fw-bold text-success mb-3">Add New Grocery Item</h1>
+            <h1 className=" fw-bold text-success mb-3">Add New Catalog Product</h1>
           </Col>
         </Row>
 
@@ -586,7 +586,28 @@ const CreateGroceryItemForm = () => {
             </Col>
           </Row>
         )}
-
+        {message?.type === 'success' && message.text.includes('Redirecting') && (
+          <div
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              backgroundColor: 'rgba(255, 255, 255, 0.5)',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              zIndex: 9999,
+            }}
+          >
+            <div className="spinner-border text-success" role="status" style={{ width: '4rem', height: '4rem' }}>
+              <span className="visually-hidden">Redirecting...</span>
+            </div>
+            <div className="mt-3 text-success fw-bold fs-5">Redirecting...</div>
+          </div>
+        )}
         {uploadProgress && (
           <Row className="mb-4">
             <Col>
