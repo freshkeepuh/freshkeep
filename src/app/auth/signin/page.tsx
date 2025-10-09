@@ -4,6 +4,7 @@ import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { Button, Card, Form, Image, Modal } from 'react-bootstrap';
+// import { redirect } from 'next/navigation';
 
 const SignIn = () => {
   const [showError, setShowError] = useState(false);
@@ -23,14 +24,14 @@ const SignIn = () => {
       callbackUrl: '/',
       email,
       password,
-      redirect: false,
+      // redirect: false,
     });
 
     if (result?.error) {
       console.error('Sign in failed: ', result.error);
-      setShowError(true);
-      // just don't..  } else if (result?.url) {
-      //   window.location.href = result.url;
+      // setShowError(true);
+      // } else if (result?.url) {   ..it doesn't work in production, should be better way to handle this
+      // redirect(result.url);
     }
   };
 
