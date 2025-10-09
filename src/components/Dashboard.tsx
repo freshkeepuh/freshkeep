@@ -44,7 +44,7 @@ export default function Dashboard({ session }: DashboardProps) {
           <Card.Title as="h1">
             Welcome back,
             {' '}
-            {session.user.name || session.user.email}
+            {session.user.name || session.user.email?.split('@')[0]}
             !
           </Card.Title>
           <Card.Text>
