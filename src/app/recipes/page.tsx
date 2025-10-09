@@ -1,8 +1,9 @@
-import { prisma } from '@/lib/prisma';
+// import { prisma } from '@/lib/prisma';
 import RecipesPage from '@/components/Recipe';
 import type { Recipe as UiRecipe } from '@/components/Recipe';
-import type { RecipeDifficulty, RecipeDiet } from '@prisma/client';
+// import type { RecipeDifficulty, RecipeDiet } from '@prisma/client';
 
+/* debug, uncomment after resolution
 // Converts database difficulty to UI label
 const toUiDifficulty = (d: RecipeDifficulty): UiRecipe['difficulty'] => {
   switch (d) {
@@ -22,11 +23,12 @@ const toUiDiet = (d: RecipeDiet): UiRecipe['diet'] => {
     default: return 'Any';
   }
 };
-
+*/
 // Loads recipes from the database and sends them to the client component
 export default async function Page() {
+  const initialRecipes = [] as UiRecipe[]; // debug
+  /* debug, uncomment after resolution
   const rows = await prisma.recipe.findMany({ orderBy: { createdAt: 'asc' } });
-
   // Converts Prisma data to UI format
   const initialRecipes: UiRecipe[] = rows.map((r) => ({
     id: r.id,
@@ -37,7 +39,7 @@ export default async function Page() {
     ingredients: (r.ingredients as string[]) ?? [],
     image: r.image ?? undefined,
   }));
-
+  */
   // Returns the client-side Recipe page with initial data
   return <RecipesPage initialRecipes={initialRecipes} />;
 }
