@@ -41,12 +41,6 @@ export default function Dashboard({ session }: DashboardProps) {
       {/* Header */}
       <Card className={styles.dashboardHeader}>
         <Card.Body>
-          <Card.Title as="h1">
-            Welcome back,
-            {' '}
-            {session.user.name || session.user.email}
-            !
-          </Card.Title>
           <Card.Text>
             You have
             {' '}
