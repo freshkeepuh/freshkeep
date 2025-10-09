@@ -211,7 +211,7 @@ async function seedLocations(): Promise<Array<Location>> {
         city: defaultLocation.city,
         state: defaultLocation.state,
         zipcode: defaultLocation.zipcode,
-        country: country,
+        country,
         picture: defaultLocation.picture || undefined,
       },
     });
@@ -268,7 +268,7 @@ async function seedUnits(): Promise<Array<Unit>> {
   // First, create all base units
   for (const defaultUnit of config.defaultUnits.filter((unit) => unit.name === unit.baseName)) {
     // Upsert base unit to avoid duplicates
-    let unit = await prisma.unit.upsert({
+    const unit = await prisma.unit.upsert({
       where: { name: defaultUnit.name },
       update: {},
       create: {
@@ -435,7 +435,10 @@ const seedShoppingListItems = async (
   const shoppingListItems: Array<ShoppingListItem> = [];
   for (const defaultItem of config.defaultShoppingListItems) {
     // Find the Shopping List to which the item belongs
-    const shoppingList = findByName(shoppingLists, defaultItem.shoppingListName);
+    const shoppingList = findByName(
+      shoppingLists,
+      defaultItem.shoppingListName,
+    );
     // Find the Product to associate with the item
     const product = findByName(products, defaultItem.productName);
     // Find the Unit to associate with the item
