@@ -397,6 +397,8 @@ const getCategoryDisplayName = (category: ProductCategory): string => {
   return displayNames[category];
 };
 
+const storageOptions = ['Pantry', 'Refrigerator', 'Freezer', 'Counter', 'Cabinet', 'Other'];
+
 const CreateGroceryItemForm = () => {
   const { data: session } = useSession();
   const router = useRouter();
@@ -699,6 +701,33 @@ const CreateGroceryItemForm = () => {
                           </Dropdown.Menu>
                         </Dropdown>
                         <input type="hidden" name="category" value={formData.category} required />
+                      </Form.Group>
+                    </Col>
+                    <Col>
+                      <Form.Group className="mb-4">
+                        <Form.Label className="fw-bold">Storage Location (Coming Soon)</Form.Label>
+                        <Dropdown autoClose="inside">
+                          <Dropdown.Toggle
+                            variant="light"
+                            size="lg"
+                            className="w-100 text-start"
+                            disabled={loading}
+                            style={{
+                              height: '48px',
+                              border: '2px solid #dee2e6',
+                              backgroundColor: 'white',
+                            }}
+                          >
+                            Select storage location
+                          </Dropdown.Toggle>
+                          <Dropdown.Menu className="w-100">
+                            {storageOptions.map((option) => (
+                              <Dropdown.Item key={option} disabled>
+                                {option}
+                              </Dropdown.Item>
+                            ))}
+                          </Dropdown.Menu>
+                        </Dropdown>
                       </Form.Group>
                     </Col>
                   </Row>
