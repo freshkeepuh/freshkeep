@@ -1,6 +1,6 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable import/no-extraneous-dependencies */
-import { test as base, expect, Page } from '@playwright/test';
+import { test as base, Cookie, expect, Page } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
 
@@ -21,7 +21,7 @@ interface AuthFixtures {
 /**
  * Helper to fill form fields with retry logic
  */
-async function fillFormWithRetry(
+export async function fillFormWithRetry(
   page: Page,
   fields: Array<{ selector: string; value: string }>,
 ): Promise<void> {
@@ -49,6 +49,43 @@ async function fillFormWithRetry(
 }
 
 /**
+ * Expect the user to be signed in or redirected to the home page
+ * @param param0 - Object containing the page and optional timeout
+ * @returns {Promise<void>}
+ */
+export async function expectSignedInOrRedirected({
+  page,
+  url,
+  timeout = 30000,
+}: { page: Page; url: string; timeout?: number }) {
+  try {
+    // Primary: redirect to /
+    const redirected = await page
+      .waitForURL(url, { timeout })
+      .then(() => true)
+      .catch(() => false);
+
+    if (redirected) {
+      await expect(page).toHaveURL(url);
+      return;
+    }
+
+    await page.goto(url);
+    await page.waitForLoadState();
+    // Fallback: check for session cookie
+    await expect(page).toBeTruthy();
+    const context = page.context();
+    await expect(context).toBeTruthy();
+    const cookies = await context.cookies();
+    await expect(cookies).toBeTruthy();
+    const hasSession = cookies.some((c: Cookie) => c.name.includes('next-auth') && c.value);
+    expect(hasSession, 'Expected a NextAuth session cookie if not redirected').toBeTruthy();
+  } catch (err) {
+    throw new Error(`User is not signed in or redirected: ${err}`);
+  }
+}
+
+/**
  * Authenticate using the UI with robust waiting and error handling
  */
 async function authenticateWithUI(
@@ -69,10 +106,10 @@ async function authenticateWithUI(
       await page.waitForLoadState('networkidle');
       // Check if we're authenticated by looking for a sign-out option or user email
       const isAuthenticated = await Promise.race([
-        page.getByText(email).isVisible().then((visible) => visible),
-        page.getByRole('button', { name: email }).isVisible().then((visible) => visible),
-        page.getByText('Sign out').isVisible().then((visible) => visible),
-        page.getByRole('button', { name: 'Sign out' }).isVisible().then((visible) => visible),
+        page.getByText(email).first().isVisible().then((visible) => visible),
+        page.getByRole('button', { name: email }).first().isVisible().then((visible) => visible),
+        page.getByText('Sign out').first().isVisible().then((visible) => visible),
+        page.getByRole('button', { name: 'Sign out' }).first().isVisible().then((visible) => visible),
         // eslint-disable-next-line no-promise-executor-return
         new Promise<boolean>((resolve) => setTimeout(() => resolve(false), 3000)),
       ]);
@@ -115,10 +152,10 @@ async function authenticateWithUI(
     // Verify authentication was successful
     await expect(async () => {
       const authState = await Promise.race([
-        page.getByText(email).isVisible().then((visible) => ({ success: visible })),
-        page.getByRole('button', { name: email }).isVisible().then((visible) => ({ success: visible })),
-        page.getByText('Sign out').isVisible().then((visible) => ({ success: visible })),
-        page.getByRole('button', { name: 'Sign out' }).isVisible().then((visible) => ({ success: visible })),
+        page.getByText(email).first().isVisible().then((visible) => ({ success: visible })),
+        page.getByRole('button', { name: email }).first().isVisible().then((visible) => ({ success: visible })),
+        page.getByText('Sign out').first().isVisible().then((visible) => ({ success: visible })),
+        page.getByRole('button', { name: 'Sign out' }).first().isVisible().then((visible) => ({ success: visible })),
         // eslint-disable-next-line no-promise-executor-return
         new Promise<{ success: boolean }>((resolve) => setTimeout(() => resolve({ success: false }), 5000)),
       ]);
@@ -129,11 +166,8 @@ async function authenticateWithUI(
     // Save session for future tests
     const cookies = await page.context().cookies();
     fs.writeFileSync(sessionPath, JSON.stringify({ cookies }));
-    console.log(`✓ Successfully authenticated ${email} and saved session`);
   } catch (error) {
-    console.error(`× Authentication failed for ${email}:`, error);
-
-    throw new Error(`Authentication failed: ${error}`);
+    throw new Error('Authentication failed', { cause: error });
   }
 }
 
