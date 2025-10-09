@@ -1,6 +1,24 @@
-import { ContainerType, Country, ProductCategory, PrismaClient, Role, User, Unit, Product, Location,
-  Container, Store, ShoppingList, ShoppingListItem, RecipeDifficulty, RecipeDiet } from '@prisma/client';
-import { hash } from 'bcrypt';
+import {
+  ContainerType,
+  Country,
+  ProductCategory,
+  PrismaClient,
+  Role,
+  User,
+  Unit,
+  Product,
+  ProductInstance,
+  Location,
+  Container,
+  Store,
+  ShoppingList,
+  ShoppingListItem,
+  RecipeDifficulty,
+  RecipeDiet,
+  Recipe,
+  Catalog,
+} from '@prisma/client';
+import { hash } from 'bcryptjs';
 import * as config from '../config/settings.development.json';
 
 const prisma = new PrismaClient();
@@ -12,7 +30,7 @@ const prisma = new PrismaClient();
  * @returns The found item.
  * @throws If the array is empty, name is empty, or item is not found.
  */
-const findByName = <T extends { name: string }>(array: Array<T>, name: string) : T => {
+const findByName = <T extends { name: string }>(array: Array<T>, name: string): T => {
   if (!array || array.length === 0) {
     throw new Error('Array is empty or undefined.');
   }
@@ -145,7 +163,7 @@ async function seedUsers(): Promise<Array<User>> {
   return users;
 }
 
-async function seedStores() : Promise<Array<Store>> {
+async function seedStores(): Promise<Array<Store>> {
   const stores: Array<Store> = [];
   // Wait for all Stores to complete
   for (const defaultStore of config.defaultStores) {
@@ -178,7 +196,7 @@ async function seedStores() : Promise<Array<Store>> {
  * If a location already exists, it skips creation for that location.
  * @returns {Promise<Array<Location>>} A promise that resolves to an array of created or existing locations.
  */
-async function seedLocations() : Promise<Array<Location>> {
+async function seedLocations(): Promise<Array<Location>> {
   const locations: Array<Location> = [];
   // Wait for all Locations to complete
   for (const defaultLocation of config.defaultLocations) {
@@ -214,7 +232,7 @@ async function seedLocations() : Promise<Array<Location>> {
  * @param locations The Locations in which the Containers are found.
  * @returns {Promise<Array<Container>>} A promise that resolves to an array of created or existing containers.
  */
-async function seedContainers(locations: Array<Location>) : Promise<Array<Container>> {
+async function seedContainers(locations: Array<Location>): Promise<Array<Container>> {
   const containers: Array<Container> = [];
   // Process the default containers
   for (const defaultContainer of config.defaultContainers) {
@@ -247,10 +265,10 @@ async function seedContainers(locations: Array<Location>) : Promise<Array<Contai
  * If a unit already exists, it skips creation for that unit.
  * @returns {Promise<Array<Unit>>} A promise that resolves to an array of created or existing units.
  */
-async function seedUnits() : Promise<Array<Unit>> {
+async function seedUnits(): Promise<Array<Unit>> {
   const units: Array<Unit> = [];
   // First, create all base units
-  for (const defaultUnit of config.defaultUnits.filter(unit => unit.name === unit.baseName)) {
+  for (const defaultUnit of config.defaultUnits.filter((unit) => unit.name === unit.baseName)) {
     // Upsert base unit to avoid duplicates
     const unit = await prisma.unit.upsert({
       where: { name: defaultUnit.name },
@@ -274,7 +292,7 @@ async function seedUnits() : Promise<Array<Unit>> {
   }
 
   // Then, create all derived units
-  for (const defaultUnit of config.defaultUnits.filter(unit => unit.name !== unit.baseName)) {
+  for (const defaultUnit of config.defaultUnits.filter((unit) => unit.name !== unit.baseName)) {
     // Find the parent unit to establish the relationship
     const parentUnit = findByName(units, defaultUnit.baseName);
     // Upsert derived unit to avoid duplicates
@@ -303,7 +321,7 @@ async function seedUnits() : Promise<Array<Unit>> {
  * @param {Array<Unit>} units - An array of Unit objects to associate with products.
  * @returns {Promise<Array<Product>>} A promise that resolves to an array of created or existing products.
  */
-async function seedProducts(units: Array<Unit>, stores: Array<Store>) : Promise<Array<Product>> {
+async function seedProducts(units: Array<Unit>, stores: Array<Store>): Promise<Array<Product>> {
   const products: Array<Product> = [];
   // Wait for all Products to complete
   for (const defaultProduct of config.defaultProducts) {
@@ -352,7 +370,7 @@ async function seedProductInstances(
   containers: Array<Container>,
   products: Array<Product>,
   units: Array<Unit>,
-) : Promise<void> {
+): Promise<void> {
   let instance = null;
   // Process the Default Items
   for (const defaultItem of config.defaultProductInstances) {
@@ -383,7 +401,7 @@ async function seedProductInstances(
  * @param stores The Stores to which the lists belong.
  * @returns A promise that resolves to an array of created or existing Shopping Lists.
  */
-const seedShoppingList = async (stores: Array<Store>) : Promise<Array<ShoppingList>> => {
+const seedShoppingList = async (stores: Array<Store>): Promise<Array<ShoppingList>> => {
   const shoppingLists: Array<ShoppingList> = [];
   for (const defaultList of config.defaultShoppingLists) {
     const store = findByName(stores, defaultList.storeName);
@@ -470,7 +488,7 @@ type SeedRecipe = {
 type SettingsConfig = { defaultRecipes?: SeedRecipe[] };
 
 async function seedRecipes(): Promise<void> {
-  const { defaultRecipes = [] } = (config as unknown as SettingsConfig);
+  const { defaultRecipes = [] } = config as unknown as SettingsConfig;
   const recipes: SeedRecipe[] = defaultRecipes;
   for (const r of recipes) {
     await prisma.recipe.upsert({
