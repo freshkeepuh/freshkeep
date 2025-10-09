@@ -167,7 +167,7 @@ async function authenticateWithUI(
     const cookies = await page.context().cookies();
     fs.writeFileSync(sessionPath, JSON.stringify({ cookies }));
   } catch (error) {
-    throw new Error(`Authentication failed: ${error}`);
+    throw new Error('Authentication failed', { cause: error });
   }
 }
 
