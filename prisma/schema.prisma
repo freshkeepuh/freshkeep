@@ -35,14 +35,14 @@ enum Role {
  * Uses: Role
  */
 model User {
-  id        String   @id @default(uuid()) @map("_id")
-  email     String   @unique
+  id        String    @id @default(uuid()) @map("_id")
+  email     String    @unique
   password  String
-  role      Role     @default(USER)
+  role      Role      @default(USER)
   settings  Json?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  Shop      Shop[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  catalog   Catalog[]
 }
 
 /**
@@ -172,14 +172,13 @@ model Product {
   defaultQty        Float              @default(1.0)
   isNeeded          Boolean            @default(false)
   picture           String?
-  soldAt            String?
   unit              Unit               @relation(fields: [unitId], references: [id])
   instances         ProductInstance[]
   shoppingListItems ShoppingListItem[]
   stores            Store[]
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
-  Shop              Shop[]
+  catalog           Catalog[]
 
   @@index([category, name], name: "category_name_idx")
 }
@@ -309,11 +308,11 @@ model Recipe {
 }
 
 /**
- * Shop Items
- * Uses: User, GroceryItem
+ * Catalog of Products
+ * Uses: User, Product
  */
 
-model Shop {
+model Catalog {
   id            String   @id @default(uuid()) @map("_id")
   userId        String
   groceryItemId String

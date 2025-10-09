@@ -10,7 +10,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Alert from 'react-bootstrap/Alert';
 import { ProductCategory } from '@prisma/client';
-import { createGroceryItem } from '@/lib/dbShopActions';
+import { createGroceryItem } from '@/lib/dbCatalogActions';
 
 // Helper function to get display name for category
 const getCategoryDisplayName = (category: ProductCategory): string => {
@@ -42,7 +42,7 @@ const CreateGroceryItemForm = () => {
   const router = useRouter();
   const [formData, setFormData] = useState({
     name: '',
-    soldAt: '',
+    storeName: '',
     category: '' as ProductCategory | '',
   });
 
@@ -87,7 +87,7 @@ const CreateGroceryItemForm = () => {
       setUploadProgress('Getting upload URL...');
 
       // Get presigned URL from your API
-      const presignResponse = await fetch('/api/shop/image-upload', {
+      const presignResponse = await fetch('/api/catalog/image-upload', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -133,7 +133,7 @@ const CreateGroceryItemForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.category || !formData.soldAt) {
+    if (!formData.name || !formData.category || !formData.storeName) {
       setMessage({ type: 'error', text: 'Please fill in all required fields.' });
       return;
     }
@@ -144,7 +144,9 @@ const CreateGroceryItemForm = () => {
     }
 
     // Get user ID from session - could be id, sub, or other field depending on auth setup
+    console.log('Full session object:', JSON.stringify(session, null, 2));
     const userId = session.user.id || (session.user as any).sub || session.user.email;
+    console.log('Determined userId:', userId);
 
     if (!userId) {
       setMessage({ type: 'error', text: 'Unable to identify user. Please try logging out and back in.' });
@@ -182,7 +184,7 @@ const CreateGroceryItemForm = () => {
       await createGroceryItem({
         name: formData.name,
         category: formData.category as ProductCategory,
-        soldAt: formData.soldAt,
+        storeName: formData.storeName,
         userId, // Use the userId we determined above
         picture: imageUrl,
       });
@@ -192,14 +194,14 @@ const CreateGroceryItemForm = () => {
       // Reset form
       setFormData({
         name: '',
-        soldAt: '',
+        storeName: '',
         category: '',
       });
       setImageFile(null);
       setImagePreview(null);
 
       setTimeout(() => {
-        router.push('/shop');
+        router.push('/catalog');
       }, 1500);
     } catch (error) {
       console.error('Error creating grocery item:', error);
@@ -238,8 +240,8 @@ const CreateGroceryItemForm = () => {
               <Form.Label>Store *</Form.Label>
               <Form.Control
                 type="text"
-                name="soldAt"
-                value={formData.soldAt}
+                name="storeName"
+                value={formData.storeName}
                 onChange={handleChange}
                 placeholder="Enter store name"
                 required
@@ -340,7 +342,7 @@ const CreateGroceryItemForm = () => {
                 type="button"
                 size="lg"
                 disabled={loading}
-                onClick={() => router.push('/shop')}
+                onClick={() => router.push('/catalog')}
               >
                 Cancel
               </Button>

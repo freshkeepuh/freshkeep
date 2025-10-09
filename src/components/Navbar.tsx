@@ -40,8 +40,8 @@ const NavBar: React.FC = () => {
                 <Nav.Link as={Link} href="/locations" active={isActive('/locations')} style={{ color: 'white' }}>
                   Locations
                 </Nav.Link>
-                <Nav.Link as={Link} href="/shop" active={isActive('/shop')} style={{ color: 'white' }}>
-                  Shop
+                <Nav.Link as={Link} href="/catalog" active={isActive('/shop')} style={{ color: 'white' }}>
+                  Catalog
                 </Nav.Link>
                 <Nav.Link as={Link} href="/shoppingList" active={isActive('/shoppingList')} style={{ color: 'white' }}>
                   Shopping List

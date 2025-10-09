@@ -7,7 +7,7 @@ import Col from 'react-bootstrap/Col';
 interface GroceryItemCardProps {
   picture: string;
   groceryItemTitle: string;
-  store: string;
+  storeName: string;
   storageType: string;
   groceryItemType: string;
   inList: boolean;
@@ -16,7 +16,7 @@ interface GroceryItemCardProps {
 const GroceryItemCard = ({
   picture,
   groceryItemTitle,
-  store,
+  storeName,
   storageType,
   groceryItemType,
   inList,
@@ -62,7 +62,7 @@ const GroceryItemCard = ({
           <Row className="mb-2">
             <Col>
               <Card.Text className="mb-1">Store:</Card.Text>
-              <Badge bg="secondary">{store}</Badge>
+              <Badge bg="secondary">{storeName}</Badge>
             </Col>
             <Col>
               <Card.Text className="mb-1">Storage:</Card.Text>
