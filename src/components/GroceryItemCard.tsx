@@ -5,18 +5,18 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 interface GroceryItemCardProps {
-  groceryItemImage: string;
+  picture: string;
   groceryItemTitle: string;
-  store: string;
+  storeName: string;
   storageType: string;
   groceryItemType: string;
   inList: boolean;
 }
 
 const GroceryItemCard = ({
-  groceryItemImage,
+  picture,
   groceryItemTitle,
-  store,
+  storeName,
   storageType,
   groceryItemType,
   inList,
@@ -45,7 +45,7 @@ const GroceryItemCard = ({
       <Card className="rounded-5" style={{ width: '18rem' }}>
         <Card.Img
           variant="top"
-          src={groceryItemImage}
+          src={picture}
           className="mx-auto d-block"
           onError={handleImageError}
           style={{
@@ -62,7 +62,7 @@ const GroceryItemCard = ({
           <Row className="mb-2">
             <Col>
               <Card.Text className="mb-1">Store:</Card.Text>
-              <Badge bg="secondary">{store}</Badge>
+              <Badge bg="secondary">{storeName}</Badge>
             </Col>
             <Col>
               <Card.Text className="mb-1">Storage:</Card.Text>

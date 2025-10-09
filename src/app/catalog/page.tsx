@@ -9,33 +9,38 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import GroceryItemCard from '../../components/GroceryItemCard';
 
-// Define the type for your shop model data
-interface ShopItem {
+// Update the interface to match the actual API response
+interface CatalogItem {
   id: string;
   name: string;
-  soldAt: string;
+  storeName: string;
+  stores: string[];
   category: string;
   userId: string;
+  picture: string;
+  productId: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
-const ShopPage = () => {
+const CatalogPage = () => {
   const { data: session, status } = useSession();
-  const [shopItems, setShopItems] = useState<ShopItem[]>([]);
+  const [CatalogItems, setCatalogItems] = useState<CatalogItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Get current user email from session (use email as identifier)
+  // Get current user ID from session
   const currentUserId = session?.user?.id;
 
   useEffect(() => {
-    const fetchShopItems = async () => {
-      if (!currentUserId) return; // Don't fetch if no user
+    const fetchCatalogItems = async () => {
+      if (!currentUserId) return;
 
       try {
         setLoading(true);
         console.log('Fetching shop items for user:', currentUserId);
 
-        const response = await fetch(`/api/shop/${currentUserId}`);
+        const response = await fetch(`/api/catalog/${currentUserId}`);
         console.log('Response status:', response.status);
 
         if (!response.ok) {
@@ -47,30 +52,29 @@ const ShopPage = () => {
         const data = await response.json();
         console.log('Received data:', data);
 
-        setShopItems(data);
+        setCatalogItems(data);
         setError(null);
       } catch (err) {
         console.error('Error fetching shop items:', err);
         const errorMessage = err instanceof Error ? err.message : 'Unknown error';
         setError(`Failed to load shop items: ${errorMessage}`);
-        setShopItems([]);
+        setCatalogItems([]);
       } finally {
         setLoading(false);
       }
     };
 
     if (status === 'loading') return;
-    fetchShopItems();
+    fetchCatalogItems();
   }, [currentUserId, status]);
 
-  // Map shop model data to GroceryItemCard props
-  const mapShopItemToCardProps = (shopItem: ShopItem) => ({
-    groceryItemImage: 'https://images.cdn.shop.foodland.com/detail/4011.jpg', // Hardcoded placeholder
-    groceryItemTitle: shopItem.name,
-    store: shopItem.soldAt,
-    storageType: 'Pantry', // Hardcoded
-    groceryItemType: shopItem.category,
-    inList: false, // Hardcoded
+  const mapCatalogItemToCardProps = (CatalogItem: CatalogItem) => ({
+    groceryItemImage: CatalogItem.picture || 'http://bit.ly/4q71ybS',
+    groceryItemTitle: CatalogItem.name,
+    storeName: CatalogItem.storeName || 'Unknown Store',
+    storageType: 'Pantry',
+    groceryItemType: CatalogItem.category,
+    inList: false, // Since isNeeded is not in the flattened structure
   });
 
   // Show loading while session is loading
@@ -92,13 +96,13 @@ const ShopPage = () => {
   if (!session) {
     return (
       <Container fluid className="p-5">
-        <h1>Shop</h1>
+        <h1>Catalog</h1>
         <div className="text-center py-5">
           <div className="mb-4">
             <i className="bi bi-person-circle" style={{ fontSize: '4rem', color: '#6c757d' }} />
           </div>
-          <h3 className="text-muted">Please sign in to view your grocery items</h3>
-          <p className="text-muted mb-4">You need to be logged in to access your personal shop.</p>
+          <h3 className="text-muted">Please sign in to view your products</h3>
+          <p className="text-muted mb-4">You need to be logged in to access your personal catalog.</p>
           <Button variant="success" href="/api/auth/signin" size="lg">
             <i className="bi bi-box-arrow-in-right me-2" />
             Sign In
@@ -144,7 +148,7 @@ const ShopPage = () => {
 
   return (
     <Container fluid className="p-5">
-      <h1>Shop</h1>
+      <h1>Catalog</h1>
       <div
         style={{
           width: '800px',
@@ -167,34 +171,34 @@ const ShopPage = () => {
           </Col>
           <Col xs="auto" className="ps-1">
             <Button variant="light" href="/createGroceryItem">
-              Add to Shop
+              Add to Catalog
             </Button>
           </Col>
         </Row>
       </div>
 
-      {shopItems.length === 0 ? (
+      {CatalogItems.length === 0 ? (
         <div className="text-center py-5">
           <div className="mb-4">
             <i className="bi bi-basket" style={{ fontSize: '4rem', color: '#6c757d' }} />
           </div>
           <h3 className="text-muted">No items found</h3>
-          <p className="text-muted mb-4">You haven&apos;t added any grocery items yet.</p>
+          <p className="text-muted mb-4">You haven&apos;t added any products yet.</p>
           <Button variant="success" href="/createGroceryItem" size="lg">
             <i className="bi bi-plus-circle me-2" />
-            Add Your First Item
+            Add Your First Product
           </Button>
         </div>
       ) : (
         <Row>
-          {shopItems.map((shopItem) => {
-            const cardProps = mapShopItemToCardProps(shopItem);
+          {CatalogItems.map((CatalogItem) => {
+            const cardProps = mapCatalogItemToCardProps(CatalogItem);
             return (
-              <Col key={shopItem.id} lg={3} md={4} sm={6} className="mb-4">
+              <Col key={CatalogItem.id} lg={3} md={4} sm={6} className="mb-4">
                 <GroceryItemCard
-                  groceryItemImage={cardProps.groceryItemImage}
+                  picture={cardProps.groceryItemImage}
                   groceryItemTitle={cardProps.groceryItemTitle}
-                  store={cardProps.store}
+                  storeName={cardProps.storeName}
                   storageType={cardProps.storageType}
                   groceryItemType={cardProps.groceryItemType}
                   inList={cardProps.inList}
@@ -208,4 +212,4 @@ const ShopPage = () => {
   );
 };
 
-export default ShopPage;
+export default CatalogPage;
