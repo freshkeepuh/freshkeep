@@ -365,7 +365,7 @@ const CatalogPage = () => {
 
   return (
     <Container fluid className="p-5">
-      <h1>Shop</h1>
+      <h1>Catalog</h1>
       <div
         style={{
           width: '800px',
