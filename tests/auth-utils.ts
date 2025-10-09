@@ -1,6 +1,7 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable import/no-extraneous-dependencies */
 import { test as base, Cookie, expect, Page } from '@playwright/test';
+import { error } from 'console';
 import fs from 'fs';
 import path from 'path';
 import { textSpanEnd } from 'typescript';
@@ -59,29 +60,31 @@ export async function expectSignedInOrRedirected({
   url,
   timeout = 30000,
 }: { page: Page; url: string; timeout?: number }) {
-  // Primary: redirect to /
-  const redirected = await page
-    .waitForURL(url, { timeout })
-    .then(() => true)
-    .catch(() => false);
+  try {
+    // Primary: redirect to /
+    const redirected = await page
+      .waitForURL(url, { timeout })
+      .then(() => true)
+      .catch(() => false);
 
-  if (redirected) {
-    await expect(page).toHaveURL(url);
-    return;
+    if (redirected) {
+      await expect(page).toHaveURL(url);
+      return;
+    }
+
+    await page.goto(url);
+    await page.waitForLoadState();
+    // Fallback: check for session cookie
+    await expect(page).toBeTruthy();
+    const context = page.context();
+    await expect(context).toBeTruthy();
+    const cookies = await context.cookies();
+    await expect(cookies).toBeTruthy();
+    const hasSession = cookies.some((c: Cookie) => c.name.includes('next-auth') && c.value);
+    expect(hasSession, 'Expected a NextAuth session cookie if not redirected').toBeTruthy();
+  } catch (err) {
+    throw new Error(`User is not signed in or redirected: ${err}`);
   }
-
-  const newPage = await page.context().newPage();
-
-  await newPage.goto(url, { timeout });
-  await newPage.waitForLoadState('networkidle', { timeout });
-  // Fallback: check for session cookie
-  await expect(newPage).toBeTruthy();
-  const context = newPage.context();
-  await expect(context).toBeTruthy();
-  const cookies = await context.cookies();
-  await expect(cookies).toBeTruthy();
-  const hasSession = cookies.some((c: Cookie) => c.name.includes('next-auth') && c.value);
-  expect(hasSession, 'Expected a NextAuth session cookie if not redirected').toBeTruthy();
 }
 
 /**
