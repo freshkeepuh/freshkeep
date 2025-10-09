@@ -15,6 +15,8 @@ import {
   ShoppingListItem,
   RecipeDifficulty,
   RecipeDiet,
+  Recipe,
+  Catalog,
 } from '@prisma/client';
 import { hash } from 'bcryptjs';
 import * as config from '../config/settings.development.json';
