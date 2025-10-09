@@ -29,8 +29,8 @@ const SignIn = () => {
     if (result?.error) {
       console.error('Sign in failed: ', result.error);
       setShowError(true);
-    } else if (result?.url) {
-      window.location.href = result.url;
+      // just don't..  } else if (result?.url) {
+      //   window.location.href = result.url;
     }
   };
 
