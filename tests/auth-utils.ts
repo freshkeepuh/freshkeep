@@ -1,10 +1,8 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable import/no-extraneous-dependencies */
 import { test as base, Cookie, expect, Page } from '@playwright/test';
-import { error } from 'console';
 import fs from 'fs';
 import path from 'path';
-import { textSpanEnd } from 'typescript';
 
 // Base configuration
 export const BASE_URL = process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:3000';

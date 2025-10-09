@@ -35,7 +35,7 @@ test('sign up page — validation errors', async ({ page }) => {
   await expect(page.getByTestId('sign-up-form-confirm-password-field-error')).toBeVisible();
 
   // Invalid email
-  fillAndSubmitSignup(page, 'invalid-email');
+  await fillAndSubmitSignup(page, 'invalid-email');
   await expect(page.getByTestId('sign-up-form-email-field-error')).toBeVisible();
 
   await page.getByTestId('sign-up-form-reset').click();
