@@ -1,7 +1,5 @@
 /* page */
-.rpPage { min-height: 100vh; background: #ffffff;
-  /* padding-bottom uses --footer-h, which should be set on the footer element */
-  padding-bottom: calc(var(--footer-h, 96px) + 16px); }
+.rpPage { min-height: 100vh; background: #ffffff; padding-bottom:112px; }
 
 /* layout */
 .rpMain { padding: 32px 16px; }
@@ -95,7 +93,7 @@
   display: flex;
   flex-direction: column;
 }
-.rpCardMedia { height: 160px; background: #ffffff; }
+.rpCardMedia { position: relative; width: 100%; height: 180px; overflow: hidden; border-radius: 12px; background: #f4f4f4; }
 .rpCardBody { flex: 1 1 auto; display: flex; flex-direction: column; padding: 20px; gap: 2px; }
 .rpCardTitle { display: flex; gap: 8px; align-items: center; }
 

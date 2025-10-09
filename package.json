@@ -13,6 +13,8 @@
     "test": "npx playwright test"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.901.0",
+    "@aws-sdk/s3-presigned-post": "^3.901.0",
     "@hookform/resolvers": "^3.6.0",
     "@ngneat/falso": "^7.2.0",
     "@vis.gl/react-google-maps": "^1.5.5",
@@ -37,7 +39,7 @@
   "devDependencies": {
     "@playwright/test": "^1.55.0",
     "@types/bcrypt": "^5.0.2",
-    "@types/node": "^22.5.4",
+    "@types/node": "^22.18.8",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8.57.1",
@@ -48,7 +50,7 @@
     "prettier": "^3.3.1",
     "prettier-eslint": "^16.3.0",
     "prisma": "^6.16.3",
-    "typescript": "^5.4.5"
+    "typescript": "^5.5.3"
   },
   "description": "[![ci-nextjs-application-template](https://github.com/ics-software-engineering/nextjs-application-template/actions/workflows/ci.yml/badge.svg)](https://github.com/ics-software-engineering/nextjs-application-template/actions/workflows/ci.yml)",
   "main": "index.js",
