@@ -1,112 +1,153 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { Plus } from 'react-bootstrap-icons';
-import Image from 'next/image';
 import LocationCard from '../../components/LocationCard';
+import MapComponent from '../../components/Map';
+import styles from './page.module.css';
 
-const initialLocations = [
-  {
-    id: '1',
-    name: 'Kitchen Pantry',
-    address: '123 Main St, Honolulu',
-  },
-  {
-    id: '2',
-    name: 'Home Pantry',
-    address: '123 Main St, Honolulu',
-  },
-  {
-    id: '3',
-    name: 'Parent Pantry',
-    address: '123 Main St, Honolulu',
-  },
-];
+interface Location {
+  id: string;
+  name: string;
+  address1: string;
+  address2?: string;
+  city: string;
+  state: string;
+  zipcode: string;
+  country: string;
+  picture?: string;
+}
 
 const LocationsPage = () => {
-  const [locations, setLocations] = useState(initialLocations);
+  const [locations, setLocations] = useState<Location[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleEditLocation = (id: string, name: string, address: string) => {
-    setLocations((prevLocations) => prevLocations.map((location) => (
-      location.id === id
-        ? { ...location, name, address }
-        : location
-    )));
+  // Initial load from API
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch('/api/locations', { cache: 'no-store' });
+        if (!res.ok) return;
+        const data = (await res.json()) as Location[];
+        if (!cancelled) setLocations(data ?? []);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Re-sync helper function
+  const reloadLocations = async () => {
+    const res = await fetch('/api/locations', { cache: 'no-store' });
+    if (!res.ok) return;
+    const data = (await res.json()) as Location[];
+    setLocations(data ?? []);
   };
 
-  const handleDeleteLocation = (id: string) => {
-    setLocations((prevLocations) => prevLocations.filter((location) => location.id !== id));
+  // Inline edit: only name and address1
+  const handleEditLocation = async (id: string, name: string, address: string) => {
+    await fetch('/api/locations', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ id, name, address1: address }),
+    });
+    await reloadLocations();
   };
-  const handleAddLocation = () => {
-    // TODO: add function
+
+  // Delete location
+  const handleDeleteLocation = async (id: string) => {
+    await fetch(`/api/locations?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+    await reloadLocations();
   };
+
+  // Compute next "New location N" number based on current list
+  const getNextAutoNumber = () => {
+    const base = 'new location';
+    const nums = locations
+      .map(l => l.name || '')
+      .filter(n => n.toLowerCase().startsWith(base))
+      .map(n => parseInt(n.slice(base.length).trim(), 10))
+      .filter(n => Number.isFinite(n));
+    return nums.length ? Math.max(...nums) + 1 : 1;
+  };
+
+  // Add location: create a new DB record with auto-incremented default name, then re-sync
+  const handleAddLocation = async () => {
+    const num = getNextAutoNumber();
+    const name = `New location ${num}`;
+
+    await fetch('/api/locations', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name,
+        address1: '2500 Campus Rd',
+        city: 'Honolulu',
+        state: 'HI',
+        zipcode: '96822',
+        country: 'USA',
+      }),
+    });
+
+    await reloadLocations();
+  };
+
+  // Locations list
+  let locationsList: React.ReactNode;
+  if (loading) {
+    locationsList = <li className="text-muted text-center p-3">Loading...</li>;
+  } else if (locations.length > 0) {
+    locationsList = locations.map(l => (
+      <LocationCard
+        key={l.id}
+        id={l.id}
+        name={l.name}
+        address={l.address1}
+        onEdit={handleEditLocation}
+        onDelete={handleDeleteLocation}
+      />
+    ));
+  } else {
+    locationsList = <li className="text-muted text-center p-3">No locations found.</li>;
+  }
+
+  const firstLocationForMap = locations.length > 0
+    ? { id: locations[0].id, name: locations[0].name, address: locations[0].address1 }
+    : undefined;
 
   return (
-    <main style={{ background: '#f4f4f4', minHeight: '100vh', paddingTop: '2rem', paddingBottom: '2rem' }}>
+    <main className={styles.main}>
       <Container>
         {/* Title */}
-        <Row className="mb-4 align-items-center" style={{ minHeight: '80px' }}>
+        <Row className={`mb-4 align-items-center ${styles.titleRow}`}>
           <Col>
             <h1 className="m-0">Location Management</h1>
           </Col>
         </Row>
+
         <Row className="g-4">
           {/* Location List */}
           <Col md={4}>
-            <div
-              className="d-flex flex-column h-100"
-              style={{
-                background: '#fff',
-                borderRadius: '8px',
-                boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
-                padding: '1.5rem',
-                minHeight: '500px',
-              }}
-            >
+            <div className={`d-flex flex-column h-100 ${styles.panel}`}>
               <div>
                 <h4>Locations</h4>
-                <ul className="list-unstyled">
-                  {locations.length > 0 ? (
-                    locations.map((location) => (
-                      <LocationCard
-                        key={location.id}
-                        id={location.id}
-                        name={location.name}
-                        address={location.address}
-                        onEdit={handleEditLocation}
-                        onDelete={handleDeleteLocation}
-                      />
-                    ))
-                  ) : (
-                    <li className="text-muted text-center p-3">
-                      No locations found.
-                    </li>
-                  )}
-                </ul>
+                <ul className="list-unstyled">{locationsList}</ul>
               </div>
             </div>
           </Col>
 
           {/* Map Display & Search Bar */}
           <Col md={8}>
-            <div
-              className="h-100"
-              style={{
-                background: '#fff',
-                borderRadius: '8px',
-                boxShadow: '0 4px 16px rgba(0,0,0,0.08)',
-                padding: '1.5rem',
-                minHeight: '500px',
-              }}
-            >
+            <div className={`${styles.panel} h-100`}>
               {/* Search Bar */}
               <Row className="mb-4 align-items-center">
                 <Col>
-                  <Form.Control
-                    type="text"
-                    placeholder="Search for a location or address..."
-                  />
+                  <Form.Control type="text" placeholder="Search for a location or address..." />
                 </Col>
                 {/* Add Location Button */}
                 <Col xs="auto">
@@ -122,15 +163,11 @@ const LocationsPage = () => {
                   </Button>
                 </Col>
               </Row>
-              {/* Google Maps Placeholder */}
+
+              {/* Google Maps */}
               <Row>
                 <Col className="text-center">
-                  <Image
-                    src="/map-placeholder.png"
-                    alt="not found"
-                    width={625}
-                    height={400}
-                  />
+                  <MapComponent firstLocation={firstLocationForMap} />
                 </Col>
               </Row>
             </div>
