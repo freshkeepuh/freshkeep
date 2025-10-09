@@ -16,7 +16,7 @@ import {
   RecipeDifficulty,
   RecipeDiet,
 } from '@prisma/client';
-import { hash } from 'bcrypt';
+import { hash } from 'bcryptjs';
 import * as config from '../config/settings.development.json';
 
 const prisma = new PrismaClient();
