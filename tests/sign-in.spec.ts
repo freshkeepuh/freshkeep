@@ -23,7 +23,7 @@ test('sign in page - successful login', async ({ page }) => {
   await page.goto(SIGNIN_URL);
 
    await fillAndSubmitSignup(page, 'john@foo.com');
-   await expectSignedInOrRedirected({ page, url: `${BASE_URL}/`, timeout: 20000 });
+   await expectSignedInOrRedirected({ page, url: `${BASE_URL}/` });
 });
 
 test('sign in page — Reset clears fields and errors', async ({ page }) => {
