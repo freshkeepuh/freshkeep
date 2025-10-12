@@ -94,6 +94,8 @@ const SignInPage = () => {
                     type="button"
                     variant="outline-secondary"
                     onClick={() => reset()}
+                    size="lg"
+                    disabled={isSubmitting}
                   >
                     Reset
                   </Button>
@@ -103,9 +105,12 @@ const SignInPage = () => {
           </Card.Body>
 
           <Card.Footer className="text-center py-3">
-            <span>New around here?</span>
-            {' '}
-            <Link href="/auth/signup" className="fw-bold text-success">
+            <span>New around here?&nbsp;</span>
+            <Link
+              data-testid="sign-in-form-signup-link"
+              href="/auth/signup"
+              className="fw-bold text-success"
+            >
               Sign up
             </Link>
           </Card.Footer>

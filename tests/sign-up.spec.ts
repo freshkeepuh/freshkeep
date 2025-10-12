@@ -1,5 +1,5 @@
 import { Page } from '@playwright/test';
-import { test, expect, BASE_URL, expectSignedInOrRedirected, fillFormWithRetry } from './auth-utils';
+import { test, expect, BASE_URL, expectSignedInOrRedirected, fillFormWithRetry, checkFormEmpty } from './auth-utils';
 
 const SIGNUP_URL = `${BASE_URL}/auth/signup`;
 
@@ -19,6 +19,14 @@ async function fillSignup(page: Page, email: string, password: string = 'secret1
   ]);
 }
 
+async function isEmptySignup(page: Page) {
+  await checkFormEmpty(page, [
+    { selector: '[id="email"]' },
+    { selector: '[id="password"]' },
+    { selector: '[id="confirmPassword"]' },
+  ]);
+}
+
 async function fillAndSubmitSignup(page: Page, email: string, password: string = 'secret123', confirmPassword: string = password) {
   await fillSignup(page, email, password, confirmPassword);
   await submitSignup(page);
@@ -30,7 +38,7 @@ test('sign up page — successful login', async ({ page }) => {
   const email = uniqueEmail();
 
   await fillAndSubmitSignup(page, email);
-  await expectSignedInOrRedirected({ page, url: `${BASE_URL}/`, timeout: 30000 });
+  await expectSignedInOrRedirected({ page, url: `${BASE_URL}/`, timeout: 10000 });
 });
 
 test('sign up page — Reset clears fields and errors', async ({ page }) => {
@@ -43,15 +51,14 @@ test('sign up page — Reset clears fields and errors', async ({ page }) => {
   await page.getByTestId('sign-up-form-reset').click();
 
   // Inputs cleared
-  await expect(page.locator('[id="email"]')).toBeEmpty();
-  await expect(page.locator('[id="password"]')).toBeEmpty();
-  await expect(page.locator('[id="confirmPassword"]')).toBeEmpty();
+  await isEmptySignup(page);
 });
 
 test('test sign up page with sign in option', async ({ page }) => {
   await page.goto(SIGNUP_URL);
 
   // Click on the "Sign In" link
-  await page.getByRole('link', { name: 'Sign In' }).last().click();
+  await page.getByTestId('sign-up-form-signin-link').click();
+  await page.waitForLoadState('domcontentloaded');
   await expect(page).toHaveURL(`${BASE_URL}/auth/signin`);
 });

@@ -47,6 +47,45 @@ export async function fillFormWithRetry(
 }
 
 /**
+ * Helper to empty form fields with retry logic
+ */
+export async function emptyFormWithRetry(
+  page: Page,
+  fields: Array<{ selector: string }>,
+): Promise<void> {
+  for (const field of fields) {
+    let attempts = 0;
+    const maxAttempts = 3;
+
+    while (attempts < maxAttempts) {
+      try {
+        const element = page.locator(field.selector);
+        await element.waitFor({ state: 'visible', timeout: 2000 });
+        await element.clear();
+        await element.evaluate((el) => el.blur()); // Trigger blur event
+        break;
+      } catch (error) {
+        attempts++;
+        if (attempts >= maxAttempts) {
+          throw new Error(`Failed to fill field ${field.selector} after ${maxAttempts} attempts`);
+        }
+        await page.waitForTimeout(500);
+      }
+    }
+  }
+}
+
+export async function checkFormEmpty(
+  page: Page,
+  fields: Array<{ selector: string }>
+): Promise<void> {
+  for (const field of fields) {
+    const element = page.locator(field.selector);
+    await expect(element).toBeEmpty();
+  }
+}
+
+/**
  * Expect the user to be signed in or redirected to the home page
  * @param param0 - Object containing the page and optional timeout
  * @returns {Promise<void>}
@@ -54,9 +93,18 @@ export async function fillFormWithRetry(
 export async function expectSignedInOrRedirected({
   page,
   url,
-  timeout = 30000,
-}: { page: Page; url: string; timeout?: number }) {
+  timeout = 20000,
+}: { page: Page; url: string; timeout?: number }): Promise<void> {
   try {
+    // Primary: check for session cookie
+    await page.waitForLoadState();
+    const cookies = await page.context().cookies();
+    const hasSessionCookie = cookies.some((cookie) => cookie.name === 'next-auth.session-token' || cookie.name === '__Secure-next-auth.session-token');
+
+    if (hasSessionCookie) {
+      console.log('✓ Session cookie found, user is signed in');
+      return;
+    }
     // Primary: redirect to /
     const redirected = await page
       .waitForURL(url, { timeout })
@@ -65,10 +113,11 @@ export async function expectSignedInOrRedirected({
 
     if (redirected) {
       await expect(page).toHaveURL(url);
+      console.log(`✓ Redirected to ${url}, user is signed in`);
       return;
     }
-   } catch (err) {
-    throw new Error(`User is not signed in or redirected: ${err}`);
+  } catch (err: Error | any) {
+    throw new Error(`× User is not signed in or redirected: ${err}`);
   }
 }
 

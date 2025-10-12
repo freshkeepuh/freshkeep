@@ -1,5 +1,5 @@
 import { Page } from '@playwright/test';
-import { test, expect, BASE_URL, expectSignedInOrRedirected, fillFormWithRetry } from './auth-utils';
+import { test, expect, BASE_URL, expectSignedInOrRedirected, fillFormWithRetry, checkFormEmpty } from './auth-utils';
 
 const SIGNIN_URL = `${BASE_URL}/auth/signin`;
 
@@ -14,6 +14,13 @@ async function fillSignin(page: Page, email: string, password: string = 'changem
   ]);
 }
 
+async function isEmptySignin(page: Page) {
+  await checkFormEmpty(page, [
+    { selector: '[id="email"]' },
+    { selector: '[id="password"]' },
+  ]);
+}
+
 async function fillAndSubmitSignup(page: Page, email: string, password: string = 'secret123', confirmPassword: string = password) {
   await fillSignin(page, email, password);
   await submitSignin(page);
@@ -21,9 +28,11 @@ async function fillAndSubmitSignup(page: Page, email: string, password: string =
 
 test('sign in page - successful login', async ({ page }) => {
   await page.goto(SIGNIN_URL);
+  
+  const email = 'john@foo.com';
 
-   await fillAndSubmitSignup(page, 'john@foo.com');
-   await expectSignedInOrRedirected({ page, url: `${BASE_URL}/` });
+  await fillAndSubmitSignup(page, email);
+  await expectSignedInOrRedirected({ page, url: `${BASE_URL}/`, timeout: 10000 });
 });
 
 test('sign in page — Reset clears fields and errors', async ({ page }) => {
@@ -36,14 +45,14 @@ test('sign in page — Reset clears fields and errors', async ({ page }) => {
   await page.getByTestId('sign-in-form-reset').click();
 
   // Inputs cleared
-  await expect(page.locator('[id="email"]')).toBeEmpty();
-  await expect(page.locator('[id="password"]')).toBeEmpty();
+  await isEmptySignin(page);
 });
 
 test('test sign in page with sign up option', async ({ page }) => {
   await page.goto(SIGNIN_URL);
 
   // Click on the "Sign Up" link
-  await page.getByRole('link', { name: 'Sign Up' }).last().click();
+  await page.getByTestId('sign-in-form-signup-link').click();
+  await page.waitForLoadState('domcontentloaded');
   await expect(page).toHaveURL(`${BASE_URL}/auth/signup`);
 });

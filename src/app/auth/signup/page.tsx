@@ -116,8 +116,12 @@ const SignUpPage = () => {
           </Card.Body>
 
           <Card.Footer className="text-center py-3">
-            <span>Already have an account?</span>
-            <Link data-testid="sign-up-form-signin-link" href="/auth/signin" className="fw-bold text-success">
+            <span>Already have an account?&nbsp;</span>
+            <Link
+              data-testid="sign-up-form-signin-link"
+              href="/auth/signin"
+              className="fw-bold text-success"
+            >
               Sign in
             </Link>
           </Card.Footer>
