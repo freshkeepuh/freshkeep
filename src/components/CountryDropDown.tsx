@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Form } from 'react-bootstrap';
-import { UseFormRegister } from 'react-hook-form';
+import { UseFormRegister, useFormContext, useWatch } from 'react-hook-form';
 import { Country } from '@prisma/client'; // Update the path as needed
 
 const displayNames: Record<Country, string> = {
@@ -16,38 +16,52 @@ const getCountryDisplayName = (country: Country): string => (
 );
 
 export interface ICountryField {
-  country: Country;
+  country?: any;
 }
 
 export interface CountryDropDownProps {
   register: UseFormRegister<ICountryField>;
-  errors: { country?: { message?: string } };
-  disabled?: boolean;
 }
 
-const CountryDropDown = ({ register, errors, disabled }: CountryDropDownProps) => (
-  <>
-    <Form.Select
-      id="country"
-      size="lg"
-      aria-label="Country"
-      {...register('country')}
-      disabled={disabled}
-      isInvalid={!!errors.country}
-      defaultValue={Country.USA}
-    >
-      {
-        Object.values(Country).map((country) => (
-          <option key={country} value={country}>
-            {getCountryDisplayName(country)}
-          </option>
-        ))
-      }
-    </Form.Select>
-    <Form.Control.Feedback type="invalid">
-      {errors.country?.message}
-    </Form.Control.Feedback>
-  </>
-);
+/**
+ * CountryDropDown component.
+ *
+ * Note: The default value for the country field should be set via useForm initialization,
+ * not via a prop or defaultValue on the select element. Example:
+ *   useForm({ defaultValues: { country: Country.USA } })
+ */
+const CountryDropDown: React.FC<CountryDropDownProps> = ({ register }) => {
+  const formContext = useFormContext(); // requires parent FormProvider or same form instance
+  const control = formContext?.control;
+
+  // watch the country field
+  const watchedCountry = useWatch({
+    control,
+    name: 'country',
+  }) as Country | undefined;
+
+  return (
+    <>
+      {/* defaultValue removed; set default in useForm initialization */}
+      <Form.Select
+        id="country"
+        size="lg"
+        aria-label="Country"
+        {...register('country')}
+      >
+        {
+          // If Country is a TypeScript enum, filter out numeric keys
+          Object.values(Country)
+            .filter((country) => typeof country === 'string')
+            .map((country) => (
+              <option key={country} value={country}>
+                {getCountryDisplayName(country as Country)}
+              </option>
+            ))
+        }
+      </Form.Select>
+    </>
+  );
+};
 
 export default CountryDropDown;
