@@ -67,7 +67,7 @@ export async function emptyFormWithRetry(
       } catch (error) {
         attempts++;
         if (attempts >= maxAttempts) {
-          throw new Error(`Failed to fill field ${field.selector} after ${maxAttempts} attempts`);
+          throw new Error(`Failed to clear field ${field.selector} after ${maxAttempts} attempts`);
         }
         await page.waitForTimeout(500);
       }
