@@ -109,9 +109,9 @@ const ShoppingListPage = () => {
         {samplegroceryItems.map((groceryItem) => (
           <Col key={groceryItem.id} lg={3} md={4} sm={6} className="mb-4">
             <GroceryItemCard
-              groceryItemImage={groceryItem.groceryItemImage}
+              picture={groceryItem.groceryItemImage}
               groceryItemTitle={groceryItem.groceryItemTitle}
-              store={groceryItem.store}
+              storeName={groceryItem.store}
               storageType={groceryItem.storageType}
               groceryItemType={groceryItem.groceryItemType}
               inList={groceryItem.inList}
