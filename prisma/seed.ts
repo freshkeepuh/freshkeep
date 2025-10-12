@@ -7,7 +7,6 @@ import {
   User,
   Unit,
   Product,
-  ProductInstance,
   Location,
   Container,
   Store,
@@ -15,11 +14,10 @@ import {
   ShoppingListItem,
   RecipeDifficulty,
   RecipeDiet,
-  Recipe,
-  Catalog,
 } from '@prisma/client';
 import { hash } from 'bcryptjs';
 import * as config from '../config/settings.development.json';
+import DEFAULT_SETTINGS from '@/lib/types/user-defaults.d';
 
 const prisma = new PrismaClient();
 
@@ -65,15 +63,6 @@ type AccountFromConfig = {
     profilePicture?: string;
   };
 };
-
-/**
- * Default settings applied when account is created
- * Ensures a default profile for every user so that
- * the UI has an image to render
- */
-const DEFAULT_SETTINGS = {
-  profilePicture: '/images/avatars/default.jpg',
-} as const;
 
 /**
  * Runtime type validation for defaultAccounts.

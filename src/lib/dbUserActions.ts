@@ -1,7 +1,9 @@
 'use server';
 
 import { hash } from 'bcryptjs';
-import { prisma } from './prisma';
+import { User } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
+import DEFAULT_SETTINGS from '@/lib/types/user-defaults.d';
 
 /**
  * Check if user email exists in the database.
@@ -19,14 +21,16 @@ export async function checkUser(credentials: { email: string }) {
  * Creates a new user in the database.
  * @param credentials an object with the following properties: email, password.
  */
-export async function createUser(credentials: { email: string; password: string }) {
+export async function createUser(credentials: { email: string; password: string }): Promise<User | null> {
   const password = await hash(credentials.password, 10);
-  await prisma.user.create({
+  const user = await prisma.user.create({
     data: {
       email: credentials.email,
       password,
+      settings: JSON.stringify(DEFAULT_SETTINGS),
     },
   });
+  return user;
 }
 
 /**
@@ -66,14 +70,27 @@ export async function readUserByEmail(email: string | null | undefined) {
 
 /**
  * Deletes a user from the database.
+ * @param id The ID of the user to delete.
+ */
+export async function deleteUser(id: string): Promise<User | null> {
+  const user = await prisma.user.delete({
+    where: { id },
+  });
+  return user;
+}
+
+/**
+ * Deletes a user from the database.
  * @param credentials an object with the following properties: email.
  */
-export async function deleteUser(credentials: { email: string }) {
+export async function deleteUserByEmail(credentials: { email: string }): Promise<User | null> {
   if (await checkUser({ email: credentials.email })) {
-    await prisma.user.delete({
+    const user = await prisma.user.delete({
       where: { email: credentials.email },
     });
+    return user;
   }
+  return null;
 }
 
 /**
@@ -89,3 +106,4 @@ export async function changePassword(credentials: { email: string; password: str
     },
   });
 }
+export { DEFAULT_SETTINGS };

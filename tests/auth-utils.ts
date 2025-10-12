@@ -18,6 +18,8 @@ interface AuthFixtures {
 
 /**
  * Helper to fill form fields with retry logic
+ * @param page The Page on which the fields are to be filled
+ * @param fields The Fields to fill with values
  */
 export async function fillFormWithRetry(
   page: Page,
@@ -40,6 +42,9 @@ export async function fillFormWithRetry(
         if (attempts >= maxAttempts) {
           throw new Error(`Failed to fill field ${field.selector} after ${maxAttempts} attempts`);
         }
+        if (page.isClosed()) {
+          throw new Error('Page is closed, cannot fill form fields');
+        }
         await page.waitForTimeout(500);
       }
     }
@@ -48,6 +53,8 @@ export async function fillFormWithRetry(
 
 /**
  * Helper to empty form fields with retry logic
+ * @param page The Page on which the fields are to be emptied
+ * @param fields The Fields to empty
  */
 export async function emptyFormWithRetry(
   page: Page,
@@ -75,6 +82,11 @@ export async function emptyFormWithRetry(
   }
 }
 
+/**
+ * Check that form fields are empty
+ * @param page The Page on which the fields are to be checked
+ * @param fields The Fields to check
+ */
 export async function checkFormEmpty(
   page: Page,
   fields: Array<{ selector: string }>
