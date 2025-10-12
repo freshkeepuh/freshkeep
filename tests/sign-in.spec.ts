@@ -53,6 +53,6 @@ test('test sign in page with sign up option', async ({ page }) => {
 
   // Click on the "Sign Up" link
   await page.getByTestId('sign-in-form-signup-link').click();
-  await page.waitForLoadState('domcontentloaded');
+  await page.waitForLoadState();
   await expect(page).toHaveURL(`${BASE_URL}/auth/signup`);
 });

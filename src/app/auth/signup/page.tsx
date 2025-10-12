@@ -32,8 +32,17 @@ const SignUpPage = () => {
 
   const onSubmit = async (data: SignUpForm) => {
     try {
-      await createUser(data);
-      await signIn('credentials', { callbackUrl: '/', redirect: true, ...data });
+      const user = await createUser(data);
+      if (!user) {
+        setShowError(true);
+        return;
+      }
+      const result = await signIn('credentials', { redirect: false, ...data });
+      if (!result?.ok) {
+        setShowError(true);
+      } else {
+        window.location.href = result?.url || '/';
+      }
     } catch (error) {
       setShowError(true);
     }

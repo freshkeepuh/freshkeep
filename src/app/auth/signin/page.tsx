@@ -30,7 +30,12 @@ const SignInPage = () => {
 
   const onSubmit = async (data: SignInForm) => {
     try {
-      await signIn('credentials', { callbackUrl: '/', redirect: true, ...data });
+      const result = await signIn('credentials', { redirect: false, ...data });
+      if (!result?.ok) {
+        setShowError(true);
+      } else {
+        window.location.href = result?.url || '/';
+      }
     } catch (error) {
       setShowError(true);
     }
