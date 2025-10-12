@@ -232,8 +232,8 @@ model ShoppingListItem {
   id          String       @id @default(uuid()) @map("_id")
   listId      String
   prodId      String
-  quantity    Float        @default(1.0)
   unitId      String
+  quantity    Float        @default(1.0)
   isPurchased Boolean      @default(false)
   list        ShoppingList @relation(fields: [listId], references: [id])
   product     Product      @relation(fields: [prodId], references: [id])
