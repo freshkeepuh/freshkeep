@@ -4,8 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { Container, Row, Col, ListGroup } from 'react-bootstrap';
 import { Store } from '@prisma/client';
-import LoadingSpinner from '@/components/LoadingSpinner';
-import StoreCard from '@/components/StoreCard';
+
+import LoadingSpinner from './LoadingSpinner';
+import StoreCard from './StoreCard';
 
 const StoresForm = () => {
   const { data: session } = useSession();
@@ -65,18 +66,29 @@ const StoresForm = () => {
                   <StoreCard
                     key={store.id}
                     store={store}
-                    onUpdate={async (updatedStore: Store) => {
-                      try {
-                        setStores((prevStores) => prevStores.map((s) => (s.id === updatedStore.id ? updatedStore : s)));
-                      } catch (error) {
-                        console.error('Failed to update store:', error);
+                    onSave={async (updatedStore) => {
+                      const response = await fetch('/api/store', {
+                        method: 'PUT',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(updatedStore),
+                      });
+                      if (response.ok) {
+                        const updated = await response.json();
+                        setStores((prevStores) => prevStores.map((s) => (s.id === updated.id ? updated : s)));
+                      } else {
+                        setError('Failed to update store');
                       }
                     }}
                     onDelete={async (id) => {
-                      try {
+                      const response = await fetch(`/api/store/${id}`, {
+                        method: 'DELETE',
+                      });
+                      if (response.ok) {
                         setStores((prevStores) => prevStores.filter((s) => s.id !== id));
-                      } catch (error) {
-                        console.error('Failed to delete store:', error);
+                      } else {
+                        setError('Failed to delete store');
                       }
                     }}
                   />
