@@ -5,9 +5,12 @@ const prisma = new PrismaClient();
 
 export const runtime = 'nodejs';
 
-export async function GET(request: NextRequest, { params }: { params: { userId: string } }) {
+export async function GET(
+  request: NextRequest,
+  context: { params: { userId: string } },
+) {
   try {
-    const { userId } = params;
+    const { userId } = context.params;
     console.log('API called with userId:', userId);
 
     if (!userId) {
