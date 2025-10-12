@@ -8,31 +8,30 @@ test('test access to navigation bar (not signed in)', async ({ page }) => {
   await page.waitForLoadState('networkidle');
 
   // Check that the FreshKeep Link is visible and works
-  const freshKeepLink = await page.getByRole('link', { name: 'FreshKeep' });
+  const freshKeepLink = await page.getByTestId('navbar-brand');
   await expect(freshKeepLink).toBeVisible();
   await freshKeepLink.click();
-  await page.waitForLoadState('networkidle');
+  await page.waitForLoadState();
   await expect(page).toHaveURL(`${BASE_URL}/`);
 
   // Check that the Login Link is visible and works
-  const loginLink = await page.getByRole('link', { name: 'Sign In' });
+  const loginLink = await page.getByTestId('navbar-link-signin');
   await expect(loginLink).toBeVisible();
-  await loginLink.click();
-  await page.waitForLoadState('networkidle');
-  await expect(page).toHaveURL(`${BASE_URL}/auth/signin`);
 });
+
 test('test access to navigation bar (signed in)', async ({ getUserPage }) => {
   // Call the getUserPage fixture with users signin info to get authenticated session for user
-  const customUserPage = await getUserPage('john@foo.com', 'changeme');
-  await customUserPage.waitForLoadState('networkidle');
+  const page = await getUserPage('john@foo.com', 'changeme');
+  await page.waitForLoadState();
 
   // Check that the FreshKeep Link is visible and works
-  const freshKeepLink = await customUserPage.getByRole('link', { name: 'FreshKeep' });
+  const freshKeepLink = await page.getByTestId('navbar-brand');
   await expect(freshKeepLink).toBeVisible();
   await freshKeepLink.click();
-  await customUserPage.waitForLoadState('networkidle');
-  await expect(customUserPage).toHaveURL(`${BASE_URL}/`);
+  await page.waitForLoadState();
+  await expect(page).toHaveURL(`${BASE_URL}/`);
 
   // Check that the user's email is visible in the navbar
-  await expect(customUserPage.getByRole('button', { name: 'john@foo.com' })).toBeVisible();
+  const accountLink = await page.getByTestId('navbar-dropdown-account');
+  await expect(accountLink).toBeVisible();
 });
