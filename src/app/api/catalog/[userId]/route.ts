@@ -5,10 +5,7 @@ const prisma = new PrismaClient();
 
 export const runtime = 'nodejs';
 
-export async function GET(
-  request: NextRequest,
-  context: { params: { userId: string } },
-) {
+export async function GET(request: NextRequest, context: any) {
   try {
     const { userId } = context.params;
     console.log('API called with userId:', userId);
