@@ -17,7 +17,7 @@ import {
 } from '@prisma/client';
 import { hash } from 'bcryptjs';
 import * as config from '../config/settings.development.json';
-import DEFAULT_SETTINGS from '@/lib/types/user-defaults.d';
+import DEFAULT_SETTINGS from '../src/lib/user-defaults';
 
 const prisma = new PrismaClient();
 

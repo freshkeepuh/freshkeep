@@ -3,7 +3,7 @@
 import { hash } from 'bcryptjs';
 import { User } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
-import DEFAULT_SETTINGS from '@/lib/types/user-defaults.d';
+import DEFAULT_SETTINGS from '@/lib/user-defaults';
 
 /**
  * Check if user email exists in the database.
