@@ -5,7 +5,6 @@ import { useSession } from 'next-auth/react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Store } from '@prisma/client';
 import LoadingSpinner from '@/components/LoadingSpinner';
-import { readStoreWithProducts } from '@/lib/dbStoreActions';
 import StoreCard from '@/components/StoreCard';
 
 type StoreFormProps = {
@@ -21,8 +20,14 @@ const StoreForm = ({ id }: StoreFormProps) => {
   useEffect(() => {
     const fetchStoreAndProducts = async () => {
       if (id) {
-        const storeData = await readStoreWithProducts(id);
-        setStore(storeData);
+        const response = await fetch(`/api/store/${id}`, {
+          method: 'GET',
+        });
+        if (response.ok) {
+          setStore(await response.json());
+        } else {
+          setError('Failed to fetch store');
+        }
       }
       setLoading(false);
     };
@@ -48,36 +53,36 @@ const StoreForm = ({ id }: StoreFormProps) => {
         <Col>
           <h1>Store</h1>
           {store ? (
-                  <StoreCard
-                  key={store.id}
-                  store={store}
-                  onSave={async (updatedStore) => {
-                    const response = await fetch('/api/store', {
-                      method: 'PUT',
-                      headers: {
-                        'Content-Type': 'application/json',
-                      },
-                      body: JSON.stringify(updatedStore),
-                    });
-                    if (response.ok) {
-                      const updated = await response.json();
-                      setStore((prevStore) => (prevStore?.id === updated.id ? updated : prevStore));
-                    } else {
-                      setError('Failed to update store');
-                    }
-                  }}
-                  onDelete={async (id) => {
-                    const response = await fetch(`/api/store/${id}`, {
-                      method: 'DELETE',
-                    });
-                    if (response.ok) {
-                      setStore(null);
-                    } else {
-                      setError('Failed to delete store');
-                    }
-                  }}
-                />
-        ) : (
+            <StoreCard
+              key={store.id}
+              store={store}
+              onUpdate={async (updatedStore: Store) => {
+                const response = await fetch('/api/store', {
+                  method: 'PUT',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(updatedStore),
+                });
+                if (response.ok) {
+                  const updated = await response.json();
+                  setStore((prevStore) => (prevStore?.id === updated.id ? updated : prevStore));
+                } else {
+                  setError('Failed to update store');
+                }
+              }}
+              onDelete={async (storeId) => {
+                const response = await fetch(`/api/store/${storeId}`, {
+                  method: 'DELETE',
+                });
+                if (response.ok) {
+                  setStore(null);
+                } else {
+                  setError('Failed to delete store');
+                }
+              }}
+            />
+          ) : (
             <p>No store found.</p>
           )}
         </Col>

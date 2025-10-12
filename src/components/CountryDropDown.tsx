@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Form } from 'react-bootstrap';
-import { UseFormRegister, useFormContext, useWatch } from 'react-hook-form';
+import { UseFormRegister } from 'react-hook-form';
 import { Country } from '@prisma/client'; // Update the path as needed
 
 const displayNames: Record<Country, string> = {
@@ -30,38 +30,27 @@ export interface CountryDropDownProps {
  * not via a prop or defaultValue on the select element. Example:
  *   useForm({ defaultValues: { country: Country.USA } })
  */
-const CountryDropDown: React.FC<CountryDropDownProps> = ({ register }) => {
-  const formContext = useFormContext(); // requires parent FormProvider or same form instance
-  const control = formContext?.control;
-
-  // watch the country field
-  const watchedCountry = useWatch({
-    control,
-    name: 'country',
-  }) as Country | undefined;
-
-  return (
-    <>
-      {/* defaultValue removed; set default in useForm initialization */}
-      <Form.Select
-        id="country"
-        size="lg"
-        aria-label="Country"
-        {...register('country')}
-      >
-        {
-          // If Country is a TypeScript enum, filter out numeric keys
-          Object.values(Country)
-            .filter((country) => typeof country === 'string')
-            .map((country) => (
-              <option key={country} value={country}>
-                {getCountryDisplayName(country as Country)}
-              </option>
-            ))
-        }
-      </Form.Select>
-    </>
-  );
-};
+const CountryDropDown: React.FC<CountryDropDownProps> = ({ register }) => (
+  <>
+    {/* defaultValue removed; set default in useForm initialization */}
+    <Form.Select
+      id="country"
+      size="lg"
+      aria-label="Country"
+      {...register('country')}
+    >
+      {
+        // If Country is a TypeScript enum, filter out numeric keys
+        Object.values(Country)
+          .filter((country) => typeof country === 'string')
+          .map((country) => (
+            <option key={country} value={country}>
+              {getCountryDisplayName(country as Country)}
+            </option>
+          ))
+      }
+    </Form.Select>
+  </>
+);
 
 export default CountryDropDown;

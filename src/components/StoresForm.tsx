@@ -68,15 +68,15 @@ const StoresForm = () => {
                     onUpdate={async (updatedStore: Store) => {
                       try {
                         setStores((prevStores) => prevStores.map((s) => (s.id === updatedStore.id ? updatedStore : s)));
-                      } catch (error) {
-                        console.error('Failed to update store:', error);
+                      } catch (err) {
+                        console.error('Failed to update store:', err);
                       }
                     }}
                     onDelete={async (id) => {
                       try {
                         setStores((prevStores) => prevStores.filter((s) => s.id !== id));
-                      } catch (error) {
-                        console.error('Failed to delete store:', error);
+                      } catch (err) {
+                        console.error('Failed to delete store:', err);
                       }
                     }}
                   />

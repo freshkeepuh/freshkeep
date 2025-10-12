@@ -6,32 +6,12 @@
 
 import { Country } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
-import { productSelect } from '@/lib/dbProductActions';
-import { shoppingListSelect } from '@/lib/dbShoppingListActions';
-
-export const storeSelect = {
-  id: true,
-  name: true,
-  address1: true,
-  address2: true,
-  city: true,
-  state: true,
-  zipcode: true,
-  country: true,
-  phone: true,
-  website: true,
-  picture: true,
-};
-
-export const storeWithShoppingListsSelect = {
-  ...storeSelect,
-  shoppingLists: shoppingListSelect,
-};
-
-export const storeWithProductsSelect = {
-  ...storeSelect,
-  products: productSelect
-};
+import {
+  productSelect,
+  shoppingListItemSelect,
+  shoppingListSelect,
+  storeSelect,
+} from './dbActionTypes';
 
 /**
  * Create a new store.
@@ -104,7 +84,15 @@ export async function readStoreWithShoppingLists(id: string | null | undefined) 
   if (!id) return null;
   const store = await prisma.store.findUnique({
     where: { id },
-    select: storeWithShoppingListsSelect,
+    include: {
+      shoppingLists: {
+        include: {
+          items: shoppingListItemSelect,
+          ...shoppingListSelect,
+        },
+      },
+      ...storeSelect,
+    },
   });
   return store;
 }
@@ -118,7 +106,12 @@ export const readStoreWithProducts = async (id: string | null | undefined) => {
   if (!id) return null;
   const store = await prisma.store.findUnique({
     where: { id },
-    select: storeWithProductsSelect,
+    include: {
+      products: {
+        ...productSelect,
+      },
+      ...storeSelect,
+    },
   });
   return store;
 };

@@ -5,10 +5,10 @@ import Link from 'next/link';
 import { Button, Col, Container, Form, Row, Image, Card } from 'react-bootstrap';
 import { Pencil, Trash, Check, X } from 'react-bootstrap-icons';
 import { Store, Country } from '@prisma/client';
-import AddressSubForm, { IAddressSubForm } from './AddressSubForm';
 import { useForm, UseFormRegister } from 'react-hook-form';
-import { storeValidation } from '@/lib/validationSchemas';
 import { yupResolver } from '@hookform/resolvers/yup';
+import AddressSubForm, { IAddressSubForm } from '@/components/AddressSubForm';
+import { storeValidation } from '@/lib/validationSchemas';
 
 interface IStoreForm extends IAddressSubForm {
   id?: string | undefined;
@@ -22,7 +22,7 @@ interface IStoreForm extends IAddressSubForm {
   phone?: string | undefined;
   website?: string | undefined;
   picture?: string | undefined;
-};
+}
 
 const mapStoreToForm = (s: Store): IStoreForm => ({
   id: s.id,
@@ -57,7 +57,6 @@ const StoreCard = ({ store, onUpdate, onDelete }: StoreCardProps) => {
     defaultValues: mapStoreToForm(store),
   });
 
-  const [showError, setShowError] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
 
   const handleEditClick = () => {
@@ -78,7 +77,7 @@ const StoreCard = ({ store, onUpdate, onDelete }: StoreCardProps) => {
         setError('name', { type: 'manual', message: 'Failed to delete store' });
       }
     } catch (error) {
-      setShowError(true);
+      setError('name', { type: 'manual', message: 'Failed to delete store. Please try again.' });
     }
   };
 
@@ -115,10 +114,6 @@ const StoreCard = ({ store, onUpdate, onDelete }: StoreCardProps) => {
         <Row>
           <Col>
             <Card>
-              <Card.Header as="h5" className="d-flex align-items-center justify-content-between">
-                <div className="d-flex align-items-center">
-                </div>
-              </Card.Header>
               <Card.Body>
                 <Card.Text className="mb-2">
                   <Form onSubmit={handleSubmit(handleSaveClick)}>
@@ -192,25 +187,20 @@ const StoreCard = ({ store, onUpdate, onDelete }: StoreCardProps) => {
                   onClick={handleCancelClick}
                   disabled={isSubmitting}
                 >
-                  <X className="mb-1" /> Cancel
+                  <X className="mb-1" />
                 </Button>
                 <Button
                   variant="primary"
                   onClick={handleSubmit(handleSaveClick)}
                   disabled={isSubmitting}
                 >
-                  <Check className="mb-1" /> Save
+                  <Check className="mb-1" />
                 </Button>
               </Card.Footer>
-              {showError && (
-                <Card.Footer className="text-danger">
-                  An error occurred. Please try again.
-                </Card.Footer>
-              )}
             </Card>
           </Col>
         </Row>
-      </Container >
+      </Container>
     );
   }
   return (
@@ -265,7 +255,8 @@ const StoreCard = ({ store, onUpdate, onDelete }: StoreCardProps) => {
                 />
               </Card.Text>
               <Card.Text className="text-muted small mb-1">
-                <strong>Phone: </strong>{store.phone}
+                <strong>Phone: </strong>
+                {store.phone}
               </Card.Text>
             </Card.Body>
           </Card>
