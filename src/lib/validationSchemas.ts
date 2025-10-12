@@ -49,7 +49,7 @@ export const storeValidation = Yup.object().shape({
   address1: Yup.string()
     .required('Address 1 is required')
     .max(100, 'Address 1 must not exceed 100 characters'),
-  address2: Yup.string().optional()
+  address2: Yup.string()
     .max(100, 'Address 2 must not exceed 100 characters'),
   city: Yup.string()
     .required('City is required')
@@ -63,12 +63,11 @@ export const storeValidation = Yup.object().shape({
   country: Yup.string()
     .default('USA')
     .oneOf(Object.values(Yup.ref('Country')), 'Invalid country selection'),
-  phone: Yup.string().optional()
+  phone: Yup.string()
     .max(20, 'Phone number must not exceed 20 characters'),
-  website: Yup.string().optional()
+  website: Yup.string()
     .url('Website must be a valid URL')
     .max(256, 'Website must not exceed 256 characters'),
-  picture: Yup.string().optional()
-    .url('Picture must be a valid URL')
+  picture: Yup.string()
     .max(256, 'Picture must not exceed 256 characters'),
 });

@@ -11,7 +11,7 @@ export const runtime = 'nodejs';
  */
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const { id } = params;
+    const { id } = await params;
     if (!id) {
       return NextResponse.json({ error: 'Store ID is required' }, { status: 400 });
     }
@@ -35,7 +35,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
  */
 export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
   try {
-    const { id } = params;
+    const { id } = await params;
     if (!id) {
       return NextResponse.json({ error: 'Store ID is required' }, { status: 400 });
     }
@@ -44,6 +44,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
 
     return NextResponse.json({ message: 'Store deleted successfully' });
   } catch (error: Error | any) {
+    console.error('Error deleting store:', error);
     return getResponseError(error);
   }
 }

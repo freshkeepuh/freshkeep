@@ -11,6 +11,7 @@ import {
   shoppingListItemSelect,
   shoppingListSelect,
   storeSelect,
+  unitSelect,
 } from './dbActionTypes';
 
 /**
@@ -55,7 +56,16 @@ export async function createStore(data: {
 export async function readStores() {
   const stores = await prisma.store.findMany(
     {
-      select: storeSelect,
+      select: {
+        products: {
+          select: {
+            unit: true,
+          },
+        },
+        shoppingLists: true,
+        ...storeSelect,
+      },
+      orderBy: { name: 'asc' },
     },
   );
   return stores;
@@ -70,51 +80,18 @@ export async function readStore(id: string | null | undefined) {
   if (!id) return null;
   const store = await prisma.store.findUnique({
     where: { id },
-    select: storeSelect,
-  });
-  return store;
-}
-
-/**
- * Read a store and its shopping lists by store ID.
- * @param id The ID of the store to read.
- * @returns The store with its shopping lists if found, otherwise null.
- */
-export async function readStoreWithShoppingLists(id: string | null | undefined) {
-  if (!id) return null;
-  const store = await prisma.store.findUnique({
-    where: { id },
-    include: {
-      shoppingLists: {
-        include: {
-          items: shoppingListItemSelect,
-          ...shoppingListSelect,
+    select: {
+      products: {
+        select: {
+          unit: true,
         },
       },
+      shoppingLists: true,
       ...storeSelect,
     },
   });
   return store;
 }
-
-/**
- * Read a store and its products by store ID.
- * @param id The ID of the store to read.
- * @returns The store with its products if found, otherwise null.
- */
-export const readStoreWithProducts = async (id: string | null | undefined) => {
-  if (!id) return null;
-  const store = await prisma.store.findUnique({
-    where: { id },
-    include: {
-      products: {
-        ...productSelect,
-      },
-      ...storeSelect,
-    },
-  });
-  return store;
-};
 
 /**
  * Update a store by ID.

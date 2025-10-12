@@ -16,7 +16,7 @@ const getCountryDisplayName = (country: Country): string => (
 );
 
 export interface ICountryField {
-  country?: any;
+  country?: Country;
 }
 
 export interface CountryDropDownProps {

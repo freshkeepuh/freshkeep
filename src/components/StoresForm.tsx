@@ -9,7 +9,7 @@ import StoreCard from '@/components/StoreCard';
 
 const StoresForm = () => {
   const { data: session } = useSession();
-  const [stores, setStores] = useState<Store[]>([]);
+  const [stores, setStores] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -59,7 +59,7 @@ const StoresForm = () => {
           {stores.length === 0 ? (
             <p>No stores found. Please add a store.</p>
           ) : (
-            <ListGroup horizontal>
+            <ListGroup horizontal className="flex-wrap">
               {stores.map((store) => (
                 <ListGroup.Item key={store.id} className="m-2">
                   <StoreCard

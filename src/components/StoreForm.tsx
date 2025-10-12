@@ -6,6 +6,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { Store } from '@prisma/client';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import StoreCard from '@/components/StoreCard';
+import { useRouter } from 'next/navigation';
 
 type StoreFormProps = {
   id: string | null;
@@ -13,6 +14,7 @@ type StoreFormProps = {
 
 const StoreForm = ({ id }: StoreFormProps) => {
   const { data: session } = useSession();
+  const router = useRouter();
   const [store, setStore] = useState<Store | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -76,7 +78,7 @@ const StoreForm = ({ id }: StoreFormProps) => {
                   method: 'DELETE',
                 });
                 if (response.ok) {
-                  setStore(null);
+                  router.push('/stores');
                 } else {
                   setError('Failed to delete store');
                 }
