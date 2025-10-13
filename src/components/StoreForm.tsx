@@ -3,15 +3,16 @@
 import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { Container, Row, Col } from 'react-bootstrap';
-import { Store } from '@prisma/client';
-import LoadingSpinner from './LoadingSpinner';
 import { useRouter } from 'next/router';
+import { Store } from '@prisma/client';
+import LoadingSpinner from '@/components/LoadingSpinner';
+import StoreCard from '@/components/StoreCard';
 
 type StoreFormProps = {
   id: string | null;
 };
 
-const StoreForm = ({ id }: StoreFormProps) => {
+const StoreForm = ({ params }: { params: StoreFormProps }) => {
   const { data: session } = useSession();
   const router = useRouter();
   const [store, setStore] = useState<Store | null>(null);
