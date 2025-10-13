@@ -7,11 +7,7 @@
 import { Country } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import {
-  productSelect,
-  shoppingListItemSelect,
-  shoppingListSelect,
   storeSelect,
-  unitSelect,
 } from './dbActionTypes';
 
 /**

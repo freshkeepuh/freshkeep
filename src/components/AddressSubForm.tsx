@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button, Col, Container, Form, Row } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { Check, Pencil, X } from 'react-bootstrap-icons';
 import { UseFormRegister } from 'react-hook-form';
 import CountryDropDown, { ICountryField } from '@/components/CountryDropDown';
@@ -169,16 +169,23 @@ const AddressSubForm = ({ register, errors, initialAddress, showEdit, onSave, on
 
   return (
     <>
-      <span className="fw-bold mb-3">{address.address1 || 'No Address Provided'}</span><br />
+      <span className="fw-bold mb-3">{address.address1 || 'No Address Provided'}</span>
+      <br />
       {address.address1 && (
         <>
-          {address.address2 && <><span className="mb-3">{address.address2}</span><br /></>}
+          {address.address2 && (
+            <>
+              <span className="mb-3">{address.address2}</span>
+              <br />
+            </>
+          )}
           <span className="mb-3">
             {address.city}
             {address.state && ', '}
             {address.state}
             {address.zipcode && ' '}
-          </span><br />
+          </span>
+          <br />
           <span className="mb-1">{address.country}</span>
         </>
       )}

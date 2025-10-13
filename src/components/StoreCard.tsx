@@ -20,22 +20,6 @@ const getStoreAddress = (store: Store): IAddressSubForm => ({
   country: store.country ?? undefined,
 });
 
-const setStoreAddress = (store: Store, address: IAddressSubForm): Store => ({
-  id: store.id,
-  name: store.name,
-  address1: address.address1 ?? null,
-  address2: address.address2 ?? null,
-  city: address.city ?? null,
-  state: address.state ?? null,
-  zipcode: address.zipcode ?? null,
-  country: address.country as Country,
-  phone: store.phone ?? null,
-  website: store.website ?? null,
-  picture: store.picture ?? null,
-  createdAt: store.createdAt,
-  updatedAt: new Date(),
-});
-
 interface IStoreForm extends IAddressSubForm {
   id?: string | undefined;
   name: string;
@@ -106,13 +90,12 @@ const StoreCard = ({ store, onUpdate, onDelete }: StoreCardProps) => {
     try {
       setIsSubmitting(true);
       const body = JSON.stringify({ ...register });
-      console.log('Saving store with data:', body);
       const response = await fetch('/api/store', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: body,
+        body,
       });
       if (response.ok) {
         const updated: Store = await response.json();
@@ -163,7 +146,7 @@ const StoreCard = ({ store, onUpdate, onDelete }: StoreCardProps) => {
               errors={errors}
               initialAddress={getStoreAddress(store)}
               showEdit={isEditing}
-              onSave={() => {}}
+              onSave={() => { }}
               onCancel={(storeAddress) => {
                 reset({ ...storeAddress });
               }}
@@ -240,12 +223,12 @@ const StoreCard = ({ store, onUpdate, onDelete }: StoreCardProps) => {
       <Card.Header as="h5" className="d-flex align-items-center justify-content-between">
         <div className="d-flex align-items-center">
           <Link
-          href={store.website ?? '#'}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-decoration-none"
-        >
-          <Image
+            href={store.website ?? '#'}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-decoration-none"
+          >
+            <Image
               src={store.picture ?? `${store.website ?? ''}/favicon.ico`}
               alt={store.name}
               width={32}
@@ -278,29 +261,29 @@ const StoreCard = ({ store, onUpdate, onDelete }: StoreCardProps) => {
       </Card.Body>
       <Card.Footer className="d-flex justify-content-end">
         <div>
-        <Button
-          variant="outline-dark"
-          size="sm"
-          className="me-2 p-1"
-          aria-label={`Edit ${store.name}`}
-          onClick={handleEditClick}
-        >
-          <Pencil />
-        </Button>
-        {(store.products?.length === 0 && store.shoppingLists?.length === 0) && (
           <Button
-          variant="outline-danger"
-          size="sm"
-          className="p-1"
-          aria-label={`Delete ${store.name}`}
-          onClick={handleDeleteClick}
-          disabled={isSubmitting}
-        >
-          <Trash />
-        </Button>
-        )}
-      </div>
-    </Card.Footer>
+            variant="outline-dark"
+            size="sm"
+            className="me-2 p-1"
+            aria-label={`Edit ${store.name}`}
+            onClick={handleEditClick}
+          >
+            <Pencil />
+          </Button>
+          {(store.products?.length === 0 && store.shoppingLists?.length === 0) && (
+            <Button
+              variant="outline-danger"
+              size="sm"
+              className="p-1"
+              aria-label={`Delete ${store.name}`}
+              onClick={handleDeleteClick}
+              disabled={isSubmitting}
+            >
+              <Trash />
+            </Button>
+          )}
+        </div>
+      </Card.Footer>
     </Card>
   );
 };
