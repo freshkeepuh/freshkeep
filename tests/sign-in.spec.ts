@@ -21,14 +21,18 @@ async function isEmptySignin(page: Page) {
   ]);
 }
 
-async function fillAndSubmitSignup(page: Page, email: string, password: string = 'secret123', confirmPassword: string = password) {
+async function fillAndSubmitSignup(
+  page: Page,
+  email: string,
+  password: string = 'secret123',
+//  confirmPassword: string = password
+) {
   await fillSignin(page, email, password);
   await submitSignin(page);
 }
 
 test('sign in page - successful login', async ({ page }) => {
   await page.goto(SIGNIN_URL);
-  
   const email = 'john@foo.com';
 
   await fillAndSubmitSignup(page, email);

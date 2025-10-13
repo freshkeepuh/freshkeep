@@ -11,7 +11,12 @@ async function submitSignup(page: Page) {
   await page.getByTestId('sign-up-form-submit').click();
 }
 
-async function fillSignup(page: Page, email: string, password: string = 'secret123', confirmPassword: string = password) {
+async function fillSignup(
+  page: Page,
+  email: string,
+  password: string = 'secret123',
+  confirmPassword: string = password,
+) {
   await fillFormWithRetry(page, [
     { selector: '[id="email"]', value: email },
     { selector: '[id="password"]', value: password },
@@ -27,7 +32,12 @@ async function isEmptySignup(page: Page) {
   ]);
 }
 
-async function fillAndSubmitSignup(page: Page, email: string, password: string = 'secret123', confirmPassword: string = password) {
+async function fillAndSubmitSignup(
+  page: Page,
+  email: string,
+  password: string = 'secret123',
+  confirmPassword: string = password,
+) {
   await fillSignup(page, email, password, confirmPassword);
   await submitSignup(page);
 }

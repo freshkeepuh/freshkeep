@@ -17,9 +17,9 @@ const Home = () => {
     return (
       <Dashboard session={{
         user: {
-          email: session.user.email,
-          name: session.user.name,
-          image: session.user.image,
+          email: session.user?.email,
+        // name: session.user.name,
+        // image: session.user.image,
         },
       }}
       />
