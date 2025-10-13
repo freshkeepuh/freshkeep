@@ -1,6 +1,5 @@
-.auth-hero {
+.auth-hero, .signin-hero {
   position: relative;
-  background-image: url('/images/sign-up/w-b-gradient.png');
   background-size: cover;
   background-position: center;
   min-height: 100vh;
@@ -10,7 +9,15 @@
   overflow: hidden;
 }
 
-.auth-hero::before {
+.auth-hero {
+  background-image: url('/images/sign-up/w-b-gradient.png');
+}
+
+.signin-hero {
+  background-image: url('/images/sign-in/Sign-in-bg-photo.png');
+}
+
+.auth-hero::before, .signin-hero::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -30,7 +37,6 @@
   color: white;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
   max-width: 500px;
-  margin-right: 3rem;
 }
 
 .welcome-title {
@@ -44,7 +50,7 @@
   font-weight: 500;
 }
 
-.auth-card-wrap {
+.auth-card-wrap, .signin-card-wrap {
   position: relative;
   z-index: 2;
   width: 500px;
@@ -53,8 +59,9 @@
   margin-right: 6rem;
 }
 
+/* Mobile: stack vertically */
 @media (max-width: 992px) {
-  .auth-hero {
+  .auth-hero, .signin-hero {
     flex-direction: column;
     justify-content: center;
     gap: 2rem;
@@ -62,7 +69,7 @@
     padding: 5vh 1.25rem;
   }
 
-  .auth-hero::before {
+  .auth-hero::before, .signin-hero::before {
     background: linear-gradient(
       to bottom,
       rgba(0,0,0,0.55) 0%,
@@ -84,7 +91,7 @@
     font-size: 1.2rem;
   }
 
-  .auth-card-wrap {
+  .auth-card-wrap, .signin-card-wrap {
     width: 100%;
     max-width: 500px;
     margin-left: 0;

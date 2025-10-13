@@ -41,6 +41,8 @@ const authOptions: NextAuthOptions = {
           id: `${user.id}`,
           email: user.email,
           role: user.role,
+          settings: user.settings,
+          randomKey: Math.random().toString(36).substring(2, 15),
         };
       },
     }),
@@ -50,7 +52,7 @@ const authOptions: NextAuthOptions = {
     signOut: '/auth/signout',
     //   error: '/auth/error',
     //   verifyRequest: '/auth/verify-request',
-    //   newUser: '/auth/new-user'
+    newUser: '/auth/signup',
   },
   callbacks: {
     session: ({ session, token }) => {

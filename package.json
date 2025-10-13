@@ -18,12 +18,13 @@
     "@aws-sdk/s3-presigned-post": "^3.906.0",
     "@hookform/resolvers": "^3.6.0",
     "@ngneat/falso": "^7.2.0",
-    "@vis.gl/react-google-maps": "^1.5.5",
     "@prisma/client": "^6.16.3",
+    "@vis.gl/react-google-maps": "^1.5.5",
+    "bcryptjs": "^3.0.2",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.13.1",
     "multiselect-react-dropdown": "^2.0.25",
-    "next": "^14.2.32",
+    "next": "^15.5.4",
     "next-auth": "^4.24.7",
     "prop-types": "^15.8.1",
     "react": "^18.3.1",
@@ -34,7 +35,6 @@
     "react-toastify": "^11.0.5",
     "sweetalert": "^2.1.2",
     "ts-node": "10.9.2",
-    "bcryptjs": "^3.0.2",
     "yup": "^1.4.0"
   },
   "devDependencies": {

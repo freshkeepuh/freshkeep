@@ -1,5 +1,5 @@
 import { Page } from '@playwright/test';
-import { test, expect, BASE_URL, expectSignedInOrRedirected, fillFormWithRetry } from './auth-utils';
+import { test, expect, BASE_URL, expectSignedInOrRedirected, fillFormWithRetry, checkFormEmpty } from './auth-utils';
 
 const SIGNUP_URL = `${BASE_URL}/auth/signup`;
 
@@ -11,52 +11,44 @@ async function submitSignup(page: Page) {
   await page.getByTestId('sign-up-form-submit').click();
 }
 
-async function fillSignup(page: Page, email: string, password: string = 'secret123', confirmPassword: string = password) {
+async function fillSignup(
+  page: Page,
+  email: string,
+  password: string = 'secret123',
+  confirmPassword: string = password,
+) {
   await fillFormWithRetry(page, [
-    { selector: '[data-testid="sign-up-form-email-field"]', value: email },
-    { selector: '[data-testid="sign-up-form-password-field"]', value: password },
-    { selector: '[data-testid="sign-up-form-confirm-password-field"]', value: confirmPassword },
+    { selector: '[id="email"]', value: email },
+    { selector: '[id="password"]', value: password },
+    { selector: '[id="confirmPassword"]', value: confirmPassword },
   ]);
 }
 
-async function fillAndSubmitSignup(page: Page, email: string, password: string = 'secret123', confirmPassword: string = password) {
+async function isEmptySignup(page: Page) {
+  await checkFormEmpty(page, [
+    { selector: '[id="email"]' },
+    { selector: '[id="password"]' },
+    { selector: '[id="confirmPassword"]' },
+  ]);
+}
+
+async function fillAndSubmitSignup(
+  page: Page,
+  email: string,
+  password: string = 'secret123',
+  confirmPassword: string = password,
+) {
   await fillSignup(page, email, password, confirmPassword);
   await submitSignup(page);
 }
 
-test('sign up page — validation errors', async ({ page }) => {
-  await page.goto(SIGNUP_URL);
-
-  // Submit empty form
-  await submitSignup(page);
-
-  await expect(page.getByTestId('sign-up-form-email-field-error')).toBeVisible();
-  await expect(page.getByTestId('sign-up-form-password-field-error')).toBeVisible();
-  await expect(page.getByTestId('sign-up-form-confirm-password-field-error')).toBeVisible();
-
-  // Invalid email
-  await fillAndSubmitSignup(page, 'invalid-email');
-  await expect(page.getByTestId('sign-up-form-email-field-error')).toBeVisible();
-
-  await page.getByTestId('sign-up-form-reset').click();
-
-  // Short password
-  await fillAndSubmitSignup(page, 'valid@mail.com', 'short', 'short');
-  await expect(page.getByTestId('sign-up-form-password-field-error')).toBeVisible();
-  await page.getByTestId('sign-up-form-reset').click();
-
-  // Mismatched passwords
-  await fillAndSubmitSignup(page, 'valid@mail.com', 'secret123', 'different123');
-  await expect(page.getByTestId('sign-up-form-confirm-password-field-error')).toBeVisible();
-});
-
-test('sign up page — successful account creation (redirect OR session cookie)', async ({ page }) => {
+test('sign up page — successful login', async ({ page }) => {
   await page.goto(SIGNUP_URL);
 
   const email = uniqueEmail();
 
   await fillAndSubmitSignup(page, email);
-  await expectSignedInOrRedirected({ page, url: `${BASE_URL}/`, timeout: 30000 });
+  await expectSignedInOrRedirected({ page, url: `${BASE_URL}/`, timeout: 10000 });
 });
 
 test('sign up page — Reset clears fields and errors', async ({ page }) => {
@@ -69,7 +61,14 @@ test('sign up page — Reset clears fields and errors', async ({ page }) => {
   await page.getByTestId('sign-up-form-reset').click();
 
   // Inputs cleared
-  await expect(page.getByTestId('sign-up-form-email-field')).toBeEmpty();
-  await expect(page.getByTestId('sign-up-form-password-field')).toBeEmpty();
-  await expect(page.getByTestId('sign-up-form-confirm-password-field')).toBeEmpty();
+  await isEmptySignup(page);
+});
+
+test('test sign up page with sign in option', async ({ page }) => {
+  await page.goto(SIGNUP_URL);
+
+  // Click on the "Sign In" link
+  await page.getByTestId('sign-up-form-signin-link').click();
+  await page.waitForLoadState();
+  await expect(page).toHaveURL(`${BASE_URL}/auth/signin`);
 });

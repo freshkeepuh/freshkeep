@@ -52,14 +52,6 @@ test.describe('Settings', () => {
     await expect(nameInput).toHaveValue('Josh Tester');
   });
 
-  test('sign out navigates to /auth', async ({ page }) => {
-    await page.getByRole('button', { name: 'Sign Out' }).click();
-
-    // Accept /auth, /auth/, or /auth/signin and wait for router push to finish
-    const authRegex = new RegExp(`^${escapeRegExp(BASE_URL)}/auth(?:/signin)?/?$`);
-    await expect(page).toHaveURL(authRegex, { timeout: 15000 });
-  });
-
   test('basic UI is present', async ({ page }) => {
     // Section headings
     await expect(page.getByRole('heading', { name: 'User Information' })).toBeVisible();

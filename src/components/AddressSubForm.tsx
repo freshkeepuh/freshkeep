@@ -76,7 +76,7 @@ const AddressSubForm = ({ register, errors, onSave, address }: AddressSubFormPro
     <Container>
       <Row>
         <Col md={6}>
-          <Form.Group controlId="address1">
+          <Form.Group>
             <Form.Label aria-required="true">Address 1: *</Form.Label>
             <Form.Control
               id="address1"
@@ -119,7 +119,7 @@ const AddressSubForm = ({ register, errors, onSave, address }: AddressSubFormPro
       </Row>
       <Row>
         <Col md={6}>
-          <Form.Group controlId="address2">
+          <Form.Group>
             <Form.Label>Address 2:</Form.Label>
             <Form.Control
               id="address2"
@@ -140,7 +140,7 @@ const AddressSubForm = ({ register, errors, onSave, address }: AddressSubFormPro
       </Row>
       <Row>
         <Col md={4}>
-          <Form.Group controlId="city">
+          <Form.Group>
             <Form.Label>City:</Form.Label>
             <Form.Control
               id="city"
@@ -159,7 +159,7 @@ const AddressSubForm = ({ register, errors, onSave, address }: AddressSubFormPro
           </Form.Group>
         </Col>
         <Col md={4}>
-          <Form.Group controlId="state">
+          <Form.Group>
             <Form.Label>State:</Form.Label>
             <Form.Control
               id="state"
@@ -178,7 +178,7 @@ const AddressSubForm = ({ register, errors, onSave, address }: AddressSubFormPro
           </Form.Group>
         </Col>
         <Col md={4}>
-          <Form.Group controlId="zipcode">
+          <Form.Group>
             <Form.Label>Zipcode:</Form.Label>
             <Form.Control
               id="zipcode"
