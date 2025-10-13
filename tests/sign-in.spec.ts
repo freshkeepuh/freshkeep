@@ -1,38 +1,62 @@
-import { test, expect, BASE_URL } from './auth-utils';
+import { Page } from '@playwright/test';
+import { test, expect, BASE_URL, expectSignedInOrRedirected, fillFormWithRetry, checkFormEmpty } from './auth-utils';
 
-test('test sign in page', async ({ page }) => {
-  await page.goto(`${BASE_URL}/auth/signin`);
-  await page.waitForLoadState('networkidle');
+const SIGNIN_URL = `${BASE_URL}/auth/signin`;
 
-  const email = page.locator('input[name="email"], input[type="email"]').first();
-  const password = page.locator('input[name="password"], input[type="password"]').first();
+async function submitSignin(page: Page) {
+  await page.getByTestId('sign-in-form-submit').click();
+}
 
-  // Expect the fields to be visible
-  await expect(email).toBeVisible();
-  await expect(password).toBeVisible();
+async function fillSignin(page: Page, email: string, password: string = 'changeme') {
+  await fillFormWithRetry(page, [
+    { selector: '[id="email"]', value: email },
+    { selector: '[id="password"]', value: password },
+  ]);
+}
 
-  // Fill in credentials
-  await email.fill('john@foo.com');
-  await password.fill('changeme');
+async function isEmptySignin(page: Page) {
+  await checkFormEmpty(page, [
+    { selector: '[id="email"]' },
+    { selector: '[id="password"]' },
+  ]);
+}
 
-  // Expect the fields to have the correct values
-  await expect(email).toHaveValue('john@foo.com');
-  await expect(password).toHaveValue('changeme');
+async function fillAndSubmitSignup(
+  page: Page,
+  email: string,
+  password: string = 'secret123',
+//  confirmPassword: string = password
+) {
+  await fillSignin(page, email, password);
+  await submitSignin(page);
+}
 
-  // Submit the form
-  await page.getByRole('button', { name: 'Sign In' }).click();
+test('sign in page - successful login', async ({ page }) => {
+  await page.goto(SIGNIN_URL);
+  const email = 'john@foo.com';
 
-  // Wait for navigation and check we're not on error page
-  await page.waitForLoadState('networkidle');
+  await fillAndSubmitSignup(page, email);
+  await expectSignedInOrRedirected({ page, url: `${BASE_URL}/`, timeout: 10000 });
+});
 
-  // Expect to be redirected to the homepage
-  await expect(page).toHaveURL(`${BASE_URL}/`);
+test('sign in page — Reset clears fields and errors', async ({ page }) => {
+  await page.goto(SIGNIN_URL);
+
+  // Fill fields
+  await fillSignin(page, 'john@foo.com');
+
+  // Reset the form
+  await page.getByTestId('sign-in-form-reset').click();
+
+  // Inputs cleared
+  await isEmptySignin(page);
 });
 
 test('test sign in page with sign up option', async ({ page }) => {
-  await page.goto(`${BASE_URL}/auth/signin`);
+  await page.goto(SIGNIN_URL);
 
   // Click on the "Sign Up" link
-  await page.getByRole('link', { name: 'Sign Up' }).click();
+  await page.getByTestId('sign-in-form-signup-link').click();
+  await page.waitForLoadState();
   await expect(page).toHaveURL(`${BASE_URL}/auth/signup`);
 });

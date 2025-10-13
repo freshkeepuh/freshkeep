@@ -5,9 +5,9 @@ const prisma = new PrismaClient();
 
 export const runtime = 'nodejs';
 
-export async function GET(request: NextRequest, { params }: { params: { email: string } }) {
+export async function GET(request: NextRequest, context: any) {
   try {
-    const { email } = params;
+    const { email } = context.params;
     const decodedEmail = decodeURIComponent(email);
 
     console.log('Looking for user with email:', decodedEmail);

@@ -4,9 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Store } from '@prisma/client';
-import LoadingSpinner from '@/components/LoadingSpinner';
-import StoreCard from '@/components/StoreCard';
-import { useRouter } from 'next/navigation';
+import LoadingSpinner from './LoadingSpinner';
+import { useRouter } from 'next/router';
 
 type StoreFormProps = {
   id: string | null;
@@ -21,20 +20,29 @@ const StoreForm = ({ id }: StoreFormProps) => {
 
   useEffect(() => {
     const fetchStoreAndProducts = async () => {
-      if (id) {
-        const response = await fetch(`/api/store/${id}`, {
-          method: 'GET',
-        });
-        if (response.ok) {
-          setStore(await response.json());
-        } else {
-          setError('Failed to fetch store');
+      try {
+        setLoading(true);
+
+        // Fetch the store associated with the current user
+        const storeResponse = await fetch(`/api/store/${params.id}`);
+        if (!storeResponse.ok) {
+          const errorText = await storeResponse.text();
+          throw new Error(`Failed to fetch store: ${storeResponse.status} - ${errorText}`);
         }
+        const storeData = await storeResponse.json();
+        setStore(storeData);
+
+        setError(null);
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+        setError(`Failed to load store: ${errorMessage}`);
+        setStore(null);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
     fetchStoreAndProducts();
-  }, [session, id]);
+  }, [session, params.id]);
 
   if (loading) {
     return <LoadingSpinner />;

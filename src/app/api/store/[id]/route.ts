@@ -7,11 +7,12 @@ export const runtime = 'nodejs';
 /**
  * Handles GET requests for retrieving a store.
  * @param request The incoming request
+ * @param context
  * @returns A JSON response containing the store or an error message
  */
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, context: any) {
   try {
-    const { id } = await params;
+    const { id } = context.params;
     if (!id) {
       return NextResponse.json({ error: 'Store ID is required' }, { status: 400 });
     }
@@ -31,11 +32,12 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
 /**
  * Handles DELETE requests for deleting a store.
  * @param request The incoming request
+ * @param context
  * @returns A JSON response indicating the result of the deletion
  */
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, context: any) {
   try {
-    const { id } = await params;
+    const { id } = context.params;
     if (!id) {
       return NextResponse.json({ error: 'Store ID is required' }, { status: 400 });
     }
