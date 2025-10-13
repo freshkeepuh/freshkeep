@@ -146,8 +146,16 @@ const StoreCard = ({ store, onUpdate, onDelete }: StoreCardProps) => {
               errors={errors}
               initialAddress={getStoreAddress(store)}
               showEdit={isEditing}
-              onSave={() => { }}
-              onCancel={(storeAddress) => {
+              onSave={(storeAddress: IAddressSubForm) => {
+                reset({ ...storeAddress });
+                store.address1 = storeAddress.address1;
+                store.address2 = storeAddress.address2;
+                store.city = storeAddress.city;
+                store.state = storeAddress.state;
+                store.zipcode = storeAddress.zipcode;
+                store.country = storeAddress.country;
+              }}
+              onCancel={(storeAddress: IAddressSubForm) => {
                 reset({ ...storeAddress });
               }}
             />

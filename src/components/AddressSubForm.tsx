@@ -5,6 +5,7 @@ import { Button, Form } from 'react-bootstrap';
 import { Check, Pencil, X } from 'react-bootstrap-icons';
 import { UseFormRegister } from 'react-hook-form';
 import CountryDropDown, { ICountryField } from '@/components/CountryDropDown';
+import { init } from 'next/dist/compiled/webpack/webpack';
 
 export interface IAddressSubForm extends ICountryField {
   address1: string;
@@ -20,20 +21,13 @@ interface AddressSubFormProps {
   errors: { [key in keyof IAddressSubForm]?: { message?: string } };
   initialAddress: IAddressSubForm;
   showEdit: boolean;
-  onSave?: () => void;
+  onSave?: (address: IAddressSubForm) => void;
   onCancel?: (address: IAddressSubForm) => void;
 }
 
 const AddressSubForm = ({ register, errors, initialAddress, showEdit, onSave, onCancel }: AddressSubFormProps) => {
-  const address = {
-    address1: initialAddress.address1,
-    address2: initialAddress.address2 ?? '',
-    city: initialAddress.city,
-    state: initialAddress.state,
-    zipcode: initialAddress.zipcode,
-    country: initialAddress.country,
-  };
 
+  const [newAddress] = useState<IAddressSubForm>({ ...initialAddress });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [allowEdit] = useState(showEdit ?? false);
@@ -46,7 +40,7 @@ const AddressSubForm = ({ register, errors, initialAddress, showEdit, onSave, on
     try {
       setIsSubmitting(true);
       if (onSave) {
-        onSave();
+        onSave(newAddress);
       }
       setIsEditing(false);
     } finally {
@@ -77,6 +71,9 @@ const AddressSubForm = ({ register, errors, initialAddress, showEdit, onSave, on
             size="lg"
             isInvalid={!!errors.address1}
             {...register('address1')}
+            onChange={(e) => {
+              newAddress.address1 = e.target.value;
+            }}
           />
           <Form.Control.Feedback type="invalid">
             {errors.address1?.message}
@@ -91,6 +88,9 @@ const AddressSubForm = ({ register, errors, initialAddress, showEdit, onSave, on
             size="lg"
             isInvalid={!!errors.address2}
             {...register('address2')}
+            onChange={(e) => {
+              newAddress.address2 = e.target.value;
+            }}
           />
           <Form.Control.Feedback type="invalid">
             {errors.address2?.message}
@@ -105,6 +105,9 @@ const AddressSubForm = ({ register, errors, initialAddress, showEdit, onSave, on
             size="lg"
             isInvalid={!!errors.city}
             {...register('city')}
+            onChange={(e) => {
+              newAddress.city = e.target.value;
+            }}
           />
           <Form.Control.Feedback type="invalid">
             {errors.city?.message}
@@ -119,6 +122,9 @@ const AddressSubForm = ({ register, errors, initialAddress, showEdit, onSave, on
             size="lg"
             isInvalid={!!errors.state}
             {...register('state')}
+            onChange={(e) => {
+              newAddress.state = e.target.value;
+            }}
           />
           <Form.Control.Feedback type="invalid">
             {errors.state?.message}
@@ -133,6 +139,9 @@ const AddressSubForm = ({ register, errors, initialAddress, showEdit, onSave, on
             size="lg"
             isInvalid={!!errors.zipcode}
             {...register('zipcode')}
+            onChange={(e) => {
+              newAddress.zipcode = e.target.value;
+            }}
           />
           <Form.Control.Feedback type="invalid">
             {errors.zipcode?.message}
@@ -169,26 +178,7 @@ const AddressSubForm = ({ register, errors, initialAddress, showEdit, onSave, on
 
   return (
     <>
-      <span className="fw-bold mb-3">{address.address1 || 'No Address Provided'}</span>
-      <br />
-      {address.address1 && (
-        <>
-          {address.address2 && (
-            <>
-              <span className="mb-3">{address.address2}</span>
-              <br />
-            </>
-          )}
-          <span className="mb-3">
-            {address.city}
-            {address.state && ', '}
-            {address.state}
-            {address.zipcode && ' '}
-          </span>
-          <br />
-          <span className="mb-1">{address.country}</span>
-        </>
-      )}
+      <span className="fw-bold mb-3">{initialAddress.address1 || 'No Address Provided'}</span>
       {allowEdit && (
         <Button
           variant="outline-dark"
@@ -200,6 +190,26 @@ const AddressSubForm = ({ register, errors, initialAddress, showEdit, onSave, on
         >
           <Pencil />
         </Button>
+      )}
+      {initialAddress.address1 && (
+        <>
+          <br />
+          {initialAddress.address2 && (
+            <>
+              <span className="mb-3">{initialAddress.address2}</span>
+              <br />
+            </>
+          )}
+          <span className="mb-3">
+            {initialAddress.city}
+            {initialAddress.state && ', '}
+            {initialAddress.state}
+            {initialAddress.zipcode && ' '}
+            {initialAddress.zipcode}
+          </span>
+          <br />
+          <span className="mb-1">{initialAddress.country}</span>
+        </>
       )}
     </>
   );

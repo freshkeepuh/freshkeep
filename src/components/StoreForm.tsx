@@ -3,19 +3,15 @@
 import React, { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { Container, Row, Col } from 'react-bootstrap';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { Store } from '@prisma/client';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import StoreCard from '@/components/StoreCard';
 
-type StoreFormProps = {
-  id: string | null;
-};
-
-const StoreForm = ({ params }: { params: StoreFormProps }) => {
+const StoreForm = ({ params }: { params: { id: string } }) => {
   const { data: session } = useSession();
   const router = useRouter();
-  const [store, setStore] = useState<Store | null>(null);
+  const [store, setStore] = useState<Store | undefined>(undefined);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -23,21 +19,22 @@ const StoreForm = ({ params }: { params: StoreFormProps }) => {
     const fetchStoreAndProducts = async () => {
       try {
         setLoading(true);
-
-        // Fetch the store associated with the current user
         const storeResponse = await fetch(`/api/store/${params.id}`);
         if (!storeResponse.ok) {
-          const errorText = await storeResponse.text();
-          throw new Error(`Failed to fetch store: ${storeResponse.status} - ${errorText}`);
+          throw new Error(storeResponse.status.toString());
         }
         const storeData = await storeResponse.json();
         setStore(storeData);
 
         setError(null);
       } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-        setError(`Failed to load store: ${errorMessage}`);
-        setStore(null);
+        if (process.env.NODE_ENV === 'development') {
+          const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+          setError(` Failed to load store: ${errorMessage}`);
+        } else {
+          setError(null);
+        }
+        setStore(undefined);
       } finally {
         setLoading(false);
       }
@@ -49,52 +46,49 @@ const StoreForm = ({ params }: { params: StoreFormProps }) => {
     return <LoadingSpinner />;
   }
 
-  if (error) {
-    return (
-      <div className="text-danger">
-        Error:
-        {error}
-      </div>
-    );
-  }
-
   return (
     <Container className="my-4">
       <Row>
-        <Col>
+        <Col md={{ span: 8, offset: 2 }}>
           <h1>Store</h1>
           {store ? (
-            <StoreCard
-              key={store.id}
-              store={store}
-              onUpdate={async (updatedStore: Store) => {
-                const response = await fetch('/api/store', {
-                  method: 'PUT',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify(updatedStore),
-                });
-                if (response.ok) {
-                  const updated = await response.json();
-                  setStore((prevStore) => (prevStore?.id === updated.id ? updated : prevStore));
-                } else {
-                  setError('Failed to update store');
-                }
-              }}
-              onDelete={async (storeId) => {
-                const response = await fetch(`/api/store/${storeId}`, {
-                  method: 'DELETE',
-                });
-                if (response.ok) {
-                  router.push('/stores');
-                } else {
-                  setError('Failed to delete store');
-                }
-              }}
-            />
+            <>
+              {error && <p className="text-danger">{error}</p>}
+              <StoreCard
+                key={store.id}
+                store={store}
+                onUpdate={async (updatedStore: Store) => {
+                  const response = await fetch('/api/store', {
+                    method: 'PUT',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(updatedStore),
+                  });
+                  if (response.ok) {
+                    const updated = await response.json();
+                    setStore((prevStore) => (prevStore?.id === updated.id ? updated : prevStore));
+                  } else {
+                    setError('Failed to update store');
+                  }
+                }}
+                onDelete={async (storeId) => {
+                  const response = await fetch(`/api/store/${storeId}`, {
+                    method: 'DELETE',
+                  });
+                  if (response.ok) {
+                    router.push('/stores');
+                  } else {
+                    setError('Failed to delete store');
+                  }
+                }}
+              />
+            </>
           ) : (
-            <p>No store found.</p>
+            <>
+              {error && <p className="text-danger">{error}</p>}
+              <p>No store found.</p>
+            </>
           )}
         </Col>
       </Row>

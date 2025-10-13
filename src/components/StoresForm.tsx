@@ -54,7 +54,7 @@ const StoresForm = () => {
   return (
     <Container className="d-flex flex-row my-4">
       <Row>
-        <Col>
+        <Col md={{ span: 8, offset: 2 }}>
           <h1>Stores</h1>
           {stores.length === 0 ? (
             <p>No stores found. Please add a store.</p>
