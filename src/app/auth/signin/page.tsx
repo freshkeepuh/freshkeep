@@ -13,6 +13,7 @@ import LogoHeader from '@/components/LogoHeader';
 import WelcomeSection from '@/components/WelcomeSection';
 import EmailAddressField, { IEmailAddressField } from '@/components/EmailAddressField';
 import PasswordField, { IPasswordField } from '@/components/PasswordField';
+import { redirect } from 'next/navigation';
 
 type SignInForm = IEmailAddressField & IPasswordField;
 
@@ -29,16 +30,17 @@ const SignInPage = () => {
   const [showError, setShowError] = useState(false);
 
   const onSubmit = async (data: SignInForm) => {
-    try {
-      const result = await signIn('credentials', { redirect: false, ...data });
-      if (!result?.ok) {
-        setShowError(true);
-      } else {
-        window.location.href = result?.url || '/';
-      }
-    } catch (error) {
+    // try {
+    const result = await signIn('credentials', { redirect: false, ...data });
+    if (!result?.ok) {
       setShowError(true);
+    } else {
+      redirect('/');
+    // do not use href for redirection. window.location.href = result?.url || '/';
     }
+    // } catch (error) {
+    //  setShowError(true);
+    // }
   };
 
   return (
