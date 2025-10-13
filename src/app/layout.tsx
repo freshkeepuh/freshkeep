@@ -18,10 +18,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const classString = `${inter.className} wrapper`;
   return (
     <html lang="en">
-      <body className={classString}>
+      <body className="wrapper">
         <Providers>
           <div className="d-flex flex-column min-vh-100">
             <NavBar />
