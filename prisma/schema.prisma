@@ -296,7 +296,8 @@ enum RecipeDiet {
  */
 model Recipe {
   id           String           @id @default(uuid()) @map("_id")
-  title        String           @unique
+  title        String 
+  slug         String?          @unique
   cookTime     Int
   difficulty   RecipeDifficulty
   diet         RecipeDiet

@@ -30,6 +30,7 @@ export default async function Page() {
   // Converts Prisma data to UI format
   const initialRecipes: UiRecipe[] = rows.map((r) => ({
     id: r.id,
+    slug: r.slug!,
     title: r.title,
     cookTime: r.cookTime,
     difficulty: toUiDifficulty(r.difficulty),

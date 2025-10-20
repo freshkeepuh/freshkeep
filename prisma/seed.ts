@@ -463,6 +463,16 @@ const seedShoppingListItems = async (
  * @returns {Promise<void>} A promise that resolves when the seeding is complete.
  */
 
+// Converts a recipe title into a URL-friendly "slug"
+function slugify(s: string) {
+  return (s || '')
+    .toLowerCase()
+    .trim()
+    .replace(/['"]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
 // Shape of a recipe in settings.development.json
 type SeedRecipe = {
   title: string;
@@ -480,10 +490,12 @@ async function seedRecipes(): Promise<void> {
   const { defaultRecipes = [] } = config as unknown as SettingsConfig;
   const recipes: SeedRecipe[] = defaultRecipes;
   for (const r of recipes) {
+    const slug = slugify(r.title);
     await prisma.recipe.upsert({
-      where: { title: r.title },
+      where: { slug },
       // update if exists
       update: {
+        title: r.title,
         cookTime: r.cookTime,
         difficulty: r.difficulty as RecipeDifficulty,
         diet: r.diet as RecipeDiet,
@@ -494,6 +506,7 @@ async function seedRecipes(): Promise<void> {
       // insert if missing
       create: {
         title: r.title,
+        slug,
         cookTime: r.cookTime,
         difficulty: r.difficulty as RecipeDifficulty,
         diet: r.diet as RecipeDiet,

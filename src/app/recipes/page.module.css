@@ -17,9 +17,11 @@
 
 /* text */
 .rpBlock { margin-bottom: 20px; }
+.rpH1 { margin: 0; font-size: 1.5rem; font-weight: 700; }
 .rpH2 { margin: 0 0 10px; font-size: 1.25rem; font-weight: 700; }
 .rpH3 { margin: 0 0 8px; font-size: 1.1rem; font-weight: 700; }
 .rpH4 { margin: 0 0 8px; font-size: 0.9rem; font-weight: 700; }
+.rpMedium { margin: 0; font-size: 1rem; font-weight: 500; }
 .rpText { margin: 0; font-size: 0.8rem; line-height: 1.5; }
 
 /* rows */
@@ -110,8 +112,176 @@
   background: #198754; color: #ffffff;
   border: 0; border-radius: 12px; padding: 10px 14px; font-weight: 600; cursor: pointer;
   margin-top: auto;
+  text-decoration: none;
 }
 .rpBtnLight:hover { background: #27bc76; }
 
 /* empty state */
 .rpEmpty { border: 0; background: transparent; padding: 0; text-align: left; }
+
+/* Back Button */
+.rpBackBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #94e3a5;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #2d5f3e;
+  text-decoration: none;
+  cursor: pointer;
+  margin-bottom: 24px;
+  transition: all 0.2s ease;
+}
+
+.rpBackBtn:hover { background: #27bc76; }
+.rpBackIcon { font-size: 1.2rem; line-height: 1; }
+
+/* Image Container */
+.rpViewImage {
+  padding: 0;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.rpViewImageWrap {
+  position: relative;
+  width: 100%;
+  padding-top: 75%;
+  overflow: hidden;
+}
+
+/* Title */
+.rpViewTitle {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #2d5f3e;
+  flex: 1;
+}
+
+/* Action Buttons (favorite/share) */
+.rpActionBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 0;
+}
+
+.rpActionLabel {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+/* Stats Pills */
+.rpStatPill {
+  flex: 1;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 12px 16px;
+  text-align: center;
+}
+
+.rpStatLabel {
+  font-size: 0.7rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.rpStatValue {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+/* Ingredients Grid */
+.rpIngredientsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.rpIngredientItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.rpCheckbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* Secondary Button */
+.rpBtnSecondary {
+  background: #f5f5f5;
+  border: 1px solid #e0e0e0;
+  border-radius: 999px;
+  padding: 10px 24px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.rpBtnSecondary:hover {
+  background: #ebebeb;
+}
+
+/* Instructions Steps */
+.rpSteps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 14px;
+}
+
+.rpStep {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding-bottom: 1rem;
+}
+
+.rpStepNumber {
+  min-width: 32px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #6acc9b;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .rpViewTitle {
+    font-size: 1.5rem;
+  }
+
+  .rpIngredientsGrid {
+    grid-template-columns: 1fr;
+  }
+}
