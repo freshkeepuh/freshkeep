@@ -7,11 +7,12 @@ import { useRouter } from 'next/navigation';
 import { Store } from '@prisma/client';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import StoreCard from '@/components/StoreCard';
+import StoreShoppingLists from '@/components/StoreShoppingLists';
 
 const StoreForm = ({ params }: { params: { id: string } }) => {
   const { data: session } = useSession();
   const router = useRouter();
-  const [store, setStore] = useState<Store | undefined>(undefined);
+  const [store, setStore] = useState<any | undefined>(undefined);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -72,7 +73,7 @@ const StoreForm = ({ params }: { params: { id: string } }) => {
                       return;
                     }
                     const updated = await response2.json();
-                    setStore((prevStore) => (prevStore?.id === updated.id ? updated : prevStore));
+                    setStore(updated);
                   } else {
                     setError('Failed to update store');
                   }
@@ -95,6 +96,9 @@ const StoreForm = ({ params }: { params: { id: string } }) => {
               <p>No store found.</p>
             </>
           )}
+        </Col>
+        <Col>
+          <StoreShoppingLists shoppingLists={store?.shoppingLists} />
         </Col>
       </Row>
     </Container>
