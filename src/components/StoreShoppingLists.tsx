@@ -11,7 +11,7 @@ export default function StoreShoppingLists({ shoppingLists }: StoreShoppingLists
     return <div>Please provide Shopping Lists.</div>;
   }
 
-  if (!shoppingLists || shoppingLists.length === 0) {
+  if (shoppingLists.length === 0) {
     return <div>No Shopping Lists found for this Store.</div>;
   }
 
