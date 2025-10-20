@@ -284,8 +284,6 @@ export default function RecipesPage({ initialRecipes }: Props) {
                   <Link href={`/recipes/${encodeURIComponent(r.slug)}`} className={styles.rpBtnLight}>
                     View Recipe
                   </Link>
-                  {' '}
-
                 </div>
               </article>
             ))}
