@@ -23,6 +23,7 @@
     "bcryptjs": "^3.0.2",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.13.1",
+    "lucide-react": "^0.546.0",
     "multiselect-react-dropdown": "^2.0.25",
     "next": "^15.5.4",
     "next-auth": "^4.24.7",
