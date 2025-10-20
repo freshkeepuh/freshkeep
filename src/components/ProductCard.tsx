@@ -11,7 +11,7 @@ const ProductCard = ({
 }: ProductCardProps) => (
   <div
     className="rounded-5 bg-success d-flex justify-content-center align-items-center px-2 py-2"
-    style={{ width: '320px', height: '350x', transition: 'transform 0.3s ease' }}
+    style={{ width: '320px', height: '350px', transition: 'transform 0.3s ease' }}
     onMouseEnter={(e) => {
       e.currentTarget.style.transform = 'translateY(-10px)';
     }}
