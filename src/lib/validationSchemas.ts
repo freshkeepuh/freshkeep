@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { Country } from '@prisma/client';
 import { checkUser } from './dbUserActions';
 
 export const forgotPasswordValidation = Yup.object().shape({
@@ -60,14 +61,16 @@ export const storeValidation = Yup.object().shape({
   zipcode: Yup.string()
     .required('Zipcode is required')
     .max(20, 'Zipcode must not exceed 20 characters'),
-  country: Yup.string()
-    .default('USA')
-    .oneOf(Object.values(Yup.ref('Country')), 'Invalid country selection'),
+  country: Yup.mixed<Country>()
+    .required('Country is required'),
   phone: Yup.string()
+    .optional()
     .max(20, 'Phone number must not exceed 20 characters'),
   website: Yup.string()
+    .optional()
     .url('Website must be a valid URL')
     .max(256, 'Website must not exceed 256 characters'),
   picture: Yup.string()
+    .optional()
     .max(256, 'Picture must not exceed 256 characters'),
 });

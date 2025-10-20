@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
-import { Check, Pencil, X } from 'react-bootstrap-icons';
-import { UseFormRegister } from 'react-hook-form';
+import React from 'react';
+import { Col, Container, Form, Row } from 'react-bootstrap';
+import { useFormContext } from 'react-hook-form';
 import CountryDropDown, { ICountryField } from '@/components/CountryDropDown';
+import { Country } from '@prisma/client';
 
 export interface IAddressSubForm extends ICountryField {
   address1: string;
@@ -12,52 +12,24 @@ export interface IAddressSubForm extends ICountryField {
   city: string;
   state: string;
   zipcode: string;
-  country?: any; // Country;
+  country: Country; // Country;
 }
 
 interface AddressSubFormProps {
-  register: UseFormRegister<IAddressSubForm>;
-  errors: { [key in keyof IAddressSubForm]?: { message?: string } };
-  initialAddress: IAddressSubForm;
-  showEdit: boolean;
-  onSave?: (address: IAddressSubForm) => void;
-  onCancel?: (address: IAddressSubForm) => void;
+  address: IAddressSubForm;
+  isEditing: boolean;
 }
 
-const AddressSubForm = ({ register, errors, initialAddress, showEdit, onSave, onCancel }: AddressSubFormProps) => {
-  const [newAddress] = useState<IAddressSubForm>({ ...initialAddress });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [allowEdit] = useState(showEdit ?? false);
-
-  const handleEditClick = () => {
-    setIsEditing(true);
-  };
-
-  const handleSaveClick = () => {
-    try {
-      setIsSubmitting(true);
-      if (onSave) {
-        onSave(newAddress);
-      }
-      setIsEditing(false);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleCancelClick = () => {
-    try {
-      if (onCancel) {
-        onCancel(initialAddress);
-      }
-      setIsEditing(false);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
+const AddressSubForm = ({ address, isEditing }: AddressSubFormProps) => {
+  const context = useFormContext();
   if (isEditing) {
+    if (!context) {
+      throw new Error('AddressSubForm must be used within a FormProvider');
+    }
+    const {
+      register,
+      formState: { errors },
+    } = context;
     return (
       <>
         <Form.Group>
@@ -67,14 +39,11 @@ const AddressSubForm = ({ register, errors, initialAddress, showEdit, onSave, on
             type="text"
             placeholder="Address 1"
             size="lg"
-            isInvalid={!!errors.address1}
             {...register('address1')}
-            onChange={(e) => {
-              newAddress.address1 = e.target.value;
-            }}
+            isInvalid={!!errors.address1}
           />
           <Form.Control.Feedback type="invalid">
-            {errors.address1?.message}
+            {errors.address1 && errors.address1.message?.toString()}
           </Form.Control.Feedback>
         </Form.Group>
         <Form.Group>
@@ -84,129 +53,97 @@ const AddressSubForm = ({ register, errors, initialAddress, showEdit, onSave, on
             type="text"
             placeholder="Address 2"
             size="lg"
-            isInvalid={!!errors.address2}
             {...register('address2')}
-            onChange={(e) => {
-              newAddress.address2 = e.target.value;
-            }}
+            isInvalid={!!errors.address2}
           />
           <Form.Control.Feedback type="invalid">
-            {errors.address2?.message}
+            {errors.address2 && errors.address2.message?.toString()}
           </Form.Control.Feedback>
         </Form.Group>
+        <Container>
+          <Row>
+            <Col>
+              <Form.Group>
+                <Form.Label>City:</Form.Label>
+                <Form.Control
+                  id="city"
+                  type="text"
+                  placeholder="City"
+                  size="lg"
+                  {...register('city')}
+                  isInvalid={!!errors.city}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.city && errors.city.message?.toString()}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group>
+                <Form.Label>State:</Form.Label>
+                <Form.Control
+                  id="state"
+                  type="text"
+                  placeholder="State"
+                  size="lg"
+                  {...register('state')}
+                  isInvalid={!!errors.state}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.state && errors.state.message?.toString()}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group>
+                <Form.Label>Zipcode:</Form.Label>
+                <Form.Control
+                  id="zipcode"
+                  type="text"
+                  placeholder="Zipcode"
+                  size="lg"
+                  {...register('zipcode')}
+                  isInvalid={!!errors.zipcode}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {errors.zipcode && errors.zipcode.message?.toString()}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Col>
+          </Row>
+        </Container>
         <Form.Group>
-          <Form.Label>City:</Form.Label>
-          <Form.Control
-            id="city"
-            type="text"
-            placeholder="City"
-            size="lg"
-            isInvalid={!!errors.city}
-            {...register('city')}
-            onChange={(e) => {
-              newAddress.city = e.target.value;
-            }}
-          />
+          <Form.Label>Country:</Form.Label>
+          <CountryDropDown />
           <Form.Control.Feedback type="invalid">
-            {errors.city?.message}
+            {errors.country && errors.country.message?.toString()}
           </Form.Control.Feedback>
         </Form.Group>
-        <Form.Group>
-          <Form.Label>State:</Form.Label>
-          <Form.Control
-            id="state"
-            type="text"
-            placeholder="State"
-            size="lg"
-            isInvalid={!!errors.state}
-            {...register('state')}
-            onChange={(e) => {
-              newAddress.state = e.target.value;
-            }}
-          />
-          <Form.Control.Feedback type="invalid">
-            {errors.state?.message}
-          </Form.Control.Feedback>
-        </Form.Group>
-        <Form.Group>
-          <Form.Label>Zipcode:</Form.Label>
-          <Form.Control
-            id="zipcode"
-            type="text"
-            placeholder="Zipcode"
-            size="lg"
-            isInvalid={!!errors.zipcode}
-            {...register('zipcode')}
-            onChange={(e) => {
-              newAddress.zipcode = e.target.value;
-            }}
-          />
-          <Form.Control.Feedback type="invalid">
-            {errors.zipcode?.message}
-          </Form.Control.Feedback>
-        </Form.Group>
-        <CountryDropDown
-          register={register as unknown as UseFormRegister<ICountryField>}
-        />
-        <span className="me-auto">
-          <Button
-            variant="success"
-            size="sm"
-            className="me-2 p-1"
-            aria-label="Save Address"
-            onClick={handleSaveClick}
-            disabled={isSubmitting}
-          >
-            <Check />
-          </Button>
-          <Button
-            variant="danger"
-            size="sm"
-            className="p-1"
-            aria-label="Cancel editing"
-            onClick={handleCancelClick}
-            disabled={isSubmitting}
-          >
-            <X />
-          </Button>
-        </span>
       </>
     );
   }
 
   return (
     <>
-      <span className="fw-bold mb-3">{initialAddress.address1 || 'No Address Provided'}</span>
-      {allowEdit && (
-        <Button
-          variant="outline-dark"
-          type="button"
-          size="sm"
-          className="me-2 p-1"
-          aria-label="Edit Address"
-          onClick={handleEditClick}
-        >
-          <Pencil />
-        </Button>
-      )}
-      {initialAddress.address1 && (
+      <span className="fw-bold mb-3">{address.address1 || 'No Address Provided'}</span>
+      {address.address1 && (
         <>
           <br />
-          {initialAddress.address2 && (
+          {address.address2 && (
             <>
-              <span className="mb-3">{initialAddress.address2}</span>
+              <span className="mb-3">{address.address2}</span>
               <br />
             </>
           )}
           <span className="mb-3">
-            {initialAddress.city}
-            {initialAddress.state && ', '}
-            {initialAddress.state}
-            {initialAddress.zipcode && ' '}
-            {initialAddress.zipcode}
+            {address.city}
+            {address.state && ', '}
+            {address.state}
+            {address.zipcode && ' '}
+            {address.zipcode}
           </span>
           <br />
-          <span className="mb-1">{initialAddress.country}</span>
+          <span className="mb-1">{address.country}</span>
         </>
       )}
     </>

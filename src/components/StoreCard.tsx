@@ -5,20 +5,10 @@ import Link from 'next/link';
 import { Button, Form, Image, Card } from 'react-bootstrap';
 import { Pencil, Trash, Check, X } from 'react-bootstrap-icons';
 import { Store, Country } from '@prisma/client';
-import { useForm, UseFormRegister } from 'react-hook-form';
+import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import AddressSubForm, { IAddressSubForm } from '@/components/AddressSubForm';
 import { storeValidation } from '@/lib/validationSchemas';
-
-// Helper to extract address fields from a Store object
-const getStoreAddress = (store: Store): IAddressSubForm => ({
-  address1: store.address1 ?? '',
-  address2: store.address2 ?? '',
-  city: store.city ?? '',
-  state: store.state ?? '',
-  zipcode: store.zipcode ?? '',
-  country: store.country ?? undefined,
-});
 
 interface IStoreForm extends IAddressSubForm {
   id?: string | undefined;
@@ -28,7 +18,7 @@ interface IStoreForm extends IAddressSubForm {
   city: string;
   state: string;
   zipcode: string;
-  country?: Country;
+  country: Country;
   phone?: string | undefined;
   website?: string | undefined;
   picture?: string | undefined;
@@ -41,15 +31,8 @@ interface StoreCardProps {
 }
 
 const StoreCard = ({ store, onUpdate, onDelete }: StoreCardProps) => {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    setError,
-    clearErrors,
-    formState: { errors },
-  } = useForm<IStoreForm>({
-    resolver: yupResolver(storeValidation),
+  const methods = useForm<IStoreForm>({
+    resolver: yupResolver<IStoreForm>(storeValidation),
     defaultValues: { ...store },
   });
 
@@ -59,7 +42,7 @@ const StoreCard = ({ store, onUpdate, onDelete }: StoreCardProps) => {
   const handleEditClick = () => {
     try {
       setIsSubmitting(true);
-      clearErrors();
+      methods.clearErrors();
       setIsEditing(true);
     } finally {
       setIsSubmitting(false);
@@ -69,7 +52,7 @@ const StoreCard = ({ store, onUpdate, onDelete }: StoreCardProps) => {
   const handleDeleteClick = async () => {
     try {
       setIsSubmitting(true);
-      clearErrors();
+      methods.clearErrors();
       const response = await fetch(`/api/store/${store.id}`, {
         method: 'DELETE',
       });
@@ -77,10 +60,10 @@ const StoreCard = ({ store, onUpdate, onDelete }: StoreCardProps) => {
         onDelete(store.id);
         setIsEditing(false);
       } else {
-        setError('name', { type: 'manual', message: 'Failed to delete store' });
+        methods.setError('name', { type: 'manual', message: 'Failed to delete store' });
       }
     } catch (error) {
-      setError('name', { type: 'manual', message: 'Failed to delete store. Please try again.' });
+      methods.setError('name', { type: 'manual', message: 'Failed to delete store. Please try again.' });
     } finally {
       setIsSubmitting(false);
     }
@@ -89,7 +72,7 @@ const StoreCard = ({ store, onUpdate, onDelete }: StoreCardProps) => {
   const handleSaveClick = async () => {
     try {
       setIsSubmitting(true);
-      const body = JSON.stringify({ ...register });
+      const body = JSON.stringify({ ...methods.getValues() });
       const response = await fetch('/api/store', {
         method: 'PUT',
         headers: {
@@ -102,10 +85,10 @@ const StoreCard = ({ store, onUpdate, onDelete }: StoreCardProps) => {
         onUpdate(updated);
         setIsEditing(false);
       } else {
-        setError('name', { type: 'manual', message: 'Failed to update store' });
+        methods.setError('name', { type: 'manual', message: 'Failed to update store' });
       }
     } catch (error) {
-      setError('name', { type: 'manual', message: 'Failed to save changes. Please try again.' });
+      methods.setError('name', { type: 'manual', message: 'Failed to save changes. Please try again.' });
     } finally {
       setIsSubmitting(false);
     }
@@ -114,8 +97,8 @@ const StoreCard = ({ store, onUpdate, onDelete }: StoreCardProps) => {
   const handleCancelClick = () => {
     try {
       setIsSubmitting(true);
-      clearErrors();
-      reset({ ...store }); // Reset form to store values when cancelling
+      methods.clearErrors();
+      methods.reset({ ...store }); // Reset form to store values when cancelling
       setIsEditing(false);
     } finally {
       setIsSubmitting(false);
@@ -124,105 +107,93 @@ const StoreCard = ({ store, onUpdate, onDelete }: StoreCardProps) => {
 
   if (isEditing) {
     return (
-      <Form onSubmit={handleSubmit(handleSaveClick)}>
-        <Card>
-          <Card.Body>
-            <Form.Group className="mb-3">
-              <Form.Label aria-required="true">Store Name: *</Form.Label>
-              <Form.Control
-                id="name"
-                type="text"
-                placeholder="Store Name"
-                size="lg"
-                {...register('name')}
-                isInvalid={!!errors.name}
+      <FormProvider {...methods}>
+        <Form onSubmit={methods.handleSubmit(handleSaveClick)}>
+          <Card>
+            <Card.Body>
+              <Form.Group className="mb-3">
+                <Form.Label aria-required="true">Store Name: *</Form.Label>
+                <Form.Control
+                  id="name"
+                  type="text"
+                  placeholder="Store Name"
+                  size="lg"
+                  {...methods.register('name')}
+                  isInvalid={!!methods.formState.errors.name}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {methods.formState.errors.name && methods.formState.errors.name.message}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <AddressSubForm
+                address={store}
+                isEditing={isEditing}
               />
-              <Form.Control.Feedback type="invalid">
-                {errors.name && errors.name.message}
-              </Form.Control.Feedback>
-            </Form.Group>
-            <AddressSubForm
-              register={register as unknown as UseFormRegister<IAddressSubForm>}
-              errors={errors}
-              initialAddress={getStoreAddress(store)}
-              showEdit={isEditing}
-              onSave={(storeAddress: IAddressSubForm) => {
-                reset({ ...storeAddress });
-                store.address1 = storeAddress.address1;
-                store.address2 = storeAddress.address2;
-                store.city = storeAddress.city;
-                store.state = storeAddress.state;
-                store.zipcode = storeAddress.zipcode;
-                store.country = storeAddress.country;
-              }}
-              onCancel={(storeAddress: IAddressSubForm) => {
-                reset({ ...storeAddress });
-              }}
-            />
-            <Form.Group className="mb-3">
-              <Form.Label>Phone:</Form.Label>
-              <Form.Control
-                id="phone"
-                type="text"
-                placeholder="Phone"
-                size="lg"
-                {...register('phone')}
-                isInvalid={!!errors.phone}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.phone && errors.phone.message}
-              </Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Website:</Form.Label>
-              <Form.Control
-                id="website"
-                type="text"
-                placeholder="Website"
-                size="lg"
-                {...register('website')}
-                isInvalid={!!errors.website}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.website && errors.website.message}
-              </Form.Control.Feedback>
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label>Picture URL:</Form.Label>
-              <Form.Control
-                id="picture"
-                type="text"
-                placeholder="Picture URL"
-                size="lg"
-                {...register('picture')}
-                isInvalid={!!errors.picture}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.picture && errors.picture.message}
-              </Form.Control.Feedback>
-            </Form.Group>
-          </Card.Body>
-          <Card.Footer className="d-flex justify-content-end">
-            <Button
-              variant="outline-secondary"
-              type="button"
-              className="me-2"
-              onClick={handleCancelClick}
-              disabled={isSubmitting}
-            >
-              <X className="mb-1" />
-            </Button>
-            <Button
-              variant="success"
-              type="submit"
-              className="me-2"
-              disabled={isSubmitting}
-            >
-              <Check className="mb-1" />
-            </Button>
-          </Card.Footer>
-        </Card>
-      </Form>
+              <Form.Group className="mb-3">
+                <Form.Label>Phone:</Form.Label>
+                <Form.Control
+                  id="phone"
+                  type="text"
+                  placeholder="Phone"
+                  size="lg"
+                  {...methods.register('phone')}
+                  isInvalid={!!methods.formState.errors.phone}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {methods.formState.errors.phone && methods.formState.errors.phone.message}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Website:</Form.Label>
+                <Form.Control
+                  id="website"
+                  type="text"
+                  placeholder="Website"
+                  size="lg"
+                  {...methods.register('website')}
+                  isInvalid={!!methods.formState.errors.website}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {methods.formState.errors.website && methods.formState.errors.website.message}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Picture URL:</Form.Label>
+                <Form.Control
+                  id="picture"
+                  type="text"
+                  placeholder="Picture URL"
+                  size="lg"
+                  {...methods.register('picture')}
+                  isInvalid={!!methods.formState.errors.picture}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {methods.formState.errors.picture && methods.formState.errors.picture.message}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Card.Body>
+            <Card.Footer className="d-flex justify-content-end">
+              <Button
+                variant="outline-secondary"
+                type="button"
+                className="me-2"
+                onClick={handleCancelClick}
+                disabled={isSubmitting}
+              >
+                <X className="mb-1" />
+              </Button>
+              <Button
+                variant="success"
+                type="submit"
+                className="me-2"
+                disabled={isSubmitting}
+              >
+                <Check className="mb-1" />
+              </Button>
+            </Card.Footer>
+          </Card>
+        </Form>
+      </FormProvider>
     );
   }
 
@@ -256,10 +227,8 @@ const StoreCard = ({ store, onUpdate, onDelete }: StoreCardProps) => {
       <Card.Body>
         <Card.Text className="mb-6">
           <AddressSubForm
-            register={register as unknown as UseFormRegister<IAddressSubForm>}
-            errors={errors}
-            initialAddress={getStoreAddress(store)}
-            showEdit={isEditing}
+            address={store}
+            isEditing={isEditing}
           />
         </Card.Text>
         <Card.Text className="text-muted small mb-6">

@@ -24,12 +24,12 @@
     { "name": "deciliter", "abbr": "dl", "baseName": "milliliter", "factor": 100 }
   ],
   "defaultStores": [
-    { "name": "Walmart", "address1":"123 Main St", "address2": "Suite 200", "city": "Anytown", "state": "CA", "zipcode": "12345", "country": "USA", "website": "https://www.walmart.com", "picture": "" },
-    { "name": "Costco", "address1":"456 Elm St", "address2": "Apt 5", "city": "Othertown", "state": "CA", "zipcode": "67890", "country": "USA", "website": "https://www.costco.com", "picture": "" },
-    { "name": "Target", "address1":"789 Oak St", "address2": "Floor 3", "city": "Anothertown", "state": "CA", "zipcode": "13579", "country": "USA", "website": "https://www.target.com", "picture": "" },
-    { "name": "Whole Foods", "address1":"321 Pine St", "address2": "Building B", "city": "Yetanothertown", "state": "CA", "zipcode": "24680", "country": "USA", "website": "https://www.wholefoodsmarket.com", "picture": "" },
-    { "name": "Safeway", "address1":"654 Maple St", "address2": "Unit 10", "city": "Somewhere", "state": "CA", "zipcode": "98765", "country": "USA", "website": "https://www.safeway.com", "picture": "" },
-    { "name": "Kroger", "address1":"987 Cedar St", "address2": "Suite 300", "city": "Anywhere", "state": "CA", "zipcode": "54321", "country": "USA", "website": "https://www.kroger.com", "picture": "" }
+    { "name": "Walmart", "address1":"123 Main St", "address2": "Suite 200", "city": "Anytown", "state": "CA", "zipcode": "12345", "country": "USA", "website": "https://www.walmart.com", "picture": "https://www.walmart.com/favicon.ico" },
+    { "name": "Costco", "address1":"456 Elm St", "address2": "Apt 5", "city": "Othertown", "state": "CA", "zipcode": "67890", "country": "USA", "website": "https://www.costco.com", "picture": "https://www.costco.com/favicon.ico" },
+    { "name": "Target", "address1":"789 Oak St", "address2": "Floor 3", "city": "Anothertown", "state": "CA", "zipcode": "13579", "country": "USA", "website": "https://www.target.com", "picture": "https://www.target.com/favicon.ico" },
+    { "name": "Whole Foods", "address1":"321 Pine St", "address2": "Building B", "city": "Yetanothertown", "state": "CA", "zipcode": "24680", "country": "USA", "website": "https://www.wholefoodsmarket.com", "picture": "https://www.wholefoodsmarket.com/favicon.ico" },
+    { "name": "Safeway", "address1":"654 Maple St", "address2": "Unit 10", "city": "Somewhere", "state": "CA", "zipcode": "98765", "country": "USA", "website": "https://www.safeway.com", "picture": "https://www.safeway.com/favicon.ico" },
+    { "name": "Kroger", "address1":"987 Cedar St", "address2": "Suite 300", "city": "Anywhere", "state": "CA", "zipcode": "54321", "country": "USA", "website": "https://www.kroger.com", "picture": "https://www.kroger.com/favicon.ico" }
   ],
   "defaultProducts": [
     { "name": "Apples", "category": "Fruits", "defaultQty": 6, "unitName": "each", "isNeeded": true, "picture": "./images/groceryItems/apples.jpg", "storeName": "Walmart" },
