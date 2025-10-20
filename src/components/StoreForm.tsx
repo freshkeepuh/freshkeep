@@ -66,7 +66,12 @@ const StoreForm = ({ params }: { params: { id: string } }) => {
                     body: JSON.stringify(updatedStore),
                   });
                   if (response.ok) {
-                    const updated = await response.json();
+                    const response2 = await fetch(`/api/store/${updatedStore.id}`);
+                    if (!response2.ok) {
+                      setError('Failed to fetch updated store');
+                      return;
+                    }
+                    const updated = await response2.json();
                     setStore((prevStore) => (prevStore?.id === updated.id ? updated : prevStore));
                   } else {
                     setError('Failed to update store');

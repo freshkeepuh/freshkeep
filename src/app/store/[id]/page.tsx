@@ -3,10 +3,11 @@ import authOptions from '@/lib/authOptions';
 import { loggedInProtectedPage } from '@/lib/page-protection';
 import StoreForm from '@/components/StoreForm';
 
-export default async function StorePage({ params }: { params: { id: string } }) {
+export default async function StorePage({ params }: { params: { id: string } } | any) {
   const session = await getServerSession(authOptions);
-  loggedInProtectedPage(session);
+  await loggedInProtectedPage(session);
 
   // Use the actual store id from route params
-  return <StoreForm params={params} />;
+  const { id } = await params;
+  return <StoreForm params={{ id }} />;
 }
