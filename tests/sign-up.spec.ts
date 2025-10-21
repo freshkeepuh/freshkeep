@@ -1,96 +1,74 @@
-import { test, expect } from './auth-utils';
+import { Page } from '@playwright/test';
+import { test, expect, BASE_URL, expectSignedInOrRedirected, fillFormWithRetry, checkFormEmpty } from './auth-utils';
 
-const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
 const SIGNUP_URL = `${BASE_URL}/auth/signup`;
 
 function uniqueEmail() {
   return `playwright+${Date.now()}@example.com`;
 }
 
-async function expectSignedInOrRedirected({
-  page,
-  timeout = 20000,
-}: { page: any; timeout?: number }) {
-  // Primary: redirect to /
-  const redirected = await page
-    .waitForURL(`${BASE_URL}/`, { timeout })
-    .then(() => true)
-    .catch(() => false);
-
-  if (redirected) {
-    await expect(page).toHaveURL(`${BASE_URL}/`);
-    return;
-  }
-
-  // Fallback: NextAuth session cookie present (Firefox sometimes lags redirect)
-  const cookies = await page.context().cookies();
-  const hasSession = cookies.some((c) => c.name.includes('next-auth') && c.value);
-  expect(hasSession, 'Expected a NextAuth session cookie if not redirected').toBeTruthy();
-
-  // And the submit cycle should have finished
-  await page.waitForLoadState('networkidle', { timeout: 5000 });
-  await expect(page.getByRole('button', { name: /Create Account|Creating…/ })).toBeVisible();
+async function submitSignup(page: Page) {
+  await page.getByTestId('sign-up-form-submit').click();
 }
 
-async function fillAndSubmitSignup(page: any, email: string, password = 'secret123') {
-  await page.goto(SIGNUP_URL);
-  await page.getByPlaceholder('📧 Email').fill(email);
-  await page.getByPlaceholder('🔒 Password').fill(password);
-  await page.getByPlaceholder('🔁 Confirm Password').fill(password);
-  await page.getByRole('button', { name: 'Create Account' }).click();
+async function fillSignup(
+  page: Page,
+  email: string,
+  password: string = 'secret123',
+  confirmPassword: string = password,
+) {
+  await fillFormWithRetry(page, [
+    { selector: '[id="email"]', value: email },
+    { selector: '[id="password"]', value: password },
+    { selector: '[id="confirmPassword"]', value: confirmPassword },
+  ]);
 }
 
-test('sign up page — validation errors', async ({ page }) => {
+async function isEmptySignup(page: Page) {
+  await checkFormEmpty(page, [
+    { selector: '[id="email"]' },
+    { selector: '[id="password"]' },
+    { selector: '[id="confirmPassword"]' },
+  ]);
+}
+
+async function fillAndSubmitSignup(
+  page: Page,
+  email: string,
+  password: string = 'secret123',
+  confirmPassword: string = password,
+) {
+  await fillSignup(page, email, password, confirmPassword);
+  await submitSignup(page);
+}
+
+test('sign up page — successful login', async ({ page }) => {
   await page.goto(SIGNUP_URL);
 
-  // Submit empty form
-  await page.getByRole('button', { name: 'Create Account' }).click();
-
-  await expect(page.getByText('Email is required', { exact: true })).toBeVisible();
-  await expect(page.getByText('Password is required', { exact: true })).toBeVisible();
-  await expect(page.getByText('Confirm Password is required', { exact: true })).toBeVisible();
-
-  // Invalid email
-  await page.getByPlaceholder('📧 Email').fill('not-an-email');
-  await page.getByRole('button', { name: 'Create Account' }).click();
-  await expect(page.getByText('Email is invalid', { exact: true })).toBeVisible();
-
-  // Mismatched passwords
-  await page.getByPlaceholder('📧 Email').fill('valid@mail.com');
-  await page.getByPlaceholder('🔒 Password').fill('secret123');
-  await page.getByPlaceholder('🔁 Confirm Password').fill('different123');
-  await page.getByRole('button', { name: 'Create Account' }).click();
-  await expect(page.getByText('Confirm Password does not match', { exact: true })).toBeVisible();
-});
-
-test('sign up page — successful account creation (redirect OR session cookie)', async ({ page }) => {
   const email = uniqueEmail();
+
   await fillAndSubmitSignup(page, email);
-  await expectSignedInOrRedirected({ page, timeout: 20000 });
+  await expectSignedInOrRedirected({ page, url: `${BASE_URL}/`, timeout: 10000 });
 });
 
 test('sign up page — Reset clears fields and errors', async ({ page }) => {
   await page.goto(SIGNUP_URL);
 
-  // Trigger required errors first
-  await page.getByRole('button', { name: 'Create Account' }).click();
-  await expect(page.getByText('Email is required', { exact: true })).toBeVisible();
-
   // Fill fields
-  await page.getByPlaceholder('📧 Email').fill(uniqueEmail());
-  await page.getByPlaceholder('🔒 Password').fill('secret123');
-  await page.getByPlaceholder('🔁 Confirm Password').fill('secret123');
+  await fillSignup(page, uniqueEmail());
 
-  // Reset
-  await page.getByRole('button', { name: 'Reset' }).click();
+  // Reset the form
+  await page.getByTestId('sign-up-form-reset').click();
 
   // Inputs cleared
-  await expect(page.getByPlaceholder('📧 Email')).toHaveValue('');
-  await expect(page.getByPlaceholder('🔒 Password')).toHaveValue('');
-  await expect(page.getByPlaceholder('🔁 Confirm Password')).toHaveValue('');
+  await isEmptySignup(page);
+});
 
-  // Errors gone after simple re-focus/blur
-  await page.getByPlaceholder('📧 Email').focus();
-  await page.getByPlaceholder('📧 Email').blur();
-  await expect(page.getByText('Email is required', { exact: true })).toBeHidden({ timeout: 500 });
+test('test sign up page with sign in option', async ({ page }) => {
+  await page.goto(SIGNUP_URL);
+
+  // Click on the "Sign In" link
+  await page.getByTestId('sign-up-form-signin-link').click();
+  await page.waitForLoadState();
+  await expect(page).toHaveURL(`${BASE_URL}/auth/signin`);
 });

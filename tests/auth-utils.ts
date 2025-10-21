@@ -1,5 +1,3 @@
-/* eslint-disable no-await-in-loop */
-/* eslint-disable import/no-extraneous-dependencies */
 import { test as base, expect, Page } from '@playwright/test';
 import fs from 'fs';
 import path from 'path';
@@ -20,8 +18,10 @@ interface AuthFixtures {
 
 /**
  * Helper to fill form fields with retry logic
+ * @param page The Page on which the fields are to be filled
+ * @param fields The Fields to fill with values
  */
-async function fillFormWithRetry(
+export async function fillFormWithRetry(
   page: Page,
   fields: Array<{ selector: string; value: string }>,
 ): Promise<void> {
@@ -42,9 +42,94 @@ async function fillFormWithRetry(
         if (attempts >= maxAttempts) {
           throw new Error(`Failed to fill field ${field.selector} after ${maxAttempts} attempts`);
         }
+        if (page.isClosed()) {
+          throw new Error('Page is closed, cannot fill form fields');
+        }
         await page.waitForTimeout(500);
       }
     }
+  }
+}
+
+/**
+ * Helper to empty form fields with retry logic
+ * @param page The Page on which the fields are to be emptied
+ * @param fields The Fields to empty
+ */
+export async function emptyFormWithRetry(
+  page: Page,
+  fields: Array<{ selector: string }>,
+): Promise<void> {
+  for (const field of fields) {
+    let attempts = 0;
+    const maxAttempts = 3;
+
+    while (attempts < maxAttempts) {
+      try {
+        const element = page.locator(field.selector);
+        await element.waitFor({ state: 'visible', timeout: 2000 });
+        await element.clear();
+        await element.evaluate((el) => el.blur()); // Trigger blur event
+        break;
+      } catch (error) {
+        attempts++;
+        if (attempts >= maxAttempts) {
+          throw new Error(`Failed to clear field ${field.selector} after ${maxAttempts} attempts`);
+        }
+        await page.waitForTimeout(500);
+      }
+    }
+  }
+}
+
+/**
+ * Check that form fields are empty
+ * @param page The Page on which the fields are to be checked
+ * @param fields The Fields to check
+ */
+export async function checkFormEmpty(
+  page: Page,
+  fields: Array<{ selector: string }>
+): Promise<void> {
+  for (const field of fields) {
+    const element = page.locator(field.selector);
+    await expect(element).toBeEmpty();
+  }
+}
+
+/**
+ * Expect the user to be signed in or redirected to the home page
+ * @param param0 - Object containing the page and optional timeout
+ * @returns {Promise<void>}
+ */
+export async function expectSignedInOrRedirected({
+  page,
+  url,
+  timeout = 20000,
+}: { page: Page; url: string; timeout?: number }): Promise<void> {
+  try {
+    // Primary: check for session cookie
+    await page.waitForLoadState();
+    const cookies = await page.context().cookies();
+    const hasSessionCookie = cookies.some((cookie) => cookie.name === 'next-auth.session-token' || cookie.name === '__Secure-next-auth.session-token');
+
+    if (hasSessionCookie) {
+      console.log('✓ Session cookie found, user is signed in');
+      return;
+    }
+    // Primary: redirect to /
+    const redirected = await page
+      .waitForURL(url, { timeout })
+      .then(() => true)
+      .catch(() => false);
+
+    if (redirected) {
+      await expect(page).toHaveURL(url);
+      console.log(`✓ Redirected to ${url}, user is signed in`);
+      return;
+    }
+  } catch (err: Error | any) {
+    throw new Error(`× User is not signed in or redirected: ${err}`);
   }
 }
 
@@ -69,10 +154,7 @@ async function authenticateWithUI(
       await page.waitForLoadState('networkidle');
       // Check if we're authenticated by looking for a sign-out option or user email
       const isAuthenticated = await Promise.race([
-        page.getByText(email).isVisible().then((visible) => visible),
-        page.getByRole('button', { name: email }).isVisible().then((visible) => visible),
-        page.getByText('Sign out').isVisible().then((visible) => visible),
-        page.getByRole('button', { name: 'Sign out' }).isVisible().then((visible) => visible),
+        page.getByTestId('navbar-dropdown-account').isVisible().then((visible) => ({ success: visible })),
         // eslint-disable-next-line no-promise-executor-return
         new Promise<boolean>((resolve) => setTimeout(() => resolve(false), 3000)),
       ]);
@@ -115,10 +197,7 @@ async function authenticateWithUI(
     // Verify authentication was successful
     await expect(async () => {
       const authState = await Promise.race([
-        page.getByText(email).isVisible().then((visible) => ({ success: visible })),
-        page.getByRole('button', { name: email }).isVisible().then((visible) => ({ success: visible })),
-        page.getByText('Sign out').isVisible().then((visible) => ({ success: visible })),
-        page.getByRole('button', { name: 'Sign out' }).isVisible().then((visible) => ({ success: visible })),
+        page.getByTestId('navbar-dropdown-account').isVisible().then((visible) => ({ success: visible })),
         // eslint-disable-next-line no-promise-executor-return
         new Promise<{ success: boolean }>((resolve) => setTimeout(() => resolve({ success: false }), 5000)),
       ]);
@@ -129,11 +208,8 @@ async function authenticateWithUI(
     // Save session for future tests
     const cookies = await page.context().cookies();
     fs.writeFileSync(sessionPath, JSON.stringify({ cookies }));
-    console.log(`✓ Successfully authenticated ${email} and saved session`);
   } catch (error) {
-    console.error(`× Authentication failed for ${email}:`, error);
-
-    throw new Error(`Authentication failed: ${error}`);
+    throw new Error('Authentication failed', { cause: error });
   }
 }
 

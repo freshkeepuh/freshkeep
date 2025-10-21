@@ -35,13 +35,14 @@ enum Role {
  * Uses: Role
  */
 model User {
-  id        String   @id @default(uuid()) @map("_id")
-  email     String   @unique
+  id        String    @id @default(uuid()) @map("_id")
+  email     String    @unique
   password  String
-  role      Role     @default(USER)
+  role      Role      @default(USER)
   settings  Json?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  catalog   Catalog[]
 }
 
 /**
@@ -52,18 +53,18 @@ model User {
  * Uses: Unit
  */
 model Unit {
-  id           String        @id @default(uuid()) @map("_id")
-  name         String        @unique
-  abbr         String        @unique
-  base         Unit?         @relation("UnitsToUnits", fields: [baseId], references: [id])
-  baseId       String?
-  factor       Float         @default(1.0)
-  children     Unit[]        @relation("UnitsToUnits")
-  products     Product[]
-  instances    ProductInstance[]
+  id                String             @id @default(uuid()) @map("_id")
+  name              String             @unique
+  abbr              String             @unique
+  base              Unit?              @relation("UnitsToUnits", fields: [baseId], references: [id])
+  baseId            String?
+  factor            Float              @default(1.0)
+  children          Unit[]             @relation("UnitsToUnits")
+  products          Product[]
+  instances         ProductInstance[]
   shoppingListItems ShoppingListItem[]
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
 }
 
 // TODO: Create Icons in public/icons/{country}.svg, flags?
@@ -84,19 +85,19 @@ enum Country {
  * Uses: Country, Container, ProductInstance
  */
 model Location {
-  id         String      @id @default(uuid()) @map("_id")
-  name       String      @unique
+  id         String            @id @default(uuid()) @map("_id")
+  name       String            @unique
   address1   String
   address2   String?
   city       String
   state      String
   zipcode    String
-  country    Country     @default(USA)
+  country    Country           @default(USA)
   picture    String?
   containers Container[]
   instances  ProductInstance[]
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
 }
 
 // TODO: Create Icons in public/icons/{containertype}.svg
@@ -117,15 +118,15 @@ enum ContainerType {
  * Uses: ContainerType, Location, ProductInstance
  */
 model Container {
-  id        String        @id @default(uuid()) @map("_id")
-  location  Location      @relation(fields: [locId], references: [id])
+  id        String            @id @default(uuid()) @map("_id")
+  location  Location          @relation(fields: [locId], references: [id])
   locId     String
-  name      String        @unique
+  name      String            @unique
   type      ContainerType
   picture   String?
   items     ProductInstance[]
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
 }
 
 // TODO: Create Icons in public/icons/{category}.svg
@@ -163,20 +164,21 @@ enum ProductCategory {
  * Uses: ProductCategory, Unit
  */
 model Product {
-  id         String          @id @default(uuid()) @map("_id")
-  name       String          @unique
-  brand      String?
-  category   ProductCategory
-  unitId     String
-  defaultQty Float           @default(1.0)
-  isNeeded   Boolean         @default(false)
-  picture    String?
-  unit       Unit            @relation(fields: [unitId], references: [id])
-  instances  ProductInstance[]
+  id                String             @id @default(uuid()) @map("_id")
+  name              String             @unique
+  brand             String?
+  category          ProductCategory
+  unitId            String
+  defaultQty        Float              @default(1.0)
+  isNeeded          Boolean            @default(false)
+  picture           String?
+  unit              Unit               @relation(fields: [unitId], references: [id])
+  instances         ProductInstance[]
   shoppingListItems ShoppingListItem[]
-  stores     Store[]
-  createdAt  DateTime        @default(now())
-  updatedAt  DateTime        @updatedAt
+  stores            Store[]
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  catalog           Catalog[]
 
   @@index([category, name], name: "category_name_idx")
 }
@@ -188,57 +190,56 @@ model Product {
  * Uses: Location, Container, Product, and Unit
  */
 model ProductInstance {
-  id          String      @id @default(uuid()) @map("_id")
-  locId       String
-  conId       String
-  prodId      String
-  unitId      String
-  quantity    Float       @default(0.0)
-  expiresAt   DateTime?
-  location    Location    @relation(fields: [locId], references: [id])
-  container   Container   @relation(fields: [conId], references: [id])
-  product     Product     @relation(fields: [prodId], references: [id])
-  unit        Unit        @relation(fields: [unitId], references: [id])
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  id        String    @id @default(uuid()) @map("_id")
+  locId     String
+  conId     String
+  prodId    String
+  unitId    String
+  quantity  Float     @default(0.0)
+  expiresAt DateTime?
+  location  Location  @relation(fields: [locId], references: [id])
+  container Container @relation(fields: [conId], references: [id])
+  product   Product   @relation(fields: [prodId], references: [id])
+  unit      Unit      @relation(fields: [unitId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
   @@unique([locId, conId, prodId, unitId, expiresAt])
 }
 
- /**
-  * The Shopping List
-  * Uses: User, Store, ShoppingListItem
-  */
+/**
+ * The Shopping List
+ * Uses: User, Store, ShoppingListItem
+ */
 model ShoppingList {
-  id            String              @id @default(uuid()) @map("_id")
-  name          String              @unique
-  storeId       String
-  isDefault     Boolean             @default(false)
-  store         Store               @relation(fields: [storeId], references: [id])
-  items         ShoppingListItem[]
-  createdAt     DateTime            @default(now())
-  updatedAt     DateTime            @updatedAt
+  id        String             @id @default(uuid()) @map("_id")
+  name      String             @unique
+  storeId   String
+  isDefault Boolean            @default(false)
+  store     Store              @relation(fields: [storeId], references: [id])
+  items     ShoppingListItem[]
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
 
   @@unique([storeId, createdAt])
 }
- 
- 
- /**
+
+/**
  * Shopping List Items
  * Uses: Product, ShoppingList, Unit
  */
 model ShoppingListItem {
-  id            String       @id @default(uuid()) @map("_id")
-  listId        String
-  prodId        String
-  quantity      Float        @default(1.0)
-  unitId        String
-  isPurchased   Boolean      @default(false)
-  list          ShoppingList @relation(fields: [listId], references: [id])
-  product       Product      @relation(fields: [prodId], references: [id])
-  unit          Unit         @relation(fields: [unitId], references: [id])
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  id          String       @id @default(uuid()) @map("_id")
+  listId      String
+  prodId      String
+  quantity    Float        @default(1.0)
+  unitId      String
+  isPurchased Boolean      @default(false)
+  list        ShoppingList @relation(fields: [listId], references: [id])
+  product     Product      @relation(fields: [prodId], references: [id])
+  unit        Unit         @relation(fields: [unitId], references: [id])
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 
   @@unique([listId, prodId, unitId])
 }
@@ -249,21 +250,21 @@ model ShoppingListItem {
  * Used By: Product, ShoppingList
  */
 model Store {
-  id            String      @id @default(uuid()) @map("_id")
+  id            String         @id @default(uuid()) @map("_id")
   name          String
   address1      String?
   address2      String?
   city          String?
   state         String?
   zipcode       String?
-  country       Country     @default(USA)
+  country       Country        @default(USA)
   phone         String?
   website       String?
   picture       String?
   shoppingLists ShoppingList[]
   products      Product[]
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 
   @@unique([name])
 }
@@ -294,14 +295,32 @@ enum RecipeDiet {
  * Uses: RecipeDifficulty, RecipeDiet
  */
 model Recipe {
-  id          String           @id @default(uuid()) @map("_id")
-  title       String           @unique
-  cookTime    Int
-  difficulty  RecipeDifficulty
-  diet        RecipeDiet
-  ingredients Json             
+  id           String           @id @default(uuid()) @map("_id")
+  title        String 
+  slug         String?          @unique
+  cookTime     Int
+  difficulty   RecipeDifficulty
+  diet         RecipeDiet
+  ingredients  Json
   instructions Json?
-  image       String?
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
+  image        String?
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+}
+
+/**
+ * Catalog of Products
+ * Uses: User, Product
+ */
+
+model Catalog {
+  id            String   @id @default(uuid()) @map("_id")
+  userId        String
+  groceryItemId String
+  user          User     @relation(fields: [userId], references: [id])
+  groceryItem   Product  @relation(fields: [groceryItemId], references: [id])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([userId, groceryItemId])
 }

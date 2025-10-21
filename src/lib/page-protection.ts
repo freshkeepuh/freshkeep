@@ -1,14 +1,6 @@
 import { redirect } from 'next/navigation';
 import { Session } from 'next-auth';
 import { Role } from '@prisma/client';
-import { readUser } from './dbUserActions';
-
-const getUserFromSession = async (session: Session | null) => {
-  if (!session) return null;
-  const currentUserId = session?.user.id;
-  const currentUser = await readUser(currentUserId);
-  return currentUser;
-};
 
 /**
  * Redirects to the login page if the user is not logged in.
@@ -25,7 +17,7 @@ export const loggedInProtectedPage = async (session: Session | null) => {
  */
 export const adminProtectedPage = async (session: Session | null) => {
   await loggedInProtectedPage(session);
-  const user = await getUserFromSession(session);
+  const user = session?.user;
   if (!user) {
     redirect('/auth/signin');
   }

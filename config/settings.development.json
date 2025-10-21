@@ -1,7 +1,7 @@
 {
   "defaultAccounts": [
-    { "email": "admin@foo.com", "password": "changeme", "role": "ADMIN" },
-    { "email": "john@foo.com", "password": "changeme" }
+    { "email": "admin@foo.com", "password": "changeme", "role": "ADMIN", "settings": { "units": "imperial", "country": "USA", "theme": "light", "profilePicture": "/images/avatars/default.jpg"}},
+    { "email": "john@foo.com", "password": "changeme", "settings": { "units": "metric", "country": "CAN", "theme": "dark" }}
   ],
   "defaultUnits": [
     { "name": "each", "abbr": "ea", "baseName": "each", "factor": 1 },
@@ -110,7 +110,96 @@
     { "shoppingListName": "Party Supplies", "productName": "Cookies", "quantity": 2, "unitName": "each", "isPurchased": false }
   ],
   "defaultRecipes": [
-    { "title": "Recipe #1", "cookTime": 30, "difficulty": "EASY", "diet": "VEGETARIAN", "ingredients": ["ingredient 1", "ingredient 2", "ingredient 3", "ingredient 4"], "instructions": [{ "step": 1, "text": "Prep ingredients." }, { "step": 2, "text": "Cook on medium heat for 10-15 min." }, { "step": 3, "text": "Season and serve." }],"image": null },
-    { "title": "Recipe #2", "cookTime": 15, "difficulty": "HARD", "diet": "VEGETARIAN", "ingredients": ["ingredient 1", "ingredient 2", "ingredient 3"], "instructions": [{ "step": 1, "text": "Boil water and prep." }, { "step": 2, "text": "Combine and cook until tender." }, { "step": 3, "text": "Plate and garnish." }], "image": null }
+     {
+    "title": "Chicken Katsu Curry",
+    "cookTime": 35,
+    "difficulty": "NORMAL",
+    "diet": "ANY",
+    "ingredients": ["chicken cutlets", "panko breadcrumbs", "eggs", "flour", "Japanese curry roux", "onion", "carrot", "potato", "steamed rice", "oil", "salt", "pepper"],
+    "instructions": [
+      "Season chicken with salt and pepper, dredge in flour, dip in beaten egg, then coat in panko.",
+      "Shallow-fry cutlets in 350°F/175°C oil until golden and cooked through; drain on a rack.",
+      "In a pot, sauté sliced onion until soft; add carrot and potato and cook 2-3 min.",
+      "Pour in water to cover, simmer until vegetables are tender.",
+      "Stir in curry roux blocks to thicken; simmer 2-3 min more.",
+      "Slice katsu and serve over steamed rice with hot curry sauce."
+    ],
+    "image": "/images/recipes/chicken-katsu-curry.jpg"
+  },
+  {
+    "title": "Garlic Shoyu Saimin",
+    "cookTime": 15,
+    "difficulty": "EASY",
+    "diet": "ANY",
+    "ingredients": ["saimin noodles", "chicken broth", "soy sauce", "garlic", "green onion", "kamaboko", "char siu", "nori"],
+    "instructions": [
+      "Bring chicken broth to a simmer; add soy sauce and 1-2 minced garlic cloves.",
+      "Cook saimin noodles per package; drain.",
+      "Slice kamaboko and char siu thinly.",
+      "Divide noodles into bowls; ladle hot broth over.",
+      "Top with char siu, kamaboko, chopped green onion, and nori strips."
+    ],
+    "image": "/images/recipes/garlic-shoyu-saimin.jpg"
+  },
+  {
+    "title": "Hawaiian Garlic Shrimp Plate",
+    "cookTime": 18,
+    "difficulty": "EASY",
+    "diet": "ANY",
+    "ingredients": ["shrimp", "butter", "garlic", "flour", "paprika", "lemon", "white rice", "macaroni salad", "salt", "pepper"],
+    "instructions": [
+      "Pat shrimp dry; season with salt, pepper, and paprika; lightly dust with flour.",
+      "Melt butter in a skillet; add lots of minced garlic and cook until fragrant.",
+      "Add shrimp; sauté until pink and just cooked through.",
+      "Squeeze lemon over shrimp; toss to coat.",
+      "Serve with white rice and a scoop of macaroni salad."
+    ],
+    "image": "/images/recipes/hawaiian-garlic-shrimp.jpg"
+  },
+  {
+    "title": "Spicy Tuna Poke Bowl",
+    "cookTime": 12,
+    "difficulty": "EASY",
+    "diet": "PESCETARIAN",
+    "ingredients": ["sushi-grade tuna", "soy sauce", "sriracha", "mayonnaise", "sesame oil", "green onion", "white rice", "avocado", "sesame seeds"],
+    "instructions": [
+      "Cube sushi-grade tuna; chill.",
+      "Mix soy sauce, mayo, sriracha, and a few drops of sesame oil.",
+      "Toss tuna with sauce and sliced green onion.",
+      "Serve over warm rice with avocado.",
+      "Finish with sesame seeds (optional furikake)."
+    ],
+    "image": "/images/recipes/spicy-tuna-poke-bowl.jpg"
+  },
+  {
+    "title": "Creamy Tomato Penne",
+    "cookTime": 20,
+    "difficulty": "EASY",
+    "diet": "VEGETARIAN",
+    "ingredients": ["penne", "crushed tomatoes", "heavy cream", "garlic", "olive oil", "parmesan", "basil", "salt", "pepper"],
+    "instructions": [
+      "Boil penne in salted water until al dente.",
+      "Sauté minced garlic in olive oil 30-60 sec; add crushed tomatoes and simmer 5 min.",
+      "Stir in cream; season with salt and pepper.",
+      "Toss in drained penne; add grated parmesan.",
+      "Top with torn basil to serve."
+    ],
+    "image": "/images/recipes/creamy-tomato-penne.jpg"
+  },
+  {
+    "title": "Mushroom Tofu Mapo",
+    "cookTime": 25,
+    "difficulty": "NORMAL",
+    "diet": "VEGAN",
+    "ingredients": ["soft tofu", "shiitake mushrooms", "doubanjiang", "soy sauce", "garlic", "ginger", "Sichuan peppercorns", "vegetable broth", "cornstarch slurry", "green onion"],
+    "instructions": [
+      "Dry-saute diced shiitake to concentrate flavor; add oil, minced garlic, and ginger.",
+      "Stir in doubanjiang; cook 30 sec to bloom.",
+      "Add vegetable broth and cubed soft tofu; simmer gently 3-4 min.",
+      "Season with soy sauce; add cornstarch slurry to thicken.",
+      "Finish with ground Sichuan peppercorns and green onion."
+    ],
+    "image": "/images/recipes/mushroom-tofu-mapo.jpg"
+  }
   ]
 }

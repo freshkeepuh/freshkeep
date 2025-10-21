@@ -2,10 +2,13 @@
 
 import React, { useMemo, useState } from 'react';
 import styles from '@/app/recipes/page.module.css';
+import Image from 'next/image';
+import Link from 'next/link';
 
 // Strict UI type
 export interface Recipe {
   id: string;
+  slug: string;
   title: string;
   cookTime: number;
   difficulty: 'Easy' | 'Normal' | 'Hard' | 'Any';
@@ -92,12 +95,23 @@ export default function RecipesPage({ initialRecipes }: Props) {
       const matchesDifficulty = difficulty === 'Any' || r.difficulty === difficulty;
       const matchesDiet = diet === 'Any' || r.diet === diet;
 
-      // Check ingredients (all entered chips must be present)
-      const matchesIngredients = ingredients.length === 0
-        || ingredients.every((ing) => r.ingredients.map((x) => x.toLowerCase()).includes(ing.toLowerCase()));
+      // Check ingredients
+      const recipeIngs = Array.isArray(r.ingredients)
+        ? r.ingredients.map((i) => String(i).toLowerCase())
+        : [];
 
+      const matchesIngredients = ingredients.length === 0
+      || ingredients.every((chip) => {
+        const c = chip.trim().toLowerCase();
+        if (!c) return true;
+        return recipeIngs.some((ing) => ing.includes(c));
+      });
       return (
-        matchesQuery && matchesTime && matchesDifficulty && matchesDiet && matchesIngredients
+        matchesQuery
+        && matchesTime
+        && matchesDifficulty
+        && matchesDiet
+        && matchesIngredients
       );
     });
   }, [recipes, committedQuery, maxTime, difficulty, diet, ingredients]);
@@ -230,7 +244,13 @@ export default function RecipesPage({ initialRecipes }: Props) {
           <section className={styles.rpCards}>
             {filteredRecipes.map((r) => (
               <article key={r.id} className={styles.rpCardItem}>
-                <div className={styles.rpCardMedia} />
+                <div className={styles.rpCardMedia} style={{ position: 'relative', height: 180 }}>
+                  {r.image ? (
+                    <Image src={r.image} alt={r.title} fill style={{ objectFit: 'cover' }} />
+                  ) : (
+                    <div className={styles.rpNoImg}>No image</div>
+                  )}
+                </div>
                 <div className={styles.rpCardBody}>
                   <div className={styles.rpCardTitle}>
                     <span className={styles.rpH2}>👨‍🍳</span>
@@ -260,8 +280,10 @@ export default function RecipesPage({ initialRecipes }: Props) {
                     <p className={styles.rpH3}>Ingredients:</p>
                     <p className={styles.rpText}>{r.ingredients.join(', ')}</p>
                   </div>
-                  {/* View Recipe button (non-functional placeholder) */}
-                  <button type="button" className={styles.rpBtnLight}>View Recipe</button>
+                  {/* View Recipe button */}
+                  <Link href={`/recipes/${encodeURIComponent(r.slug)}`} className={styles.rpBtnLight}>
+                    View Recipe
+                  </Link>
                 </div>
               </article>
             ))}

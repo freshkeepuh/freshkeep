@@ -6,11 +6,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { Store } from '@prisma/client';
 import LoadingSpinner from './LoadingSpinner';
 
-type StoreFormProps = {
-  id: string | null;
-};
-
-const StoreForm = ({ id }: StoreFormProps) => {
+const StoreForm = ({ params }: { params: { id: string } }) => {
   const { data: session } = useSession();
   const [store, setStore] = useState<Store | null>(null);
   const [loading, setLoading] = useState(true);
@@ -22,7 +18,7 @@ const StoreForm = ({ id }: StoreFormProps) => {
         setLoading(true);
 
         // Fetch the store associated with the current user
-        const storeResponse = await fetch(`/api/store/${id}`);
+        const storeResponse = await fetch(`/api/store/${params.id}`);
         if (!storeResponse.ok) {
           const errorText = await storeResponse.text();
           throw new Error(`Failed to fetch store: ${storeResponse.status} - ${errorText}`);
@@ -41,7 +37,7 @@ const StoreForm = ({ id }: StoreFormProps) => {
     };
 
     fetchStoreAndProducts();
-  }, [session, id]);
+  }, [session, params.id]);
 
   if (loading) {
     return <LoadingSpinner />;
