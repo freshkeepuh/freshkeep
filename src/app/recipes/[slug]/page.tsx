@@ -4,16 +4,36 @@ import { notFound } from 'next/navigation';
 import { ArrowBigLeft, Heart, Share } from 'lucide-react';
 import Link from 'next/link';
 import styles from '@/app/recipes/page.module.css';
+import slugify from '@/lib/slug';
 
-type RouteParams = { slug: string };
 export const dynamic = 'force-dynamic';
 
-export default async function RecipeViewPage(
-  { params }: { params: Promise<RouteParams> },
-) {
-  const { slug: routeSlug } = await params;
+export default async function RecipeViewPage(props: any) {
+  const { slug: routeSlug } = await Promise.resolve(props?.params);
 
-  const recipe = await prisma.recipe.findUnique({ where: { slug: routeSlug } });
+  // Normal lookup by slug
+  let recipe = await prisma.recipe.findUnique({
+    where: { slug: routeSlug },
+  });
+
+  // Fallback: if slug is missing in DB, match by slugified title
+  if (!recipe) {
+    const rows = await prisma.recipe.findMany({
+      select: {
+        id: true,
+        title: true,
+        cookTime: true,
+        difficulty: true,
+        diet: true,
+        ingredients: true,
+        instructions: true,
+        image: true,
+      },
+    });
+    const match = rows.find((r) => slugify(r.title) === routeSlug);
+    if (match) recipe = match as any;
+  }
+
   if (!recipe) notFound();
 
   const ingredients: string[] = Array.isArray(recipe.ingredients)
