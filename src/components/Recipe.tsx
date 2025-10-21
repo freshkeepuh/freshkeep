@@ -4,6 +4,7 @@ import React, { useMemo, useState } from 'react';
 import styles from '@/app/recipes/page.module.css';
 import Image from 'next/image';
 import Link from 'next/link';
+import slugify from '@/lib/slug';
 
 // Strict UI type
 export interface Recipe {
@@ -281,7 +282,10 @@ export default function RecipesPage({ initialRecipes }: Props) {
                     <p className={styles.rpText}>{r.ingredients.join(', ')}</p>
                   </div>
                   {/* View Recipe button */}
-                  <Link href={`/recipes/${encodeURIComponent(r.slug)}`} className={styles.rpBtnLight}>
+                  <Link
+                    href={`/recipes/${encodeURIComponent(r.slug || slugify(r.title))}`}
+                    className={styles.rpBtnLight}
+                  >
                     View Recipe
                   </Link>
                 </div>
