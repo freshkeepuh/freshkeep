@@ -46,6 +46,7 @@ export async function DELETE(request: NextRequest, context: any) {
 
     return NextResponse.json({ message: 'Store deleted successfully' });
   } catch (error: Error | any) {
+    console.error('Error deleting store:', error);
     return getResponseError(error);
   }
 }

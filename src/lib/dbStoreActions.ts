@@ -5,23 +5,10 @@
 'use server';
 
 import { Country } from '@prisma/client';
-import { prisma } from './prisma';
-
-const shoppingListsSelect = { select: { id: true, name: true } };
-
-const storeSelect = {
-  id: true,
-  name: true,
-  address1: true,
-  address2: true,
-  city: true,
-  state: true,
-  zipcode: true,
-  country: true,
-  phone: true,
-  website: true,
-  shoppingLists: shoppingListsSelect,
-};
+import { prisma } from '@/lib/prisma';
+import {
+  storeSelect,
+} from './dbActionTypes';
 
 /**
  * Create a new store.
@@ -65,7 +52,16 @@ export async function createStore(data: {
 export async function readStores() {
   const stores = await prisma.store.findMany(
     {
-      select: storeSelect,
+      select: {
+        products: {
+          select: {
+            unit: true,
+          },
+        },
+        shoppingLists: true,
+        ...storeSelect,
+      },
+      orderBy: { name: 'asc' },
     },
   );
   return stores;
@@ -80,7 +76,15 @@ export async function readStore(id: string | null | undefined) {
   if (!id) return null;
   const store = await prisma.store.findUnique({
     where: { id },
-    select: storeSelect,
+    select: {
+      products: {
+        select: {
+          unit: true,
+        },
+      },
+      shoppingLists: true,
+      ...storeSelect,
+    },
   });
   return store;
 }
