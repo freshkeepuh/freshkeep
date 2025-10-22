@@ -6,10 +6,10 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import GroceryItemCard from '../../components/GroceryItemCard';
+import Badge from 'react-bootstrap/Badge';
+import Image from 'react-bootstrap/Image';
 
 const ShoppingListPage = () => {
-  // Sample groceryItem data
   const samplegroceryItems = [
     {
       id: 'groceryItem-1',
@@ -79,6 +79,10 @@ const ShoppingListPage = () => {
     },
   ];
 
+  const handleButtonClick = (itemTitle: string, inList: boolean) => {
+    console.log(`${inList ? 'Removing' : 'Adding'} ${itemTitle} ${inList ? 'from' : 'to'} list`);
+  };
+
   return (
     <Container fluid className="p-5">
       <h1>Shopping List</h1>
@@ -88,37 +92,116 @@ const ShoppingListPage = () => {
           height: '75px',
           margin: '0 auto',
         }}
-        className="d-flex justify-content-center bg-success p-1 rounded mb-4 "
+        className="d-flex justify-content-center bg-success p-1 rounded mb-4"
       >
-        <Row className=" align-items-center justify-content-center py-3" style={{ height: '50px' }}>
+        <Row className="align-items-center justify-content-center py-3" style={{ height: '50px' }}>
           <Col xs="auto" className="px-1">
-            <Form.Control type="search" placeholder="Search groceryItems..." style={{ width: '400px' }} />
+            <Form.Control type="search" placeholder="Search Grocery Item" style={{ width: '400px' }} />
           </Col>
           <Col xs="auto" className="ps-1">
             <Button variant="light">Filters</Button>
           </Col>
           <Col xs="auto" className="ps-1">
-            <Button variant="light" href="/store">
+            <Button variant="light" href="/catalog">
               Add To List
             </Button>
           </Col>
         </Row>
       </div>
 
-      <Row>
-        {samplegroceryItems.map((groceryItem) => (
-          <Col key={groceryItem.id} lg={3} md={4} sm={6} className="mb-4">
-            <GroceryItemCard
-              picture={groceryItem.groceryItemImage}
-              groceryItemTitle={groceryItem.groceryItemTitle}
-              storeName={groceryItem.store}
-              storageType={groceryItem.storageType}
-              groceryItemType={groceryItem.groceryItemType}
-              inList={groceryItem.inList}
-            />
-          </Col>
+      <div
+        className="bg-success bg-opacity-10 border-bottom border-success border-2 py-3 px-4 mb-3"
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '100px 1fr 140px 140px 140px 120px',
+          gap: '20px',
+          fontWeight: '600',
+          fontSize: '12px',
+          textTransform: 'uppercase',
+          letterSpacing: '0.5px',
+          color: '#198754',
+        }}
+      >
+        <div>Image</div>
+        <div>Item Name</div>
+        <div>Type</div>
+        <div>Storage</div>
+        <div>Store</div>
+        <div className="text-center">Actions</div>
+      </div>
+
+      {/* Table Rows */}
+      <div>
+        {samplegroceryItems.map((item) => (
+          <div
+            key={item.id}
+            className="bg-white border rounded mb-2 py-3 px-4"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '100px 1fr 140px 140px 140px 120px',
+              gap: '20px',
+              alignItems: 'center',
+              transition: 'all 0.2s',
+              boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#f8f9fa';
+              e.currentTarget.style.boxShadow = '0 2px 8px rgba(25, 135, 84, 0.15)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'white';
+              e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.05)';
+            }}
+          >
+            <div>
+              <Image
+                src={item.groceryItemImage}
+                alt={item.groceryItemTitle}
+                width={80}
+                height={80}
+                style={{
+                  objectFit: 'cover',
+                  borderRadius: '8px',
+                  border: '1px solid #e9ecef',
+                }}
+              />
+            </div>
+
+            <div>
+              <div style={{ fontSize: '16px', fontWeight: '600', color: '#212529' }}>{item.groceryItemTitle}</div>
+            </div>
+
+            <div>
+              <Badge bg="success" className="px-3 py-2">
+                {item.groceryItemType}
+              </Badge>
+            </div>
+
+            <div>
+              <Badge bg="secondary" className="px-3 py-2">
+                {item.storageType}
+              </Badge>
+            </div>
+
+            <div>
+              <Badge bg="secondary" className="px-3 py-2">
+                {item.store}
+              </Badge>
+            </div>
+
+            <div className="text-center">
+              <Button
+                variant={item.inList ? 'outline-danger' : 'success'}
+                size="sm"
+                onClick={() => handleButtonClick(item.groceryItemTitle, item.inList)}
+                style={{ width: '100px' }}
+              >
+                {item.inList ? 'Remove' : 'Add'}
+              </Button>
+            </div>
+          </div>
         ))}
-      </Row>
+      </div>
     </Container>
   );
 };
