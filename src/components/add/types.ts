@@ -8,7 +8,7 @@ export type Category = 'dairy' | 'fruits' | 'vegetables' | 'meat' | 'pantry' | '
 
 export type StorageUnit =
   | { id: number; name: string; items: number; temperature: string; type: 'fridge' }
-  | { id: number; name: string; items: number; type: 'pantry' }
+  | { id: number; name: string; items: number; type: 'pantry' };
 
 export type GroceryCategory = Category;
 
