@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     }
 
     const safeName = sanitizeFilename(fileName);
-    const key = `shop/uploads/${Date.now()}-${safeName}`;
+    const key = `catalog/uploads/${Date.now()}-${safeName}`;
 
     const bucket = process.env.AWS_S3_BUCKET || process.env.NEXT_PUBLIC_S3_BUCKET;
     const region = process.env.AWS_REGION || process.env.NEXT_PUBLIC_AWS_REGION;
