@@ -19,21 +19,33 @@ import styles from './SignInPage.module.css';
 type SignInForm = IEmailAddressField & IPasswordField;
 
 const SignInPage = () => {
-  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } =
-    useForm<SignInForm>({ resolver: yupResolver(signInValidation) });
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<SignInForm>({
+    resolver: yupResolver(signInValidation),
+  });
 
   const [showError, setShowError] = useState(false);
 
   const onSubmit = async (data: SignInForm) => {
     const result = await signIn('credentials', { redirect: false, ...data });
-    if (!result?.ok) setShowError(true);
-    else redirect('/');
+    if (!result?.ok) {
+      setShowError(true);
+    } else {
+      redirect('/');
+    }
   };
 
   return (
     <main className={`${styles.authHero} ${styles.twoUp}`}>
       {/* LEFT SIDE (hero) */}
-      <section className={`${styles.side} ${styles.left}`}>
+      <section
+        className={`${styles.side} ${styles.left}`}
+        style={{ backgroundImage: "url('/images/sign-in/bg-left.png')" }}
+      >
         <div className={styles.overlayDark} />
         <div className={styles.welcomeWrap}>
           <WelcomeSection
@@ -44,7 +56,10 @@ const SignInPage = () => {
       </section>
 
       {/* RIGHT SIDE (form) */}
-      <section className={`${styles.side} ${styles.right}`}>
+      <section
+        className={`${styles.side} ${styles.right}`}
+        style={{ backgroundImage: "url('/images/sign-in/bg-right.png')" }}
+      >
         <div className={styles.overlayLight} />
         <div className={styles.cardWrap}>
           <Card className={`shadow rounded-4 ${styles.glassyCard}`}>
