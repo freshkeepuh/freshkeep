@@ -58,7 +58,7 @@ export default function AddStorageModal({ show, onClose, onAdd }: AddStorageModa
 
     onAdd(submissionData);
 
-    setFormData({ name: '', type: 'Fridge', itemCount: '' });
+    setFormData({ name: '', type: '', itemCount: '' });
     onClose();
   };
 
