@@ -23,7 +23,7 @@ export default function CategorySelector({ selected, onSelect }: Props) {
     <div style={{ marginTop: 8 }}>
       <span id={labelId} className={styles.label}>Category</span>
       <div className={styles.catGrid} role="group" aria-labelledby={labelId}>
-        {CATS.map(c => {
+        {CATS.map((c) => {
           const active = c.id === selected;
           return (
             <button

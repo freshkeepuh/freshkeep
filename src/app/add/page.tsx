@@ -29,18 +29,19 @@ export default function AddPage() {
   const [qty, setQty] = useState(1);
   const [unit, setUnit] = useState('pieces');
   const [category, setCategory] = useState<Category | null>(null);
-  const [date, setDate] = useState('');
+  const [expiresAt, setExpiresAt] = useState<string | undefined>(undefined);
+  const [picture, setPicture] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     const d = new Date();
     d.setDate(d.getDate() + 7);
-    setDate(d.toISOString().split('T')[0]);
+    setExpiresAt(d.toISOString().split('T')[0]);
   }, []);
 
   const onPreset = useCallback((days: number) => {
     const d = new Date();
     d.setDate(d.getDate() + days);
-    setDate(d.toISOString().split('T')[0]);
+    setExpiresAt(d.toISOString().split('T')[0]);
   }, []);
 
   const onQuickAdd = useCallback(
@@ -58,18 +59,19 @@ export default function AddPage() {
     setUnit('pieces');
     setSelected(null);
     setCategory(null);
+    setPicture(undefined);
     const d = new Date();
     d.setDate(d.getDate() + 7);
-    setDate(d.toISOString().split('T')[0]);
+    setExpiresAt(d.toISOString().split('T')[0]);
   }, []);
 
   const onSave = useCallback(() => {
     if (!name.trim()) return;
     if (!selected) return;
     if (!category) return;
-    if (!date) return;
+    if (!expiresAt) return;
     resetForm();
-  }, [category, date, name, resetForm, selected]);
+  }, [category, expiresAt, name, resetForm, selected]);
 
   const goBack = useCallback(() => {
     router.back();
@@ -93,7 +95,12 @@ export default function AddPage() {
             <CategorySelector selected={category} onSelect={setCategory} />
           </section>
 
-          <ExpirySection date={date} onDate={setDate} onPreset={onPreset} />
+          <ExpirySection
+            expiresAt={expiresAt}
+            setExpiresAt={(v: string | undefined) => setExpiresAt(v)}
+            picture={picture}
+            setPicture={(v: string | undefined) => setPicture(v)}
+          />
 
           <div className={styles.actions}>
             <button type="button" className={styles.btnSecondary} onClick={goBack}>
