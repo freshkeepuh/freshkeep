@@ -1,7 +1,17 @@
 .page {
-    min-height: 100vh;
-    background: radial-gradient(1200px 600px at 10% 0%, #eaf7ee 0%, #ffffff 60%) no-repeat fixed;
-  }
+  min-height: 100vh;
+  background:
+    radial-gradient(
+      ellipse
+      clamp(800px, 80vw, 1400px)   
+      clamp(350px, 40vh, 700px)   
+      at 10% 0%,
+      #eaf7ee 0%,
+      #ffffff 60%
+    )
+    no-repeat fixed;
+}
+
   
   .header {
     background: #fff;

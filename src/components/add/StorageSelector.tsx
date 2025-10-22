@@ -39,7 +39,7 @@ export default function StorageSelector({ units, selected, onSelect }: Props) {
               <div className={styles.storageName}>{s.name}</div>
               <p className={styles.storageMeta}>
                 {s.items}
-                <span>items</span>
+                <span> items</span>
               </p>
               {temperature ? <p className={styles.storageTemp}>{temperature}</p> : null}
             </button>

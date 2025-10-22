@@ -11,7 +11,7 @@ export default function ProductBasics({ name, onChange }: Props) {
   return (
     <div style={{ marginBottom: 10 }}>
       <label className={styles.field} htmlFor={inputId}>
-        <span>Product Name</span>
+        <span className={styles.label}>Product Name</span>
         <input
           id={inputId}
           type="text"
