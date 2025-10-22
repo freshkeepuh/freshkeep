@@ -3,38 +3,49 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Row, Col, Container, Card, Button, ListGroup } from 'react-bootstrap';
-import styles from '../styles/dashboard.module.css';
+import StorageList, { StorageType } from '@/components/dashboard/StorageList';
+import AddStorageModal, { NewStorageData } from '@/components/dashboard/AddStorageModal';
+import styles from '../../styles/dashboard.module.css';
 
 interface DashboardProps {
   session: { user: { email?: string | null; name?: string | null; image?: string | null } };
 }
 
-interface StorageType {
-  id: number;
-  name: string;
-  type: 'Fridge' | 'Freezer' | 'Pantry' | 'Spice Rack' | 'Other';
-  itemCount?: number;
-}
-
 export default function Dashboard({ session }: DashboardProps) {
-  const [storageTypes, setStorageTypes] = useState<StorageType[]>([]);
+  const router = useRouter();
+
+  const [storages, setStorages] = useState<StorageType[]>([]);
   const [totalItems, setTotalItems] = useState(0);
   const [expiringSoon, setExpiringSoon] = useState(0);
   const [shoppingListCount, setShoppingListCount] = useState(0);
-  const router = useRouter();
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    // temp mock data
-    const mockStorageTypes: StorageType[] = [
+    // Mock data
+    const mockData: StorageType[] = [
       { id: 1, name: 'Kitchen Fridge', type: 'Fridge', itemCount: 5 },
       { id: 2, name: 'Garage Freezer', type: 'Freezer', itemCount: 8 },
       { id: 3, name: 'House Pantry', type: 'Pantry', itemCount: 10 },
     ];
-    setStorageTypes(mockStorageTypes);
-    setTotalItems(mockStorageTypes.reduce((sum, storage) => sum + (storage.itemCount || 0), 0));
-    setExpiringSoon(3); // mock value
-    setShoppingListCount(5); // mock value
+    setStorages(mockData);
+    setTotalItems(mockData.reduce((sum, s) => sum + (s.itemCount || 0), 0));
+    setExpiringSoon(3);
+    setShoppingListCount(5);
   }, []);
+
+  const handleAddStorage = (newStorage: NewStorageData) => {
+    const newEntry: StorageType = {
+      id: Date.now(),
+      ...newStorage,
+    };
+    setStorages((prev) => [...prev, newEntry]);
+    setTotalItems((prev) => prev + (newEntry.itemCount || 0));
+  };
+
+  const handleRemoveStorage = (id: number, count: number) => {
+    setStorages((prev) => prev.filter((s) => s.id !== id));
+    setTotalItems((prev) => prev - count);
+  };
 
   return (
     <Container fluid className={styles.dashboardPage}>
@@ -56,9 +67,10 @@ export default function Dashboard({ session }: DashboardProps) {
               items
             </span>
             {' '}
-            across your storage units.
+            across your
+            storage units.
+            {' '}
             <span className={styles.orangeText}>
-              {' '}
               {expiringSoon}
               {' '}
               items
@@ -70,7 +82,6 @@ export default function Dashboard({ session }: DashboardProps) {
       </Card>
 
       <Row className="mt-4 g-5">
-        {/* Main Content */}
         <Col md={9}>
           {/* Summary Cards */}
           <Row className="g-3">
@@ -97,7 +108,7 @@ export default function Dashboard({ session }: DashboardProps) {
             </Col>
           </Row>
 
-          {/* Storage Units Section */}
+          {/* Storage Section */}
           <Card className={`${styles.storageSection} mt-4`}>
             <Card.Body>
               <div className={styles.storageHeader}>
@@ -109,70 +120,14 @@ export default function Dashboard({ session }: DashboardProps) {
                   + Add Item
                 </Button>
               </div>
+
               <div className="mt-3 d-flex gap-2 flex-wrap">
-                {/* TODO Make a modal for adding new storage with form inputs for name
-                and item count. Consider adding edit button on each storage card */}
-                <Button
-                  className={styles.btnBlue}
-                  onClick={() => setStorageTypes((
-                    prev,
-                  ) => [...prev, { id: Date.now(), type: 'Fridge', name: 'New Fridge', itemCount: 0 }])}
-                >
-                  + Add Fridge
-                </Button>
-                <Button
-                  className={styles.btnBlue}
-                  onClick={() => setStorageTypes((
-                    prev,
-                  ) => [...prev, { id: Date.now(), type: 'Freezer', name: 'New Freezer', itemCount: 0 }])}
-                >
-                  + Add Freezer
-                </Button>
-                <Button
-                  className={styles.btnBlue}
-                  onClick={() => setStorageTypes((
-                    prev,
-                  ) => [...prev, { id: Date.now(), type: 'Pantry', name: 'New Pantry', itemCount: 0 }])}
-                >
-                  + Add Pantry
+                <Button className={styles.btnBlue} onClick={() => setShowModal(true)}>
+                  + Add Storage
                 </Button>
               </div>
 
-              <Row xs={1} md={2} className={`g-3 mt-3 ${styles.storageGrid}`}>
-                {storageTypes.map((storage) => (
-                  <Col key={storage.id}>
-                    <Card className={styles.storageCard}>
-                      <Card.Body className="text-center">
-                        <div className={styles.storageIcon}>
-                          {storage.type === 'Fridge' && '🧊'}
-                          {storage.type === 'Freezer' && '❄️'}
-                          {storage.type === 'Pantry' && '🥫'}
-                          {storage.type === 'Spice Rack' && '🌶️'}
-                          {storage.type === 'Other' && '📦'}
-                        </div>
-                        <Card.Title>{storage.name}</Card.Title>
-                        <Card.Text>
-                          {storage.itemCount || 0}
-                          {' '}
-                          items
-                        </Card.Text>
-                        <Button
-                          variant="outline-none"
-                          size="sm"
-                          className={`me-2 ${styles.removeBtn}`}
-                          onClick={() => {
-                            // Handle remove storage unit
-                            setStorageTypes((prev) => prev.filter((s) => s.id !== storage.id));
-                            setTotalItems((prev) => prev - (storage.itemCount || 0));
-                          }}
-                        >
-                          Remove
-                        </Button>
-                      </Card.Body>
-                    </Card>
-                  </Col>
-                ))}
-              </Row>
+              <StorageList storages={storages} onRemove={handleRemoveStorage} />
             </Card.Body>
           </Card>
         </Col>
@@ -193,22 +148,23 @@ export default function Dashboard({ session }: DashboardProps) {
           <Card className={`${styles.quickActions} mt-3`}>
             <Card.Body>
               <Card.Title>Quick Actions</Card.Title>
-              <Button
-                className={`w-100 mt-2 ${styles.actionBtn}`}
-                onClick={() => router.push('/recipes')}
-              >
+              <Button className={`w-100 mt-2 ${styles.actionBtn}`} onClick={() => router.push('/recipes')}>
                 🍳 Find Recipes
               </Button>
-              <Button
-                className={`w-100 mt-2 ${styles.actionBtn}`}
-                onClick={() => router.push('/shoppingList')}
-              >
+              <Button className={`w-100 mt-2 ${styles.actionBtn}`} onClick={() => router.push('/shoppingList')}>
                 🛒 View Shopping List
               </Button>
             </Card.Body>
           </Card>
         </Col>
       </Row>
+
+      {/* Add Storage Modal */}
+      <AddStorageModal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        onAdd={handleAddStorage}
+      />
     </Container>
   );
 }
