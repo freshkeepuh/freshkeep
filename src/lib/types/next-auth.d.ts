@@ -9,9 +9,15 @@ declare module 'next-auth' {
   interface Session {
     user: {
       id?: string;
-      name?: string | null;
       email?: string | null;
-      image?: string | null;
+      role?: string | null;
+      settings?: {
+        units: 'imperial' | 'metric';
+        country: string;
+        theme: 'light' | 'dark' | 'system';
+        profilePicture: string | null;
+      } | null;
+      randomKey?: string;
     };
   }
 }

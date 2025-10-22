@@ -1,15 +1,22 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
+import Dashboard from '@/app/dashboard/page';
+import LoadingSpinner from '@/components/LoadingSpinner';
 import Welcome from '@/components/Welcome';
-import Dashboard from '@/components/Dashboard';
 
 /** The Home page. */
 const Home = () => {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
+
+  if (status === 'loading') {
+    return <LoadingSpinner />;
+  }
 
   if (session) {
-    return <Dashboard />;
+    return (
+      <Dashboard />
+    );
   }
   return <Welcome />;
 };

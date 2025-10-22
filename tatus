@@ -1,0 +1,2903 @@
+[33mcommit edbdb7f270cc62031b8ec7529e18306514422d3a[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32missue-164[m[33m)[m
+Author: Ralph Jhon Ramos <22ralph.ramos@gmail.com>
+Date:   Wed Oct 8 08:44:48 2025 -1000
+
+    cleaned up code, updated shop routes
+
+[33mcommit 8cd8d4d18003d3ec30396fcdf4bb80052f136355[m
+Author: Ralph Jhon Ramos <22ralph.ramos@gmail.com>
+Date:   Wed Oct 8 08:33:21 2025 -1000
+
+    display =ing shop item in shop with the newly updated image instead of hardcoded seeded items
+
+[33mcommit 80da210a02f6673852547ebf2f1002a85887e4c0[m[33m ([m[1;31morigin/issue-98[m[33m)[m
+Merge: 337ac35 75f57c7
+Author: Ralph Jhon Ramos <134979001+ralphramosgit@users.noreply.github.com>
+Date:   Wed Oct 8 07:25:43 2025 -1000
+
+    Merge branch 'main' into issue-98
+
+[33mcommit 337ac35e15f4bd0f9c0645b3d4cff62ffc596f0e[m
+Author: Ralph Jhon Ramos <134979001+ralphramosgit@users.noreply.github.com>
+Date:   Wed Oct 8 07:25:14 2025 -1000
+
+    large comment code section removed
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit 39f671c093a64e56fbeba0794bf07e33bc8a03c0[m
+Author: Ralph Jhon Ramos <134979001+ralphramosgit@users.noreply.github.com>
+Date:   Wed Oct 8 07:25:00 2025 -1000
+
+    unused code comment section removed
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit bcbe320a2546e1706fc85f257b692905dee71c23[m
+Author: Ralph Jhon Ramos <134979001+ralphramosgit@users.noreply.github.com>
+Date:   Wed Oct 8 07:24:48 2025 -1000
+
+    existing code comment removed
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit d64656c8dc1d9affcce801cc4c716158e02f3079[m
+Author: Ralph Jhon Ramos <134979001+ralphramosgit@users.noreply.github.com>
+Date:   Wed Oct 8 07:24:31 2025 -1000
+
+    Update src/app/api/shop/image-upload/route.ts
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit 75f57c74641f161a3e02ec2300f2ece2ae9a888f[m[33m ([m[1;31morigin/issue-216[m[33m, [m[1;31morigin/issue-215[m[33m, [m[1;31morigin/issue-213[m[33m, [m[1;31morigin/issue-212[m[33m, [m[1;31morigin/issue-211[m[33m, [m[1;31morigin/issue-210[m[33m, [m[1;31morigin/issue-209[m[33m, [m[1;31morigin/issue-208[m[33m, [m[1;31morigin/issue-207[m[33m, [m[1;31morigin/issue-206[m[33m, [m[1;31morigin/issue-205[m[33m, [m[1;31morigin/issue-204[m[33m, [m[1;31morigin/issue-203[m[33m, [m[1;31morigin/issue-202[m[33m, [m[1;31morigin/issue-201[m[33m, [m[1;31morigin/issue-200[m[33m, [m[1;31morigin/issue-199[m[33m, [m[1;31morigin/issue-198[m[33m, [m[1;31morigin/issue-197[m[33m, [m[1;31morigin/issue-196[m[33m)[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Wed Oct 8 06:34:06 2025 -1000
+
+    Refactor environment variable setup in CI workflow
+
+[33mcommit a80e5bfbb52dc43c969de16c1a97772d46e3d5ec[m
+Merge: 8245bce 66e1300
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Wed Oct 8 06:24:08 2025 -1000
+
+    Merge pull request #188 from freshkeepuh/issue-151
+    
+    Issue 151
+
+[33mcommit 66e13003acdeb119d37e2e71989ab071a33ffa69[m
+Merge: fc317aa 8245bce
+Author: Salina Thongsisavath <97216698+salina-t@users.noreply.github.com>
+Date:   Wed Oct 8 00:09:11 2025 -1000
+
+    Merge branch 'main' into issue-151
+
+[33mcommit ca1d072990f5c3efae4c338b74bc2b61ea7e9f14[m
+Merge: b2b3d44 8245bce
+Author: Ralph Jhon Ramos <134979001+ralphramosgit@users.noreply.github.com>
+Date:   Tue Oct 7 21:59:12 2025 -1000
+
+    Merge branch 'main' into issue-98
+
+[33mcommit b2b3d44add83e872e34ca5c954a17ebb560ce522[m[33m ([m[1;32missue-98[m[33m)[m
+Author: Ralph Jhon Ramos <22ralph.ramos@gmail.com>
+Date:   Tue Oct 7 21:41:26 2025 -1000
+
+    cleaned up unused code and comments
+
+[33mcommit d261fed65aa0f78b43e938e4da2ec5da954c842c[m
+Author: Ralph Jhon Ramos <22ralph.ramos@gmail.com>
+Date:   Tue Oct 7 21:21:21 2025 -1000
+
+    image uploads to s3 bucket
+
+[33mcommit 8245bce4786a6dffdb6baf8a1b18984dcc6ff264[m[33m ([m[1;31morigin/issue-193[m[33m)[m
+Merge: e75f29d f9911b0
+Author: Dmitry Gordeev <gordeev.du@gmail.com>
+Date:   Tue Oct 7 20:43:09 2025 -1000
+
+    Merge pull request #181 from freshkeepuh/issue-075
+    
+    updated seed.ts
+
+[33mcommit 502bbd65da7dd6cf2c28eab061ebe18fe2397eb5[m
+Merge: e49458a e75f29d
+Author: Ralph Jhon Ramos <22ralph.ramos@gmail.com>
+Date:   Tue Oct 7 20:38:22 2025 -1000
+
+    Merge branch 'main' of https://github.com/freshkeepuh/freshkeep into issue-98
+
+[33mcommit fc317aa849ac94f2431ad18ffe323b275b35563c[m[33m ([m[1;31morigin/issue-151[m[33m)[m
+Merge: 3f851f2 e75f29d
+Author: Salina Thongsisavath <97216698+salina-t@users.noreply.github.com>
+Date:   Tue Oct 7 17:02:00 2025 -1000
+
+    Merge branch 'main' into issue-151
+
+[33mcommit f9911b0e53a681b73ee8f24a0b3085b42bf8a362[m[33m ([m[1;31morigin/issue-075[m[33m)[m
+Author: dominic-isaac-molina <dim@hawaii.edu>
+Date:   Tue Oct 7 16:08:02 2025 -1000
+
+    Update seed.ts
+
+[33mcommit cbcb4ce514299424767178b9a42aef9c4026a0d4[m
+Merge: ffab651 e75f29d
+Author: Dominic Molina <dim@hawaii.edu>
+Date:   Tue Oct 7 10:16:07 2025 -1000
+
+    Merge branch 'main' into issue-075
+
+[33mcommit e75f29d9020af308f3a93a715510ce0547a145fd[m[33m ([m[1;32mmain[m[33m)[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Tue Oct 7 07:39:39 2025 -1000
+
+    Enable WebKit browser configuration in Playwright
+
+[33mcommit e3755bddfcbd0e307e2efe069d31f982a510db48[m
+Merge: b24aa2c af8999b
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Tue Oct 7 07:38:51 2025 -1000
+
+    Merge pull request #190 from freshkeepuh/awjans-patch-1
+    
+    Refactor Playwright version retrieval in CI workflow
+
+[33mcommit af8999becd131921df2458e537e33e191c59545e[m[33m ([m[1;31morigin/awjans-patch-1[m[33m)[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Tue Oct 7 07:31:01 2025 -1000
+
+    Refactor Playwright version retrieval in CI workflow
+
+[33mcommit b24aa2c387d3ba021fab5e1cab66c5c328139d1d[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Tue Oct 7 07:25:35 2025 -1000
+
+    Fix syntax error in Playwright version retrieval
+
+[33mcommit a9ac8f9c9e09cd21297dc2d92d8640768ac497c3[m
+Author: awjans <andreaw@jans.org>
+Date:   Tue Oct 7 07:21:00 2025 -1000
+
+    Refactor CI workflow to set DATABASE_URL in environment and streamline Playwright installation steps
+
+[33mcommit 3f851f23542b689f66ff6cc748efde39f47c56ea[m
+Merge: be6dfd7 e5e9816
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Tue Oct 7 06:41:18 2025 -1000
+
+    Merge branch 'main' into issue-151
+
+[33mcommit ffab651f49a4bfdcdff4bc27f6762ab0367db654[m
+Merge: 4561aff e5e9816
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Tue Oct 7 06:40:33 2025 -1000
+
+    Merge branch 'main' into issue-075
+
+[33mcommit e5e98163d1a78c9548ff38ae0208ed59c3a4dab7[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Tue Oct 7 06:33:10 2025 -1000
+
+    Refactor Playwright installation in CI workflow
+    
+    Removed Playwright version retrieval and caching steps, and added installation of Playwright and its dependencies.
+
+[33mcommit 4561aff31c83db8601905cb4bb63110f903cdeb0[m
+Merge: 668c6ea 85beae5
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Tue Oct 7 06:25:26 2025 -1000
+
+    Merge branch 'main' into issue-075
+
+[33mcommit 85beae5b14fb9d9bd63bb06b405443da9d0ae41c[m
+Merge: bdbbd9e 38b4476
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Tue Oct 7 06:17:31 2025 -1000
+
+    Merge pull request #184 from freshkeepuh/issue-183
+    
+    issue-183 Connect recipe page to database
+
+[33mcommit be6dfd702693121f9a6b74f3f5dc616baebb6dce[m
+Merge: ef61dbb bdbbd9e
+Author: Salina Thongsisavath <97216698+salina-t@users.noreply.github.com>
+Date:   Tue Oct 7 01:24:28 2025 -1000
+
+    Merge branch 'main' into issue-151
+
+[33mcommit ef61dbb99f9855309e09e255aef347921290a66b[m
+Author: Salina Thongsisavath <salinat@hawaii.edu>
+Date:   Tue Oct 7 00:51:30 2025 -1000
+
+    link temp buttons & add TODO note
+
+[33mcommit 71bcdccc2522f1b7b16334d6c7b575abacf2a4fc[m
+Author: Salina Thongsisavath <salinat@hawaii.edu>
+Date:   Tue Oct 7 00:25:05 2025 -1000
+
+    dashboard page with temp mock data
+
+[33mcommit 668c6eacc8b8cc6ab357f1d7e4a342f58bdd15c4[m
+Merge: ae09eae bdbbd9e
+Author: Dmitry Gordeev <gordeev.du@gmail.com>
+Date:   Mon Oct 6 23:58:03 2025 -1000
+
+    Merge branch 'main' into issue-075
+
+[33mcommit ae09eae828c29a0f9505c9e17824c572c63e4b33[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Mon Oct 6 23:32:19 2025 -1000
+
+    Update seed.ts
+
+[33mcommit cc069f3221dd426146e2f67761a7a76207c11f73[m
+Merge: 3d15a92 7b14b7a
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Mon Oct 6 23:32:10 2025 -1000
+
+    Merge branch 'issue-075' of https://github.com/freshkeepuh/freshkeep into issue-075
+
+[33mcommit 3d15a92f59d620176de66746d6296cd8e6d68886[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Mon Oct 6 22:11:35 2025 -1000
+
+    Update seed.ts
+
+[33mcommit 38b447641718ba37d0b8d0db3665386ebcaadc82[m[33m ([m[1;31morigin/issue-183[m[33m)[m
+Merge: 18e8493 bdbbd9e
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Mon Oct 6 19:42:41 2025 -1000
+
+    Merge branch 'main' into issue-183
+
+[33mcommit bdbbd9ed07ed6d1ab30db756fa3b22ed1c6fbde2[m[33m ([m[1;31morigin/issue-189[m[33m)[m
+Merge: 909e395 47e78e1
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Mon Oct 6 19:42:14 2025 -1000
+
+    Merge pull request #187 from freshkeepuh/182-issue-182-create-a-playwright-test-for-settings-page
+    
+    Finished settings acceptance test
+
+[33mcommit 7b14b7a71ba80eabb6fe2e7cc6373fa6631c44e3[m
+Merge: af326dd 909e395
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Mon Oct 6 19:41:23 2025 -1000
+
+    Merge branch 'main' into issue-075
+
+[33mcommit 18e849367f4525a535d0fa7576134de9785ed687[m
+Merge: 2e25351 909e395
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Mon Oct 6 19:30:12 2025 -1000
+
+    Merge branch 'main' into issue-183
+
+[33mcommit 909e395e373b119f6b541af0728a517727c13f10[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Mon Oct 6 19:23:46 2025 -1000
+
+    Fix indentation and update environment variables
+
+[33mcommit 47e78e154dcb48122203179b67fa639501d824bc[m[33m ([m[1;31morigin/182-issue-182-create-a-playwright-test-for-settings-page[m[33m)[m
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Mon Oct 6 18:24:10 2025 -1000
+
+    Update settings.spec.ts
+    
+    why is it working on the github intelij thing but not on the actual pr request
+
+[33mcommit da38b6d9874939ef7fd3b7c444453ffd1ea6abcf[m
+Merge: 7cbecaf b604ccd
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Mon Oct 6 18:18:09 2025 -1000
+
+    Merge branch '182-issue-182-create-a-playwright-test-for-settings-page' of https://github.com/freshkeepuh/freshkeep into 182-issue-182-create-a-playwright-test-for-settings-page
+
+[33mcommit 7cbecaf2967ffb67a671ba3d465a7b6af5ca6f4d[m
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Mon Oct 6 18:17:26 2025 -1000
+
+    version 2
+    
+    i think it works
+
+[33mcommit 2e2535166fcecfe0c1d5df15f9f80de72e3d7912[m
+Merge: b0a06ab cdd307a
+Author: Ellie Ishii <166664143+ellieishii@users.noreply.github.com>
+Date:   Mon Oct 6 18:14:21 2025 -1000
+
+    Merge branch 'main' into issue-183
+
+[33mcommit b0a06ab6d52ccded4288b2ed19022268a27617b1[m
+Merge: 6fd9eb8 00abcc5
+Author: Ellie Ishii <166664143+ellieishii@users.noreply.github.com>
+Date:   Mon Oct 6 18:09:24 2025 -1000
+
+    Merge branch 'issue-183' of https://github.com/freshkeepuh/freshkeep into issue-183
+
+[33mcommit 6fd9eb8cfb60029cbf37c5766601c0b8b33ed335[m
+Author: Ellie Ishii <166664143+ellieishii@users.noreply.github.com>
+Date:   Mon Oct 6 18:09:19 2025 -1000
+
+    issue-183 Update the Recipe model
+
+[33mcommit b604ccd7357a8934e3913b5530c5f51241476f80[m
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Mon Oct 6 18:03:49 2025 -1000
+
+    Update tests/settings.spec.ts
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit d567bd429f046c87a663281e6ee8f06888bf7467[m
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Mon Oct 6 18:02:25 2025 -1000
+
+    Finished settings acceptance test
+    
+    basic UI is present
+    sign out navigates to /auth
+    basic UI is present
+    updates profile form (no navigation, controlled input stays)
+     renders and toggles theme (light ↔ dark)
+    renders and toggles theme (light ↔ dark)
+    sign out navigates to /auth
+
+[33mcommit cdd307a03bf2b4c8abe3d32d719920b6ea344744[m
+Merge: bf0e0e9 f2ef608
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Mon Oct 6 17:50:40 2025 -1000
+
+    Merge pull request #186 from freshkeepuh/155-issue-155-acceptance-test-sign-up-page
+    
+    finished sign up acceptance test
+
+[33mcommit e49458a876dba357ea6e5f12ec572e941ad0c03d[m
+Author: Ralph Jhon Ramos <22ralph.ramos@gmail.com>
+Date:   Mon Oct 6 17:47:58 2025 -1000
+
+    added image upload skeleton createGroceryItem form
+
+[33mcommit f2ef608ec3398c069d2a4ef7bbdfe56b63d26cbf[m[33m ([m[1;31morigin/155-issue-155-acceptance-test-sign-up-page[m[33m)[m
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Mon Oct 6 17:44:54 2025 -1000
+
+    finished sign up acceptance test
+    
+    sign up page — validation errors
+    sign up page — successful account creation (redirect OR session cookie)
+    sign up page — Reset clears fields and errors
+    sign up page — validation errors
+    sign up page — Reset clears fields and errors
+    sign up page — successful account creation (redirect OR session cookie)
+
+[33mcommit af326dd6d2240cb0d85e2440f41bb5445beb9971[m
+Merge: 0272208 bf0e0e9
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Mon Oct 6 14:17:55 2025 -1000
+
+    Merge branch 'main' into issue-075
+
+[33mcommit 00abcc54fd4ee7f86870c976b3be7d9648cb460b[m
+Merge: e91dabd bf0e0e9
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Mon Oct 6 14:15:58 2025 -1000
+
+    Merge branch 'main' into issue-183
+
+[33mcommit bf0e0e962dff053b1e8271bd4e337c8758b3ab92[m
+Author: awjans <andreaw@jans.org>
+Date:   Mon Oct 6 13:06:59 2025 -1000
+
+    fix: update prisma UML diagram image
+
+[33mcommit c6ee1c8b33cbbe58593919a00b43ac47cb7f1942[m
+Author: awjans <andreaw@jans.org>
+Date:   Mon Oct 6 11:17:53 2025 -1000
+
+    fix: update prisma UML diagram
+
+[33mcommit 72ed032920da6ca33eb45532d86e899dc2d07fcf[m
+Merge: 83fc435 f6cf238
+Author: Dmitry Gordeev <gordeev.du@gmail.com>
+Date:   Mon Oct 6 09:13:35 2025 -1000
+
+    Merge pull request #185 from freshkeepuh/issue-172
+    
+    fix: update forgot password link to include auth path
+
+[33mcommit 0272208b10a9a289916ef259566ccabeb1fc4850[m
+Merge: 3ebe5a2 83fc435
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Mon Oct 6 07:52:39 2025 -1000
+
+    Merge branch 'main' into issue-075
+
+[33mcommit e91dabdbb495b9e40905ef04eca09b664c745548[m
+Merge: 870dde4 83fc435
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Mon Oct 6 07:51:16 2025 -1000
+
+    Merge branch 'main' into issue-183
+
+[33mcommit 83fc435d420e5bb8668a43eca33eb2971e906faa[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Mon Oct 6 07:41:21 2025 -1000
+
+    Add Copilot instructions for JavaScript and TypeScript
+
+[33mcommit f6cf23806d87b9d9dfa21995b165b6bad13a1b5f[m[33m ([m[1;31morigin/issue-172[m[33m)[m
+Author: awjans <andreaw@jans.org>
+Date:   Mon Oct 6 07:32:22 2025 -1000
+
+    fix: comment out webkit browser configuration in Playwright setup
+
+[33mcommit 261a7b11f9e5086df6fed963700428c6fc90106b[m
+Author: awjans <andreaw@jans.org>
+Date:   Mon Oct 6 07:26:34 2025 -1000
+
+    fix: update forgot password link to include auth path
+
+[33mcommit 3ebe5a27f93ed4e46b0b17686010e94eda6b6865[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Mon Oct 6 07:13:49 2025 -1000
+
+    Delete prisma/migrations 2/migration_lock.toml
+    
+    This file is not needed.
+
+[33mcommit e0db99be6f1d8471f81763e9c4609c15801c92ff[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Mon Oct 6 07:13:17 2025 -1000
+
+    Delete prisma/migrations 2/20250924021043_init/migration.sql
+    
+    This file is not needed
+
+[33mcommit 2158cdc38be2236a91b54a57db9e43beef4cff02[m
+Merge: 7521c02 cd019ac
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Mon Oct 6 06:48:02 2025 -1000
+
+    Merge branch 'main' into issue-075
+
+[33mcommit cd019acf836b746b4d77a16a231bbf6fae6c2703[m
+Merge: 94ab173 2330650
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Mon Oct 6 06:43:28 2025 -1000
+
+    Merge pull request #176 from freshkeepuh/issue-174
+    
+    Issue 174 - Add Stores Schema and Pages
+
+[33mcommit 870dde4061df0ccbf106c3becdb80d5d77eb756f[m
+Author: Ellie Ishii <166664143+ellieishii@users.noreply.github.com>
+Date:   Mon Oct 6 02:40:49 2025 -1000
+
+    issue-183 Connect recipe page to database
+
+[33mcommit 2330650e564243c5ddfbbf6e8f9b3392c2b974cc[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Sun Oct 5 22:34:20 2025 -1000
+
+    Update Dashboard.tsx
+
+[33mcommit d53dd71871ca15f3c39ac64fc4809cefe8b5ced1[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Sun Oct 5 22:30:14 2025 -1000
+
+    fixed playwright checking dashboard user name
+
+[33mcommit 3e0f88b0bc330e28656c192d56b9b04fbb1b337d[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Sun Oct 5 20:41:50 2025 -1000
+
+    fix after refactoring
+
+[33mcommit d35292a1327da283a91b7b28b9d8bb8be4ea67fe[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Sun Oct 5 19:23:17 2025 -1000
+
+    Update dbShopActions.ts
+
+[33mcommit 7521c0291bd2d848f0209954881fda65185c3eaf[m
+Author: dominic-isaac-molina <dim@hawaii.edu>
+Date:   Sun Oct 5 16:27:10 2025 -1000
+
+    Update seed.ts
+
+[33mcommit 060791cc571502108da37daaae639e3795d0c734[m
+Author: Dominic Molina <dim@hawaii.edu>
+Date:   Sun Oct 5 15:39:56 2025 -1000
+
+    Update prisma/migrations 2/migration_lock.toml
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit 48665b5166ae8a81d2a628aebfe9ac7dbae6ba8d[m
+Author: dominic-isaac-molina <dim@hawaii.edu>
+Date:   Sun Oct 5 10:59:47 2025 -1000
+
+    Delete migration.sql
+
+[33mcommit 87f6bbe1424f411f8071de8a9dd35e45d8ae038f[m
+Merge: f9fbe60 94ab173
+Author: Dominic Molina <dim@hawaii.edu>
+Date:   Sun Oct 5 10:52:00 2025 -1000
+
+    Merge branch 'main' into issue-075
+
+[33mcommit f9fbe603d20a4e92608548cb2273d49c651ef5ad[m
+Author: dominic-isaac-molina <dim@hawaii.edu>
+Date:   Sun Oct 5 10:42:59 2025 -1000
+
+    updated seed.ts
+    
+    added profile picture to the json
+
+[33mcommit bc92a04a67a99c6b5978adf52a6539d087b7060e[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Sun Oct 5 00:45:40 2025 -1000
+
+    some eslint
+
+[33mcommit 4e58b37a63ecaeeddb996ed2f9433aa52d9bf095[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Sun Oct 5 00:30:40 2025 -1000
+
+    shop fix
+
+[33mcommit 07f78357413b5d39fbdb81fb09a25089fe761798[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Sat Oct 4 07:47:23 2025 -1000
+
+    Update src/app/store/[id]/page.tsx
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit 8bd702335f16c6f6c51cb2399ae7a9ba3222290f[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Sat Oct 4 07:47:14 2025 -1000
+
+    Update src/app/stores/page.tsx
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit ae191eaa327c26af73bf45c19308307d95221cd2[m
+Merge: b621440 94ab173
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Sat Oct 4 07:26:08 2025 -1000
+
+    Merge branch 'main' into issue-174
+
+[33mcommit 94ab173d48c6d8fe520b8573f18dfc7271570d81[m[33m ([m[1;31morigin/issue-182[m[33m)[m
+Merge: 3ca71f8 11d75fb
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Sat Oct 4 07:24:46 2025 -1000
+
+    Merge pull request #180 from freshkeepuh/issue-178
+    
+    Issue 178
+
+[33mcommit 11d75fbfce4dadd8d1008e08df9416417465bcf4[m[33m ([m[1;31morigin/issue-178[m[33m)[m
+Author: awjans <andreaw@jans.org>
+Date:   Fri Oct 3 09:37:58 2025 -1000
+
+    Rename onEdit prop to onSave in AddressSubForm component
+
+[33mcommit 7ecfba1676e79d8e21dc861afe18d1086e7ff9d6[m
+Author: awjans <andreaw@jans.org>
+Date:   Fri Oct 3 09:36:25 2025 -1000
+
+    Add form control registration for address fields in AddressSubForm component
+
+[33mcommit f09227976306867d991e1902fd801ab2a8624b27[m
+Author: awjans <andreaw@jans.org>
+Date:   Fri Oct 3 09:19:13 2025 -1000
+
+    Refactor country registration type in AddressSubForm component
+
+[33mcommit 07724ebfc62dafe6f0759b95f1ecd6bfe4c59688[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Fri Oct 3 09:13:38 2025 -1000
+
+    Update src/components/AddressSubForm.tsx
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit eed08739e35e8bd2980d2b7dc870f61e98c057a2[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Fri Oct 3 09:08:48 2025 -1000
+
+    Update src/components/AddressSubForm.tsx
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit fde3e440c5849d3417e55ae9049e2763f964097f[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Fri Oct 3 09:04:31 2025 -1000
+
+    Update src/components/AddressSubForm.tsx
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit 26f901c8e78c1a85a2326c8abba968c03aaa8719[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Fri Oct 3 09:04:10 2025 -1000
+
+    Update src/components/AddressSubForm.tsx
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit 3fce963840c4dbb42c6e21b37f7b695ccbfc93f1[m
+Author: awjans <andreaw@jans.org>
+Date:   Fri Oct 3 08:59:27 2025 -1000
+
+    Implement editable address form with save and cancel functionality
+
+[33mcommit 4097302bea51c8fb93434dd75539c472e47a2c14[m
+Author: awjans <andreaw@jans.org>
+Date:   Fri Oct 3 08:19:32 2025 -1000
+
+    Add AddressSubForm component with address fields and country selection
+
+[33mcommit 3ca71f836f3b7a114504891f4d67cd2cfe47bec0[m
+Merge: d657964 427f617
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Fri Oct 3 08:09:31 2025 -1000
+
+    Merge pull request #179 from freshkeepuh/issue-177
+    
+    Issue 177
+
+[33mcommit 427f61702ec6bd72844a3f0a1b2d01fca784a6fe[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Fri Oct 3 07:27:27 2025 -1000
+
+    Update src/components/CountryDropDown.tsx
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit 0dd0bc162f7c13fcf37b3be4f987282b8e500462[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Fri Oct 3 07:27:05 2025 -1000
+
+    Update src/components/CountryDropDown.tsx
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit cadc3dedb050ec38f7cabd01b7309cde3e0e1317[m
+Author: awjans <andreaw@jans.org>
+Date:   Fri Oct 3 07:24:01 2025 -1000
+
+    Refactor getCountryDisplayName function for concise syntax
+
+[33mcommit 3e525b368f0113a01ed74d8306242b7a9145c1af[m
+Author: awjans <andreaw@jans.org>
+Date:   Fri Oct 3 07:19:48 2025 -1000
+
+    Add CountryDropDown component for country selection with validation
+
+[33mcommit b6214408cbc5d6b2561f5abf36a01aecc11f462c[m[33m ([m[1;31morigin/issue-174[m[33m)[m
+Author: awjans <andreaw@jans.org>
+Date:   Thu Oct 2 16:11:59 2025 -1000
+
+    refactor: enhance layout by adding ListGroup for store items in StoresForm component
+
+[33mcommit 8340d7489e12980f90fc29f50e4431725f653b8e[m
+Author: awjans <andreaw@jans.org>
+Date:   Thu Oct 2 15:50:57 2025 -1000
+
+    refactor: streamline imports and enhance error handling in API routes
+
+[33mcommit e284af258ed33d7759c675159c54a855ca01418b[m
+Author: awjans <andreaw@jans.org>
+Date:   Thu Oct 2 15:44:58 2025 -1000
+
+    refactor: consolidate store API routes and improve error handling
+
+[33mcommit 8ee9edbe48a66311eeadc3c598bc66ad4ca330c6[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Thu Oct 2 11:38:23 2025 -1000
+
+    Update src/components/StoresForm.tsx
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit 83262e1d73bec3637c67a9dea7597a46c5d1cd3a[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Thu Oct 2 11:36:55 2025 -1000
+
+    Update src/lib/page-protection.ts
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit 18916234238be4a5b6b32f8e1a6173c506dafe16[m
+Author: awjans <andreaw@jans.org>
+Date:   Thu Oct 2 11:32:07 2025 -1000
+
+    refactor: update import paths for authOptions and improve error handling in StoreCard component
+
+[33mcommit 84365222a7e370895138d31147652ae1f02cdbcf[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Thu Oct 2 11:26:32 2025 -1000
+
+    Update src/components/StoreCard.tsx
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit 35a6e3ede31b045ca20e34710e917e9366188a87[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Thu Oct 2 11:26:19 2025 -1000
+
+    Update src/lib/page-protection.ts
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit 0110fe080d0ef7add25b1432a218b4c2ca11f45c[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Thu Oct 2 11:26:10 2025 -1000
+
+    Update src/app/store/page.tsx
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit c66c94cf942ca6775a357b052b6cb4fc82db3627[m
+Author: awjans <andreaw@jans.org>
+Date:   Thu Oct 2 10:03:46 2025 -1000
+
+    refactor: remove unused import from UnitDropDown component
+
+[33mcommit ce87f9a638fcfd064ccc0ebaf954d37da4c8f84f[m
+Author: awjans <andreaw@jans.org>
+Date:   Thu Oct 2 09:11:51 2025 -1000
+
+    feat: implement session management and page protection in StorePage and StoresPage; add disabled prop to EmailAddressField and enhance dropdown components
+
+[33mcommit bcbf53dd27cdf8c8ce57a402e8fe90fe6e23bd6e[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Thu Oct 2 07:14:40 2025 -1000
+
+    Update src/app/store/page.tsx
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit be36e0736fb3eff898446f31a0e2db6315610803[m
+Author: awjans <andreaw@jans.org>
+Date:   Thu Oct 2 07:10:59 2025 -1000
+
+    refactor: clean up StoreCard component by removing unused icon import and improving image display formatting
+
+[33mcommit b7fc49a977dd15e906ead4a27a1b2a0b33f4da5e[m
+Author: awjans <andreaw@jans.org>
+Date:   Thu Oct 2 07:04:01 2025 -1000
+
+    feat: enhance StoreCard with image display and update link structure; improve error handling in StoresForm
+
+[33mcommit d4647ad7a15fcf376f21dade97406ea06b4c93aa[m
+Author: awjans <andreaw@jans.org>
+Date:   Thu Oct 2 06:43:11 2025 -1000
+
+    feat: add StoreCard component for store management with edit and delete functionality
+
+[33mcommit 29584023fdea336b9ba2e56f46a411c56f218ddc[m
+Author: awjans <andreaw@jans.org>
+Date:   Wed Oct 1 15:30:58 2025 -1000
+
+    refactor: clean up imports and improve code formatting across multiple components
+
+[33mcommit 9acf3fe1e61b2f0e6e1b49505563552bc0fc5604[m
+Author: awjans <andreaw@jans.org>
+Date:   Wed Oct 1 15:11:56 2025 -1000
+
+    feat: implement CRUD operations for store management and update StoreForm component
+
+[33mcommit 1222c145d127bbf1a9b8f1c6e3c0e98545c054cd[m
+Author: awjans <andreaw@jans.org>
+Date:   Wed Oct 1 15:11:33 2025 -1000
+
+    feat: restructure shopping list and product management
+    
+    - Added default stores and products to the development settings.
+    - Introduced new migration scripts to modify the database schema:
+      - Dropped unnecessary columns and added unique constraints for shopping lists.
+      - Updated the ShoppingList model to include a name and isDefault flag.
+      - Enhanced the ShoppingListItem model to enforce uniqueness across listId, prodId, and unitId.
+    - Implemented seeding functions for stores, products, shopping lists, and shopping list items.
+    - Refactored existing seeding logic to accommodate new data structures and relationships.
+
+[33mcommit 48bb7a536c4ef73a03b31e26c990576240591e14[m
+Author: awjans <andreaw@jans.org>
+Date:   Wed Oct 1 10:08:45 2025 -1000
+
+    feat: implement Store and Stores forms with CRUD actions for store management
+
+[33mcommit 6979de053e3dae6b7aa70047740e2be7ea3b7ec8[m
+Author: awjans <andreaw@jans.org>
+Date:   Wed Oct 1 10:08:30 2025 -1000
+
+    refactor: update user role handling and improve session management in authentication flow
+
+[33mcommit 668aac452d82c895f1baaba052694a2d47649632[m
+Author: awjans <andreaw@jans.org>
+Date:   Wed Oct 1 10:08:02 2025 -1000
+
+    refactor: reorder fields in ProductInstance and ShoppingListItem models for clarity
+
+[33mcommit 478bb697b4718a713ef73e5309ee501f6802a2e2[m
+Author: awjans <andreaw@jans.org>
+Date:   Wed Oct 1 08:14:39 2025 -1000
+
+    chore: update prisma and related dependencies to version 6.16.3
+    
+    feat: add ShoppingList and ShoppingListItem models to schema
+    - Introduced ShoppingList model with relationships to User and Store
+    - Added ShoppingListItem model with relationships to ShoppingList, Product, Store, and Unit
+    - Updated Product model to include relationships with ShoppingListItem and Store
+    - Modified Unit model to include relationships with ProductInstance and ShoppingListItem
+    - Updated Location and Container models to reflect changes in relationships
+    - Renamed GroceryItem to Product and updated related references in the schema
+    - Created ProductCategory enum for categorizing products
+    - Added migration script for dropping obsolete tables and creating new ones
+
+[33mcommit d657964e30546c9cc194d8b8c1c58682cfe354f7[m[33m ([m[1;31morigin/issue-175[m[33m)[m
+Merge: 29a6989 63f37bf
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Wed Oct 1 06:53:22 2025 -1000
+
+    Merge pull request #171 from freshkeepuh/issue-076a
+    
+    Issue 079a - Create a Forgot Password page.
+
+[33mcommit 63f37bf6c48263b4b5c2312637862be700fba2ef[m[33m ([m[1;31morigin/issue-076a[m[33m)[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Mon Sep 29 07:09:32 2025 -1000
+
+    Apply suggestions from code review
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit 88ee38abb0fd7736796aa5673eac7684e964777b[m
+Author: awjans <andreaw@jans.org>
+Date:   Mon Sep 29 07:05:15 2025 -1000
+
+    Change Playwright reporter from 'html' to 'list' for improved test output readability
+
+[33mcommit 67f8dbb13b39a30a006406d17a3135871d3c627b[m
+Author: awjans <andreaw@jans.org>
+Date:   Mon Sep 29 06:54:37 2025 -1000
+
+    Implement forgot password functionality with validation and error handling
+
+[33mcommit 05435c02abcacec3641b3b3f3c01b45cb97fda22[m
+Author: awjans <andreaw@jans.org>
+Date:   Mon Sep 29 06:52:17 2025 -1000
+
+    Refactor Dashboard and Welcome components to include session data and improve loading state handling
+
+[33mcommit 42a5882dff251cbb8395d88b19ecef1435af2e2e[m
+Author: awjans <andreaw@jans.org>
+Date:   Mon Sep 29 06:51:20 2025 -1000
+
+    Update ESLint rules and package dependencies
+
+[33mcommit 29a6989c7375eacb1343bf86fc465b00bb4e6b18[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Thu Sep 25 11:28:52 2025 -1000
+
+    Remove duplicate lint step from CI workflow
+
+[33mcommit cba73bed146621a969dc7a075baeb85055663162[m[33m ([m[1;31morigin/issue-169[m[33m)[m
+Merge: 249f99a eac0c25
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Wed Sep 24 10:03:25 2025 -1000
+
+    Merge pull request #166 from freshkeepuh/test-branch
+    
+    Test images
+
+[33mcommit eac0c25f409aced30de3a91eb8457fbef67f9d6c[m[33m ([m[1;31morigin/test-branch[m[33m)[m
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Wed Sep 24 09:45:57 2025 -1000
+
+    Okay I fixed it for the final time lets gooo
+
+[33mcommit 249f99aa80a50fc0c5f7c2fd23e343f8a5509226[m[33m ([m[1;31morigin/issue-167[m[33m, [m[1;31morigin/issue-165[m[33m, [m[1;31morigin/issue-163[m[33m, [m[1;32missue-167[m[33m)[m
+Merge: 6b5601f 925cc10
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Wed Sep 24 08:30:40 2025 -1000
+
+    Merge pull request #161 from freshkeepuh/issue-154
+    
+    issue-154 Grocery Item Shop displays grocery items from database
+
+[33mcommit 925cc10cad93d23c59a7571a04bc07f780f33488[m[33m ([m[1;31morigin/issue-154[m[33m)[m
+Merge: b96e3d0 6b5601f
+Author: Ralph Jhon Ramos <134979001+ralphramosgit@users.noreply.github.com>
+Date:   Wed Sep 24 08:14:03 2025 -1000
+
+    Merge branch 'main' into issue-154
+
+[33mcommit b96e3d0d34ae3f571b93116d0e21db66598ab514[m
+Author: Ralph Jhon Ramos <22ralph.ramos@gmail.com>
+Date:   Wed Sep 24 08:12:57 2025 -1000
+
+    removed shopping-list test file
+
+[33mcommit 6b5601f222e654383831dbb294247c653205145a[m
+Merge: 817ed6f 72a2b14
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Wed Sep 24 06:10:17 2025 -1000
+
+    Merge pull request #162 from freshkeepuh/issue-160
+    
+    issue-160 Create location card component
+
+[33mcommit 72a2b14704693846659cfd7828e476984793e1f8[m
+Author: Joseph Heintz <143227278+josephheintz@users.noreply.github.com>
+Date:   Wed Sep 24 01:54:52 2025 -1000
+
+    Update src/components/LocationCard.tsx
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit 7007ff0250e511f4ca5bdb58db7359ba38219365[m
+Author: Joseph Heintz <143227278+josephheintz@users.noreply.github.com>
+Date:   Wed Sep 24 01:54:45 2025 -1000
+
+    Update src/components/LocationCard.tsx
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit 76dc03c89211bfa899042e34a8de18249af83efe[m
+Author: Joseph Heintz <143227278+josephheintz@users.noreply.github.com>
+Date:   Wed Sep 24 01:54:32 2025 -1000
+
+    Update src/app/locations/page.tsx
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit e4860fdf87112fe57cbf1881a596c7de659f1f3c[m
+Author: Joseph Heintz <143227278+josephheintz@users.noreply.github.com>
+Date:   Wed Sep 24 01:49:48 2025 -1000
+
+    add space to address:
+
+[33mcommit 508e5ad2b5fc3b59fd378f2b4be5e9135af469bb[m
+Author: Joseph Heintz <143227278+josephheintz@users.noreply.github.com>
+Date:   Wed Sep 24 01:35:10 2025 -1000
+
+    fixed ES Lint errors and notification for if no locations found
+
+[33mcommit 3abe0f7901f3f509f2374bf8956d60325ffaaf05[m
+Author: Joseph Heintz <143227278+josephheintz@users.noreply.github.com>
+Date:   Wed Sep 24 00:46:15 2025 -1000
+
+    edit and delete feature for sample locations
+    
+    not connected to DB and refreshing the page brings back deleted cards
+
+[33mcommit c608e867390073807fd8806dc963f6db6d338500[m[33m ([m[1;31morigin/issue-160[m[33m)[m
+Author: Joseph Heintz <143227278+josephheintz@users.noreply.github.com>
+Date:   Tue Sep 23 23:52:30 2025 -1000
+
+    Created LocationCard component
+
+[33mcommit 27b68e544d43622dc9f4151ba43d238da2895684[m
+Author: Ralph Jhon Ramos <22ralph.ramos@gmail.com>
+Date:   Tue Sep 23 23:28:56 2025 -1000
+
+    removed comments
+
+[33mcommit 94ccf61cf713ad4b0ae1fee8fd3b00fba8eff509[m
+Author: Ralph Jhon Ramos <22ralph.ramos@gmail.com>
+Date:   Tue Sep 23 23:27:23 2025 -1000
+
+    displays newly created grocerty items in shop page and also shows items that are connected to the current user
+
+[33mcommit 817ed6f96b7e290119386510724a783cef5f3df6[m
+Merge: 9473562 7f93284
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Tue Sep 23 22:29:29 2025 -1000
+
+    Merge pull request #156 from freshkeepuh/issue-058
+    
+    Issue 058 Functioning CreateGroceryItem page to create a groceryItem and also add it to shop join table
+
+[33mcommit 7f932846507cb037ab0f5e912b4d3f2d28f1a70d[m[33m ([m[1;31morigin/issue-058[m[33m)[m
+Merge: 26d7aeb 9473562
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Tue Sep 23 22:22:03 2025 -1000
+
+    Merge branch 'main' into issue-058
+
+[33mcommit 9473562411cba5c4005cba95d0a76725a8dcb202[m
+Merge: bf90228 111dfb2
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Tue Sep 23 22:21:42 2025 -1000
+
+    Merge pull request #148 from freshkeepuh/issue-077
+    
+    fix deployment, delete pnpm
+
+[33mcommit 26d7aeb766923f3f0a8ddf6222802b58e90ed434[m
+Author: Ralph Jhon Ramos <134979001+ralphramosgit@users.noreply.github.com>
+Date:   Tue Sep 23 22:16:04 2025 -1000
+
+    change added to shop instead of shopping list success message
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit c7ec63d25df5a34945ad5b0ce0ac0fb11782fc68[m[33m ([m[1;32missue-058[m[33m)[m
+Author: Ralph Jhon Ramos <22ralph.ramos@gmail.com>
+Date:   Tue Sep 23 22:07:51 2025 -1000
+
+    fixed handle change void issue
+
+[33mcommit c17d3761389e99b237c3df8945825f7d35b4de90[m
+Merge: 18ac3be bf90228
+Author: Ralph Jhon Ramos <22ralph.ramos@gmail.com>
+Date:   Tue Sep 23 21:55:05 2025 -1000
+
+    Merge branch 'main' of https://github.com/freshkeepuh/freshkeep into issue-058
+
+[33mcommit 111dfb25a351e81593e805141a3e8e2e7a6ab4c0[m[33m ([m[1;31morigin/issue-077[m[33m)[m
+Merge: 64da574 bf90228
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Tue Sep 23 21:46:17 2025 -1000
+
+    Merge branch 'main' into issue-077
+
+[33mcommit bf9022874353f5ab1d4a8af9df4d1c71dd05e020[m[33m ([m[1;31morigin/issue-158[m[33m, [m[1;31morigin/issue-157[m[33m, [m[1;31morigin/issue-155[m[33m)[m
+Merge: e5559f8 7692b47
+Author: Ralph Jhon Ramos <134979001+ralphramosgit@users.noreply.github.com>
+Date:   Tue Sep 23 21:45:56 2025 -1000
+
+    Merge pull request #139 from freshkeepuh/issue-125
+    
+    Issue 125 - Added Shop model to schema
+
+[33mcommit 7692b470a852836c8dbf8d4b7dfe7d0c1a8afbbf[m[33m ([m[1;31morigin/issue-125[m[33m, [m[1;32missue-125[m[33m)[m
+Merge: 6c68fd9 e5559f8
+Author: Ralph Jhon Ramos <134979001+ralphramosgit@users.noreply.github.com>
+Date:   Tue Sep 23 21:38:17 2025 -1000
+
+    Merge branch 'main' into issue-125
+
+[33mcommit e5559f842efc4f52ba3efe5a60f9067ccd1a651f[m
+Merge: fa3f628 a1179f7
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Tue Sep 23 21:33:39 2025 -1000
+
+    Merge pull request #153 from freshkeepuh/issue-147
+    
+    Reverted back to josh's signup updates
+
+[33mcommit a1179f7cd307accd9e11da85a43b137eedf40e53[m[33m ([m[1;31morigin/issue-147[m[33m)[m
+Merge: ff5b852 fa3f628
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Tue Sep 23 21:27:11 2025 -1000
+
+    Merge branch 'main' into issue-147
+
+[33mcommit ff5b8523e7cb0d942443d2e0efa4d6d144b519e3[m[33m ([m[1;32missue-147[m[33m)[m
+Author: Ralph Jhon Ramos <22ralph.ramos@gmail.com>
+Date:   Tue Sep 23 21:26:37 2025 -1000
+
+    removed signup test
+
+[33mcommit 780f2224493829ed0e90e3d1bfa83038d00b37cf[m
+Author: Ralph Jhon Ramos <22ralph.ramos@gmail.com>
+Date:   Tue Sep 23 21:17:57 2025 -1000
+
+    remodify signup page, ralph and josh collab
+
+[33mcommit fa3f628dc8ac5b92fceb2dba4f4540400b20f0be[m
+Merge: cbff51d 9442201
+Author: Ralph Jhon Ramos <134979001+ralphramosgit@users.noreply.github.com>
+Date:   Tue Sep 23 21:04:46 2025 -1000
+
+    Merge pull request #152 from freshkeepuh/147-issue-147-fixing-sign-up-page
+    
+    147 issue 147 fixing sign up page
+
+[33mcommit 94422012fbcb562fe0c3cf49f1f7e5c6964130da[m[33m ([m[1;31morigin/147-issue-147-fixing-sign-up-page[m[33m)[m
+Merge: 621569a cbff51d
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Tue Sep 23 20:56:35 2025 -1000
+
+    Merge branch 'main' into 147-issue-147-fixing-sign-up-page
+
+[33mcommit 621569abeded81efa0d60a237965d76e3d9a1e79[m
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Tue Sep 23 20:55:12 2025 -1000
+
+    okay I retested my code sign up now works
+
+[33mcommit 18ac3be3c022d1faa03783343aad617e76971323[m
+Author: Ralph Jhon Ramos <22ralph.ramos@gmail.com>
+Date:   Tue Sep 23 20:42:33 2025 -1000
+
+    created create grocery item form page, able to add new grocery item into groceryitem table and shop table
+
+[33mcommit cbff51d8dbf9b9d8f310fa2b855a8f4d4c831627[m[33m ([m[1;31morigin/issue-150[m[33m)[m
+Merge: e7618e1 2269cca
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Tue Sep 23 20:38:10 2025 -1000
+
+    Merge pull request #142 from freshkeepuh/issue-140
+    
+    Sign In erorr pop up/modal
+
+[33mcommit 2fa68b2519624f13f198e65a7e8660a7b192818b[m
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Tue Sep 23 20:35:12 2025 -1000
+
+    okay I retested my code sign up now works
+
+[33mcommit 7854097f9be6eecdaeebdfca92824aeab0c9cb84[m
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Tue Sep 23 20:27:12 2025 -1000
+
+    okay I retested my code sign up now works
+
+[33mcommit 64da5746e1f078a4751c65a391ad52eb5627ae6e[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Tue Sep 23 20:26:18 2025 -1000
+
+    fix deployment, delete pnpm
+
+[33mcommit 2269ccaa405f3692d506b41744ca45cc75a68d73[m[33m ([m[1;31morigin/issue-140[m[33m)[m
+Merge: 28b3cb3 e7618e1
+Author: Salina Thongsisavath <97216698+salina-t@users.noreply.github.com>
+Date:   Tue Sep 23 20:23:58 2025 -1000
+
+    Merge branch 'main' into issue-140
+
+[33mcommit e7618e15ca00e01e965e83412646f1080b8fe0c7[m
+Merge: 82931d5 bf8aa8f
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Tue Sep 23 20:09:36 2025 -1000
+
+    Merge pull request #123 from freshkeepuh/issue-077
+    
+    Issue 077 - Sign up page debug
+
+[33mcommit 367f80cb9ed81509a232640986c430d40abce76c[m
+Merge: 51229b8 6c68fd9
+Author: Ralph Jhon Ramos <22ralph.ramos@gmail.com>
+Date:   Tue Sep 23 19:49:47 2025 -1000
+
+    Merge branch 'issue-125' of https://github.com/freshkeepuh/freshkeep into issue-058
+
+[33mcommit bf8aa8f037d36b1105d394cbfc0f52860ab5ed85[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Tue Sep 23 19:44:46 2025 -1000
+
+    Update page.tsx
+
+[33mcommit 5f5fcb7d10081c3d67a9ca7e8023cbc2e6bc14db[m
+Merge: f6af407 82931d5
+Author: Dmitry Gordeev <gordeev.du@gmail.com>
+Date:   Tue Sep 23 19:37:10 2025 -1000
+
+    Merge branch 'main' into issue-077
+
+[33mcommit 28b3cb33c4b8b953a4a772a51770fc0753349ba8[m
+Merge: c24f7ad 82931d5
+Author: Salina Thongsisavath <97216698+salina-t@users.noreply.github.com>
+Date:   Tue Sep 23 19:33:41 2025 -1000
+
+    Merge branch 'main' into issue-140
+
+[33mcommit f6af407eca2e8b5df3f751a6dfeb712d8e0290ae[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Tue Sep 23 19:25:35 2025 -1000
+
+    Update src/lib/dbUserActions.ts
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit 6c68fd9f49c2a306d0f0317aca0d9d706c3a5b49[m
+Merge: 84a1f6f 82931d5
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Tue Sep 23 19:19:17 2025 -1000
+
+    Merge branch 'main' into issue-125
+
+[33mcommit 82931d56301bbb94301a62f6e440686c74b933a8[m
+Merge: b5a1578 bdc3cc1
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Tue Sep 23 19:15:55 2025 -1000
+
+    Merge pull request #143 from freshkeepuh/66-issue-066-create-a-mock-up-sign-up-page
+    
+    Sign-up mockup page
+
+[33mcommit c24f7ad7912500c9a19783beb5f0bac0195abaaf[m
+Author: Salina Thongsisavath <salinat@hawaii.edu>
+Date:   Tue Sep 23 19:05:10 2025 -1000
+
+    edit component id and add window pop up
+
+[33mcommit 14f277afe6285fca050999d8a03167b0231a1929[m
+Merge: f5119bb b5a1578
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Tue Sep 23 19:00:09 2025 -1000
+
+    Merge branch 'main' into issue-077
+
+[33mcommit bdc3cc1e7c7013c3fa23b602daf79102f4c76426[m[33m ([m[1;31morigin/66-issue-066-create-a-mock-up-sign-up-page[m[33m)[m
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Tue Sep 23 18:57:48 2025 -1000
+
+    Sign-up mockup page
+    
+    Finished mockup page
+    Did mobile support
+    Added text emojis as well as a new background picture
+
+[33mcommit 84a1f6fcfc751f95d64d02a0662a2e7b46703683[m
+Merge: 2dc0911 b5a1578
+Author: Ralph Jhon Ramos <134979001+ralphramosgit@users.noreply.github.com>
+Date:   Tue Sep 23 18:19:10 2025 -1000
+
+    Merge branch 'main' into issue-125
+
+[33mcommit 2dc09116fc5c1e66cdfbe8d74c082e57fd294f4f[m
+Author: Ralph Jhon Ramos <22ralph.ramos@gmail.com>
+Date:   Tue Sep 23 18:16:26 2025 -1000
+
+    revised schema for consistency of shop id
+
+[33mcommit 51229b8f3e481c803d75ab2c6c0d9dcd30a26ee7[m
+Author: Ralph Jhon Ramos <22ralph.ramos@gmail.com>
+Date:   Tue Sep 23 18:10:30 2025 -1000
+
+    created a page for gorcery item form, wip
+
+[33mcommit 0c4758ff7ed0f653276ac2efd949fe8129d3b75f[m
+Author: Salina Thongsisavath <salinat@hawaii.edu>
+Date:   Tue Sep 23 16:40:53 2025 -1000
+
+    edit pop up header color
+
+[33mcommit 0819d68259fc9e4e14bb2a831f7743a98477877e[m
+Merge: f690470 b5a1578
+Author: Salina Thongsisavath <97216698+salina-t@users.noreply.github.com>
+Date:   Tue Sep 23 16:19:10 2025 -1000
+
+    Merge branch 'main' into issue-140
+
+[33mcommit f690470295883a1b51962bfce7ce41c155a8397a[m
+Author: Salina Thongsisavath <salinat@hawaii.edu>
+Date:   Tue Sep 23 15:43:32 2025 -1000
+
+    adds Sign In erorr pop up
+
+[33mcommit d1b2c73540d2fbfcf706c17c51e12c1bfc57c201[m
+Author: Ralph Jhon Ramos <22ralph.ramos@gmail.com>
+Date:   Tue Sep 23 14:03:44 2025 -1000
+
+    created draft frontend createGroceryItem form, current inputs of name, category, and soldAt
+
+[33mcommit 01047e2392461a5e5fc36a2462b3ea09305b1b7d[m
+Merge: ba89cb4 b5a1578
+Author: Ralph Jhon Ramos <134979001+ralphramosgit@users.noreply.github.com>
+Date:   Tue Sep 23 13:41:16 2025 -1000
+
+    Merge branch 'main' into issue-125
+
+[33mcommit ba89cb475da3db71311135dc41739250de9286a1[m
+Author: Ralph Jhon Ramos <22ralph.ramos@gmail.com>
+Date:   Tue Sep 23 13:37:53 2025 -1000
+
+    fixed new line eslint error
+
+[33mcommit 419fecc44a1e515045dcfb83c1253a67c46fd917[m
+Author: Ralph Jhon Ramos <22ralph.ramos@gmail.com>
+Date:   Tue Sep 23 13:35:56 2025 -1000
+
+    fixed merge conflicts with the navbar, renamed store to shop
+
+[33mcommit b5a1578336b3cc96c5aaece73504e6d106d23eeb[m
+Merge: 8c76810 258fc23
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Tue Sep 23 13:35:22 2025 -1000
+
+    Merge pull request #141 from freshkeepuh/issue-104
+    
+    Issue 104
+
+[33mcommit 258fc23478717c0a0c08cc51b11bfeb81bc4bcd1[m[33m ([m[1;31morigin/issue-104[m[33m)[m
+Merge: 41ddc3c 8c76810
+Author: Salina Thongsisavath <97216698+salina-t@users.noreply.github.com>
+Date:   Tue Sep 23 13:29:17 2025 -1000
+
+    Merge branch 'main' into issue-104
+
+[33mcommit b31b2db4b634fa592bd4e54681a06a2b97fbd9a4[m
+Author: Ralph Jhon Ramos <22ralph.ramos@gmail.com>
+Date:   Tue Sep 23 12:38:20 2025 -1000
+
+    created a shop model and added shop button to navbar
+
+[33mcommit 8c76810f36c480b61f1b15df234135b3cbac7416[m
+Merge: 39aa3ae 2c2e4f6
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Mon Sep 22 22:21:59 2025 -1000
+
+    Merge pull request #138 from freshkeepuh/issue-137
+    
+    issue-137 Connect Recipe Page to Navbar
+
+[33mcommit 2c2e4f6d8e7511c581d930bc428b3da7cbeb1b62[m[33m ([m[1;31morigin/issue-137[m[33m)[m
+Author: Ellie Ishii <166664143+ellieishii@users.noreply.github.com>
+Date:   Mon Sep 22 22:12:07 2025 -1000
+
+    issue-137 Connect Recipe Page to Navbar
+
+[33mcommit 39aa3ae52d8489b8265995c4404b516f52818aff[m
+Merge: b77fb37 dd514d8
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Mon Sep 22 21:56:50 2025 -1000
+
+    Merge pull request #136 from freshkeepuh/issue-93-issue-093_Create_a_skeleton_of_recipe_page
+    
+    issue-093 Create a skeleton of recipe page
+
+[33mcommit dd514d8c4a1fa8bfaf169a04d9444e842598b105[m[33m ([m[1;31morigin/issue-93-issue-093_Create_a_skeleton_of_recipe_page[m[33m)[m
+Author: Ellie Ishii <166664143+ellieishii@users.noreply.github.com>
+Date:   Mon Sep 22 21:48:08 2025 -1000
+
+    Update src/app/recipes/page.module.css
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit 5194e89d51e4ee0a1036c972ee5312bdc5c80f48[m
+Author: Ellie Ishii <166664143+ellieishii@users.noreply.github.com>
+Date:   Mon Sep 22 21:47:45 2025 -1000
+
+    Update src/app/recipes/page.tsx
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit f5119bb0238ea1b0ef091bed314f1f91301a1b29[m
+Author: Dmitry Gordeev <gordeev.du@gmail.com>
+Date:   Mon Sep 22 21:43:47 2025 -1000
+
+    Update src/lib/dbUserActions.ts
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit 47a7a206ba77f7f7cc674df34d8d252182b956be[m
+Author: Ellie Ishii <166664143+ellieishii@users.noreply.github.com>
+Date:   Mon Sep 22 21:37:33 2025 -1000
+
+    issue-093 Create a skeleton of recipe page
+
+[33mcommit 44825741ffb40ae8dfff1c34a760f3faf26cce07[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Mon Sep 22 21:29:36 2025 -1000
+
+    Update dbUserActions.ts
+
+[33mcommit b6b8bc5212bbc922d4b98c5c3d1103aeb13a1f06[m
+Merge: c9680c0 b77fb37
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Mon Sep 22 21:07:17 2025 -1000
+
+    Merge branch 'main' into issue-077
+
+[33mcommit b77fb373d5ca72233385decec5bc7e28d55b8a19[m
+Merge: 0f0016f e23e222
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Mon Sep 22 20:54:00 2025 -1000
+
+    Merge pull request #132 from freshkeepuh/131-fix-sign-in-page-container
+    
+    Update page.tsx fixed container issue also added stylization for mobile use
+
+[33mcommit e23e2228e8cb75040fd76253177c01b5667de134[m[33m ([m[1;31morigin/131-fix-sign-in-page-container[m[33m)[m
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Mon Sep 22 20:42:24 2025 -1000
+
+    Update page.tsx
+
+[33mcommit 70d277174eac04fdbd4e9f597aa50ea0a3bd3839[m
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Mon Sep 22 16:14:04 2025 -1000
+
+    Update page.tsx
+
+[33mcommit 0f0016f1af1e7cda609736113bb053e558188c78[m[33m ([m[1;31morigin/issue-131[m[33m)[m
+Merge: 1d63c00 7832754
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Mon Sep 22 14:30:05 2025 -1000
+
+    Merge pull request #129 from freshkeepuh/issue-071
+    
+     issue-071 Connect pages to Navbar
+
+[33mcommit 7832754da540114ce1f5eb61c4542ac40251b7c6[m[33m ([m[1;31morigin/issue-071[m[33m)[m
+Merge: 7f64c00 bcdb56f
+Author: Ellie Ishii <166664143+ellieishii@users.noreply.github.com>
+Date:   Mon Sep 22 12:03:46 2025 -1000
+
+    Merge branch 'issue-071' of https://github.com/freshkeepuh/freshkeep into issue-071
+
+[33mcommit 7f64c00a7d9a2043836df2d9ef2e6bda37898123[m
+Author: Ellie Ishii <166664143+ellieishii@users.noreply.github.com>
+Date:   Mon Sep 22 12:03:40 2025 -1000
+
+    Update Navbar.tsx
+
+[33mcommit bcdb56f4e634c270f3e328a78c91fadfc0592b88[m
+Merge: c9b784f 1d63c00
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Mon Sep 22 10:11:10 2025 -1000
+
+    Merge branch 'main' into issue-071
+
+[33mcommit 1d63c000546fb79385d9429cdbfbcf592091572c[m
+Author: awjans <andreaw@jans.org>
+Date:   Mon Sep 22 10:01:17 2025 -1000
+
+    Fix condition for installing Playwright dependencies in CI workflow
+
+[33mcommit 6d67a83b8590d23fa2d6e4ed90aec974d5d4ee9d[m
+Author: awjans <andreaw@jans.org>
+Date:   Mon Sep 22 09:46:27 2025 -1000
+
+    Enhance CI workflow by caching Playwright binaries and retrieving installed version
+
+[33mcommit c9b784fbea9a8d3eaa22b99d1d490407834f06c0[m
+Author: Ellie Ishii <166664143+ellieishii@users.noreply.github.com>
+Date:   Mon Sep 22 09:13:18 2025 -1000
+
+    Update Navbar.tsx
+
+[33mcommit c9680c01bdb5a94a48b171b959672324bec191da[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Mon Sep 22 09:06:13 2025 -1000
+
+    Sing-in misspell
+
+[33mcommit bbd97eb448f877324c39dc0d0db507c3ee40bcae[m
+Author: Ralph Jhon Ramos <22ralph.ramos@gmail.com>
+Date:   Mon Sep 22 09:03:23 2025 -1000
+
+    renamed store to shop
+
+[33mcommit 63a407c7ba3c7b9801bf2f79500ea25cfe31f5ab[m
+Author: Ellie Ishii <166664143+ellieishii@users.noreply.github.com>
+Date:   Mon Sep 22 01:23:52 2025 -1000
+
+    Connect Pages to Navbar
+
+[33mcommit 111e272c2e61e7a7013219fd157b38e0855933e9[m[33m ([m[1;31morigin/issue-128[m[33m, [m[1;31morigin/issue-127[m[33m, [m[1;31morigin/issue-061[m[33m)[m
+Merge: 13aa421 0f55007
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Sun Sep 21 18:32:25 2025 -1000
+
+    Merge pull request #118 from freshkeepuh/issue-99
+    
+    Issue 99 - Locations page acceptance tests
+
+[33mcommit 0f55007717060ddf1093f9c9b30fd23c76027c2f[m
+Merge: bb5ee64 13aa421
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Sun Sep 21 18:26:26 2025 -1000
+
+    Merge branch 'main' into issue-99
+
+[33mcommit ebe200b4da6d5a050fceccc022d6f444712ecc60[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Sun Sep 21 18:25:36 2025 -1000
+
+    working for lint
+
+[33mcommit be392b2d720dcf54ab9e92f575aefe4f199d4402[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Sun Sep 21 18:23:48 2025 -1000
+
+    lint compliance
+
+[33mcommit 850ba1f067ee1968d0ab5da919071cde9de8dde7[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Sun Sep 21 18:18:00 2025 -1000
+
+    SingUp page, check existing user.
+
+[33mcommit 13aa421d88f2d409aa8f676162f169b1cde010e4[m
+Merge: 3d62faf 58ba1b2
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Sun Sep 21 14:22:52 2025 -1000
+
+    Merge pull request #113 from freshkeepuh/issue-50
+    
+    Issue 050
+
+[33mcommit bb5ee6438bb12e5ccdc4459bd75e1715a522bfe1[m[33m ([m[1;31morigin/issue-99[m[33m)[m
+Author: Joseph Heintz <143227278+josephheintz@users.noreply.github.com>
+Date:   Sat Sep 20 15:29:13 2025 -1000
+
+    Update locations page acceptance tests for location
+
+[33mcommit 3726feafe6c23dddce949e49f27f40ea4742db89[m
+Merge: 2f43cc8 a3b6836
+Author: Joseph Heintz <143227278+josephheintz@users.noreply.github.com>
+Date:   Sat Sep 20 15:07:36 2025 -1000
+
+    Merge branch 'issue-99' of https://github.com/freshkeepuh/freshkeep into issue-99
+
+[33mcommit 2f43cc82a50fad1210d4510cbbbbd03049d3591d[m
+Author: Joseph Heintz <143227278+josephheintz@users.noreply.github.com>
+Date:   Sat Sep 20 15:07:21 2025 -1000
+
+    rename const Locations to LocationsPage and put edit/delete buttons onto each location list item
+
+[33mcommit 41ddc3c5ce6aba9cb098aa37b05fb450e3721ad2[m
+Author: Salina Thongsisavath <salinat@hawaii.edu>
+Date:   Sat Sep 20 14:54:56 2025 -1000
+
+    update acceptance test
+
+[33mcommit 58ba1b2876aaa8ef1df1f4a2425f8eec1eec738e[m[33m ([m[1;31morigin/issue-50[m[33m)[m
+Merge: 0d09089 3d62faf
+Author: Dominic Molina <dim@hawaii.edu>
+Date:   Sat Sep 20 11:25:48 2025 -1000
+
+    Merge branch 'main' into issue-50
+
+[33mcommit 0d09089ed1bf018c663918a65fa984814436ae25[m
+Author: dominic-isaac-molina <dim@hawaii.edu>
+Date:   Sat Sep 20 11:24:56 2025 -1000
+
+    edited Settings.tsx
+
+[33mcommit a3b68362ebb9bfc76ffc243f231cba1495b04b14[m
+Merge: c7d5006 3d62faf
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Thu Sep 18 11:18:01 2025 -1000
+
+    Merge branch 'main' into issue-99
+
+[33mcommit febb2f0c40feb873fb29262582639695e8e3cdf0[m
+Merge: b813257 3d62faf
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Wed Sep 17 22:19:14 2025 -1000
+
+    Merge branch 'main' into issue-077
+
+[33mcommit 3d62faf24a45cfad142b06d959afd74bbb0730fa[m[33m ([m[1;31morigin/issue-120[m[33m, [m[1;32mproductUpdate-test[m[33m)[m
+Merge: 3c32c72 9f45cba
+Author: Dmitry Gordeev <gordeev.du@gmail.com>
+Date:   Wed Sep 17 22:10:54 2025 -1000
+
+    Merge pull request #117 from freshkeepuh/issue-116
+    
+    Issue 116 - Refactor home and dashboard components; remove old dashboard page and…
+
+[33mcommit b8132579d5d414df2c6e10b95cb4a96848ca1ff7[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Wed Sep 17 22:07:58 2025 -1000
+
+    Sing in navbar
+
+[33mcommit c7d5006ded4e68daff3e73eeb58207a240e5bef2[m
+Merge: d239304 2e5bd79
+Author: Joseph Heintz <143227278+josephheintz@users.noreply.github.com>
+Date:   Wed Sep 17 19:16:09 2025 -1000
+
+    Merge branch 'issue-99' of https://github.com/freshkeepuh/freshkeep into issue-99
+
+[33mcommit d239304c248920161826e4172ec67ad5c2227814[m
+Author: Joseph Heintz <143227278+josephheintz@users.noreply.github.com>
+Date:   Wed Sep 17 19:15:41 2025 -1000
+
+    localhost URL configuration changed
+
+[33mcommit 2e5bd792219dfb6aa79d711970e14864f0407d62[m
+Merge: c03f01a 3c32c72
+Author: Joseph Heintz <143227278+josephheintz@users.noreply.github.com>
+Date:   Wed Sep 17 19:11:48 2025 -1000
+
+    Merge branch 'main' into issue-99
+
+[33mcommit c03f01a5922debbbf038725d1982cd17a6e1f684[m
+Author: Joseph Heintz <143227278+josephheintz@users.noreply.github.com>
+Date:   Wed Sep 17 19:10:35 2025 -1000
+
+    put back comments on admin page
+
+[33mcommit 35a2c8098c14790abe5c3bff110387b1c359eb3b[m
+Author: Joseph Heintz <143227278+josephheintz@users.noreply.github.com>
+Date:   Wed Sep 17 18:51:51 2025 -1000
+
+    Acceptance tests for locations page done
+
+[33mcommit 9f45cba1e97c9196d32ce5562d152fa847051e7d[m[33m ([m[1;31morigin/issue-116[m[33m)[m
+Author: awjans <andreaw@jans.org>
+Date:   Wed Sep 17 15:30:56 2025 -1000
+
+    Refactor home page tests: ensure URL assertion is checked for both welcome and dashboard page access
+
+[33mcommit 5ea2410c8bd9212cc00cd11090833dc37cf66dbc[m
+Author: awjans <andreaw@jans.org>
+Date:   Wed Sep 17 15:09:02 2025 -1000
+
+    Fix indentation in user page access test for consistency
+
+[33mcommit cfff34f2396a189bbc04895aea293a0d540d6e34[m
+Author: awjans <andreaw@jans.org>
+Date:   Wed Sep 17 14:24:14 2025 -1000
+
+    Refactor admin and user page tests: remove unnecessary navigation step and ensure page load state is checked before visibility assertion.
+
+[33mcommit c183eb702b7056e04149b36f85759871c7304715[m
+Author: awjans <andreaw@jans.org>
+Date:   Wed Sep 17 13:52:14 2025 -1000
+
+    Update Navbar and test cases: change 'Login' to 'Sign In' in Navbar, rename test for welcome page access, and add footer and navbar component tests.
+
+[33mcommit 251f24daf9229ffb158cdbb9f005b6ef830dbced[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Wed Sep 17 12:24:06 2025 -1000
+
+    Apply suggestions from code review
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit 17768098117460480ee05bc9f29081ff1317a1aa[m
+Author: awjans <andreaw@jans.org>
+Date:   Wed Sep 17 12:21:47 2025 -1000
+
+    Refactor home and dashboard components; remove old dashboard page and implement new structure with session handling
+
+[33mcommit dfbec5b6391f2d7ccd90cf1107c2d79d30653b73[m
+Author: Joseph Heintz <143227278+josephheintz@users.noreply.github.com>
+Date:   Wed Sep 17 11:13:35 2025 -1000
+
+    add acceptance test file for locations page
+
+[33mcommit 0955282be0ad341c7cafbc4c4f40ab89568475ef[m[33m ([m[1;32missue-104[m[33m)[m
+Author: Salina Thongsisavath <salinat@hawaii.edu>
+Date:   Wed Sep 17 09:08:52 2025 -1000
+
+    remove unused comments
+
+[33mcommit c66f3703ce20a2b4a1a4cf73449c21cb1dc7d437[m
+Author: Salina Thongsisavath <salinat@hawaii.edu>
+Date:   Wed Sep 17 09:05:48 2025 -1000
+
+    add acceptance tests for sign-in page
+
+[33mcommit 0f2a30e756726ababe86c50c45985347d58e27c4[m
+Merge: 8d4bac0 cc170a0
+Author: dominic-isaac-molina <dim@hawaii.edu>
+Date:   Wed Sep 17 08:44:42 2025 -1000
+
+    Merge branch 'issue-50' of https://github.com/freshkeepuh/freshkeep into issue-50
+
+[33mcommit 8d4bac0599979e8261c6ae79f5ea80ea6f9a0085[m
+Author: dominic-isaac-molina <dim@hawaii.edu>
+Date:   Wed Sep 17 08:43:57 2025 -1000
+
+    Update Navbar.tsx
+
+[33mcommit cc170a0af05eefbdf983f6536d558c4d1e4067ea[m
+Merge: bc7797c 3c32c72
+Author: Dominic Molina <dim@hawaii.edu>
+Date:   Wed Sep 17 08:26:41 2025 -1000
+
+    Merge branch 'main' into issue-50
+
+[33mcommit bc7797c921fb046c485096ac7ca29974ecb7f85a[m
+Author: dominic-isaac-molina <dim@hawaii.edu>
+Date:   Wed Sep 17 08:19:30 2025 -1000
+
+    Update package-lock.json
+
+[33mcommit 2678c63f5cb77ce661c1dcf025559394477b8a9a[m
+Author: dominic-isaac-molina <dim@hawaii.edu>
+Date:   Wed Sep 17 08:17:34 2025 -1000
+
+    added auth pages
+    
+    TODO:
+    update settings page
+    connect
+
+[33mcommit 3c32c72d3d334c0756865c9cd246f854150b05e3[m[33m ([m[1;31morigin/issue-114[m[33m, [m[1;32mreview-114[m[33m, [m[1;32missue-105-notworking[m[33m)[m
+Merge: 9fe5ba1 a0abb39
+Author: Ralph Jhon Ramos <134979001+ralphramosgit@users.noreply.github.com>
+Date:   Tue Sep 16 21:27:11 2025 -1000
+
+    Merge pull request #112 from freshkeepuh/111-issue-111-acceptance-test-login-page
+    
+    Created acceptance test for sign up page
+
+[33mcommit a0abb39064ec52ad3f5802799f669c4fa6516a94[m[33m ([m[1;31morigin/111-issue-111-acceptance-test-login-page[m[33m)[m
+Merge: 652dfa6 9fe5ba1
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Tue Sep 16 21:04:53 2025 -1000
+
+    Merge branch 'main' into 111-issue-111-acceptance-test-login-page
+
+[33mcommit 652dfa649c036b88b6768519e90d18afb3d003ac[m
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Tue Sep 16 20:56:53 2025 -1000
+
+    IT WORKS LETS GOOOOO
+
+[33mcommit 9fe5ba17b8a3f0ba577fd8e991327ac30fcc37fd[m
+Merge: 1fcc197 a2ef191
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Tue Sep 16 19:51:22 2025 -1000
+
+    Merge pull request #101 from freshkeepuh/review-073
+    
+    Review 073
+
+[33mcommit a2ef1912f0db71c93fe6d94f9f3cd948b3b8236f[m[33m ([m[1;31morigin/review-073[m[33m)[m
+Merge: 3b571a8 1fcc197
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Tue Sep 16 17:41:06 2025 -1000
+
+    Merge branch 'main' into review-073
+
+[33mcommit 1fcc197a4548ed554e5072398537509265908d66[m[33m ([m[1;31morigin/issue-111[m[33m)[m
+Merge: 490a37c 228540e
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Tue Sep 16 17:40:30 2025 -1000
+
+    Merge pull request #106 from freshkeepuh/issue-09-create-landingPage
+    
+    Issue 09 create landing page
+
+[33mcommit 228540ee297e3ecbd4b1c8854bbcac64669b22f1[m[33m ([m[1;31morigin/issue-09-create-landingPage[m[33m)[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Tue Sep 16 17:32:00 2025 -1000
+
+    Remove extra whitespace in signin page
+
+[33mcommit cc381b0a77c9e94c9e2c4b8c8d7303f4af57cac1[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Tue Sep 16 17:24:18 2025 -1000
+
+    Update scripts in package.json
+
+[33mcommit 3b571a8a2d925bdfe14060141a238023587ac020[m
+Merge: 8d12500 490a37c
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Tue Sep 16 17:13:10 2025 -1000
+
+    Merge branch 'main' into review-073
+
+[33mcommit d820a8735c66dfc22e9bd54b18c6e47de3534758[m
+Merge: 8062045 490a37c
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Tue Sep 16 17:12:36 2025 -1000
+
+    Merge branch 'main' into issue-09-create-landingPage
+
+[33mcommit 490a37c9057a1575c349ad4fb159e819b9e078a6[m
+Author: awjans <andreaw@jans.org>
+Date:   Tue Sep 16 17:10:38 2025 -1000
+
+    Specify Node.js version directly in lint workflow
+
+[33mcommit 52a0d8ef6119dd41b0fb95234103b5ffbb0fa644[m
+Author: awjans <andreaw@jans.org>
+Date:   Tue Sep 16 17:08:31 2025 -1000
+
+    Update Node.js setup in CI workflow to specify version directly
+
+[33mcommit 8d125008a166ea359e71099c6cfac2a0e70d817a[m
+Merge: 3454bda b78ab08
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Tue Sep 16 17:06:44 2025 -1000
+
+    Merge branch 'main' into review-073
+
+[33mcommit 80620459a95ca53cc0ead13a8469854ed48f2997[m
+Merge: 03257b5 b78ab08
+Author: Salina Thongsisavath <97216698+salina-t@users.noreply.github.com>
+Date:   Tue Sep 16 17:06:35 2025 -1000
+
+    Merge branch 'main' into issue-09-create-landingPage
+
+[33mcommit b78ab0801c2bdc686e998f9423b804404f6e8ee5[m
+Merge: 7c8ebb5 41afe6a
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Tue Sep 16 17:02:28 2025 -1000
+
+    Merge pull request #108 from freshkeepuh/issue-105
+    
+    issue-105 created a playwright test for shoppingList page using code gen
+
+[33mcommit 7c8ebb5e7e9ba12e964f6e75b979c711d33b83dd[m
+Merge: efab219 33251f5
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Tue Sep 16 17:01:14 2025 -1000
+
+    Merge pull request #109 from freshkeepuh/issue-103
+    
+    Add simple dashboard access test after login
+
+[33mcommit 33251f5aad90e0ac35189d4eea76a75bbedb0f67[m
+Author: Ellie Ishii <166664143+ellieishii@users.noreply.github.com>
+Date:   Tue Sep 16 16:52:36 2025 -1000
+
+    Update package-lock.json
+
+[33mcommit 571df99eb48c672f4d451d5536292bf8c5a06a49[m
+Author: Ellie Ishii <166664143+ellieishii@users.noreply.github.com>
+Date:   Tue Sep 16 16:45:24 2025 -1000
+
+    Add simple dashboard access test after login
+
+[33mcommit 41afe6af0e61809d2561bc901d3b2c052b52ae09[m
+Author: Ralph Jhon Ramos <22ralph.ramos@gmail.com>
+Date:   Tue Sep 16 16:41:13 2025 -1000
+
+    created a playwright test for shoppingList page using code gen
+
+[33mcommit f1519ff7c41a3d04edbcb8847ddceb7f6ec8e342[m
+Author: dominic-isaac-molina <dim@hawaii.edu>
+Date:   Tue Sep 16 16:40:24 2025 -1000
+
+    updated settings/page.tsx
+    
+    removed the html file and converted the file to a tsx file
+
+[33mcommit 03257b59fd2ec25c588e4b6a8d6d491aab4d34f5[m
+Merge: dcef6f1 efab219
+Author: Salina Thongsisavath <97216698+salina-t@users.noreply.github.com>
+Date:   Tue Sep 16 16:26:33 2025 -1000
+
+    Merge branch 'main' into issue-09-create-landingPage
+
+[33mcommit dcef6f1abab5f00911016b07f44a0e244b1471a0[m
+Author: Salina Thongsisavath <97216698+salina-t@users.noreply.github.com>
+Date:   Tue Sep 16 16:24:53 2025 -1000
+
+    remove unused react-icons
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit 01ce226284c74e1b6c1221264a2a63dd20cfa135[m
+Author: Salina Thongsisavath <salinat@hawaii.edu>
+Date:   Tue Sep 16 16:18:16 2025 -1000
+
+    remove unused image
+
+[33mcommit 3454bda5a6a538072add628a21400af5b53d653c[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Mon Sep 15 14:56:55 2025 -1000
+
+    Update prisma/seed.ts
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit 3bb1c34764d3b9f3a01a99b71ae0ad3f0a1b5db9[m
+Author: awjans <andreaw@jans.org>
+Date:   Mon Sep 15 14:48:32 2025 -1000
+
+    Refactor grocery item and unit handling in seed script for consistency
+
+[33mcommit 175583f868ffc02436a6a96633fbfa05fa21d755[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Mon Sep 15 14:16:33 2025 -1000
+
+    Apply suggestions from code review
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit 0be6af6f2bc8b765a0c5ae8c63bacf7f06cdc0da[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Mon Sep 15 14:10:20 2025 -1000
+
+    Update prisma/schema.prisma
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit 15db735d583325edfded5393ed1f96c5dded8f7d[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Mon Sep 15 14:10:06 2025 -1000
+
+    Update prisma/seed.ts
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit c256e5c5eb9cfd2c929762af21503f36cfc9b2e9[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Mon Sep 15 14:09:54 2025 -1000
+
+    Update prisma/seed.ts
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit 93a69a9bece5dbc049029c2c495492205e088935[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Mon Sep 15 14:09:29 2025 -1000
+
+    Update prisma/seed.ts
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit 2f007e311a622ec5c5392c296febd9aa1d450c86[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Mon Sep 15 14:09:11 2025 -1000
+
+    Update src/lib/unitConverter.ts
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit 0d38fabe1f1b4df19a442458b88cf53327a342c3[m
+Author: awjans <andreaw@jans.org>
+Date:   Mon Sep 15 14:03:25 2025 -1000
+
+    Created UML Diagram from prisma schema to give teammates a visual look at the database design.
+
+[33mcommit 8f699a0a9f4981b12816f5a8dabdb816fadfc86d[m
+Author: awjans <andreaw@jans.org>
+Date:   Mon Sep 15 11:47:37 2025 -1000
+
+    Refactor unitConverter function to use default export and improve consistency in code structure
+
+[33mcommit 2bf7b0d48e308d550e1bf3cbaa5c285516860a76[m
+Author: awjans <andreaw@jans.org>
+Date:   Mon Sep 15 11:40:07 2025 -1000
+
+    Refactor seedItems function to create items directly instead of using upsert, simplifying the item creation process.
+
+[33mcommit 689d13f9b45e62ddb0d07c76e1c79ac137ff5922[m
+Author: awjans <andreaw@jans.org>
+Date:   Mon Sep 15 11:36:35 2025 -1000
+
+    Refactor Prisma schema and migration: replace 'unitsId' with 'unitId' in GroceryItem and Item models, rename Units table to Unit table, and update foreign key constraints
+
+[33mcommit aeb0a1cd1069ad4c24f8c3f784eaf5a2e99ee6ad[m
+Author: awjans <andreaw@jans.org>
+Date:   Mon Sep 15 10:08:13 2025 -1000
+
+    Refactor main seeding function comment for consistency
+
+[33mcommit 4203dd9dc632734352b96672fac0dbba26308d32[m
+Author: awjans <andreaw@jans.org>
+Date:   Mon Sep 15 10:07:33 2025 -1000
+
+    Enhance Prisma schema with detailed comments and improve seed functions for users, units, grocery items, locations, containers, and items
+
+[33mcommit efab21988526edf47e94cefe3ca42c5e938bdd62[m[33m ([m[1;31morigin/issue-102[m[33m)[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Mon Sep 15 07:24:17 2025 -1000
+
+    Add NEXTAUTH_URL to Playwright test environment
+
+[33mcommit 09c9f64bbde11b5553df4ea56a9e31425be134c5[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Mon Sep 15 07:13:23 2025 -1000
+
+    Delete tests/playwright-auth-sessions/session-john@foo.com.json
+
+[33mcommit f334e3d0d6d1425de12c54097dd690248e1f4c35[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Mon Sep 15 07:12:36 2025 -1000
+
+    Delete tests/playwright-auth-sessions/session-admin@foo.com.json
+
+[33mcommit 9b878fc763b2ad349548528a64580c19295247d2[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Mon Sep 15 07:05:58 2025 -1000
+
+    Revise installation steps and add developer guide link
+
+[33mcommit 4b0f56f735a33877f036265b0a98daaeaa8e0c99[m
+Merge: 324a08e b8fc038
+Author: Dmitry Gordeev <gordeev.du@gmail.com>
+Date:   Sat Sep 13 19:13:14 2025 -1000
+
+    Merge pull request #100 from freshkeepuh/issue-092
+
+[33mcommit b8fc038aeb439cd4f9108feb28e757d048fd2d48[m[33m ([m[1;31morigin/issue-092[m[33m)[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Sat Sep 13 18:14:44 2025 -1000
+
+    Update tests/auth-utils.ts
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit a20a6a2f61b3b3ca710853a1b5f3a30551b78fda[m
+Author: awjans <andreaw@jans.org>
+Date:   Sat Sep 13 18:08:48 2025 -1000
+
+    Refactor tests to use BASE_URL for navigation instead of hardcoded localhost URL
+
+[33mcommit e945f3e1cb57c9b187e0ebda103bbca09cd2997e[m
+Author: awjans <andreaw@jans.org>
+Date:   Sat Sep 13 17:21:29 2025 -1000
+
+    Refactor tests: update branch naming convention and clean up test cases
+
+[33mcommit 35e160ee6d543ddab08745a7787058549e399ab8[m
+Author: awjans <andreaw@jans.org>
+Date:   Sat Sep 13 17:20:13 2025 -1000
+
+    Fix .gitignore entry for playwright auth sessions to include trailing slash
+
+[33mcommit 0e0d9833284666636f0b1bc0cf4414bf5973a17e[m
+Author: awjans <andreaw@jans.org>
+Date:   Sat Sep 13 17:19:22 2025 -1000
+
+    Remove leading slash from playwright auth sessions in .gitignore
+
+[33mcommit a9ecaa5885823243727bf1ab6e96993ea06baaac[m
+Author: Joseph Heintz <143227278+josephheintz@users.noreply.github.com>
+Date:   Sat Sep 13 16:08:31 2025 -1000
+
+    Fixed ESLint errors, added placeholder image and acceptance tests
+    
+    Test if Location Management title is visible
+
+[33mcommit 324a08e1ed6827f32729454469697b14abe615e7[m
+Merge: 6da94a2 06ce564
+Author: Dmitry Gordeev <gordeev.du@gmail.com>
+Date:   Sat Sep 13 15:43:05 2025 -1000
+
+    Merge pull request #97 from freshkeepuh/issue-030
+    
+    Issue 030
+
+[33mcommit 06ce56480ae3855c45aa4b9d047b9cd5dd1a87eb[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Sat Sep 13 15:37:37 2025 -1000
+
+    Working for Copilot
+
+[33mcommit 0e5c2079d93a8d15813d7cd1b815e35d04ab1b13[m
+Merge: 63a4ec2 9d7ade4
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Sat Sep 13 15:30:23 2025 -1000
+
+    Merge branch 'issue-030' of https://github.com/freshkeepuh/freshkeep into issue-030
+
+[33mcommit 63a4ec2d31bd43fd79e559d9d34690610729c54a[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Sat Sep 13 15:30:20 2025 -1000
+
+    playwright tests remove
+
+[33mcommit 9d7ade46233b7303f100ebe8c1e0189c3f0400b8[m
+Author: awjans <andreaw@jans.org>
+Date:   Sat Sep 13 15:11:45 2025 -1000
+
+    Update test script in package.json to replace playwright-development with test
+
+[33mcommit f7e7d91b8b5c03e99a91bcd44391ef707a68fb3c[m
+Author: awjans <andreaw@jans.org>
+Date:   Sat Sep 13 15:08:39 2025 -1000
+
+    Rename LocationManagement component to Locations and update alt text for image
+
+[33mcommit 8e627e33baebe024d1eacc7365a3da987e31a68b[m
+Merge: daaf86a 6da94a2
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Sat Sep 13 15:01:11 2025 -1000
+
+    Merge branch 'main' into issue-030
+
+[33mcommit 6da94a240222306e87fc0a0a36ef0b959ee293fb[m
+Merge: 97b8f4f a59cf2c
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Sat Sep 13 15:00:48 2025 -1000
+
+    Merge pull request #89 from freshkeepuh/awjans-patch-1
+    
+    Change project name to FreshKeep and update CI badge
+
+[33mcommit a59cf2cc94028fd736d3067cc239fa74b8e58ab2[m
+Merge: 47f7b13 97b8f4f
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Sat Sep 13 14:59:01 2025 -1000
+
+    Merge branch 'main' into awjans-patch-1
+
+[33mcommit 97b8f4f45dbc02ef89c88ab34b0e84e5ad3633f6[m
+Merge: 2207643 6b46f3d
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Sat Sep 13 14:56:48 2025 -1000
+
+    Merge pull request #82 from freshkeepuh/issue-057
+    
+    Issue-057 Create location management page
+
+[33mcommit 6b46f3d365a472648cfb4cf208fbe80e18310b9e[m
+Merge: 45caac3 2207643
+Author: Joseph Heintz <143227278+josephheintz@users.noreply.github.com>
+Date:   Sat Sep 13 14:27:45 2025 -1000
+
+    Merge branch 'main' into issue-057
+
+[33mcommit daaf86a6e44c985c9f9b1fa184ac4b115391b358[m
+Merge: 7fae1de 2207643
+Author: awjans <andreaw@jans.org>
+Date:   Sat Sep 13 13:43:04 2025 -1000
+
+    Merge remote-tracking branch 'origin/main' into issue-030
+
+[33mcommit 2207643c349e2cb28db8448150e7fdde8b438c62[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Sat Sep 13 13:38:35 2025 -1000
+
+    Simplify Playwright setup in CI workflow
+    
+    Removed conditional checks for Playwright installation and tests.
+
+[33mcommit 7fae1de6cb90d8c0f1fefd24ac3926358c94a1c9[m
+Merge: 32b692a 338d3a7
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Sat Sep 13 13:37:08 2025 -1000
+
+    Merge branch 'main' into issue-030
+
+[33mcommit 32b692aa2ee422b6d936dd0e97475a17171c55ed[m
+Author: awjans <andreaw@jans.org>
+Date:   Sat Sep 13 13:34:52 2025 -1000
+
+    Update .gitignore to include Playwright auth sessions directory
+
+[33mcommit 5634ef9bad8f3e4d8b71ca9307b5031a53eb29d1[m
+Author: awjans <andreaw@jans.org>
+Date:   Sat Sep 13 13:31:06 2025 -1000
+
+    Add Playwright tests for admin and user authentication
+
+[33mcommit 338d3a795d44dd41a3729fed8e58f434ad972528[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Sat Sep 13 13:22:18 2025 -1000
+
+    Remove check for test files in CI workflow
+    
+    Removed the check for test files existence in CI workflow.
+
+[33mcommit df7b9f645fd4a131199b3395e0437e8b21f116d4[m
+Merge: 0eb10c3 3f2359d
+Author: awjans <andreaw@jans.org>
+Date:   Sat Sep 13 13:16:37 2025 -1000
+
+    Merge remote-tracking branch 'origin/main' into issue-030
+
+[33mcommit 0eb10c3e23b38a38769551403160e90be680cab0[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Sat Sep 13 13:08:31 2025 -1000
+
+    comments
+
+[33mcommit 7e59a2548b128ee3ad920689d29d7fc69226fa3c[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Sat Sep 13 13:06:59 2025 -1000
+
+    Update package-lock.json
+
+[33mcommit 47f7b133136de71eec1db18d1be8a37e1258c82b[m
+Merge: d899caf 3f2359d
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Sat Sep 13 13:03:35 2025 -1000
+
+    Merge branch 'main' into awjans-patch-1
+
+[33mcommit 3f2359d391af68a996bf4411cf008a16b49dd6a2[m
+Merge: 208a005 60845c5
+Author: Dmitry Gordeev <gordeev.du@gmail.com>
+Date:   Sat Sep 13 11:49:39 2025 -1000
+
+    Merge pull request #95 from freshkeepuh/issue-073
+    
+    Issue 073 - Create Prisma Model
+
+[33mcommit 195e7d466dc9df3e64806dd8bb99a345165cf75b[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Sat Sep 13 11:39:03 2025 -1000
+
+    Logo, navbar
+
+[33mcommit 9f223efb3f18700235ae064c63bb5e8198d76930[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Fri Sep 12 21:29:09 2025 -1000
+
+    Navbar and styling of homepage
+
+[33mcommit d899caf2b025a5fe494f25dfe36a7ed4439fe268[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Thu Sep 11 20:24:14 2025 -1000
+
+    Update README.md
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit 208a0056ba22d74ee58fc6242be7b4687f537c06[m
+Author: awjans <andreaw@jans.org>
+Date:   Thu Sep 11 20:20:16 2025 -1000
+
+    Add check for test files existence before running Playwright tests
+
+[33mcommit 60845c59bcc68160a7fd1f3e481acde6e53976e6[m[33m ([m[1;32mreview-073[m[33m)[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Thu Sep 11 19:54:04 2025 -1000
+
+    Update prisma/seed.ts
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit a6ebc79e9cf529df6961690e3f517a361463ca8a[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Thu Sep 11 19:53:55 2025 -1000
+
+    Update prisma/seed.ts
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit b105252cb1448317f1e0268327446c635aed162e[m
+Author: awjans <andreaw@jans.org>
+Date:   Thu Sep 11 19:51:56 2025 -1000
+
+    Remove unused seed import from seed.ts
+
+[33mcommit a3055559720ea7d709818d1832d261cc8b3573f6[m
+Author: awjans <andreaw@jans.org>
+Date:   Thu Sep 11 19:37:30 2025 -1000
+
+    Refactor seeding logic to use for-of loops instead of forEach; remove unnecessary sleep calls for improved performance
+
+[33mcommit b28ba059d118112cffdad38af86c0998c8832e5a[m
+Author: awjans <andreaw@jans.org>
+Date:   Thu Sep 11 19:23:10 2025 -1000
+
+    Update seed logging to include location, container, and grocery item names for created items
+
+[33mcommit e11b0b86ab26b9c37b22ca5fb65bfa044b9d11af[m
+Author: awjans <andreaw@jans.org>
+Date:   Thu Sep 11 19:20:31 2025 -1000
+
+    Refactor database schema and seeding logic; remove unused migrations and enhance seed functionality for units, grocery items, locations, containers, and items
+
+[33mcommit 1faf1826db0dbb1b30f463297a870dc960be4b91[m
+Author: awjans <andreaw@jans.org>
+Date:   Thu Sep 11 10:00:00 2025 -1000
+
+    Make baseId optional in Units model
+
+[33mcommit 882a922114707eb57be90c9941390aa9ddbac698[m
+Author: awjans <andreaw@jans.org>
+Date:   Thu Sep 11 09:37:41 2025 -1000
+
+    Refactor database actions and user management; remove unused components and pages
+
+[33mcommit 798f880f1e999aa59109bbbf22567d96c5a1ff2a[m
+Author: awjans <andreaw@jans.org>
+Date:   Thu Sep 11 06:46:00 2025 -1000
+
+    Add issue branch configuration YAML file
+
+[33mcommit ae52360fa5721f394196ae189455dd95fe67ba4b[m
+Author: Salina Thongsisavath <salinat@hawaii.edu>
+Date:   Wed Sep 10 20:40:53 2025 -1000
+
+    ESLint fix
+
+[33mcommit 58c39a51c866da134046ae4c8f8e24c686241bc8[m
+Author: Salina Thongsisavath <salinat@hawaii.edu>
+Date:   Wed Sep 10 20:39:57 2025 -1000
+
+    add bg image, edit sign in form
+
+[33mcommit 84c675d5e52d8f39f4e325f36fd4164671b9b00b[m
+Author: awjans <andreaw@jans.org>
+Date:   Wed Sep 10 15:49:51 2025 -1000
+
+    Update branch name format to include issue number in YAML configuration
+
+[33mcommit 04ce442952a523afe973853c249e0537644f7ef8[m
+Author: awjans <andreaw@jans.org>
+Date:   Wed Sep 10 15:28:54 2025 -1000
+
+    Fix YAML formatting by adding quotes around branch name
+
+[33mcommit 1d4298eab247ddd954d6ddb7d7028b86cf8dee1c[m[33m ([m[1;31morigin/issue-88-issue-088_Create_a_skeleton_for_Dashboard_Page[m[33m)[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Wed Sep 10 15:21:04 2025 -1000
+
+    Change branch name format to 'short'
+    
+    The custom one was not working
+
+[33mcommit 4e4e4a695ac52cb43ed15c069c2c0ec69bb7786e[m
+Author: awjans <andreaw@jans.org>
+Date:   Wed Sep 10 15:00:49 2025 -1000
+
+    rename user story discussion template in GitHub repository
+
+[33mcommit e96eb868db0af4d1eb2f2f751259cae019203abd[m
+Author: awjans <andreaw@jans.org>
+Date:   Wed Sep 10 14:54:05 2025 -1000
+
+    Reintroduce user story discussion template in GitHub repository
+
+[33mcommit 45caac356c88b66a99864073082cc39e310826a6[m
+Merge: 8655eb5 bb1712d
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Wed Sep 10 14:51:54 2025 -1000
+
+    Merge branch 'main' into issue-057
+
+[33mcommit bb1712d1d07e21855d558ff8052c36ad86a392a3[m
+Merge: c808473 29aabb3
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Wed Sep 10 14:48:38 2025 -1000
+
+    Merge pull request #91 from freshkeepuh/issue-090
+    
+    add ESLint
+
+[33mcommit c8084737969eedbd72e0a93249cbb59d4328832b[m
+Author: awjans <andreaw@jans.org>
+Date:   Wed Sep 10 14:39:35 2025 -1000
+
+    Reintroduce user story discussion template in GitHub repository
+
+[33mcommit de4a9bedf22ae854e512d0484be0a9f204ee8889[m
+Author: awjans <andreaw@jans.org>
+Date:   Wed Sep 10 14:34:51 2025 -1000
+
+    Add user story discussion template and update issue branch mode to auto (create assign)
+
+[33mcommit 29aabb3c7ed9601ff850f9f742a392e648647e94[m
+Author: Salina Thongsisavath <97216698+salina-t@users.noreply.github.com>
+Date:   Wed Sep 10 14:33:59 2025 -1000
+
+    Update package.json to remove redundancy
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit f35eb03c552f38ec90eefc8be8bf2e2754fa4510[m
+Merge: 68573c4 b065413
+Author: Salina Thongsisavath <97216698+salina-t@users.noreply.github.com>
+Date:   Wed Sep 10 14:32:17 2025 -1000
+
+    Merge branch 'main' into issue-090
+
+[33mcommit 68573c427d557960bcb18ca05b5675e95af33419[m
+Author: Salina Thongsisavath <salinat@hawaii.edu>
+Date:   Wed Sep 10 14:22:39 2025 -1000
+
+    add ESLint
+
+[33mcommit b0654131249d8ea75abe08c0054233cbe919b7e2[m
+Author: awjans <andreaw@jans.org>
+Date:   Wed Sep 10 14:19:14 2025 -1000
+
+    Add user story discussion template to GitHub repository
+
+[33mcommit e3117bbdf0d899d83fcc9415c8968ea419890b0d[m
+Merge: 0801f36 fedb567
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Wed Sep 10 13:45:07 2025 -1000
+
+    Merge branch 'main' into awjans-patch-1
+
+[33mcommit 8655eb5dfffe305463156c3150ea72621adab402[m
+Merge: f5b90da fedb567
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Wed Sep 10 13:39:55 2025 -1000
+
+    Merge branch 'main' into issue-057
+
+[33mcommit fedb56711a66c21f07418c2e39f005a4387c3801[m
+Author: awjans <andreaw@jans.org>
+Date:   Wed Sep 10 13:39:33 2025 -1000
+
+    Rename job from build-and-test to run-lint in lint workflow
+
+[33mcommit f5b90da09cfdefb511c1e4c274a4e9c41775e006[m
+Merge: 53f889d e4ad2c7
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Wed Sep 10 13:37:52 2025 -1000
+
+    Merge branch 'main' into issue-057
+
+[33mcommit e4ad2c7e6b71f783deb54d45618349fcb080baee[m
+Author: awjans <andreaw@jans.org>
+Date:   Wed Sep 10 13:37:25 2025 -1000
+
+    Remove unnecessary Prisma setup and build steps from lint workflow
+
+[33mcommit 53f889db7d181b2d275b989a60eea697dca98dd0[m
+Merge: 6b053c5 dda6d17
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Wed Sep 10 13:28:13 2025 -1000
+
+    Merge branch 'main' into issue-057
+
+[33mcommit 0801f36f253a84b820f5cce065b4cf60cfe9766f[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Wed Sep 10 13:19:07 2025 -1000
+
+    Change project name to FreshKeep and update CI badge
+
+[33mcommit dda6d17129b3b980521a84637f52bb647a341a5c[m
+Author: awjans <andreaw@jans.org>
+Date:   Wed Sep 10 13:09:36 2025 -1000
+
+    Add NEXTAUTH_SECRET to Playwright test environment and create linting workflow
+
+[33mcommit 68d5da49178424b33a09d6d562b6e8d0c696b4f5[m
+Author: awjans <andreaw@jans.org>
+Date:   Wed Sep 10 12:38:08 2025 -1000
+
+    Add issue branch creation workflow and update CI to include linting step
+
+[33mcommit ea5596b64b6c7dbec4326db8e60c5e600ddc97fb[m
+Merge: 7c854a5 9ba6298
+Author: awjans <andreaw@jans.org>
+Date:   Wed Sep 10 12:27:45 2025 -1000
+
+    Merge remote-tracking branch 'origin/main' into issue-076
+
+[33mcommit 6b053c54de15cf74a0715025ded33ed22b42cfc6[m[33m ([m[1;31morigin/issue-057[m[33m)[m
+Merge: aab4318 a36680b
+Author: Joseph Heintz <143227278+josephheintz@users.noreply.github.com>
+Date:   Wed Sep 10 10:08:09 2025 -1000
+
+    Merge branch 'issue-057' of https://github.com/freshkeepuh/freshkeep into issue-057
+
+[33mcommit aab43182cfb8a3bdebc2346ef1ed713063ecb5f6[m
+Author: Joseph Heintz <143227278+josephheintz@users.noreply.github.com>
+Date:   Wed Sep 10 10:01:31 2025 -1000
+
+    Remove Nav Link for locations page
+
+[33mcommit 94794e2f41b921efad329d1f47c1d26d48637f6a[m
+Author: Joseph Heintz <143227278+josephheintz@users.noreply.github.com>
+Date:   Wed Sep 10 09:59:02 2025 -1000
+
+    Rename location folder to locations
+
+[33mcommit a36680b194d26e2238753947c06830a029825f78[m
+Merge: 91f2182 9ba6298
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Wed Sep 10 06:48:36 2025 -1000
+
+    Merge branch 'main' into issue-057
+
+[33mcommit 9ba629883c2bc0082808285f4f71d1b1d8fd14c0[m[33m ([m[1;31morigin/issue-030[m[33m)[m
+Merge: 298e6f8 9f353ad
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Wed Sep 10 06:48:00 2025 -1000
+
+    Merge pull request #81 from freshkeepuh/issue-078
+    
+    Issue-078 Create Mockup Store Page
+
+[33mcommit 91f218276b941ee17a70d4a6f7b99c635603bbc9[m
+Merge: 69b7344 298e6f8
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Wed Sep 10 06:41:32 2025 -1000
+
+    Merge branch 'main' into issue-057
+
+[33mcommit 69b73446ab4f7c9407e969e7895f35923ec2f6ac[m
+Author: Joseph Heintz <143227278+josephheintz@users.noreply.github.com>
+Date:   Wed Sep 10 02:33:30 2025 -1000
+
+    Update location page
+
+[33mcommit 9f353ad43fd75ef5e99ae07747693fa11460299e[m[33m ([m[1;31morigin/issue-078[m[33m, [m[1;32missue-078[m[33m)[m
+Author: Ralph Jhon Ramos <22ralph.ramos@gmail.com>
+Date:   Tue Sep 9 22:54:04 2025 -1000
+
+    created store page mockup
+
+[33mcommit 029c88f6336166d922123dc6e207b7e897ecca53[m[33m ([m[1;31morigin/issue-074[m[33m, [m[1;32missue-074[m[33m)[m
+Merge: 04bb841 298e6f8
+Author: Ralph Jhon Ramos <134979001+ralphramosgit@users.noreply.github.com>
+Date:   Tue Sep 9 22:41:59 2025 -1000
+
+    Merge branch 'main' into issue-074
+
+[33mcommit 04bb8410dc27922fe135912ff0abdbd461fd3881[m
+Author: Ralph Jhon Ramos <22ralph.ramos@gmail.com>
+Date:   Tue Sep 9 22:33:07 2025 -1000
+
+    fixed inList to true for in shopping list items
+
+[33mcommit dadf0862a791380d5437b98dd660dd2832539152[m
+Author: Ralph Jhon Ramos <22ralph.ramos@gmail.com>
+Date:   Tue Sep 9 22:32:14 2025 -1000
+
+    ref link to store page for add to list button
+
+[33mcommit 559befdeb3330be4114fc52ca7a3ce75b99ba074[m
+Author: Ralph Jhon Ramos <22ralph.ramos@gmail.com>
+Date:   Tue Sep 9 22:26:01 2025 -1000
+
+    added shoppingList page with product card list placeholder data
+
+[33mcommit 8ce8dfb023caae557b81baf91ef03071c93f5670[m
+Author: Ralph Jhon Ramos <22ralph.ramos@gmail.com>
+Date:   Tue Sep 9 20:49:14 2025 -1000
+
+    created rough draft of product card
+
+[33mcommit 7c854a53ce6c19a279d291b493492a1bf413a5ff[m[33m ([m[1;31morigin/issue-076[m[33m)[m
+Author: awjans <andreaw@jans.org>
+Date:   Tue Sep 9 18:58:10 2025 -1000
+
+    Add continuous integration workflow for build and testing
+
+[33mcommit 298e6f8c9590655a886fbf57f7176ae42b7e0103[m
+Merge: f664ac9 f79a74c
+Author: Dmitry Gordeev <gordeev.du@gmail.com>
+Date:   Tue Sep 9 18:53:02 2025 -1000
+
+    Merge pull request #65 from freshkeepuh/issue-055-set-up-postgres
+    
+    Finish the steps required to setup a local development environment.
+
+[33mcommit f79a74c05d52e53db47b2b1cf9200d02d2fae295[m[33m ([m[1;31morigin/issue-055-set-up-postgres[m[33m)[m
+Merge: 1da258f f664ac9
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Tue Sep 9 18:07:40 2025 -1000
+
+    Merge branch 'main' into issue-055-set-up-postgres
+
+[33mcommit f664ac9e81d5e163240bac50f796d2dcce6e4f4d[m
+Merge: 066d5ae 8c09cba
+Author: Dmitry Gordeev <gordeev.du@gmail.com>
+Date:   Tue Sep 9 17:54:17 2025 -1000
+
+    Merge pull request #67 from freshkeepuh/issue-063-create-a-nav-bar
+    
+    Updated Navbar and added Dashboard page
+
+[33mcommit 8fbbef939b3ee19213be3b103ad08762424846a6[m
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Tue Sep 9 16:38:03 2025 -1000
+
+    Stage 2 mockup finished
+    
+    Added Remember me button aswell as Forgot password link
+
+[33mcommit 4f730ca81e27ae044a1547b969e6a7a18432cfcd[m
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Tue Sep 9 16:14:57 2025 -1000
+
+    First stage
+    
+    Test
+
+[33mcommit 1da258f21766359139e046d823cbe584ffcd4734[m
+Merge: 4908c36 066d5ae
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Tue Sep 9 15:27:49 2025 -1000
+
+    Merge branch 'main' into issue-055-set-up-postgres
+
+[33mcommit 6e97bbd5b5dc33f94857c8c91d3206e96ea31ede[m
+Author: joshuanssato <156635500+joshuanssato@users.noreply.github.com>
+Date:   Tue Sep 9 14:33:09 2025 -1000
+
+    Update package-lock.json
+
+[33mcommit 8c09cbaaf60ee8bb36c269d50090ac8db8ac6558[m[33m ([m[1;31morigin/issue-063-create-a-nav-bar[m[33m)[m
+Merge: 0798fa5 066d5ae
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Tue Sep 9 12:40:53 2025 -1000
+
+    Merge branch 'main' into issue-063-create-a-nav-bar
+
+[33mcommit 066d5ae093adda22e62f5f95ec790676ea6da897[m[33m ([m[1;31morigin/9-issue-009-create-login-page[m[33m)[m
+Merge: 17cb18d d4437c9
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Tue Sep 9 12:10:31 2025 -1000
+
+    Merge pull request #70 from freshkeepuh/issue-064
+    
+    Update Footer.tsx
+
+[33mcommit 0798fa544be78875a314b9901867bbb2b19b4112[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Tue Sep 9 12:03:27 2025 -1000
+
+    Remove leading empty line in sample.env
+
+[33mcommit e2e180e93bdc72359bf9c9402c91d1f0efe0877d[m
+Author: Ellie Ishii <166664143+ellieishii@users.noreply.github.com>
+Date:   Tue Sep 9 11:52:08 2025 -1000
+
+    Updated login redirection and kept sample.env
+
+[33mcommit 0b1944a20bfc449c6cb96babeaa311af62cd2ccf[m
+Author: dominic-isaac-molina <dim@hawaii.edu>
+Date:   Tue Sep 9 11:09:17 2025 -1000
+
+    Update userSettings.html
+
+[33mcommit e9c3c9ad6c6f8cb05a9f8e6593943a1aecd6585b[m
+Author: dominic-isaac-molina <dim@hawaii.edu>
+Date:   Tue Sep 9 11:07:53 2025 -1000
+
+    added a mockup User Settings HTML
+
+[33mcommit d4437c98446bef3afb1482c9eb9cf1182f5785f0[m[33m ([m[1;31morigin/issue-064[m[33m)[m
+Author: dominic-isaac-molina <dim@hawaii.edu>
+Date:   Tue Sep 9 08:14:19 2025 -1000
+
+    Update Footer.tsx
+
+[33mcommit 0131073e3239e7678d3352592280d6e3dd66c0b7[m
+Author: Joseph Heintz <143227278+josephheintz@users.noreply.github.com>
+Date:   Mon Sep 8 13:55:51 2025 -1000
+
+    Created Location skeleton page and added to Navbar
+
+[33mcommit 09062958b27587e2220be6128ec70729872a167a[m
+Author: Ellie Ishii <166664143+ellieishii@users.noreply.github.com>
+Date:   Mon Sep 8 13:07:33 2025 -1000
+
+    Updated Navbar and added Dashboard page
+
+[33mcommit 4908c3660f1ea3afab4b527b0938df834cad7b9e[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Sat Sep 6 13:52:38 2025 -1000
+
+    refactor: update package.json scripts and add prisma.config.ts for migration and seeding
+
+[33mcommit 17cb18d362915e94a23e69ae22f402ca3865068b[m
+Merge: 8d4c953 b3e7083
+Author: Joseph Heintz <143227278+josephheintz@users.noreply.github.com>
+Date:   Thu Sep 4 12:04:22 2025 -1000
+
+    Merge pull request #60 from freshkeepuh/issue-019
+    
+    Issue 019
+
+[33mcommit b3e7083ba438564b6fda2bc3307e1e8cc8b744d2[m[33m ([m[1;31morigin/issue-019[m[33m)[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Thu Sep 4 00:11:52 2025 -1000
+
+    delete .idea
+
+[33mcommit 4eead19a8f719a6dd4919edd77ff1c77a8603a68[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Thu Sep 4 00:10:18 2025 -1000
+
+    remove .idea
+
+[33mcommit 8d49f201ef0468ccf7914f9cee342b0514dc5a02[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Thu Sep 4 00:08:27 2025 -1000
+
+    Update .gitignore
+
+[33mcommit 8d4c9536b62c664ce280306dbc1b174ea85d95a9[m
+Merge: edbe2ab 1b1140d
+Author: Dmitry Gordeev <gordeev.du@gmail.com>
+Date:   Wed Sep 3 09:27:04 2025 -1000
+
+    Merge pull request #54 from freshkeepuh/issue-016
+    
+    chore: rename project to freshkeep and update dependencies
+
+[33mcommit 1b1140dd8b65bf8d35220f8c9aa2c455a9058133[m[33m ([m[1;31morigin/issue-016[m[33m)[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Wed Sep 3 07:38:38 2025 -1000
+
+    Update package.json
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit 47dd3d88ce8d6773dfb7a840a225908cdbc35c3e[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Wed Sep 3 07:36:43 2025 -1000
+
+    Update package.json
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit 6c4ea4f6c53fc7ff3240e970d7ec64e2b8c44c81[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Wed Sep 3 07:33:55 2025 -1000
+
+    chore: rename project to freshkeep and update dependencies
+    
+    - Changed project name from nextjs-application-template-1 to freshkeep
+    - Added predev and prestart scripts to run build before development and start
+    - Updated @prisma/client and prisma dependencies to version 6.15.0
+
+[33mcommit edbe2ab67da8af362fa446c0621e3fcc37f9162d[m
+Merge: d4c9d5f 6ed8618
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Wed Sep 3 07:05:49 2025 -1000
+
+    Merge pull request #51 from freshkeepuh/issue-016
+    
+    Issue 016
+
+[33mcommit 6ed8618236915873b0e14d5129a7e0047c153e4a[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Tue Sep 2 23:26:31 2025 -1000
+
+    instruction and db setup
+
+[33mcommit 1178c1f274b297881a57ed36d7a784d86b751668[m
+Merge: 17ac29d 2903bff
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Tue Sep 2 22:45:35 2025 -1000
+
+    Merge branch 'nextjs-application-template' into issue-016
+
+[33mcommit 17ac29d5353038b2bfc52a26a5687bc73f386d8f[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Tue Sep 2 22:43:20 2025 -1000
+
+    Update workspace.xml
+
+[33mcommit 535fec7baea63f701feeb0c5fb43e2821a3930d7[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Tue Sep 2 22:42:52 2025 -1000
+
+    Update workspace.xml
+
+[33mcommit deb3d7c0bdca2bca3ee0e26925505729e5342e2c[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Tue Sep 2 22:42:18 2025 -1000
+
+    clear
+
+[33mcommit 2903bff867a47d7c65e2a5c4d020f3293656ab5f[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Tue Sep 2 22:30:47 2025 -1000
+
+    template
+
+[33mcommit d4c9d5f9f8bb24cccf81334aced15986a2add732[m
+Merge: c268e70 1d06737
+Author: Dmitry Gordeev <gordeev.du@gmail.com>
+Date:   Mon Sep 1 15:34:10 2025 -1000
+
+    Merge pull request #48 from freshkeepuh/awj
+    
+    Initialize the FreshKeep application as a Next.js project
+
+[33mcommit 1d06737b453ca35a55314292463dbb0ec32d2ec4[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Mon Sep 1 09:42:03 2025 -1000
+
+    Refactor layout styles and update icon paths; remove unused SVG files
+
+[33mcommit 7eeccd3366f1a63b7191ed22bce67e83d922d082[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Mon Sep 1 09:11:16 2025 -1000
+
+    Add Bootstrap for styling and refactor header and footer layout
+
+[33mcommit c61480af440b097c109403b529a49bfa787434e5[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Mon Sep 1 08:18:14 2025 -1000
+
+    Update app/layout.tsx
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit b3e919adac00a3128af0ce8b93c3641dbc924e11[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Mon Sep 1 08:18:05 2025 -1000
+
+    Update app/layout.tsx
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit b7d347ac9d6b1f19b1be6c7b9ecbbd80bc867b47[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Sun Aug 31 16:43:09 2025 -1000
+
+    nextjs template test
+
+[33mcommit dd192cc010688e2ad76e6fb7a0ae4d675cb45918[m
+Merge: d5429d7 c268e70
+Author: Dmitry Gordeev <gordeev.du@gmail.com>
+Date:   Sun Aug 31 16:36:58 2025 -1000
+
+    Merge branch 'main' into awj
+
+[33mcommit d5429d7c039f3d07c149df7a56ffb8915d8ef515[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Sun Aug 31 16:34:46 2025 -1000
+
+    Create workspace.xml
+
+[33mcommit c268e7009bd46e3b53a10d613e4c4c556c9493de[m
+Merge: 6469205 e8a16a2
+Author: Dmitry Gordeev <gordeev.du@gmail.com>
+Date:   Sat Aug 30 14:50:21 2025 -1000
+
+    Merge pull request #44 from freshkeepuh/awjans-patch-1
+    
+    Refactor CI workflow for Next.js application
+
+[33mcommit 376123ac613d16b86229ce6f1e4955efdce21e65[m
+Author: DMITRY GORDEEV <gordeev.du@gmail.com>
+Date:   Sat Aug 30 14:02:25 2025 -1000
+
+    test
+
+[33mcommit e8a16a29c2735ce175bab31adc55acb494b6dd42[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Sat Aug 30 08:30:03 2025 -1000
+
+    Update .github/workflows/ci.yml
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit 79b44e5bdff88a7e1e891744fba5be342e9d1d94[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Sat Aug 30 08:27:44 2025 -1000
+
+    Refactor CI workflow for Next.js application
+    
+    Updated CI workflow for Next.js application, replacing Meteor commands with linting step.
+
+[33mcommit 2be45aebe129ac30b229f26af74a628095bfff83[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Sat Aug 30 08:22:21 2025 -1000
+
+    Update app/layout.tsx
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit e00ecad2e661ffca6cc35a00d429c72129ac1592[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Sat Aug 30 08:21:43 2025 -1000
+
+    Update app/layout.tsx
+    
+    Co-authored-by: Copilot <175728472+Copilot@users.noreply.github.com>
+
+[33mcommit 41639919bf1c1648304e02e80c833fb6e34cfab9[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Sat Aug 30 08:02:59 2025 -1000
+
+    feat: Initialize FreshKeep application with layout, styles, and SVG assets
+    
+    - Added global styles for light and dark themes in globals.css
+    - Created RootLayout component in layout.tsx with header, main, and footer sections
+    - Implemented page styles in page.module.css for responsive design
+    - Developed Home page in page.tsx with welcome message and button
+    - Configured ESLint with Next.js and TypeScript support
+    - Set up Next.js configuration in next.config.ts
+    - Added SVG assets for globe, home, and profile icons
+    - Configured TypeScript with strict settings in tsconfig.json
+
+[33mcommit 646920541ff5d8ded07d28be98593dafcb8a0d07[m
+Merge: 83a9b47 64c0dcb
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Fri Aug 29 15:17:08 2025 -1000
+
+    Merge pull request #28 from freshkeepuh/awj
+    
+    chore: initialize package.json with dependencies and devDependencies
+
+[33mcommit 64c0dcbea33bc28bf97dfc7be6bfdd9c8c88351c[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Fri Aug 29 14:56:40 2025 -1000
+
+    chore: initialize package.json with dependencies and devDependencies
+
+[33mcommit 83a9b47841bcc0ee72484004ae35dd261324da60[m
+Author: Andrea Jans <57602919+awjans@users.noreply.github.com>
+Date:   Mon Aug 25 10:49:33 2025 -1000
+
+    Initial commit
