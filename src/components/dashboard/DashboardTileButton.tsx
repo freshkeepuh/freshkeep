@@ -14,7 +14,7 @@ interface DashboardTileButtonProps {
 }
 
 const DashboardTileButton: React.FC<DashboardTileButtonProps> = ({ icon, title, count, onClick, className }) => (
-  <Card className={`${styles.card} ${className}`} onClick={onClick} style={{ cursor: onClick ? 'pointer' : 'default' }}>
+  <Card className={`${styles.card} ${className}`} onClick={onClick}>
     <div className={styles.cardIcon}>{icon}</div>
     <Card.Title>{title}</Card.Title>
     <Card.Text>{count}</Card.Text>
