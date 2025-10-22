@@ -4,13 +4,11 @@ import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Row, Col, Container, Card, Button, ListGroup } from 'react-bootstrap';
+// components
 import StorageList, { StorageType } from '@/components/dashboard/StorageList';
 import AddStorageModal, { NewStorageData } from '@/components/dashboard/AddStorageModal';
+import DashboardTileButton from '@/components/dashboard/DashboardTileButton';
 import styles from '../../styles/dashboard.module.css';
-
-//  interface DashboardProps {
-//   session: { user: { email?: string | null; name?: string | null; image?: string | null } };
-// }
 
 const DashboardPage = () => {
   const router = useRouter();
@@ -85,28 +83,34 @@ const DashboardPage = () => {
 
       <Row className="mt-4 g-5">
         <Col md={9}>
-          {/* Summary Cards */}
+          {/* Dashboard Tile Cards */}
           <Row className="g-3">
             <Col md={4}>
-              <Card className={`${styles.card} ${styles.totalItems}`}>
-                <div className={styles.cardIcon}>📦</div>
-                <Card.Title>Total Items</Card.Title>
-                <Card.Text>{totalItems}</Card.Text>
-              </Card>
+              <DashboardTileButton
+                icon="📦"
+                title="Total Items"
+                count={totalItems}
+                onClick={() => router.push('/')}
+                className={styles.totalItems}
+              />
             </Col>
             <Col md={4}>
-              <Card className={`${styles.card} ${styles.expiringSoon}`}>
-                <div className={styles.cardIcon}>⚠️</div>
-                <Card.Title>Expiring Soon</Card.Title>
-                <Card.Text>{expiringSoon}</Card.Text>
-              </Card>
+              <DashboardTileButton
+                icon="⚠️"
+                title="Expiring Soon"
+                count={expiringSoon}
+                onClick={() => router.push('/')}
+                className={styles.expiringSoon}
+              />
             </Col>
             <Col md={4}>
-              <Card className={`${styles.card} ${styles.shoppingListCount}`}>
-                <div className={styles.cardIcon}>🛒</div>
-                <Card.Title>Shopping List</Card.Title>
-                <Card.Text>{shoppingListCount}</Card.Text>
-              </Card>
+              <DashboardTileButton
+                icon="🛒"
+                title="Shopping List"
+                count={shoppingListCount}
+                onClick={() => router.push('/shoppingList')}
+                className={styles.shoppingListCount}
+              />
             </Col>
           </Row>
 
