@@ -99,14 +99,13 @@ const ShoppingListPage = () => {
   );
 
   const filteredItems = useMemo(
-    () =>
-      samplegroceryItems.filter((item) => {
-        const matchesSearch = item.groceryItemTitle.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesStore = selectedStores.length === 0 || selectedStores.includes(item.store);
-        const matchesStorage = selectedStorageTypes.length === 0 || selectedStorageTypes.includes(item.storageType);
-        const matchesType = selectedTypes.length === 0 || selectedTypes.includes(item.groceryItemType);
-        return matchesSearch && matchesStore && matchesStorage && matchesType;
-      }),
+    () => samplegroceryItems.filter((item) => {
+      const matchesSearch = item.groceryItemTitle.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesStore = selectedStores.length === 0 || selectedStores.includes(item.store);
+      const matchesStorage = selectedStorageTypes.length === 0 || selectedStorageTypes.includes(item.storageType);
+      const matchesType = selectedTypes.length === 0 || selectedTypes.includes(item.groceryItemType);
+      return matchesSearch && matchesStore && matchesStorage && matchesType;
+    }),
     [searchTerm, selectedStores, selectedStorageTypes, selectedTypes, samplegroceryItems],
   );
 
@@ -235,10 +234,19 @@ const ShoppingListPage = () => {
       )}
 
       <div className="mb-3 text-muted" style={{ fontSize: '14px' }}>
-        Showing {` `}
+        Showing
+        {' '}
+        {' '}
         {filteredItems.length}
-        {` `} of {` `} {samplegroceryItems.length}
-        {` `} items
+        {' '}
+        {' '}
+        of
+        {' '}
+        {' '}
+        {samplegroceryItems.length}
+        {' '}
+        {' '}
+        items
       </div>
 
       <div
