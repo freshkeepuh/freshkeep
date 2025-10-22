@@ -11,7 +11,7 @@ export interface DashboardProps {
   session: { user: { email?: string | null; name?: string | null; image?: string | null } };
 }
 
-const DashboardPage: React.FC<DashboardProps> = ({ session }) => {  
+const DashboardPage: React.FC<DashboardProps> = ({ session }) => {
   const router = useRouter();
 
   const [storages, setStorages] = useState<StorageType[]>([]);
