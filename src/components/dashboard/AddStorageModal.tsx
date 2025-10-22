@@ -7,7 +7,7 @@ import RequiredLabel from '../RequiredLabel';
 export interface NewStorageData {
   name: string;
   type: 'Fridge' | 'Freezer' | 'Pantry' | 'Spice Rack' | 'Other';
-  itemCount: number;
+  itemCount: number | string;
 }
 
 interface AddStorageModalProps {
@@ -25,7 +25,7 @@ export default function AddStorageModal({ show, onClose, onAdd }: AddStorageModa
 
   const [errors, setErrors] = useState<{ [key in keyof NewStorageData]?: boolean }>({});
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,

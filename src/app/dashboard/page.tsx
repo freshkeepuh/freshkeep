@@ -1,18 +1,20 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Row, Col, Container, Card, Button, ListGroup } from 'react-bootstrap';
 import StorageList, { StorageType } from '@/components/dashboard/StorageList';
 import AddStorageModal, { NewStorageData } from '@/components/dashboard/AddStorageModal';
 import styles from '../../styles/dashboard.module.css';
 
-export interface DashboardProps {
-  session: { user: { email?: string | null; name?: string | null; image?: string | null } };
-}
+//  interface DashboardProps {
+//   session: { user: { email?: string | null; name?: string | null; image?: string | null } };
+// }
 
-const DashboardPage: React.FC<DashboardProps> = ({ session }) => {
+const DashboardPage = () => {
   const router = useRouter();
+  const { data: session } = useSession();
 
   const [storages, setStorages] = useState<StorageType[]>([]);
   const [totalItems, setTotalItems] = useState(0);
@@ -37,6 +39,7 @@ const DashboardPage: React.FC<DashboardProps> = ({ session }) => {
     const newEntry: StorageType = {
       id: Date.now(),
       ...newStorage,
+      itemCount: Number(newStorage.itemCount) || 0,
     };
     setStorages((prev) => [...prev, newEntry]);
     setTotalItems((prev) => prev + (newEntry.itemCount || 0));
@@ -55,7 +58,7 @@ const DashboardPage: React.FC<DashboardProps> = ({ session }) => {
           <Card.Title as="h1">
             Welcome back,
             {' '}
-            {session.user.name || session.user.email?.split('@')[0]}
+            {session?.user?.email?.split('@')[0] || 'user'}
             !
           </Card.Title>
           <Card.Text>
