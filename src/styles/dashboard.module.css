@@ -64,6 +64,12 @@
   display: flex;
 }
 
+.card:hover {
+  background-color: #e9eff5;
+  transform: scale(1.03);
+  cursor: pointer;
+}
+
 .cardIcon {
   font-size: 2rem;
   display: flex;
