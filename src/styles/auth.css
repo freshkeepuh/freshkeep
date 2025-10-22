@@ -1,23 +1,48 @@
-.signin-hero,
-.auth-hero {
-  background-image: url('/images/sign-in/Sign-in.png');
-  background-color: #263324;
+.auth-hero, .signin-hero {
+  position: relative;
   background-size: cover;
-  background-position: top;
+  background-position: center;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 5vh 4rem;
+  overflow: hidden;
 }
 
 .auth-hero {
-  background-image: url('/images/sign-up/Sign-up.png');
+  background-image: url('/images/sign-up/w-b-gradient.png');
+}
+
+.signin-hero {
+  background-image: url('/images/sign-in/Sign-in-bg-photo.png');
+}
+
+.auth-hero::before, .signin-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(0,0,0,0.55) 0%,
+    rgba(0,0,0,0.25) 35%,
+    rgba(0,0,0,0) 60%
+  );
+  pointer-events: none;
+  z-index: 1;
 }
 
 .welcome-section {
+  position: relative;
+  z-index: 2;
+  color: white;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  max-width: 500px;
 }
 
 .welcome-title {
   font-size: 4rem;
   font-weight: 800;
-  padding-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .welcome-subtitle {
@@ -25,18 +50,18 @@
   font-weight: 500;
 }
 
-.signin-card-wrap {
-  min-width: 500px;
-  background-color: #263324;
+.auth-card-wrap, .signin-card-wrap {
+  position: relative;
+  z-index: 2;
+  width: 500px;
+  flex-shrink: 0;
+  margin-left: auto;
+  margin-right: 6rem;
 }
 
 /* Mobile: stack vertically */
-@media (max-width: 1240px) {
-
-  .signin-hero,
-  .auth-hero {
-    background-image: none;
-    background-color: #263324;
+@media (max-width: 992px) {
+  .auth-hero, .signin-hero {
     flex-direction: column;
     justify-content: center;
     gap: 2rem;
@@ -44,7 +69,17 @@
     padding: 5vh 1.25rem;
   }
 
+  .auth-hero::before, .signin-hero::before {
+    background: linear-gradient(
+      to bottom,
+      rgba(0,0,0,0.55) 0%,
+      rgba(0,0,0,0.25) 40%,
+      rgba(0,0,0,0) 70%
+    );
+  }
+
   .welcome-section {
+    margin-right: 0;
     text-align: center;
   }
 
@@ -56,9 +91,10 @@
     font-size: 1.2rem;
   }
 
-  .signin-card-wrap {
+  .auth-card-wrap, .signin-card-wrap {
     width: 100%;
-    margin-left: 1rem;
-    margin-right: 1rem;
+    max-width: 500px;
+    margin-left: 0;
+    margin-right: 0;
   }
 }
