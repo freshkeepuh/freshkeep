@@ -70,8 +70,7 @@ const DashboardPage = () => {
               items
             </span>
             {' '}
-            across your
-            storage units.
+            across your storage units.
             {' '}
             <span className={styles.orangeText}>
               {expiringSoon}
