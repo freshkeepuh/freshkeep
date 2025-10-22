@@ -7,11 +7,11 @@ import StorageList, { StorageType } from '@/components/dashboard/StorageList';
 import AddStorageModal, { NewStorageData } from '@/components/dashboard/AddStorageModal';
 import styles from '../../styles/dashboard.module.css';
 
-interface DashboardProps {
+export interface DashboardProps {
   session: { user: { email?: string | null; name?: string | null; image?: string | null } };
 }
 
-export default function Dashboard({ session }: DashboardProps) {
+const DashboardPage: React.FC<DashboardProps> = ({ session }) => {  
   const router = useRouter();
 
   const [storages, setStorages] = useState<StorageType[]>([]);
@@ -168,4 +168,6 @@ export default function Dashboard({ session }: DashboardProps) {
       />
     </Container>
   );
-}
+};
+
+export default DashboardPage;
