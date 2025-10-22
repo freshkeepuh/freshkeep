@@ -127,6 +127,7 @@ export default function Dashboard({ session }: DashboardProps) {
                 </Button>
               </div>
 
+              {/* Storage Units */}
               <StorageList storages={storages} onRemove={handleRemoveStorage} />
             </Card.Body>
           </Card>

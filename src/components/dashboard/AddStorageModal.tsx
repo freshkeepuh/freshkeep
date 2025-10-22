@@ -19,22 +19,46 @@ interface AddStorageModalProps {
 export default function AddStorageModal({ show, onClose, onAdd }: AddStorageModalProps) {
   const [formData, setFormData] = useState<NewStorageData>({
     name: '',
-    type: '',
-    itemCount: 0,
+    type: '' as any,
+    itemCount: '' as any,
   });
+
+  const [errors, setErrors] = useState<{ [key in keyof NewStorageData]?: boolean }>({});
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: name === 'itemCount' ? Number(value) : value,
+      [name]: value,
     }));
+
+    // Clear error on change
+    setErrors((prev) => ({ ...prev, [name]: false }));
   };
 
   const handleSubmit = () => {
-    if (!formData.name.trim()) return;
-    onAdd(formData);
-    setFormData({ name: '', type: 'Fridge', itemCount: 0 });
+    // Validate required fields
+    const newErrors: typeof errors = {};
+    if (!formData.name.trim()) newErrors.name = true;
+    if (!formData.type) newErrors.type = true;
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    // convert input itemCount to number
+    const itemCountNumber = formData.itemCount === '' ? 0 : Number(formData.itemCount);
+
+    const submissionData: NewStorageData = {
+      name: formData.name.trim(),
+      type: formData.type,
+      itemCount: itemCountNumber,
+    };
+
+    onAdd(submissionData);
+
+    setFormData({ name: '', type: 'Fridge', itemCount: '' });
     onClose();
   };
 
@@ -53,14 +77,14 @@ export default function AddStorageModal({ show, onClose, onAdd }: AddStorageModa
               placeholder="e.g. Upstairs Pantry"
               value={formData.name}
               onChange={handleChange}
-              required
+              isInvalid={errors.name}
             />
             <Form.Control.Feedback type="invalid">Please provide a storage name.</Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group className="mb-3">
             <RequiredLabel>Storage Type</RequiredLabel>
-            <Form.Select name="type" value={formData.type} onChange={handleChange} required>
+            <Form.Select name="type" value={formData.type} onChange={handleChange} isInvalid={errors.type}>
               <option value="" disabled hidden>Select type</option>
               <option value="Fridge">Fridge</option>
               <option value="Freezer">Freezer</option>
@@ -68,6 +92,7 @@ export default function AddStorageModal({ show, onClose, onAdd }: AddStorageModa
               <option value="Spice Rack">Spice Rack</option>
               <option value="Other">Other</option>
             </Form.Select>
+            <Form.Control.Feedback type="invalid">Please select a storage type.</Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group>
@@ -75,6 +100,7 @@ export default function AddStorageModal({ show, onClose, onAdd }: AddStorageModa
             <Form.Control
               name="itemCount"
               type="number"
+              placeholder="e.g. 10"
               min="0"
               value={formData.itemCount}
               onChange={handleChange}
