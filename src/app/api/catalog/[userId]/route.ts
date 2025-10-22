@@ -5,9 +5,9 @@ const prisma = new PrismaClient();
 
 export const runtime = 'nodejs';
 
-export async function GET(request: NextRequest, context: any) {
+export async function GET(request: NextRequest, { params }: any) {
   try {
-    const { userId } = context.params;
+    const userId = params?.userId;
     console.log('API called with userId:', userId);
 
     if (!userId) {
@@ -15,14 +15,10 @@ export async function GET(request: NextRequest, context: any) {
     }
 
     const userCatalogItems = await prisma.catalog.findMany({
-      where: {
-        userId,
-      },
+      where: { userId },
       include: {
         groceryItem: {
-          include: {
-            stores: true,
-          },
+          include: { stores: true },
         },
       },
     });
