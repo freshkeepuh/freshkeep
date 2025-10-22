@@ -2,8 +2,10 @@
 
 import { useMemo, useState } from 'react';
 import { Col, Form, Row } from 'react-bootstrap';
-import { GroceryCategory } from '@prisma/client';
+import type { $Enums } from '@prisma/client';
 import type { GroceryOption, Mode, UnitOption } from './types';
+
+type GroceryCategory = $Enums.ProductCategory;
 
 type Props = {
   mode: Mode;
@@ -13,7 +15,6 @@ type Props = {
   groceryItemId: string | null;
   setGroceryItemId: (id: string | null) => void;
 
-  // New item fields
   newName?: string;
   setNewName: (v: string) => void;
   newCategory?: GroceryCategory;
@@ -26,6 +27,27 @@ type Props = {
   units: UnitOption[];
   disabled?: boolean;
 };
+
+const CATEGORY_VALUES: GroceryCategory[] = [
+  'Fruits',
+  'Vegetables',
+  'CannedGoods',
+  'Dairy',
+  'Meat',
+  'FishSeafood',
+  'Deli',
+  'Condiments',
+  'Spices',
+  'Snacks',
+  'Bakery',
+  'Beverages',
+  'Pasta',
+  'Grains',
+  'Cereal',
+  'Baking',
+  'FrozenFoods',
+  'Other',
+];
 
 const CATEGORY_LABELS: Partial<Record<GroceryCategory, string>> = {
   Fruits: 'Fruits',
@@ -144,12 +166,13 @@ export default function ProductInformation({
               <Form.Label>Category</Form.Label>
               <Form.Select
                 value={newCategory ?? ''}
-                onChange={(e) => setNewCategory((e.currentTarget.value as GroceryCategory) || undefined)}
+                onChange={(e) => setNewCategory(
+                  (e.currentTarget.value || undefined) as GroceryCategory | undefined,
+                )}
                 disabled={disabled}
               >
-
                 <option value="">Select…</option>
-                {Object.values(GroceryCategory).map((c) => (
+                {CATEGORY_VALUES.map((c) => (
                   <option key={c} value={c}>
                     {CATEGORY_LABELS[c] ?? c}
                   </option>

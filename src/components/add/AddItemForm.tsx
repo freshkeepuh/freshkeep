@@ -1,11 +1,13 @@
 'use client';
 
 import { useMemo, useState, useCallback } from 'react';
-import type { GroceryCategory } from '@prisma/client';
+import type { $Enums } from '@prisma/client';
 import { Button, Card, Col, Form, Row } from 'react-bootstrap';
 import ProductInformation from './ProductInformation';
 import Expiration from './ExpirySection';
 import type { ContainerOption, GroceryOption, LocationOption, UnitOption, Mode } from './types';
+
+type GroceryCategory = $Enums.ProductCategory;
 
 type Props = {
   locations: LocationOption[];
@@ -29,7 +31,10 @@ export default function AddItemForm({ locations, containers, units, groceries }:
   const [picture, setPicture] = useState<string | undefined>(undefined);
   const [submittedPreview, setSubmittedPreview] = useState<string | null>(null);
 
-  const filteredContainers = useMemo(() => containers.filter(c => c.locId === locId), [containers, locId]);
+  const filteredContainers = useMemo(
+    () => containers.filter((c) => c.locId === locId),
+    [containers, locId],
+  );
 
   const handleLocChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
     setLocId(e.currentTarget.value);
@@ -49,9 +54,26 @@ export default function AddItemForm({ locations, containers, units, groceries }:
     setQuantity(val);
   }, []);
 
-  const handleSubmitMock = useCallback((e: React.FormEvent) => {
-    e.preventDefault();
-    const payload = {
+  const handleSubmitMock = useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault();
+      const payload = {
+        mode,
+        locId,
+        conId,
+        unitId,
+        quantity,
+        expiresAt,
+        picture,
+        groceryItemId: mode === 'existing' ? groceryItemId : undefined,
+        newName: mode === 'new' ? newName || undefined : undefined,
+        newCategory: mode === 'new' ? newCategory : undefined,
+        newDefaultQty: mode === 'new' ? newDefaultQty : undefined,
+        newUnitId: mode === 'new' ? newUnitId : undefined,
+      };
+      setSubmittedPreview(JSON.stringify(payload, null, 2));
+    },
+    [
       mode,
       locId,
       conId,
@@ -59,27 +81,13 @@ export default function AddItemForm({ locations, containers, units, groceries }:
       quantity,
       expiresAt,
       picture,
-      groceryItemId: mode === 'existing' ? groceryItemId : undefined,
-      newName: mode === 'new' ? newName || undefined : undefined,
-      newCategory: mode === 'new' ? newCategory : undefined,
-      newDefaultQty: mode === 'new' ? newDefaultQty : undefined,
-      newUnitId: mode === 'new' ? newUnitId : undefined,
-    };
-    setSubmittedPreview(JSON.stringify(payload, null, 2));
-  }, [
-    mode,
-    locId,
-    conId,
-    unitId,
-    quantity,
-    expiresAt,
-    picture,
-    groceryItemId,
-    newName,
-    newCategory,
-    newDefaultQty,
-    newUnitId,
-  ]);
+      groceryItemId,
+      newName,
+      newCategory,
+      newDefaultQty,
+      newUnitId,
+    ],
+  );
 
   const handleReset = useCallback(() => {
     setMode('existing');
@@ -107,8 +115,10 @@ export default function AddItemForm({ locations, containers, units, groceries }:
                 <Form.Label>Location</Form.Label>
                 <Form.Select value={locId} onChange={handleLocChange}>
                   <option value="">Select…</option>
-                  {locations.map(l => (
-                    <option key={l.id} value={l.id}>{l.name}</option>
+                  {locations.map((l) => (
+                    <option key={l.id} value={l.id}>
+                      {l.name}
+                    </option>
                   ))}
                 </Form.Select>
               </Form.Group>
@@ -119,8 +129,10 @@ export default function AddItemForm({ locations, containers, units, groceries }:
                 <Form.Label>Container</Form.Label>
                 <Form.Select value={conId} onChange={handleConChange} disabled={!locId}>
                   <option value="">Select…</option>
-                  {filteredContainers.map(c => (
-                    <option key={c.id} value={c.id}>{c.name}</option>
+                  {filteredContainers.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name}
+                    </option>
                   ))}
                 </Form.Select>
               </Form.Group>
@@ -153,7 +165,7 @@ export default function AddItemForm({ locations, containers, units, groceries }:
                 <Form.Label>Unit</Form.Label>
                 <Form.Select value={unitId} onChange={handleUnitChange}>
                   <option value="">Select…</option>
-                  {units.map(u => (
+                  {units.map((u) => (
                     <option key={u.id} value={u.id}>
                       {`${u.name}${u.abbr ? ` (${u.abbr})` : ''}`}
                     </option>
@@ -165,25 +177,40 @@ export default function AddItemForm({ locations, containers, units, groceries }:
             <Col md={4}>
               <Form.Group controlId="quantity">
                 <Form.Label>Quantity</Form.Label>
-                <Form.Control type="number" step="0.01" min="0.01" value={quantity} onChange={handleQtyChange} />
+                <Form.Control
+                  type="number"
+                  step="0.01"
+                  min="0.01"
+                  value={quantity}
+                  onChange={handleQtyChange}
+                />
               </Form.Group>
             </Col>
           </Row>
 
           <div className="mt-2">
-            <Expiration expiresAt={expiresAt} setExpiresAt={setExpiresAt} picture={picture} setPicture={setPicture} />
+            <Expiration
+              expiresAt={expiresAt}
+              setExpiresAt={(v) => setExpiresAt(v)}
+              picture={picture}
+              setPicture={(v) => setPicture(v)}
+            />
           </div>
 
           <div className="mt-4 d-flex gap-2">
             <Button type="submit">Add Item (Mock)</Button>
-            <Button type="button" variant="outline-secondary" onClick={handleReset}>Reset</Button>
+            <Button type="button" variant="outline-secondary" onClick={handleReset}>
+              Reset
+            </Button>
           </div>
         </Form>
 
         {submittedPreview && (
           <div className="mt-4">
             <h6 className="mb-2 text-muted">Mock submission preview</h6>
-            <pre className="bg-light p-3 rounded" style={{ whiteSpace: 'pre-wrap' }}>{submittedPreview}</pre>
+            <pre className="bg-light p-3 rounded" style={{ whiteSpace: 'pre-wrap' }}>
+              {submittedPreview}
+            </pre>
           </div>
         )}
       </Card.Body>

@@ -1,16 +1,12 @@
+import type { $Enums } from '@prisma/client';
+
 export type Mode = 'existing' | 'new';
 
 export type LocationOption = { id: string; name: string };
 export type ContainerOption = { id: string; name: string; locId: string };
 export type UnitOption = { id: string; name: string; abbr?: string | null };
 
-export type Category = 'dairy' | 'fruits' | 'vegetables' | 'meat' | 'pantry' | 'other';
-
-export type StorageUnit =
-  | { id: number; name: string; items: number; temperature: string; type: 'fridge' }
-  | { id: number; name: string; items: number; type: 'pantry' };
-
-export type GroceryCategory = Category;
+export type GroceryCategory = $Enums.ProductCategory;
 
 export type GroceryOption = {
   id: string;
@@ -20,7 +16,16 @@ export type GroceryOption = {
   unitId?: string | null;
 };
 
-export const CATEGORY_META: Record<Category, { label: string; emoji: string; borderClass: string }> = {
+export type Category = 'dairy' | 'fruits' | 'vegetables' | 'meat' | 'pantry' | 'other';
+
+export type StorageUnit =
+  | { id: number; name: string; items: number; temperature: string; type: 'fridge' }
+  | { id: number; name: string; items: number; type: 'pantry' };
+
+export const CATEGORY_META: Record<
+Category,
+{ label: string; emoji: string; borderClass: string }
+> = {
   dairy: { label: 'Dairy', emoji: '🥛', borderClass: 'bdBlue' },
   fruits: { label: 'Fruits', emoji: '🍎', borderClass: 'bdGreen' },
   vegetables: { label: 'Veggies', emoji: '🥕', borderClass: 'bdGreen' },
