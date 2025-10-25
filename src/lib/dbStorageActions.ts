@@ -3,3 +3,127 @@
  */
 
 'use server';
+
+import { ContainerType } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
+import {
+  productInstanceSelect,
+  productsSelect,
+  storageSelect,
+  unitsSelect,
+} from './dbActionTypes';
+
+/**
+ * Create a new storage.
+ * @param data The storage data to create.
+ * @returns The created storage.
+ */
+export async function createStorage(data: {
+  locId: string,
+  name: string,
+  type: string,
+  picture: string | undefined,
+}) {
+  const newStorage = await prisma.container.create({
+    data: {
+      locId: data.locId,
+      name: data.name,
+      type: data.type as ContainerType,
+      picture: data.picture,
+    },
+    select: {
+      locId: true,
+      ...storageSelect,
+    },
+  });
+  return newStorage;
+}
+
+/**
+ * Read all storages.
+ * @returns All storages.
+ */
+export async function readStorages() {
+  const storages = await prisma.container.findMany(
+    {
+      select: {
+        locId: true,
+        ...storageSelect,
+      },
+      orderBy: { name: 'asc' },
+    },
+  );
+  return storages;
+}
+
+/**
+ * Read a storage by ID.
+ * @param id The ID of the storage to read.
+ * @returns The storage if found, otherwise null.
+ */
+export async function readStorage(id: string | null | undefined) {
+  if (!id) return null;
+  const storage = await prisma.container.findUnique({
+    where: { id },
+    select: {
+      locId: true,
+      ...storageSelect,
+      items: {
+        select: {
+          unit: unitsSelect,
+          product: productsSelect,
+          ...productInstanceSelect,
+        },
+      },
+    },
+  });
+  return storage;
+}
+
+/**
+ * Update a storage by ID.
+ * @param id The ID of the storage to update.
+ * @param data The new data for the storage.
+ * @returns The updated storage if found, otherwise null.
+ */
+export async function updateStorage(id: string, data: {
+  locId: string,
+  name: string,
+  type: string,
+  picture: string | undefined,
+}) {
+  const updatedStorage = await prisma.container.update({
+    where: { id },
+    data: {
+      name: data.name,
+      locId: data.locId,
+      type: data.type as ContainerType,
+      picture: data.picture,
+    },
+    select: {
+      locId: true,
+      ...storageSelect,
+      items: {
+        select: {
+          unit: unitsSelect,
+          product: productsSelect,
+          ...productInstanceSelect,
+        },
+      },
+    },
+  });
+  return updatedStorage;
+}
+
+/**
+ * Delete a storage by ID.
+ * @param id The ID of the storage to delete.
+ * @returns The deleted storage if found, otherwise null.
+ */
+export async function deleteStorage(id: string) {
+  const deletedStorage = await prisma.container.delete({
+    where: { id },
+    select: storageSelect,
+  });
+  return deletedStorage;
+}

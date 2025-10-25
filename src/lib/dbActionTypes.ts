@@ -200,18 +200,18 @@ export const storesSelect = {
  * Use when selecting a single recipe record
  */
 export const recipeSelect = {
-    id: true,
-    title: true, 
-    slug: true,
-    cookTime: true,
-    difficulty: true,
-    diet: true,
-    ingredients: true,
-    instructions: true,
-    image: true,
-    createdAt: true,
-    updatedAt: true,
-}
+  id: true,
+  title: true,
+  slug: true,
+  cookTime: true,
+  difficulty: true,
+  diet: true,
+  ingredients: true,
+  instructions: true,
+  image: true,
+  createdAt: true,
+  updatedAt: true,
+};
 
 /**
  * Select fields for recipes entity
