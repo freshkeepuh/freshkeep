@@ -1,36 +1,36 @@
 import { NextRequest, NextResponse } from 'next/server';
 import getResponseError from '@/lib/routeHelpers';
-import { deleteStore, readStore } from '@/lib/dbStoreActions';
+import { deleteProduct, readProduct } from '@/lib/dbProductActions';
 
 export const runtime = 'nodejs';
 
 /**
- * Handles GET requests for retrieving a store.
+ * Handles GET requests for retrieving a product.
  * @param request The incoming request
  * @param context
- * @returns A JSON response containing the store or an error message
+ * @returns A JSON response containing the product or an error message
  */
 export async function GET(request: NextRequest, context: any) {
   try {
     const { id } = context.params;
     if (!id) {
-      return NextResponse.json({ error: 'Store ID is required' }, { status: 400 });
+      return NextResponse.json({ error: 'Product ID is required' }, { status: 400 });
     }
 
-    const store = await readStore(id);
+    const product = await readProduct(id);
 
-    if (!store) {
-      return NextResponse.json({ error: 'Store not found' }, { status: 404 });
+    if (!product) {
+      return NextResponse.json({ error: 'Product not found' }, { status: 404 });
     }
 
-    return NextResponse.json(store);
+    return NextResponse.json(product);
   } catch (error: Error | any) {
     return getResponseError(error);
   }
 }
 
 /**
- * Handles DELETE requests for deleting a store.
+ * Handles DELETE requests for deleting a product.
  * @param request The incoming request
  * @param context
  * @returns A JSON response indicating the result of the deletion
@@ -39,12 +39,12 @@ export async function DELETE(request: NextRequest, context: any) {
   try {
     const { id } = context.params;
     if (!id) {
-      return NextResponse.json({ error: 'Store ID is required' }, { status: 400 });
+      return NextResponse.json({ error: 'Product ID is required' }, { status: 400 });
     }
 
-    await deleteStore(id);
+    await deleteProduct(id);
 
-    return NextResponse.json({ message: 'Store deleted successfully' });
+    return NextResponse.json({ message: 'Product deleted successfully' });
   } catch (error: Error | any) {
     return getResponseError(error);
   }
