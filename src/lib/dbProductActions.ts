@@ -100,7 +100,7 @@ export async function readProducts() {
       select: {
         instances: {
           ...unitsSelect,
-          ...productInstanceSelect
+          ...productInstanceSelect,
         },
         ...unitsSelect,
         ...productSelect,
@@ -150,7 +150,7 @@ export async function readProduct(id: string | null | undefined) {
     select: {
       instances: {
         ...unitsSelect,
-        ...productInstanceSelect
+        ...productInstanceSelect,
       },
       ...unitsSelect,
       ...productSelect,

@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
       quantity,
       expiresAt,
     });
-    
+
     return NextResponse.json(newProductInstance, { status: 201 });
   } catch (error: Error | any) {
     return getResponseError(error);
