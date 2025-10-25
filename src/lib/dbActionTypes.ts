@@ -14,7 +14,7 @@ export const unitSelect = {
 
 /**
  * Select fields for units entity
- * Use when selecting multiple unit records
+ * Use when sub-selecting unit records
  */
 export const unitsSelect = {
   select: {
@@ -42,7 +42,7 @@ export const locationSelect = {
 
 /**
  * Select fields for locations entity
- * Use when selecting multiple location records
+ * Use when sub-selecting location records
  */
 export const locationsSelect = {
   select: {
@@ -65,7 +65,7 @@ export const storageSelect = {
 
 /**
  * Select fields for storages entity
- * Use when selecting multiple storage records
+ * Use when sub-selecting storage records
  */
 export const storagesSelect = {
   select: {
@@ -75,7 +75,7 @@ export const storagesSelect = {
 
 /**
  * Select fields for product instance entity
- * Use when selecting a single product record
+ * Use when selecting a single product instance record
  */
 export const productInstanceSelect = {
   id: true,
@@ -87,7 +87,7 @@ export const productInstanceSelect = {
 
 /**
  * Select fields for product instances entity
- * Use when selecting multiple product records
+ * Use when sub-selecting product instance records
  */
 export const productInstancesSelect = {
   select: {
@@ -113,7 +113,7 @@ export const productSelect = {
 
 /**
  * Select fields for products entity
- * Use when selecting multiple product records
+ * Use when sub-selecting product records
  */
 export const productsSelect = {
   select: {
@@ -135,7 +135,7 @@ export const shoppingListItemSelect = {
 
 /**
  * Select fields for shopping list items entity
- * Use when selecting multiple shopping list item records
+ * Use when sub-selecting shopping list item records
  */
 export const shoppingListItemsSelect = {
   select: {
@@ -157,7 +157,7 @@ export const shoppingListSelect = {
 
 /**
  * Select fields for shopping lists entity
- * Use when selecting multiple shopping list records
+ * Use when sub-selecting shopping list records
  */
 export const shoppingListsSelect = {
   select: {
@@ -187,7 +187,7 @@ export const storeSelect = {
 
 /**
  * Select fields for stores entity
- * Use when selecting multiple store records
+ * Use when sub-selecting store records
  */
 export const storesSelect = {
   select: {
