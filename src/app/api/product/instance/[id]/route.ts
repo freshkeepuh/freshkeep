@@ -46,7 +46,6 @@ export async function DELETE(request: NextRequest, context: any) {
 
     return NextResponse.json({ message: 'Product instance deleted successfully' });
   } catch (error: Error | any) {
-    console.error('Error deleting product instance:', error);
     return getResponseError(error);
   }
 }
