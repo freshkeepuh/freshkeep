@@ -160,8 +160,8 @@ export async function readProduct(id: string | null | undefined) {
 }
 
 /**
- * Read a product by ID.
- * @param id The ID of the product to read.
+ * Read a product instance by ID.
+ * @param id The ID of the product instance to read.
  * @returns The product instance if found, otherwise null.
  */
 export async function readProductInstance(id: string | null | undefined) {
