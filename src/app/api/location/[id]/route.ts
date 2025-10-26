@@ -1,36 +1,36 @@
 import { NextRequest, NextResponse } from 'next/server';
 import getResponseError from '@/lib/routeHelpers';
-import { deleteStore, readStore } from '@/lib/dbStoreActions';
+import { deleteLocation, readLocation } from '@/lib/dbLocationActions';
 
 export const runtime = 'nodejs';
 
 /**
- * Handles GET requests for retrieving a store.
+ * Handles GET requests for retrieving a location.
  * @param request The incoming request
  * @param context
- * @returns A JSON response containing the store or an error message
+ * @returns A JSON response containing the location or an error message
  */
 export async function GET(request: NextRequest, context: any) {
   try {
     const { id } = context.params;
     if (!id) {
-      return NextResponse.json({ error: 'Store ID is required' }, { status: 400 });
+      return NextResponse.json({ error: 'Location ID is required' }, { status: 400 });
     }
 
-    const store = await readStore(id);
+    const location = await readLocation(id);
 
-    if (!store) {
-      return NextResponse.json({ error: 'Store not found' }, { status: 404 });
+    if (!location) {
+      return NextResponse.json({ error: 'Location not found' }, { status: 404 });
     }
 
-    return NextResponse.json(store);
+    return NextResponse.json(location);
   } catch (error: Error | any) {
     return getResponseError(error);
   }
 }
 
 /**
- * Handles DELETE requests for deleting a store.
+ * Handles DELETE requests for deleting a location.
  * @param request The incoming request
  * @param context
  * @returns A JSON response indicating the result of the deletion
@@ -39,12 +39,12 @@ export async function DELETE(request: NextRequest, context: any) {
   try {
     const { id } = context.params;
     if (!id) {
-      return NextResponse.json({ error: 'Store ID is required' }, { status: 400 });
+      return NextResponse.json({ error: 'Location ID is required' }, { status: 400 });
     }
 
-    await deleteStore(id);
+    await deleteLocation(id);
 
-    return NextResponse.json({ message: 'Store deleted successfully' });
+    return NextResponse.json({ message: 'Location deleted successfully' });
   } catch (error: Error | any) {
     return getResponseError(error);
   }
