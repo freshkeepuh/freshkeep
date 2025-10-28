@@ -1,187 +1,243 @@
 'use client';
 
 import { useState } from 'react';
-import { Button, Form, Image } from 'react-bootstrap';
+import Link from 'next/link';
+import { Button, Form, Image, Card } from 'react-bootstrap';
 import { Pencil, Trash, Check, X } from 'react-bootstrap-icons';
-import { Store } from '@prisma/client';
+import { Store, Country } from '@prisma/client';
+import { FormProvider, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import AddressSubForm, { IAddressSubForm } from '@/components/AddressSubForm';
+import { storeValidation } from '@/lib/validationSchemas';
+
+interface IStoreForm extends IAddressSubForm {
+  id?: string | undefined;
+  name: string;
+  address1: string;
+  address2?: string | undefined;
+  city: string;
+  state: string;
+  zipcode: string;
+  country: Country;
+  phone?: string | undefined;
+  website?: string | undefined;
+  picture?: string | undefined;
+}
 
 interface StoreCardProps {
-  store: Store;
-  onSave: (store: Store) => void;
+  store: any;
+  onUpdate: (updatedStore: any) => void;
   onDelete: (id: string) => void;
 }
 
-const StoreCard = ({ store, onSave, onDelete }: StoreCardProps) => {
+const StoreCard = ({ store, onUpdate, onDelete }: StoreCardProps) => {
+  const methods = useForm<IStoreForm>({
+    resolver: yupResolver<IStoreForm>(storeValidation),
+    defaultValues: { ...store },
+  });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [editName, setEditName] = useState(store.name);
-  const [editAddress1, setEditAddress1] = useState(store.address1);
-  const [editAddress2, setEditAddress2] = useState(store.address2);
-  const [editCity, setEditCity] = useState(store.city);
-  const [editState, setEditState] = useState(store.state);
-  const [editZipcode, setEditZipcode] = useState(store.zipcode);
-  const [editPhone, setEditPhone] = useState(store.phone);
-  const [editWebsite, setEditWebsite] = useState(store.website);
-  const [editPicture, setEditPicture] = useState(store.picture);
-  const [errors, setErrors] = useState<string[]>([]);
 
   const handleEditClick = () => {
-    setIsEditing(true);
-    setEditName(store.name);
-    setEditAddress1(store.address1);
-    setEditAddress2(store.address2);
-    setEditCity(store.city);
-    setEditState(store.state);
-    setEditZipcode(store.zipcode);
-    setEditPhone(store.phone);
-    setEditWebsite(store.website);
-    setEditPicture(store.picture);
-    setErrors([]);
-  };
-
-  const handleDeleteClick = () => {
     try {
-      setErrors([]);
-      onDelete(store.id);
-    } catch (error) {
-      setErrors(['Failed to delete the store. Please try again.']);
+      setIsSubmitting(true);
+      methods.clearErrors();
+      setIsEditing(true);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const handleSaveClick = () => {
+  const handleDeleteClick = async () => {
     try {
-      setErrors([]);
-      onSave({
-        ...store,
-        name: editName,
-        address1: editAddress1,
-        address2: editAddress2,
-        city: editCity,
-        state: editState,
-        zipcode: editZipcode,
-        phone: editPhone,
-        website: editWebsite,
-        picture: editPicture,
+      setIsSubmitting(true);
+      methods.clearErrors();
+      const response = await fetch(`/api/store/${store.id}`, {
+        method: 'DELETE',
       });
-      setIsEditing(false);
+      if (response.ok) {
+        onDelete(store.id);
+        setIsEditing(false);
+      } else {
+        methods.setError('name', { type: 'manual', message: 'Failed to delete store' });
+      }
     } catch (error) {
-      setErrors(['Failed to save changes. Please try again.']);
+      methods.setError('name', { type: 'manual', message: 'Failed to delete store. Please try again.' });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleSaveClick = async () => {
+    try {
+      setIsSubmitting(true);
+      const body = JSON.stringify({ ...methods.getValues() });
+      const response = await fetch('/api/store', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body,
+      });
+      if (response.ok) {
+        const updated: Store = await response.json();
+        onUpdate(updated);
+        setIsEditing(false);
+      } else {
+        methods.setError('name', { type: 'manual', message: 'Failed to update store' });
+      }
+    } catch (error) {
+      methods.setError('name', { type: 'manual', message: 'Failed to save changes. Please try again.' });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   const handleCancelClick = () => {
-    setEditName(store.name);
-    setEditAddress1(store.address1);
-    setEditAddress2(store.address2);
-    setEditCity(store.city);
-    setEditState(store.state);
-    setEditZipcode(store.zipcode);
-    setEditPhone(store.phone);
-    setEditWebsite(store.website);
-    setEditPicture(store.picture);
-    setErrors([]);
-    setIsEditing(false);
+    try {
+      setIsSubmitting(true);
+      methods.clearErrors();
+      methods.reset({ ...store }); // Reset form to store values when cancelling
+      setIsEditing(false);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (isEditing) {
     return (
-      <li
-        className="d-flex flex-column mb-3 p-3"
-        style={{
-          background: '#f8f9fa', // Slightly different background to indicate edit mode
-          borderRadius: '8px',
-          border: '2px solid #28a745',
-          boxShadow: '0 4px 16px rgba(40, 167, 69, 0.15)',
-        }}
-      >
-        {errors.length > 0 && (
-          <div className="mb-2">
-            {errors.map((error) => (
-              <div className="text-danger" key={error}>
-                {error}
-              </div>
-            ))}
-          </div>
-        )}
-        {/* Edit form */}
-        <div className="d-flex align-items-center justify-content-between mb-2">
-          <Form.Control
-            type="text"
-            value={editName}
-            onChange={(e) => setEditName(e.target.value)}
-            size="sm"
-            className="fw-bold"
-            placeholder="Location name"
-            style={{
-              flex: 1,
-              marginRight: '0.5rem',
-              border: '1px solid #ced4da',
-              borderRadius: '4px',
-            }}
-          />
-          <span>
-            <Button
-              variant="success"
-              size="sm"
-              className="me-2 p-1"
-              aria-label={`Save ${editName}`}
-              onClick={handleSaveClick}
-            >
-              <Check />
-            </Button>
-            <Button
-              variant="danger"
-              size="sm"
-              className="p-1"
-              aria-label="Cancel editing"
-              onClick={handleCancelClick}
-            >
-              <X />
-            </Button>
-          </span>
-        </div>
-        <div>
-          {/* Address1 edit */}
-          <Form.Control
-            type="text"
-            value={editAddress1 as string}
-            onChange={(e) => setEditAddress1(e.target.value)}
-            size="sm"
-            placeholder="Address"
-            style={{
-              border: '1px solid #ced4da',
-              borderRadius: '4px',
-              fontSize: 'inherit',
-            }}
-          />
-        </div>
-      </li>
+      <FormProvider {...methods}>
+        <Form onSubmit={methods.handleSubmit(handleSaveClick)}>
+          <Card>
+            <Card.Body>
+              <Form.Group className="mb-3">
+                <Form.Label aria-required="true">Store Name: *</Form.Label>
+                <Form.Control
+                  id="name"
+                  type="text"
+                  placeholder="Store Name"
+                  size="lg"
+                  {...methods.register('name')}
+                  isInvalid={!!methods.formState.errors.name}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {methods.formState.errors.name && methods.formState.errors.name.message}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <AddressSubForm
+                address={store}
+                isEditing={isEditing}
+              />
+              <Form.Group className="mb-3">
+                <Form.Label>Phone:</Form.Label>
+                <Form.Control
+                  id="phone"
+                  type="text"
+                  placeholder="Phone"
+                  size="lg"
+                  {...methods.register('phone')}
+                  isInvalid={!!methods.formState.errors.phone}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {methods.formState.errors.phone && methods.formState.errors.phone.message}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Website:</Form.Label>
+                <Form.Control
+                  id="website"
+                  type="text"
+                  placeholder="Website"
+                  size="lg"
+                  {...methods.register('website')}
+                  isInvalid={!!methods.formState.errors.website}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {methods.formState.errors.website && methods.formState.errors.website.message}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group className="mb-3">
+                <Form.Label>Picture URL:</Form.Label>
+                <Form.Control
+                  id="picture"
+                  type="text"
+                  placeholder="Picture URL"
+                  size="lg"
+                  {...methods.register('picture')}
+                  isInvalid={!!methods.formState.errors.picture}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {methods.formState.errors.picture && methods.formState.errors.picture.message}
+                </Form.Control.Feedback>
+              </Form.Group>
+            </Card.Body>
+            <Card.Footer className="d-flex justify-content-end">
+              <Button
+                variant="outline-secondary"
+                type="button"
+                className="me-2"
+                onClick={handleCancelClick}
+                disabled={isSubmitting}
+              >
+                <X className="mb-1" />
+              </Button>
+              <Button
+                variant="success"
+                type="submit"
+                className="me-2"
+                disabled={isSubmitting}
+              >
+                <Check className="mb-1" />
+              </Button>
+            </Card.Footer>
+          </Card>
+        </Form>
+      </FormProvider>
     );
   }
 
   return (
-    <li
-      className="d-flex flex-column mb-3 p-3"
-      style={{
-        background: '#f8f9fa',
-        borderRadius: '8px',
-        border: '1px solid #dee2e6',
-      }}
-    >
-      {/* Header with name and action buttons */}
-      <div className="d-flex align-items-center justify-content-between mb-2">
-        <h6 className="mb-0 fw-bold text-dark">
-          <Image
-            src={store.picture ? store.picture : `${store.website}/favicon.ico`}
-            alt={store.name}
-            width={24}
-            height={24}
-            className="me-2"
-          />
-          <a href={store.website ? store.website : '#'} className="me-2" target="_blank" rel="noopener noreferrer">
+    <Card>
+      <Card.Header as="h5" className="d-flex align-items-center justify-content-between">
+        <div className="d-flex align-items-center">
+          <Link
+            href={store.website ?? '#'}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-decoration-none"
+          >
+            <Image
+              src={store.picture ?? `${store.website ?? ''}/favicon.ico`}
+              alt={store.name}
+              width={32}
+              height={32}
+              className="me-2"
+            />
+          </Link>
+          <Link
+            href={`/store/${store.id}`}
+            aria-label={`View details for ${store.name}`}
+            className="text-decoration-none"
+          >
             {store.name}
-          </a>
-        </h6>
-        <span>
+          </Link>
+        </div>
+      </Card.Header>
+      <Card.Body>
+        <Card.Text className="mb-6">
+          <AddressSubForm
+            address={store}
+            isEditing={isEditing}
+          />
+        </Card.Text>
+        <Card.Text className="text-muted small mb-6">
+          <strong>Phone: </strong>
+          {store.phone}
+        </Card.Text>
+      </Card.Body>
+      <Card.Footer className="d-flex justify-content-end">
+        <div>
           <Button
             variant="outline-dark"
             size="sm"
@@ -191,33 +247,21 @@ const StoreCard = ({ store, onSave, onDelete }: StoreCardProps) => {
           >
             <Pencil />
           </Button>
-          <Button
-            variant="outline-danger"
-            size="sm"
-            className="p-1"
-            aria-label={`Delete ${store.name}`}
-            onClick={handleDeleteClick}
-          >
-            <Trash />
-          </Button>
-        </span>
-      </div>
-      {/* Address */}
-      <div className="text-muted small">
-        <strong>Address: </strong>
-        {store.address1}
-        {store.address2 ? `, ${store.address2}` : ''}
-        {store.city ? `, ${store.city}` : ''}
-        {store.state ? `, ${store.state}` : ''}
-        {store.zipcode ? `, ${store.zipcode}` : ''}
-        {store.country ? `, ${store.country}` : ''}
-      </div>
-      {/* Phone */}
-      <div className="text-muted small">
-        <strong>Phone: </strong>
-        {store.phone}
-      </div>
-    </li>
+          {(store.products?.length === 0 && store.shoppingLists?.length === 0) && (
+            <Button
+              variant="outline-danger"
+              size="sm"
+              className="p-1"
+              aria-label={`Delete ${store.name}`}
+              onClick={handleDeleteClick}
+              disabled={isSubmitting}
+            >
+              <Trash />
+            </Button>
+          )}
+        </div>
+      </Card.Footer>
+    </Card>
   );
 };
 

@@ -8,6 +8,6 @@ export default async function StorePage({ params }: { params: { id: string } } |
   await loggedInProtectedPage(session);
 
   // Use the actual store id from route params
-  // const { id } = params;
-  return <StoreForm params={params} />;
+  const { id } = await params;
+  return <StoreForm params={{ id }} />;
 }
