@@ -1,28 +1,52 @@
+/* eslint-disable react/no-unused-prop-types */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 'use client';
 
 import { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { Pencil, Trash, Check, X, Plus } from 'react-bootstrap-icons';
-import { Location } from '@prisma/client';
+import { Country, Location } from '@prisma/client';
 
 interface LocationCardProps extends Location {
   id: string;
   name: string;
   address1: string;
+  address2: string | null;
+  city: string;
+  state: string;
+  zipcode: string;
+  country: Country;
+  picture: string | null;
+  createdAt: Date;
+  updatedAt: Date;
   onEdit: (id: string, name: string, address1: string) => void;
   onDelete: (id: string) => void;
 }
 
-const LocationCard = ({ id, name, address1, onEdit, onDelete }: LocationCardProps) => {
+// eslint-disable-next-line max-len
+const LocationCard = ({ id, name, address1, address2, city, state, zipcode, country, picture, onEdit, onDelete }: LocationCardProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState(name);
   const [editAddress1, setEditAddress1] = useState(address1);
+  const [editAddress2, setEditAddress2] = useState(address2);
+  const [editCity, setEditCity] = useState(city);
+  const [editState, setEditState] = useState(state);
+  const [editZipcode, setEditZipcode] = useState(zipcode);
+  const [editCountry, setEditCountry] = useState(country);
+  const [editPicture, setEditPicture] = useState(picture);
 
   const handleEditClick = () => {
     setIsEditing(true);
     setEditName(name);
     setEditAddress1(address1);
+    setEditAddress2(address2);
+    setEditCity(city);
+    setEditState(state);
+    setEditZipcode(zipcode);
+    setEditCountry(country);
+    setEditPicture(picture);
   };
 
   const handleSaveClick = () => {

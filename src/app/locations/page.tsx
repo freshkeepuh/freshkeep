@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { Plus } from 'react-bootstrap-icons';
+import { Country } from '@prisma/client';
 import LocationCard from '../../components/LocationCard';
 import MapComponent from '../../components/Map';
 import styles from './page.module.css';
@@ -11,12 +12,14 @@ interface Location {
   id: string;
   name: string;
   address1: string;
-  address2?: string;
+  address2: string | null;
   city: string;
   state: string;
   zipcode: string;
-  country: string;
-  picture?: string;
+  country: Country;
+  picture?: string | null;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 const LocationsPage = () => {
@@ -108,6 +111,14 @@ const LocationsPage = () => {
         id={l.id}
         name={l.name}
         address1={l.address1}
+        address2={l.address2 ?? null}
+        city={l.city}
+        state={l.state}
+        zipcode={l.zipcode}
+        country={l.country as Country}
+        picture={l.picture ?? null}
+        createdAt={l.createdAt}
+        updatedAt={l.updatedAt}
         onEdit={handleEditLocation}
         onDelete={handleDeleteLocation}
       />
@@ -174,6 +185,7 @@ const LocationsPage = () => {
           </Col>
         </Row>
       </Container>
-    </main>;
+    </main>
+  );
 };
 export default LocationsPage;
