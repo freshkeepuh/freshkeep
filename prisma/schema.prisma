@@ -102,8 +102,8 @@ model Location {
 
 // TODO: Create Icons in public/icons/{storagetype}.svg
 /**
- * Container Type
- * Used By: Container
+ * Storage Type
+ * Used By: StorageArea
  */
 enum StorageType {
   Refrigerator
@@ -192,7 +192,7 @@ model Product {
 model ProductInstance {
   id        String    @id @default(uuid()) @map("_id")
   locId     String
-  storId     String
+  storId    String
   prodId    String
   unitId    String
   quantity  Float     @default(0.0)
