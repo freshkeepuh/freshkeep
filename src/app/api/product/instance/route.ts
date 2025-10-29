@@ -25,14 +25,14 @@ export async function GET() {
  */
 export async function POST(request: NextRequest) {
   try {
-    const { locId, conId, prodId, unitId, quantity, expiresAt } = await request.json();
-    if (!locId || !conId || !prodId || !unitId || quantity === undefined) {
+    const { locId, storId, prodId, unitId, quantity, expiresAt } = await request.json();
+    if (!locId || !storId || !prodId || !unitId || quantity === undefined) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
     const newProductInstance = await createProductInstance({
       locId,
-      conId,
+      storId,
       prodId,
       unitId,
       quantity,
@@ -55,20 +55,20 @@ export async function PUT(request: NextRequest) {
     const {
       id,
       locId,
-      conId,
+      storId,
       prodId,
       unitId,
       quantity,
       expiresAt,
     } = await request.json();
 
-    if (!id || !locId || !conId || !prodId || !unitId || quantity === undefined) {
+    if (!id || !locId || !storId || !prodId || !unitId || quantity === undefined) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
     const updatedProductInstance = await updateProductInstance(id, {
       locId,
-      conId,
+      storId,
       prodId,
       unitId,
       quantity,

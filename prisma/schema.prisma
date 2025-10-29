@@ -62,7 +62,7 @@ model Unit {
   children          Unit[]             @relation("UnitsToUnits")
   products          Product[]
   instances         ProductInstance[]
-  shoppingListItems ShoppingListItem[]
+  items             ShoppingListItem[]
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
 }
@@ -94,18 +94,18 @@ model Location {
   zipcode    String
   country    Country           @default(USA)
   picture    String?
-  containers Container[]
+  areas      StorageArea[]
   instances  ProductInstance[]
   createdAt  DateTime          @default(now())
   updatedAt  DateTime          @updatedAt
 }
 
-// TODO: Create Icons in public/icons/{containertype}.svg
+// TODO: Create Icons in public/icons/{storagetype}.svg
 /**
  * Container Type
  * Used By: Container
  */
-enum ContainerType {
+enum StorageType {
   Refrigerator
   Freezer
   Pantry
@@ -117,14 +117,14 @@ enum ContainerType {
  * Used By: ProductInstance
  * Uses: ContainerType, Location, ProductInstance
  */
-model Container {
+model StorageArea {
   id        String            @id @default(uuid()) @map("_id")
   location  Location          @relation(fields: [locId], references: [id])
   locId     String
   name      String            @unique
-  type      ContainerType
+  type      StorageType
   picture   String?
-  items     ProductInstance[]
+  instances ProductInstance[]
   createdAt DateTime          @default(now())
   updatedAt DateTime          @updatedAt
 }
@@ -174,7 +174,7 @@ model Product {
   picture           String?
   unit              Unit               @relation(fields: [unitId], references: [id])
   instances         ProductInstance[]
-  shoppingListItems ShoppingListItem[]
+  items             ShoppingListItem[]
   stores            Store[]
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
@@ -192,19 +192,19 @@ model Product {
 model ProductInstance {
   id        String    @id @default(uuid()) @map("_id")
   locId     String
-  conId     String
+  storId     String
   prodId    String
   unitId    String
   quantity  Float     @default(0.0)
   expiresAt DateTime?
   location  Location  @relation(fields: [locId], references: [id])
-  container Container @relation(fields: [conId], references: [id])
+  storage   StorageArea @relation(fields: [storId], references: [id])
   product   Product   @relation(fields: [prodId], references: [id])
   unit      Unit      @relation(fields: [unitId], references: [id])
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
-  @@unique([locId, conId, prodId, unitId, expiresAt])
+  @@unique([locId, storId, prodId, unitId, expiresAt])
 }
 
 /**
