@@ -107,7 +107,7 @@ const LocationsPage = () => {
         key={l.id}
         id={l.id}
         name={l.name}
-        address={l.address1}
+        address1={l.address1}
         onEdit={handleEditLocation}
         onDelete={handleDeleteLocation}
       />

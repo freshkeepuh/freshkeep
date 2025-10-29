@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { ContainerType, Country, ProductInstance } from '@prisma/client';
+import { ContainerType, Country } from '@prisma/client';
 import { checkUser } from './dbUserActions';
 
 export const forgotPasswordValidation = Yup.object().shape({
@@ -89,7 +89,18 @@ export const AddLocationSchema = Yup.object({
   country: Yup.mixed<Country>().oneOf(Object.values(Country)).required('Country is required'),
   picture: Yup.string().url('Must be a valid URL').nullable(),
   containers: Yup.array().of(Yup.mixed<ContainerType>().oneOf(Object.values(ContainerType))),
-  instances: Yup.array().of(Yup.object(ProductInstance)),
+  instances: Yup.array().of(Yup.object({
+    picture: Yup.string().url('Must be a valid URL').nullable(),
+    id: Yup.string().required(),
+    locId: Yup.string().required(),
+    conId: Yup.string().required(),
+    grocId: Yup.string().required(),
+    unitId: Yup.string().required(),
+    quantity: Yup.number().positive().required(),
+    expiresAt: Yup.date().nullable(),
+  })),
+  createdAt: Yup.date().required(),
+  updatedAt: Yup.date().required(),
 });
 
 /**
@@ -127,39 +138,27 @@ export const storeValidation = Yup.object().shape({
     .optional()
     .max(256, 'Picture must not exceed 256 characters'),
 });
-
-/**
- * Validation schema for Store form.
- */
-export const storeValidation = Yup.object().shape({
-  id: Yup.string().optional(),
-  name: Yup.string()
-    .required('Store name is required')
-    .max(100, 'Store name must not exceed 100 characters'),
-  address1: Yup.string()
-    .required('Address 1 is required')
-    .max(100, 'Address 1 must not exceed 100 characters'),
-  address2: Yup.string()
-    .max(100, 'Address 2 must not exceed 100 characters'),
-  city: Yup.string()
-    .required('City is required')
-    .max(50, 'City must not exceed 50 characters'),
-  state: Yup.string()
-    .required('State is required')
-    .max(50, 'State must not exceed 50 characters'),
-  zipcode: Yup.string()
-    .required('Zipcode is required')
-    .max(20, 'Zipcode must not exceed 20 characters'),
-  country: Yup.mixed<Country>()
-    .required('Country is required'),
-  phone: Yup.string()
-    .optional()
-    .max(20, 'Phone number must not exceed 20 characters'),
-  website: Yup.string()
-    .optional()
-    .url('Website must be a valid URL')
-    .max(256, 'Website must not exceed 256 characters'),
-  picture: Yup.string()
-    .optional()
-    .max(256, 'Picture must not exceed 256 characters'),
-});
+/*
+export const productInstanceSchema: Yup.ObjectSchema<ProductInstance> = Yup.object({
+  id: Yup.string().required(),
+  locId: Yup.string().required(),
+  conId: Yup.string().required(),
+  prodId: Yup.string().required(),
+  unitId: Yup.string().required(),
+  quantity: Yup.number().positive().required(),
+  expiresAt: Yup.date().nullable(),
+  location: Yup.mixed<Location>().oneOf(Object.values(Location)).required(),
+  container: Yup.mixed<ContainerType>().oneOf(Object.values(ContainerType)).required(),
+  product: Yup.object().shape({
+    id: Yup.string().required(),
+    name: Yup.string().required(),
+    brand: Yup.string().nullable(),
+    category: Yup.mixed<ProductCategory>().oneOf(Object.values(ProductCategory)).required(),
+    unitId: Yup.string().required(),
+    defaultQty: Yup.number().positive().required(),
+    isNeeded: Yup.boolean().required(),
+    picture: Yup.string().url('Must be a valid URL').nullable(),
+    unit: new Yup.ObjectSchema<Unit>().required(),
+  }).required(),
+  shoppingListItems: Yup.array().of(
+}) as unknown as Yup.ObjectSchema<ProductInstance>; */
