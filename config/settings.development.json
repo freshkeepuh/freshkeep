@@ -89,12 +89,12 @@
     { "name": "Spice Rack Vacation", "locationName": "Vacation Home", "type": "SpiceRack", "picture":  "./images/containers/spice_rack.jpg" }
   ],
   "defaultProductInstances": [
-    { "productName": "Milk", "storageAreaName": "Fridge1", "locationName": "Main Home", "quantity": 1, "unitName": "gallon", "expirationDate": null },
-    { "productName": "Eggs", "storageAreaName": "Fridge1", "locationName": "Main Home", "quantity": 1, "unitName": "dozen", "expirationDate": null },
-    { "productName": "Butter", "storageAreaName": "Fridge1", "locationName": "Main Home", "quantity": 1, "unitName": "pound", "expirationDate": null },
-    { "productName": "Cheese", "storageAreaName": "Fridge1", "locationName": "Main Home", "quantity": 0.5, "unitName": "pound", "expirationDate": null },
-    { "productName": "Chicken Breast", "storageAreaName": "Freezer1", "locationName": "Main Home", "quantity": 2, "unitName": "pound", "expirationDate": null },
-    { "productName": "Broccoli", "storageAreaName": "Fridge1", "locationName": "Main Home", "quantity": 1, "unitName": "pound", "expirationDate": null }
+    { "productName": "Milk", "storageAreaName": "Kitchen Fridge", "locationName": "Main Home", "quantity": 1, "unitName": "gallon", "expirationDate": null },
+    { "productName": "Eggs", "storageAreaName": "Kitchen Fridge", "locationName": "Main Home", "quantity": 1, "unitName": "dozen", "expirationDate": null },
+    { "productName": "Butter", "storageAreaName": "Kitchen Fridge", "locationName": "Main Home", "quantity": 1, "unitName": "pound", "expirationDate": null },
+    { "productName": "Cheese", "storageAreaName": "Kitchen Fridge", "locationName": "Main Home", "quantity": 0.5, "unitName": "pound", "expirationDate": null },
+    { "productName": "Chicken Breast", "storageAreaName": "Garage Freezer", "locationName": "Main Home", "quantity": 2, "unitName": "pound", "expirationDate": null },
+    { "productName": "Broccoli", "storageAreaName": "Kitchen Fridge", "locationName": "Main Home", "quantity": 1, "unitName": "pound", "expirationDate": null }
   ],
   "defaultShoppingLists": [
     { "name": "Weekly Groceries", "storeName": "Walmart", "isDefault": true },
