@@ -350,6 +350,4 @@ const Settings: React.FC<Props> = ({ user = DEFAULT_USER }) => {
   );
 };
 
-Settings.defaultProps = { user: DEFAULT_USER };
-
 export default Settings;
