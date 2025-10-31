@@ -5,15 +5,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './settings.css';
-import {
-  Row,
-  Col,
-  Card,
-  Button,
-  Form,
-  ButtonGroup,
-  ToggleButton,
-} from 'react-bootstrap';
+import { Row, Col, Card, Button, Form, ButtonGroup, ToggleButton } from 'react-bootstrap';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Modal from 'react-bootstrap/Modal';
 import {
@@ -50,13 +42,12 @@ const DEFAULT_USER: UserData = {
 };
 
 const AVATAR_PLACEHOLDER_CLASS = [
-  'avatar-xl',
-  'rounded-circle',
-  'd-flex',
-  'align-items-center',
-  'justify-content-center',
-  'border',
-  'bg-surface',
+  'avatar-xl', 'rounded-circle', 'd-flex', 'align-items-center', 'justify-content-center', 'border', 'bg-surface',
+].join(' ');
+
+const AVATAR_ROW_CLASS = [
+  'd-flex', 'flex-column', 'flex-sm-row', 'align-items-center', 'justify-content-center', 'gap-3', 'avatar-row',
+  'w-100',
 ].join(' ');
 
 const applyTheme = (t: 'light' | 'dark') => {
@@ -75,6 +66,7 @@ const Settings: React.FC<Props> = ({ user = DEFAULT_USER }) => {
   const [theme, setTheme] = useState<'light' | 'dark'>(user.theme ?? 'light');
   const [firstName, setFirstName] = useState<string>(user.firstName ?? '');
   const [lastName, setLastName] = useState<string>(user.lastName ?? '');
+  const [email, setEmail] = useState<string>(user.email ?? '');
   const [units, setUnits] = useState<'Imperial' | 'Metric'>(user.units ?? DEFAULT_UNITS);
   const [country, setCountry] = useState<string>(user.country ?? DEFAULT_COUNTRY);
   const [profilePicture] = useState<string | null>(user.profilePicture ?? null);
@@ -144,7 +136,7 @@ const Settings: React.FC<Props> = ({ user = DEFAULT_USER }) => {
 
             <Card.Body className="pt-3">
               <form className="vstack gap-3" noValidate onSubmit={onSubmit}>
-                <div className="d-flex align-items-center gap-3 avatar-row">
+                <div className={AVATAR_ROW_CLASS}>
                   {profilePicture ? (
                     <Image
                       src={profilePicture}
@@ -161,6 +153,7 @@ const Settings: React.FC<Props> = ({ user = DEFAULT_USER }) => {
                       <span className="fw-bold">{initials}</span>
                     </div>
                   )}
+
                   <Button
                     type="button"
                     variant="outline-secondary"
@@ -192,6 +185,20 @@ const Settings: React.FC<Props> = ({ user = DEFAULT_USER }) => {
                         aria-label="Last Name"
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
+                      />
+                    </FloatingLabel>
+                  </Col>
+                </Row>
+
+                <Row className="g-3">
+                  <Col md={12}>
+                    <FloatingLabel controlId="email" label="Email">
+                      <Form.Control
+                        type="email"
+                        placeholder=""
+                        aria-label="Email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                       />
                     </FloatingLabel>
                   </Col>

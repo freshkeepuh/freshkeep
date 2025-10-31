@@ -39,7 +39,7 @@
 .chip-indigo  { background: linear-gradient(135deg, #6366f1, #4f46e5); }
 .chip-amber   { background: linear-gradient(135deg, #f59e0b, #d97706); }
 
-.avatar-xl { inline-size: 84px; block-size: 84px; font-size: 1.25rem; }
+.avatar-xl { inline-size: 100px; block-size: 100px; font-size: 1.25rem; }
 .btn-ghost { border: 1px dashed var(--fk-border); background: transparent; }
 .btn-ghost:hover { border-style: solid; }
 
