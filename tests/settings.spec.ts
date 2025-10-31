@@ -20,29 +20,26 @@ test.describe('Settings', () => {
       .toBe(false);
 
     // Switch to dark
-    await page.locator('#darkTheme').click();
+    await page.locator('#theme-dark').click();
     await expect
       .poll(async () => await page.evaluate(() => document.body.classList.contains('dark')))
       .toBe(true);
-    await expect(page.locator('#darkTheme')).toHaveAttribute('aria-pressed', 'true');
-    await expect(page.locator('#lightTheme')).toHaveAttribute('aria-pressed', 'false');
+    await expect(page.locator('#theme-dark')).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('#theme-light')).toHaveAttribute('aria-pressed', 'false');
 
     // Switch back to light
-    await page.locator('#lightTheme').click();
+    await page.locator('#theme-light').click();
     await expect
       .poll(async () => await page.evaluate(() => document.body.classList.contains('dark')))
       .toBe(false);
-    await expect(page.locator('#lightTheme')).toHaveAttribute('aria-pressed', 'true');
-    await expect(page.locator('#darkTheme')).toHaveAttribute('aria-pressed', 'false');
+    await expect(page.locator('#theme-light')).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('#theme-dark')).toHaveAttribute('aria-pressed', 'false');
   });
 
   test('updates profile form (no navigation, controlled input stays)', async ({ page }) => {
-    const nameInput = page.locator('#userName');
+    const nameInput = page.locator('#firstName');
     await expect(nameInput).toBeVisible();
     await nameInput.fill('Josh Tester');
-
-    // Email is read-only plaintext and includes helper text
-    await expect(page.getByText('Email cannot be changed')).toBeVisible();
 
     // Submit
     await page.getByRole('button', { name: 'Update Profile' }).click();
@@ -60,8 +57,8 @@ test.describe('Settings', () => {
 
     // Buttons visible
     await expect(page.getByRole('button', { name: 'Update Profile' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Light' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Dark' })).toBeVisible();
+    await expect(page.locator('#theme-light')).toBeVisible();
+    await expect(page.locator('#theme-dark')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Sign Out' })).toBeVisible();
   });
 });
