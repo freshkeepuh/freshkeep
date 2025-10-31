@@ -33,7 +33,7 @@ export default function StorageList({ storages, onRemove }: StorageListProps) {
   };
 
   return (
-    <Row xs={1} md={2} className={`g-3 mt-3 ${styles.storageGrid}`}>
+    <Row xs={1} md={3} className={`g-3 mt-3 ${styles.storageGrid}`}>
       {storages.map((storage) => (
         <Col key={storage.id}>
           <Card className={styles.storageCard}>
