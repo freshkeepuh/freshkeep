@@ -1,5 +1,5 @@
 /* eslint-disable arrow-body-style */
-import { compare } from 'bcrypt';
+import { compare } from 'bcryptjs';
 import { type NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { prisma } from '@/lib/prisma';
@@ -40,7 +40,9 @@ const authOptions: NextAuthOptions = {
         return {
           id: `${user.id}`,
           email: user.email,
-          randomKey: user.role,
+          role: user.role,
+          settings: user.settings,
+          randomKey: Math.random().toString(36).substring(2, 15),
         };
       },
     }),
@@ -50,7 +52,7 @@ const authOptions: NextAuthOptions = {
     signOut: '/auth/signout',
     //   error: '/auth/error',
     //   verifyRequest: '/auth/verify-request',
-    //   newUser: '/auth/new-user'
+    newUser: '/auth/signup',
   },
   callbacks: {
     session: ({ session, token }) => {

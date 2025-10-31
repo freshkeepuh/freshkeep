@@ -1,111 +1,151 @@
 'use client';
 
 import { signIn } from 'next-auth/react';
-import { useForm } from 'react-hook-form';
+import Link from 'next/link';
+import { useState } from 'react';
+import { useForm, UseFormRegister } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as Yup from 'yup';
-import { Card, Col, Container, Button, Form, Row } from 'react-bootstrap';
+import { Button, Card, Col, Form, Row } from 'react-bootstrap';
 import { createUser } from '@/lib/dbUserActions';
+import { signUpValidation } from '@/lib/validationSchemas';
+import ErrorPopUp from '@/components/ErrorPopUp';
+import LogoHeader from '@/components/LogoHeader';
+import WelcomeSection from '@/components/WelcomeSection';
+import EmailAddressField, { IEmailAddressField } from '@/components/EmailAddressField';
+import PasswordField, { IPasswordField } from '@/components/PasswordField';
+import ConfirmPasswordField, { IConfirmPasswordField } from '@/components/ConfirmPasswordField';
 
-type SignUpForm = {
-  email: string;
-  password: string;
-  confirmPassword: string;
-  // acceptTerms: boolean;
-};
+import styles from './SignUpPage.module.css';
 
-/** The sign up page. */
-const SignUp = () => {
-  const validationSchema = Yup.object().shape({
-    email: Yup.string().required('Email is required').email('Email is invalid'),
-    password: Yup.string()
-      .required('Password is required')
-      .min(6, 'Password must be at least 6 characters')
-      .max(40, 'Password must not exceed 40 characters'),
-    confirmPassword: Yup.string()
-      .required('Confirm Password is required')
-      .oneOf([Yup.ref('password'), ''], 'Confirm Password does not match'),
-  });
+type SignUpForm = IEmailAddressField & IPasswordField & IConfirmPasswordField;
 
+const SignUpPage = () => {
   const {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<SignUpForm>({
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(signUpValidation),
   });
 
+  const [showError, setShowError] = useState(false);
+
   const onSubmit = async (data: SignUpForm) => {
-    // console.log(JSON.stringify(data, null, 2));
-    await createUser(data);
-    // After creating, signIn with redirect to the add page
-    await signIn('credentials', { callbackUrl: '/add', ...data });
+    try {
+      const user = await createUser(data);
+      if (!user) {
+        setShowError(true);
+        return;
+      }
+      const result = await signIn('credentials', { redirect: false, ...data });
+      if (!result?.ok) {
+        setShowError(true);
+      } else {
+        window.location.href = result?.url || '/';
+      }
+    } catch (error) {
+      setShowError(true);
+    }
   };
 
   return (
-    <main>
-      <Container>
-        <Row className="justify-content-center">
-          <Col xs={5}>
-            <h1 className="text-center">Sign Up</h1>
-            <Card>
-              <Card.Body>
-                <Form onSubmit={handleSubmit(onSubmit)}>
-                  <Form.Group className="form-group">
-                    <Form.Label>Email</Form.Label>
-                    <input
-                      type="text"
-                      {...register('email')}
-                      className={`form-control ${errors.email ? 'is-invalid' : ''}`}
-                    />
-                    <div className="invalid-feedback">{errors.email?.message}</div>
-                  </Form.Group>
+    <main className={`${styles.authHero} ${styles.twoUp}`}>
+      {/* LEFT SIDE */}
+      <section className={`${styles.side} ${styles.left}`}>
+        <div className={styles.overlayDark} />
+        <div className={styles.welcomeWrap}>
+          <WelcomeSection
+            title="Create your account"
+            subtitle="Join Fresh Keep and see what's in your fridge."
+          />
+        </div>
+      </section>
 
-                  <Form.Group className="form-group">
-                    <Form.Label>Password</Form.Label>
-                    <input
-                      type="password"
-                      {...register('password')}
-                      className={`form-control ${errors.password ? 'is-invalid' : ''}`}
-                    />
-                    <div className="invalid-feedback">{errors.password?.message}</div>
-                  </Form.Group>
-                  <Form.Group className="form-group">
-                    <Form.Label>Confirm Password</Form.Label>
-                    <input
-                      type="password"
-                      {...register('confirmPassword')}
-                      className={`form-control ${errors.confirmPassword ? 'is-invalid' : ''}`}
-                    />
-                    <div className="invalid-feedback">{errors.confirmPassword?.message}</div>
-                  </Form.Group>
-                  <Form.Group className="form-group py-3">
-                    <Row>
-                      <Col>
-                        <Button type="submit" className="btn btn-primary">
-                          Register
-                        </Button>
-                      </Col>
-                      <Col>
-                        <Button type="button" onClick={() => reset()} className="btn btn-warning float-right">
-                          Reset
-                        </Button>
-                      </Col>
-                    </Row>
-                  </Form.Group>
-                </Form>
-              </Card.Body>
-              <Card.Footer>
-                Already have an account?
-                <a href="/auth/signin">Sign in</a>
-              </Card.Footer>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
+      {/* RIGHT SIDE */}
+      <section className={`${styles.side} ${styles.right}`}>
+        <div className={styles.overlayLight} />
+        <div className={styles.cardWrap}>
+          <Card className={`shadow rounded-4 ${styles.glassyCard}`}>
+            <Card.Body className="p-5">
+              <LogoHeader />
+              <h2 className="mb-4 fw-bold">Sign Up</h2>
+
+              <ErrorPopUp
+                show={showError}
+                onClose={() => setShowError(false)}
+                title="Sign Up Error"
+                body="The email you entered is already in use. Please check your credentials and try again."
+              />
+
+              <Form method="post" onSubmit={handleSubmit(onSubmit)}>
+                <Form.Group className="mb-4">
+                  <EmailAddressField
+                    register={register as unknown as UseFormRegister<IEmailAddressField>}
+                    errors={errors}
+                    data-testid="sign-up-form-email-field"
+                  />
+                </Form.Group>
+
+                <Form.Group className="mb-4">
+                  <PasswordField
+                    register={register as unknown as UseFormRegister<IPasswordField>}
+                    errors={errors}
+                    data-testid="sign-up-form-password-field"
+                  />
+                </Form.Group>
+
+                <Form.Group className="mb-4">
+                  <ConfirmPasswordField
+                    register={register as unknown as UseFormRegister<IConfirmPasswordField>}
+                    errors={errors}
+                    data-testid="sign-up-form-confirm-password-field"
+                  />
+                </Form.Group>
+
+                <Row className="align-items-center mb-4">
+                  <Col xs="auto">
+                    <Button
+                      data-testid="sign-up-form-submit"
+                      type="submit"
+                      variant="success"
+                      size="lg"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? 'Signing Up…' : 'Sign Up'}
+                    </Button>
+                  </Col>
+                  <Col className="text-end">
+                    <Button
+                      data-testid="sign-up-form-reset"
+                      type="button"
+                      variant="outline-secondary"
+                      onClick={() => reset()}
+                      size="lg"
+                      disabled={isSubmitting}
+                    >
+                      Reset
+                    </Button>
+                  </Col>
+                </Row>
+              </Form>
+            </Card.Body>
+
+            <Card.Footer className="text-center py-3">
+              <span>Already have an account?&nbsp;</span>
+              <Link
+                data-testid="sign-up-form-signin-link"
+                href="/auth/signin"
+                className="fw-bold text-success"
+              >
+                Sign in
+              </Link>
+            </Card.Footer>
+          </Card>
+        </div>
+      </section>
     </main>
   );
 };
 
-export default SignUp;
+export default SignUpPage;

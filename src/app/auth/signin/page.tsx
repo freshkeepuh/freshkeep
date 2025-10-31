@@ -1,125 +1,139 @@
 'use client';
 
 import { signIn } from 'next-auth/react';
-import { Button, Card, Col, Container, Form, Row, Image } from 'react-bootstrap';
+import Link from 'next/link';
+import { useState } from 'react';
+import { useForm, UseFormRegister } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Button, Card, Col, Form, Row } from 'react-bootstrap';
+import { signInValidation } from '@/lib/validationSchemas';
+import ErrorPopUp from '@/components/ErrorPopUp';
+import LogoHeader from '@/components/LogoHeader';
+import WelcomeSection from '@/components/WelcomeSection';
+import EmailAddressField, { IEmailAddressField } from '@/components/EmailAddressField';
+import PasswordField, { IPasswordField } from '@/components/PasswordField';
+import { redirect } from 'next/navigation';
 
-const SignIn = () => {
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+import styles from './SignInPage.module.css';
 
-    const target = e.target as typeof e.target & {
-      email: { value: string };
-      password: { value: string };
-      rememberMe?: { checked: boolean };
-    };
+type SignInForm = IEmailAddressField & IPasswordField;
 
-    const email = target.email.value;
-    const password = target.password.value;
-    const result = await signIn('credentials', {
-      callbackUrl: '/',
-      email,
-      password,
-    });
+const SignInPage = () => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<SignInForm>({
+    resolver: yupResolver(signInValidation),
+  });
 
-    if (result?.error) {
-      console.error('Sign in failed: ', result.error);
+  const [showError, setShowError] = useState(false);
+
+  const onSubmit = async (data: SignInForm) => {
+    const result = await signIn('credentials', { redirect: false, ...data });
+    if (!result?.ok) {
+      setShowError(true);
+    } else {
+      redirect('/');
     }
   };
 
   return (
-    <main
-      style={{
-        backgroundImage: "url('/images/sign-in/Sign-in-bg-photo.png')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        minHeight: '100vh',
-        display: 'flex',
-      }}
-    >
-      <Container>
-        <Row className="justify-content-center mt-5 gap-5">
-          {/* #region Image Section */}
-          <Col
-            xs={12}
-            md={7}
-            lg={5}
-            className="d-flex flex-column justify-content-center align-items-center text-white p-5"
-          >
-            <h1 className="fw-bold">Welcome back!</h1>
-            <h2 className="fs-5">Sign in and see what&apos;s in your fridge.</h2>
-          </Col>
-          {/* #endregion Image Section */}
-          {/* #region Sign In Form  */}
-          <Col xs={12} md={6} lg={5} className="bg-white p-5 rounded shadow mt-5 ms-md-5">
-            {/* Logo + Title */}
-            <div className="d-flex align-items-center justify-content-center mb-3">
-              <Image
-                src="/multicolor-leaf2.png"
-                alt="Fresh Keep Logo"
-                width={40}
-                height={40}
-                className="me-2"
+    <main className={`${styles.authHero} ${styles.twoUp}`}>
+      {/* LEFT SIDE (hero) */}
+      <section
+        className={`${styles.side} ${styles.left}`}
+        style={{ backgroundImage: "url('/images/sign-in/bg-left.png')" }}
+      >
+        <div className={styles.overlayDark} />
+        <div className={styles.welcomeWrap}>
+          <WelcomeSection
+            title="Welcome back!"
+            subtitle="Sign in and see what's in your fridge."
+          />
+        </div>
+      </section>
+
+      {/* RIGHT SIDE (form) */}
+      <section
+        className={`${styles.side} ${styles.right}`}
+        style={{ backgroundImage: "url('/images/sign-in/bg-right.png')" }}
+      >
+        <div className={styles.overlayLight} />
+        <div className={styles.cardWrap}>
+          <Card className={`shadow rounded-4 ${styles.glassyCard}`}>
+            <Card.Body className="p-5">
+              <LogoHeader />
+              <h2 className="mb-4 fw-bold">Sign In</h2>
+
+              <ErrorPopUp
+                show={showError}
+                onClose={() => setShowError(false)}
+                title="Sign In Error"
+                body="The email or password you entered is incorrect. Please check your credentials and try again."
               />
-              <h1 className="text-center m-0">Fresh Keep</h1>
-            </div>
 
-            <h2 className="text-left mb-3 fw-bold">Sign In</h2>
-            <Card>
-              <Card.Body>
-                <Form method="post" onSubmit={handleSubmit}>
-                  <Form.Group controlId="formBasicEmail" className="mb-3">
-                    <Form.Control
-                      name="email"
-                      type="text"
-                      placeholder="👤Username or Email"
-                      required
-                    />
-                  </Form.Group>
+              <Form method="post" onSubmit={handleSubmit(onSubmit)}>
+                <Form.Group className="mb-4">
+                  <EmailAddressField
+                    register={register as unknown as UseFormRegister<IEmailAddressField>}
+                    errors={errors}
+                    data-testid="sign-in-form-email-field"
+                  />
+                </Form.Group>
 
-                  <Form.Group controlId="formBasicPassword" className="mb-3">
-                    <Form.Control
-                      name="password"
-                      type="password"
-                      placeholder="🔒Password"
-                      required
-                    />
-                  </Form.Group>
+                <Form.Group className="mb-4">
+                  <PasswordField
+                    register={register as unknown as UseFormRegister<IPasswordField>}
+                    errors={errors}
+                    data-testid="sign-in-form-password-field"
+                  />
+                </Form.Group>
 
-                  {/* Remember me + Forgot password */}
-                  <div className="d-flex justify-content-between align-items-center mb-3">
-                    <Form.Check
-                      type="checkbox"
-                      id="rememberMe"
-                      name="rememberMe"
-                      label="Remember me"
-                    />
-                    <a href="/forgot-password" className="fw-semibold text-success">
-                      Forgot Password?
-                    </a>
-                  </div>
-
-                  <div className="d-grid">
-                    <Button type="submit" variant="success">
-                      Sign In
+                <Row className="align-items-center mb-4">
+                  <Col xs="auto">
+                    <Button
+                      data-testid="sign-in-form-submit"
+                      type="submit"
+                      variant="success"
+                      size="lg"
+                      disabled={isSubmitting}
+                    >
+                      {isSubmitting ? 'Signing In…' : 'Sign In'}
                     </Button>
-                  </div>
-                </Form>
-              </Card.Body>
+                  </Col>
+                  <Col className="text-end">
+                    <Button
+                      data-testid="sign-in-form-reset"
+                      type="button"
+                      variant="outline-secondary"
+                      onClick={() => reset()}
+                      size="lg"
+                      disabled={isSubmitting}
+                    >
+                      Reset
+                    </Button>
+                  </Col>
+                </Row>
+              </Form>
+            </Card.Body>
 
-              <Card.Footer className="text-center">
-                New around here?
-                {' '}
-                <a href="/auth/signup" className="fw-bold text-success">
-                  Sign up
-                </a>
-              </Card.Footer>
-            </Card>
-          </Col>
-          {/* #endregion Sign in Form */}
-        </Row>
-      </Container>
+            <Card.Footer className="text-center py-3">
+              <span>New around here?&nbsp;</span>
+              <Link
+                data-testid="sign-in-form-signup-link"
+                href="/auth/signup"
+                className="fw-bold text-success"
+              >
+                Sign up
+              </Link>
+            </Card.Footer>
+          </Card>
+        </div>
+      </section>
     </main>
   );
 };
 
-export default SignIn;
+export default SignInPage;
