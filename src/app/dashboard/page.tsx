@@ -21,21 +21,29 @@ const DashboardPage = () => {
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    // Mock data
-    const mockData: StorageType[] = [
-      { id: 1, name: 'Kitchen Fridge', type: 'Fridge', itemCount: 5 },
-      { id: 2, name: 'Garage Freezer', type: 'Freezer', itemCount: 8 },
-      { id: 3, name: 'House Pantry', type: 'Pantry', itemCount: 10 },
-    ];
-    setStorages(mockData);
-    setTotalItems(mockData.reduce((sum, s) => sum + (s.itemCount || 0), 0));
-    setExpiringSoon(3);
-    setShoppingListCount(5);
+    const loadStorages = async () => {
+      try {
+        const res = await fetch('/api/storages', { cache: 'no-store' });
+        if (!res.ok) throw new Error(`Failed to load storages: ${res.status}`);
+        const data: StorageType[] = await res.json();
+        setStorages(data);
+        setTotalItems(data.reduce((sum, s) => sum + (s.itemCount || 0), 0));
+      } catch (e) {
+        // Leave list empty on error
+        setStorages([]);
+        setTotalItems(0);
+      } finally {
+        // TODO: wire real values later
+        setExpiringSoon(3);
+        setShoppingListCount(5);
+      }
+    };
+    loadStorages();
   }, []);
 
   const handleAddStorage = (newStorage: NewStorageData) => {
     const newEntry: StorageType = {
-      id: Date.now(),
+      id: String(Date.now()),
       ...newStorage,
       itemCount: Number(newStorage.itemCount) || 0,
     };
@@ -43,7 +51,7 @@ const DashboardPage = () => {
     setTotalItems((prev) => prev + (newEntry.itemCount || 0));
   };
 
-  const handleRemoveStorage = (id: number, count: number) => {
+  const handleRemoveStorage = (id: string, count: number) => {
     setStorages((prev) => prev.filter((s) => s.id !== id));
     setTotalItems((prev) => prev - count);
   };

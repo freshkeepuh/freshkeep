@@ -5,7 +5,7 @@ import { Card, Button, Row, Col } from 'react-bootstrap';
 import styles from '../../styles/dashboard.module.css';
 
 export interface StorageType {
-  id: number;
+  id: string;
   name: string;
   type: 'Fridge' | 'Freezer' | 'Pantry' | 'Spice Rack' | 'Other';
   itemCount?: number;
@@ -13,7 +13,7 @@ export interface StorageType {
 
 interface StorageListProps {
   storages: StorageType[];
-  onRemove: (id: number, count: number) => void;
+  onRemove: (id: string, count: number) => void;
 }
 
 export default function StorageList({ storages, onRemove }: StorageListProps) {

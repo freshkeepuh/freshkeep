@@ -44,15 +44,16 @@ export async function createStorage(data: {
  * @returns All storages.
  */
 export async function readStorages() {
-  const storages = await prisma.storageArea.findMany(
-    {
-      select: {
-        locId: true,
-        ...storageSelect,
+  const storages = await prisma.storageArea.findMany({
+    select: {
+      locId: true,
+      ...storageSelect,
+      _count: {
+        select: { instances: true },
       },
-      orderBy: { name: 'asc' },
     },
-  );
+    orderBy: { name: 'asc' },
+  });
   return storages;
 }
 
