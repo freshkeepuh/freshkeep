@@ -18,6 +18,7 @@ function mapTypeToUi(type: string): 'Fridge' | 'Freezer' | 'Pantry' | 'Spice Rac
   }
 }
 
+const COUNT_KEY = '_count';
 export async function GET() {
   try {
     const storages = await readStorages();
@@ -26,12 +27,10 @@ export async function GET() {
       locId: s.locId,
       name: s.name,
       type: mapTypeToUi(String(s.type)),
-      itemCount: s._count?.instances ?? 0,
+      itemCount: s[COUNT_KEY]?.instances ?? 0,
     }));
     return NextResponse.json(data);
   } catch (error: any) {
     return NextResponse.json({ error: error?.message || 'Failed to load storages' }, { status: 500 });
   }
 }
-
-

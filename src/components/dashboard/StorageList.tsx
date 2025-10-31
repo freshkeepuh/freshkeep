@@ -15,11 +15,11 @@ export interface StorageType {
 
 interface StorageListProps {
   storages: StorageType[];
-  onRemove: (id: string, count: number) => void;
+  // onRemove: (id: string, count: number) => void;
   locationsById?: Record<string, string>;
 }
 
-export default function StorageList({ storages, onRemove, locationsById = {} }: StorageListProps) {
+export default function StorageList({ storages, locationsById = {} }: StorageListProps) {
   const router = useRouter();
   const getIcon = (type: string) => {
     switch (type) {
@@ -67,7 +67,8 @@ export default function StorageList({ storages, onRemove, locationsById = {} }: 
                     <div className={styles.storageIcon}>{getIcon(storage.type)}</div>
                     <Card.Title className={styles.storageTitle}>{storage.name}</Card.Title>
                     <Card.Text>
-                      {storage.itemCount || 0} items
+                      {storage.itemCount || 0}
+                      items
                     </Card.Text>
                   </Card.Body>
                 </Card>
