@@ -86,7 +86,7 @@
     { "name": "Fridge", "locationName": "Vacation Home", "type": "Refrigerator", "picture":  "./images/containers/fridge.jpg" },
     { "name": "Freezer", "locationName": "Vacation Home", "type": "Freezer", "picture":  "./images/containers/freezer.jpg" },
     { "name": "Pantry", "locationName": "Vacation Home", "type": "Pantry", "picture":  "./images/containers/pantry.jpg" },
-    { "name": "Spice Rack", "locationName": "Vacation Home", "type": "SpiceRack", "picture":  "./images/containers/spice_rack.jpg" }
+    { "name": "Spice Rack Vacation", "locationName": "Vacation Home", "type": "SpiceRack", "picture":  "./images/containers/spice_rack.jpg" }
   ],
   "defaultProductInstances": [
     { "productName": "Milk", "storageAreaName": "Fridge1", "locationName": "Main Home", "quantity": 1, "unitName": "gallon", "expirationDate": null },
