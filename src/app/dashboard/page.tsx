@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Row, Col, Container, Card, Button, ListGroup } from 'react-bootstrap';
@@ -16,30 +16,45 @@ const DashboardPage = () => {
 
   const [storages, setStorages] = useState<StorageType[]>([]);
   const [totalItems, setTotalItems] = useState(0);
+  const [locations, setLocations] = useState<{ id: string; name: string }[]>([]);
   const [expiringSoon, setExpiringSoon] = useState(0);
   const [shoppingListCount, setShoppingListCount] = useState(0);
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    const loadStorages = async () => {
+    const load = async () => {
       try {
-        const res = await fetch('/api/storages', { cache: 'no-store' });
-        if (!res.ok) throw new Error(`Failed to load storages: ${res.status}`);
-        const data: StorageType[] = await res.json();
-        setStorages(data);
-        setTotalItems(data.reduce((sum, s) => sum + (s.itemCount || 0), 0));
-      } catch (e) {
-        // Leave list empty on error
-        setStorages([]);
-        setTotalItems(0);
+        const [storagesRes, locationsRes] = await Promise.all([
+          fetch('/api/storages', { cache: 'no-store' }),
+          fetch('/api/locations', { cache: 'no-store' }),
+        ]);
+        if (storagesRes.ok) {
+          const data: StorageType[] = await storagesRes.json();
+          setStorages(data);
+          setTotalItems(data.reduce((sum, s) => sum + (s.itemCount || 0), 0));
+        } else {
+          setStorages([]);
+          setTotalItems(0);
+        }
+        if (locationsRes.ok) {
+          const locs: { id: string; name: string }[] = await locationsRes.json();
+          setLocations(locs.map(l => ({ id: l.id, name: l.name })));
+        } else {
+          setLocations([]);
+        }
       } finally {
-        // TODO: wire real values later
         setExpiringSoon(3);
         setShoppingListCount(5);
       }
     };
-    loadStorages();
+    load();
   }, []);
+
+  const locationsById = useMemo(() => {
+    const map: Record<string, string> = {};
+    for (const l of locations) map[l.id] = l.name;
+    return map;
+  }, [locations]);
 
   const handleAddStorage = (newStorage: NewStorageData) => {
     const newEntry: StorageType = {
@@ -128,21 +143,18 @@ const DashboardPage = () => {
               <div className={styles.storageHeader}>
                 <h2>Your Storage Units</h2>
                 <Button
-                  className={`ms-2 ${styles.btnGreen}`}
-                  onClick={() => router.push('/locations')}
+                  aria-label="Add Storage"
+                  className={`ms-2 ${styles.btnGreen} ${styles.roundBtn}`}
+                  onClick={() => setShowModal(true)}
                 >
-                  + Add Item
+                  +
                 </Button>
               </div>
 
-              <div className="mt-3 d-flex gap-2 flex-wrap">
-                <Button className={styles.btnBlue} onClick={() => setShowModal(true)}>
-                  + Add Storage
-                </Button>
-              </div>
+              
 
               {/* Storage Units */}
-              <StorageList storages={storages} onRemove={handleRemoveStorage} />
+              <StorageList storages={storages} onRemove={handleRemoveStorage} locationsById={locationsById} />
             </Card.Body>
           </Card>
         </Col>

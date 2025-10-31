@@ -23,6 +23,7 @@ export async function GET() {
     const storages = await readStorages();
     const data = storages.map((s) => ({
       id: s.id,
+      locId: s.locId,
       name: s.name,
       type: mapTypeToUi(String(s.type)),
       itemCount: s._count?.instances ?? 0,

@@ -11,6 +11,7 @@ import {
   productsSelect,
   storageSelect,
   unitsSelect,
+  locationsSelect,
 } from './dbActionTypes';
 
 /**
@@ -69,6 +70,7 @@ export async function readStorage(id: string | null | undefined) {
     select: {
       locId: true,
       ...storageSelect,
+      location: locationsSelect,
       instances: {
         select: {
           unit: unitsSelect,
