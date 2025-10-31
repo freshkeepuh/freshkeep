@@ -4,7 +4,7 @@ import { loggedInProtectedPage } from '@/lib/page-protection';
 import { readStorage } from '@/lib/dbStorageActions';
 import StorageDetail from '@/components/dashboard/StorageDetail';
 
-export default async function StorageDetailPage({ params }: { params: { id: string } }) {
+export default async function StorageDetailPage({ params }: { params: { id: string } } | any) {
   const session = await getServerSession(authOptions);
   await loggedInProtectedPage(session);
 
