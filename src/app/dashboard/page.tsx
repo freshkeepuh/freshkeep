@@ -47,7 +47,9 @@ const DashboardPage = () => {
         setShoppingListCount(5);
       }
     };
-    load();
+    load().catch(err => {
+      console.error('Failed to load dashboard data', err);
+    });
   }, []);
 
   const locationsById = useMemo(() => {
@@ -64,11 +66,6 @@ const DashboardPage = () => {
     };
     setStorages((prev) => [...prev, newEntry]);
     setTotalItems((prev) => prev + (newEntry.itemCount || 0));
-  };
-
-  const handleRemoveStorage = (id: string, count: number) => {
-    setStorages((prev) => prev.filter((s) => s.id !== id));
-    setTotalItems((prev) => prev - count);
   };
 
   return (
@@ -150,11 +147,8 @@ const DashboardPage = () => {
                   +
                 </Button>
               </div>
-
-              
-
               {/* Storage Units */}
-              <StorageList storages={storages} onRemove={handleRemoveStorage} locationsById={locationsById} />
+              <StorageList storages={storages} locationsById={locationsById} />
             </Card.Body>
           </Card>
         </Col>
