@@ -8,8 +8,22 @@ import Col from 'react-bootstrap/Col';
 import Badge from 'react-bootstrap/Badge';
 import styles from '../../styles/dashboard.module.css';
 
+interface StorageInstance {
+  id: string;
+  name: string;
+  [key: string]: any; // Add more fields as needed
+}
+interface Storage {
+  id: string;
+  name: string;
+  instances: StorageInstance[];
+  createdAt?: string | null;
+  updatedAt?: string | null;
+  expiresAt?: string | null;
+  [key: string]: any; // Add more fields as needed
+}
 type StorageDetailProps = {
-  storage: any;
+  storage: Storage | any;
 };
 
 function formatDate(dateStr?: string | null) {
