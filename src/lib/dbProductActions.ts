@@ -56,7 +56,7 @@ export async function createProduct(data: {
  */
 export async function createProductInstance(data: {
   locId: string,
-  conId: string,
+  storId: string,
   prodId: string,
   unitId: string,
   quantity: number,
@@ -65,7 +65,7 @@ export async function createProductInstance(data: {
   const newProductInstance = await prisma.productInstance.create({
     data: {
       locId: data.locId,
-      conId: data.conId,
+      storId: data.storId,
       prodId: data.prodId,
       unitId: data.unitId,
       quantity: data.quantity,
@@ -75,7 +75,7 @@ export async function createProductInstance(data: {
       location: {
         ...locationsSelect,
       },
-      container: {
+      storage: {
         ...storagesSelect,
       },
       product: {
@@ -122,7 +122,7 @@ export async function readProductInstances() {
         location: {
           ...locationsSelect,
         },
-        container: {
+        storage: {
           ...storagesSelect,
         },
         product: {
@@ -172,7 +172,7 @@ export async function readProductInstance(id: string | null | undefined) {
       location: {
         ...locationsSelect,
       },
-      container: {
+      storage: {
         ...storagesSelect,
       },
       product: {
@@ -226,7 +226,7 @@ export async function updateProduct(id: string, data: {
  */
 export async function updateProductInstance(id: string, data: {
   locId: string,
-  conId: string,
+  storId: string,
   prodId: string,
   unitId: string,
   quantity: number,
@@ -236,7 +236,7 @@ export async function updateProductInstance(id: string, data: {
     where: { id },
     data: {
       locId: data.locId,
-      conId: data.conId,
+      storId: data.storId,
       prodId: data.prodId,
       unitId: data.unitId,
       quantity: data.quantity,
