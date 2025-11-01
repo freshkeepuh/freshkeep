@@ -1,5 +1,5 @@
 import {
-  ContainerType,
+  StorageType,
   Country,
   ProductCategory,
   PrismaClient,
@@ -8,7 +8,7 @@ import {
   Unit,
   Product,
   Location,
-  Container,
+  StorageArea,
   Store,
   ShoppingList,
   ShoppingListItem,
@@ -214,37 +214,37 @@ async function seedLocations(): Promise<Array<Location>> {
 }
 
 /**
- * Seed containers into the database
- * This function creates containers based on the default containers specified in the configuration file.
- * It associates each container with a location.
- * If a container already exists, it skips creation for that container.
- * @param locations The Locations in which the Containers are found.
- * @returns {Promise<Array<Container>>} A promise that resolves to an array of created or existing containers.
+ * Seed storageAreas into the database
+ * This function creates storageAreas based on the default storageAreas specified in the configuration file.
+ * It associates each storageArea with a location.
+ * If a storageArea already exists, it skips creation for that storageArea.
+ * @param locations The Locations in which the StorageAreas are found.
+ * @returns {Promise<Array<StorageArea>>} A promise that resolves to an array of created or existing storageAreas.
  */
-async function seedContainers(locations: Array<Location>): Promise<Array<Container>> {
-  const containers: Array<Container> = [];
-  // Process the default containers
-  for (const defaultContainer of config.defaultContainers) {
-    // Find the Location in which the container belongs
-    const location = findByName(locations, defaultContainer.locationName);
-    // Get the Container Type
-    const containerType = (defaultContainer.type as ContainerType) || ContainerType.Pantry;
-    // Upsert the Container to avoid duplicates
-    const container = await prisma.container.upsert({
-      where: { name: defaultContainer.name },
+async function seedStorageAreas(locations: Array<Location>): Promise<Array<StorageArea>> {
+  const storageAreas: Array<StorageArea> = [];
+  // Process the default storageAreas
+  for (const defaultStorageArea of config.defaultStorageAreas) {
+    // Find the Location in which the storageArea belongs
+    const location = findByName(locations, defaultStorageArea.locationName);
+    // Get the StorageArea Type
+    const storageType = (defaultStorageArea.type as StorageType) || StorageType.Pantry;
+    // Upsert the StorageArea to avoid duplicates
+    const storageArea = await prisma.storageArea.upsert({
+      where: { name: defaultStorageArea.name },
       update: {},
       create: {
-        name: defaultContainer.name,
-        type: containerType,
+        name: defaultStorageArea.name,
+        type: storageType,
         locId: location.id,
-        picture: defaultContainer.picture || undefined,
+        picture: defaultStorageArea.picture || undefined,
       },
     });
-    // Push the container into the array
-    containers.push(container);
+    // Push the storageArea into the array
+    storageAreas.push(storageArea);
   }
-  // Return the containers
-  return containers;
+  // Return the storageAreas
+  return storageAreas;
 }
 
 /**
@@ -346,17 +346,17 @@ async function seedProducts(units: Array<Unit>, stores: Array<Store>): Promise<A
 /**
  * Seed items into the database
  * This function creates items based on the default items specified in the configuration file.
- * It associates each item with a location, container, product, and unit.
+ * It associates each item with a location, storageArea, product, and unit.
  * If an item already exists, it skips creation for that item.
  * @param locations The Locations in which the Items can reside.
- * @param containers The Containers in which the Items can be stored.
+ * @param storageAreas The StorageAreas in which the Items can be stored.
  * @param products The Products that the Items are based on.
  * @param units The Units of measurement for the Items.
  * @returns {Promise<Array<Item>>} A promise that resolves to an array of created or existing items.
  */
 async function seedProductInstances(
   locations: Array<Location>,
-  containers: Array<Container>,
+  storageAreas: Array<StorageArea>,
   products: Array<Product>,
   units: Array<Unit>,
 ): Promise<void> {
@@ -365,8 +365,8 @@ async function seedProductInstances(
   for (const defaultItem of config.defaultProductInstances) {
     // Get the Location
     const location = findByName(locations, defaultItem.locationName);
-    // Get the Container
-    const container = findByName(containers, defaultItem.containerName);
+    // Get the StorageArea
+    const storageArea = findByName(storageAreas, defaultItem.storageAreaName);
     // Get the Product
     const product = findByName(products, defaultItem.productName);
     // Get the Unit
@@ -375,7 +375,7 @@ async function seedProductInstances(
     instance = await prisma.productInstance.create({
       data: {
         locId: location.id,
-        conId: container.id,
+        storId: storageArea.id,
         prodId: product.id,
         unitId: unit.id,
         quantity: defaultItem.quantity || 0.0,
@@ -525,10 +525,10 @@ async function main() {
   await seedUsers();
   const stores = await seedStores();
   const locations = await seedLocations();
-  const containers = await seedContainers(locations);
+  const storageAreas = await seedStorageAreas(locations);
   const units = await seedUnits();
   const products = await seedProducts(units, stores);
-  await seedProductInstances(locations, containers, products, units);
+  await seedProductInstances(locations, storageAreas, products, units);
   const shoppingList = await seedShoppingList(stores);
   await seedShoppingListItems(shoppingList, products, units);
   await seedRecipes();

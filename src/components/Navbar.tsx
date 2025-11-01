@@ -110,7 +110,7 @@ const NavBar: React.FC = () => {
                   <NavDropdown.Item
                     data-testid="navbar-link-signout"
                     onClick={() => signOut({
-                      callbackUrl: '/',
+                      callbackUrl: `${window.location.origin}/`,
                       redirect: true,
                     })}
                   >
