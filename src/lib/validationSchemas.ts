@@ -70,7 +70,8 @@ export const EditStorageSchema = Yup.object({
     picture: Yup.string().url('Must be a valid URL').nullable(),
     id: Yup.string().required(),
     locId: Yup.string().required(),
-    conId: Yup.string().required(),
+    storId: Yup.string().required(),
+    prodId: Yup.string().required(),
     grocId: Yup.string().required(),
     unitId: Yup.string().required(),
     quantity: Yup.number().positive().required(),
@@ -93,7 +94,8 @@ export const AddLocationSchema = Yup.object({
     picture: Yup.string().url('Must be a valid URL').nullable(),
     id: Yup.string().required(),
     locId: Yup.string().required(),
-    conId: Yup.string().required(),
+    prodId: Yup.string().required(),
+    storId: Yup.string().required(),
     grocId: Yup.string().required(),
     unitId: Yup.string().required(),
     quantity: Yup.number().positive().required(),
@@ -138,27 +140,3 @@ export const storeValidation = Yup.object().shape({
     .optional()
     .max(256, 'Picture must not exceed 256 characters'),
 });
-/*
-export const productInstanceSchema: Yup.ObjectSchema<ProductInstance> = Yup.object({
-  id: Yup.string().required(),
-  locId: Yup.string().required(),
-  conId: Yup.string().required(),
-  prodId: Yup.string().required(),
-  unitId: Yup.string().required(),
-  quantity: Yup.number().positive().required(),
-  expiresAt: Yup.date().nullable(),
-  location: Yup.mixed<Location>().oneOf(Object.values(Location)).required(),
-  container: Yup.mixed<ContainerType>().oneOf(Object.values(ContainerType)).required(),
-  product: Yup.object().shape({
-    id: Yup.string().required(),
-    name: Yup.string().required(),
-    brand: Yup.string().nullable(),
-    category: Yup.mixed<ProductCategory>().oneOf(Object.values(ProductCategory)).required(),
-    unitId: Yup.string().required(),
-    defaultQty: Yup.number().positive().required(),
-    isNeeded: Yup.boolean().required(),
-    picture: Yup.string().url('Must be a valid URL').nullable(),
-    unit: new Yup.ObjectSchema<Unit>().required(),
-  }).required(),
-  shoppingListItems: Yup.array().of(
-}) as unknown as Yup.ObjectSchema<ProductInstance>; */
