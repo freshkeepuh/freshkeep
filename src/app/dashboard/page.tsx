@@ -9,6 +9,7 @@ import StorageList, { StorageType } from '@/components/dashboard/StorageList';
 import AddStorageModal, { NewStorageData } from '@/components/dashboard/AddStorageModal';
 import DashboardTileButton from '@/components/dashboard/DashboardTileButton';
 import styles from '../../styles/dashboard.module.css';
+// import defaultStorageAreas from '../../../config/settings.development.json';
 
 const DashboardPage = () => {
   const router = useRouter();
@@ -23,9 +24,10 @@ const DashboardPage = () => {
   useEffect(() => {
     // Mock data
     const mockData: StorageType[] = [
-      { id: 1, name: 'Kitchen Fridge', type: 'Fridge', itemCount: 5 },
-      { id: 2, name: 'Garage Freezer', type: 'Freezer', itemCount: 8 },
-      { id: 3, name: 'House Pantry', type: 'Pantry', itemCount: 10 },
+      // eslint-disable-next-line max-len
+      { id: 1, name: 'Kitchen Fridge', location: 'Main House 123 Ave Honolulu, HI 96814', type: 'Fridge', itemCount: 5 },
+      { id: 2, name: 'Garage Freezer', location: 'Guest House', type: 'Freezer', itemCount: 8 },
+      { id: 3, name: 'House Pantry', location: 'Main House 123 Ave Honolulu, HI 96814', type: 'Pantry', itemCount: 10 },
     ];
     setStorages(mockData);
     setTotalItems(mockData.reduce((sum, s) => sum + (s.itemCount || 0), 0));
@@ -123,7 +125,7 @@ const DashboardPage = () => {
                   className={`ms-2 ${styles.btnGreen}`}
                   onClick={() => router.push('/locations')}
                 >
-                  + Add Item
+                  + Add Location
                 </Button>
               </div>
 

@@ -7,6 +7,7 @@ import styles from '../../styles/dashboard.module.css';
 export interface StorageType {
   id: number;
   name: string;
+  location?: string;
   type: 'Fridge' | 'Freezer' | 'Pantry' | 'Spice Rack' | 'Other';
   itemCount?: number;
 }
@@ -40,6 +41,7 @@ export default function StorageList({ storages, onRemove }: StorageListProps) {
             <Card.Body className="text-center">
               <div className={styles.storageIcon}>{getIcon(storage.type)}</div>
               <Card.Title>{storage.name}</Card.Title>
+              <Card.Subtitle>{storage.location}</Card.Subtitle>
               <Card.Text>
                 {storage.itemCount || 0}
                 {' '}
