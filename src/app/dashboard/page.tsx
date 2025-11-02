@@ -58,14 +58,29 @@ const DashboardPage = () => {
     return map;
   }, [locations]);
 
-  const handleAddStorage = (newStorage: NewStorageData) => {
-    const newEntry: StorageType = {
-      id: String(Date.now()),
-      ...newStorage,
-      itemCount: Number(newStorage.itemCount) || 0,
-    };
-    setStorages((prev) => [...prev, newEntry]);
-    setTotalItems((prev) => prev + (newEntry.itemCount || 0));
+  const handleAddStorage = async (newStorage: NewStorageData) => {
+    try {
+      const response = await fetch('/api/storages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: newStorage.name,
+          type: newStorage.type,
+          locId: null, // Default to no location
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to add storage');
+      }
+
+      const createdStorage: StorageType = await response.json();
+      setStorages((prev) => [...prev, createdStorage]);
+      setTotalItems((prev) => prev + (createdStorage.itemCount || 0));
+    } catch (error) {
+      console.error('Error adding storage:', error);
+      // You might want to show an error message to the user here
+    }
   };
 
   return (
