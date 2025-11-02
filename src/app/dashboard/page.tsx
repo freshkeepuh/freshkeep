@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Row, Col, Container, Card, Button, ListGroup } from 'react-bootstrap';
+import swal from 'sweetalert';
 // components
 import StorageList, { StorageType } from '@/components/dashboard/StorageList';
 import AddStorageModal, { NewStorageData } from '@/components/dashboard/AddStorageModal';
@@ -71,7 +72,8 @@ const DashboardPage = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to add storage');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to add storage');
       }
 
       const createdStorage: StorageType = await response.json();
@@ -79,7 +81,8 @@ const DashboardPage = () => {
       setTotalItems((prev) => prev + (createdStorage.itemCount || 0));
     } catch (error) {
       console.error('Error adding storage:', error);
-      // You might want to show an error message to the user here
+      const message = error instanceof Error ? error.message : 'Failed to add storage';
+      await swal('Error', message, 'error');
     }
   };
 
