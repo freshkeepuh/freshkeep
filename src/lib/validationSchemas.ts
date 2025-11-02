@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { ContainerType, Country } from '@prisma/client';
+import { StorageType, Country } from '@prisma/client';
 import { checkUser } from './dbUserActions';
 
 export const forgotPasswordValidation = Yup.object().shape({
@@ -42,8 +42,8 @@ export const signInValidation = Yup.object().shape({
 export const AddStorageSchema = Yup.object({
   location: Yup.string().required(),
   name: Yup.string().required(),
-  type: Yup.mixed<ContainerType>()
-    .oneOf(Object.values(ContainerType))
+  type: Yup.mixed<StorageType>()
+    .oneOf(Object.values(StorageType))
     .required(),
   picture: Yup.string().url('Must be a valid URL').required(),
   items: Yup.array().of(Yup.object({
@@ -62,8 +62,8 @@ export const EditStorageSchema = Yup.object({
   id: Yup.string().required(),
   locId: Yup.string().required(),
   name: Yup.string().required(),
-  type: Yup.mixed<ContainerType>()
-    .oneOf(Object.values(ContainerType))
+  type: Yup.mixed<StorageType>()
+    .oneOf(Object.values(StorageType))
     .required(),
   picture: Yup.string().url('Must be a valid URL').nullable(),
   items: Yup.array().of(Yup.object({
@@ -89,7 +89,7 @@ export const AddLocationSchema = Yup.object({
   zip: Yup.string().required('Zip code is required'),
   country: Yup.mixed<Country>().oneOf(Object.values(Country)).required('Country is required'),
   picture: Yup.string().url('Must be a valid URL').nullable(),
-  containers: Yup.array().of(Yup.mixed<ContainerType>().oneOf(Object.values(ContainerType))),
+  storageAreas: Yup.array().of(Yup.mixed<StorageType>().oneOf(Object.values(StorageType))),
   instances: Yup.array().of(Yup.object({
     picture: Yup.string().url('Must be a valid URL').nullable(),
     id: Yup.string().required(),
