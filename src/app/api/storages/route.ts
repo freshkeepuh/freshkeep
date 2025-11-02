@@ -1,5 +1,5 @@
-import { NextResponse } from 'next/server';
-import { readStorages } from '@/lib/dbStorageActions';
+import { NextRequest, NextResponse } from 'next/server';
+import { readStorages, createStorage } from '@/lib/dbStorageActions';
 
 export const runtime = 'nodejs';
 
@@ -18,6 +18,21 @@ function mapTypeToUi(type: string): 'Fridge' | 'Freezer' | 'Pantry' | 'Spice Rac
   }
 }
 
+function mapTypeToDb(type: string): string {
+  switch (type) {
+    case 'Fridge':
+      return 'Refrigerator';
+    case 'Freezer':
+      return 'Freezer';
+    case 'Pantry':
+      return 'Pantry';
+    case 'Spice Rack':
+      return 'SpiceRack';
+    default:
+      return 'Pantry'; // Default to Pantry for 'Other'
+  }
+}
+
 const COUNT_KEY = '_count';
 export async function GET() {
   try {
@@ -32,5 +47,35 @@ export async function GET() {
     return NextResponse.json(data);
   } catch (error: any) {
     return NextResponse.json({ error: error?.message || 'Failed to load storages' }, { status: 500 });
+  }
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { name, type, locId } = body;
+
+    if (!name || !type) {
+      return NextResponse.json({ error: 'Name and type are required' }, { status: 400 });
+    }
+
+    const dbType = mapTypeToDb(type);
+    const newStorage = await createStorage({
+      name,
+      type: dbType,
+      locId: locId || null,
+      picture: undefined,
+    });
+
+    return NextResponse.json({
+      id: newStorage.id,
+      locId: newStorage.locId,
+      name: newStorage.name,
+      type: mapTypeToUi(String(newStorage.type)),
+      itemCount: 0,
+    }, { status: 201 });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Failed to create storage';
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

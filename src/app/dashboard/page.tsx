@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Row, Col, Container, Card, Button, ListGroup } from 'react-bootstrap';
+import swal from 'sweetalert';
 // components
 import StorageList, { StorageType } from '@/components/dashboard/StorageList';
 import AddStorageModal, { NewStorageData } from '@/components/dashboard/AddStorageModal';
@@ -58,14 +59,31 @@ const DashboardPage = () => {
     return map;
   }, [locations]);
 
-  const handleAddStorage = (newStorage: NewStorageData) => {
-    const newEntry: StorageType = {
-      id: String(Date.now()),
-      ...newStorage,
-      itemCount: Number(newStorage.itemCount) || 0,
-    };
-    setStorages((prev) => [...prev, newEntry]);
-    setTotalItems((prev) => prev + (newEntry.itemCount || 0));
+  const handleAddStorage = async (newStorage: NewStorageData) => {
+    try {
+      const response = await fetch('/api/storages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: newStorage.name,
+          type: newStorage.type,
+          locId: null, // Default to no location
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to add storage');
+      }
+
+      const createdStorage: StorageType = await response.json();
+      setStorages((prev) => [...prev, createdStorage]);
+      setTotalItems((prev) => prev + (createdStorage.itemCount || 0));
+    } catch (error) {
+      console.error('Error adding storage:', error);
+      const message = error instanceof Error ? error.message : 'Failed to add storage';
+      await swal('Error', message, 'error');
+    }
   };
 
   return (
