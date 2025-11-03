@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import getResponseError from '@/lib/routeHelpers';
-import { deleteLocation, readLocation } from '@/lib/dbLocationActions';
+import { deleteLocation, readLocation, updateLocation } from '@/lib/dbLocationActions';
 
 export const runtime = 'nodejs';
 
@@ -45,6 +45,38 @@ export async function DELETE(request: NextRequest, context: any) {
     await deleteLocation(id);
 
     return NextResponse.json({ message: 'Location deleted successfully' });
+  } catch (error: Error | any) {
+    return getResponseError(error);
+  }
+}
+
+/**
+ * PUT /api/location/:id - update a location (partial allowed)
+ */
+export async function PUT(request: NextRequest, context: any) {
+  try {
+    const { id } = context.params;
+    if (!id) {
+      return NextResponse.json({ error: 'Location ID is required' }, { status: 400 });
+    }
+
+    const body = await request.json();
+    const current = await readLocation(id);
+    if (!current) {
+      return NextResponse.json({ error: 'Location not found' }, { status: 404 });
+    }
+
+    const updated = await updateLocation(id, {
+      name: body.name ?? current.name,
+      address1: body.address1 ?? current.address1,
+      address2: body.address2 ?? current.address2,
+      city: body.city ?? current.city,
+      state: body.state ?? current.state,
+      zipcode: body.zipcode ?? current.zipcode,
+      country: body.country ?? current.country,
+      picture: body.picture ?? current.picture,
+    });
+    return NextResponse.json(updated, { status: 200 });
   } catch (error: Error | any) {
     return getResponseError(error);
   }

@@ -1,50 +1,54 @@
 import { NextRequest, NextResponse } from 'next/server';
 import getResponseError from '@/lib/routeHelpers';
-import { deleteLocation, readLocation } from '@/lib/dbLocationActions';
+import { readLocations, createLocation } from '@/lib/dbLocationActions';
 
 export const runtime = 'nodejs';
 
 /**
- * Handles GET requests for retrieving a location.
- * @param request The incoming request
- * @param context
- * @returns A JSON response containing the location or an error message
+ * GET /api/location - list all locations
  */
-export async function GET(request: NextRequest, context: any) {
+export async function GET() {
   try {
-    const { id } = context.params;
-    if (!id) {
-      return NextResponse.json({ error: 'Location ID is required' }, { status: 400 });
-    }
-
-    const location = await readLocation(id);
-
-    if (!location) {
-      return NextResponse.json({ error: 'Location not found' }, { status: 404 });
-    }
-
-    return NextResponse.json(location);
+    const locations = await readLocations();
+    return NextResponse.json(locations, { status: 200 });
   } catch (error: Error | any) {
     return getResponseError(error);
   }
 }
 
 /**
- * Handles DELETE requests for deleting a location.
- * @param request The incoming request
- * @param context
- * @returns A JSON response indicating the result of the deletion
+ * POST /api/location - create a new location
  */
-export async function DELETE(request: NextRequest, context: any) {
+export async function POST(request: NextRequest) {
   try {
-    const { id } = context.params;
-    if (!id) {
-      return NextResponse.json({ error: 'Location ID is required' }, { status: 400 });
+    const body = await request.json();
+    const {
+      name,
+      address1,
+      address2,
+      city,
+      state,
+      zipcode,
+      country,
+      picture,
+    } = body || {};
+
+    if (!name || !address1 || !city || !state || !zipcode || !country) {
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    await deleteLocation(id);
+    const created = await createLocation({
+      name,
+      address1,
+      address2: address2 ?? undefined,
+      city,
+      state,
+      zipcode,
+      country,
+      picture: picture ?? undefined,
+    });
 
-    return NextResponse.json({ message: 'Location deleted successfully' });
+    return NextResponse.json(created, { status: 201 });
   } catch (error: Error | any) {
     return getResponseError(error);
   }

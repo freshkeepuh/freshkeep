@@ -16,3 +16,24 @@
   padding: 1.5rem;
   min-height: 500px;
 }
+
+/* Scrollable list area to cap height around 4 cards */
+.listScroll {
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 0.25rem; /* keep content away from scrollbar */
+}
+
+/* Optional nicer scrollbar for WebKit */
+.listScroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.listScroll::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.listSection h4 {
+  margin-bottom: 0.75rem;
+}

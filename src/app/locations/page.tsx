@@ -28,7 +28,7 @@ const LocationsPage = () => {
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch('/api/locations', { cache: 'no-store' });
+  const res = await fetch('/api/location', { cache: 'no-store' });
         if (!res.ok) return;
         const data = (await res.json()) as Location[];
         if (!cancelled) setLocations(data ?? []);
@@ -43,7 +43,7 @@ const LocationsPage = () => {
 
   // Re-sync helper function
   const reloadLocations = async () => {
-    const res = await fetch('/api/locations', { cache: 'no-store' });
+  const res = await fetch('/api/location', { cache: 'no-store' });
     if (!res.ok) return;
     const data = (await res.json()) as Location[];
     setLocations(data ?? []);
@@ -51,17 +51,17 @@ const LocationsPage = () => {
 
   // Inline edit: only name and address1
   const handleEditLocation = async (id: string, name: string, address: string) => {
-    await fetch('/api/locations', {
+    await fetch(`/api/location/${encodeURIComponent(id)}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id, name, address1: address }),
+      body: JSON.stringify({ name, address1: address }),
     });
     await reloadLocations();
   };
 
   // Delete location
   const handleDeleteLocation = async (id: string) => {
-    await fetch(`/api/locations?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+    await fetch(`/api/location/${encodeURIComponent(id)}`, { method: 'DELETE' });
     await reloadLocations();
   };
 
@@ -81,7 +81,7 @@ const LocationsPage = () => {
     const num = getNextAutoNumber();
     const name = `New location ${num}`;
 
-    await fetch('/api/locations', {
+    await fetch('/api/location', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -126,7 +126,7 @@ const LocationsPage = () => {
         {/* Title */}
         <Row className={`mb-4 align-items-center ${styles.titleRow}`}>
           <Col>
-            <h1 className="m-0">Location Management</h1>
+            <h1 className="m-0">Locations</h1>
           </Col>
         </Row>
 
@@ -134,9 +134,11 @@ const LocationsPage = () => {
           {/* Location List */}
           <Col md={4}>
             <div className={`d-flex flex-column h-100 ${styles.panel}`}>
-              <div>
-                <h4>Locations</h4>
-                <ul className="list-unstyled">{locationsList}</ul>
+              <div className={styles.listSection}>
+                <h4>Your Locations</h4>
+                <div className={styles.listScroll}>
+                  <ul className="list-unstyled mb-0">{locationsList}</ul>
+                </div>
               </div>
             </div>
           </Col>
