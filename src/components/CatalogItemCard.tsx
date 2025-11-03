@@ -4,26 +4,26 @@ import Badge from 'react-bootstrap/Badge';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-interface GroceryItemCardProps {
+interface CatalogItemCardProps {
   picture: string;
-  groceryItemTitle: string;
+  catalogItemTitle: string;
   storeName: string;
   storageType: string;
-  groceryItemType: string;
+  catalogItemType: string;
   inList: boolean;
 }
 
-const GroceryItemCard = ({
+const CatalogItemCard = ({
   picture,
-  groceryItemTitle,
+  catalogItemTitle,
   storeName,
   storageType,
-  groceryItemType,
+  catalogItemType,
   inList,
-}: GroceryItemCardProps) => {
+}: CatalogItemCardProps) => {
   // Placeholder function for handling add/remove button click
   const handleButtonClick = () => {
-    console.log(`${inList ? 'Removing' : 'Adding'} ${groceryItemTitle} ${inList ? 'from' : 'to'} list`);
+    console.log(`${inList ? 'Removing' : 'Adding'} ${catalogItemTitle} ${inList ? 'from' : 'to'} list`);
   };
 
   // Placeholder function for handling image error
@@ -57,7 +57,7 @@ const GroceryItemCard = ({
         />
 
         <Card.Body>
-          <Card.Title>{groceryItemTitle}</Card.Title>
+          <Card.Title>{catalogItemTitle}</Card.Title>
 
           <Row className="mb-2">
             <Col>
@@ -70,7 +70,7 @@ const GroceryItemCard = ({
             </Col>
             <Col>
               <Card.Text className="mb-1">Type:</Card.Text>
-              <Badge bg="secondary">{groceryItemType}</Badge>
+              <Badge bg="secondary">{catalogItemType}</Badge>
             </Col>
           </Row>
 
@@ -85,4 +85,4 @@ const GroceryItemCard = ({
   );
 };
 
-export default GroceryItemCard;
+export default CatalogItemCard;

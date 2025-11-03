@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-one-expression-per-line */
+
 'use client';
 
 import React, { ChangeEvent, useEffect, useState } from 'react';
@@ -14,7 +16,9 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Modal from 'react-bootstrap/Modal';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { ProductCategory } from '@prisma/client';
-import { createGroceryItem } from '@/lib/dbCatalogActions';
+import { createCatalogItem } from '@/lib/dbCatalogActions';
+import { Image } from 'react-bootstrap';
+import './createCatalogItem.css';
 
 // Google Custom Search API Configuration
 const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
@@ -83,7 +87,7 @@ const getCategorySearchContext = (category: ProductCategory | ''): string => {
 
 const storageOptions = ['Pantry', 'Refrigerator', 'Freezer', 'Counter', 'Cabinet', 'Other'];
 
-const CreateGroceryItemForm = () => {
+const CreateCatalogItemForm = () => {
   const { data: session } = useSession();
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -130,8 +134,8 @@ const CreateGroceryItemForm = () => {
   const buildEnhancedQuery = (query: string, attempt: number = 0): string => {
     const categoryContext = getCategorySearchContext(formData.category);
 
-    const exclusions =
-      '-logo -icon -tech -electronics -company -corporation -brand -iphone -ipad -macbook -laptop -computer -app -software';
+    const exclusions = `-logo-icon -tech -electronics -company -corporation -brand 
+      -iphone -ipad -macbook -laptop -computer -app -software`;
 
     const strategies = [
       `"${query}" ${categoryContext} ${exclusions}`,
@@ -156,9 +160,20 @@ const CreateGroceryItemForm = () => {
       const currentAttempt = attemptOverride !== undefined ? attemptOverride : searchAttempt;
       const enhancedQuery = buildEnhancedQuery(query, currentAttempt);
 
-      const apiUrl = `https://www.googleapis.com/customsearch/v1?key=${GOOGLE_API_KEY}&cx=${GOOGLE_CX}&q=${encodeURIComponent(
-        enhancedQuery,
-      )}&searchType=image&num=10&imgSize=medium&safe=active&imgType=photo&imgColorType=color&fileType=jpg,png`;
+      const params = new URLSearchParams({
+        key: GOOGLE_API_KEY ?? '',
+        cx: GOOGLE_CX ?? '',
+        q: enhancedQuery,
+        searchType: 'image',
+        num: '10',
+        imgSize: 'medium',
+        safe: 'active',
+        imgType: 'photo',
+        imgColorType: 'color',
+        fileType: 'jpg,png',
+      });
+
+      const apiUrl = `https://www.googleapis.com/customsearch/v1?${params.toString()}`;
 
       console.log('Search attempt:', currentAttempt);
       console.log('Enhanced query:', enhancedQuery);
@@ -182,7 +197,7 @@ const CreateGroceryItemForm = () => {
 
       if (!data.items || data.items.length === 0) {
         setSearchError(
-          'No images found with this search strategy. Try clicking "Try Different Results" or entering a different term.',
+          'No images found with this search. Try clicking "Try Different Results" or entering a different term.',
         );
         setSearchResults([]);
       } else {
@@ -213,24 +228,21 @@ const CreateGroceryItemForm = () => {
   const handleImageClick = (imageUrl: string) => {
     setSelectedImageUrl(imageUrl);
     setImagePreview(imageUrl);
-    setImageFile(null); // Clear any uploaded file
-    setShowImageSearch(false); // Close modal
+    setImageFile(null);
+    setShowImageSearch(false);
     setMessage({ type: 'success', text: '✓ Image selected from Google search!' });
 
-    // Clear success message after 3 seconds
     setTimeout(() => {
       setMessage(null);
     }, 3000);
   };
 
-  // Auto-populate search with item name
   useEffect(() => {
     if (formData.name) {
       setSearchQuery(formData.name);
     }
   }, [formData.name]);
 
-  // Revoke object URL when component unmounts
   useEffect(
     () => () => {
       if (imagePreview && imageFile) {
@@ -333,9 +345,9 @@ const CreateGroceryItemForm = () => {
         }
       }
 
-      setUploadProgress('Creating grocery item...');
+      setUploadProgress('Creating catalog item...');
 
-      await createGroceryItem({
+      await createCatalogItem({
         name: formData.name,
         category: formData.category as ProductCategory,
         storeName: formData.storeName,
@@ -343,7 +355,7 @@ const CreateGroceryItemForm = () => {
         picture: finalImageUrl,
       });
 
-      setMessage({ type: 'success', text: 'Grocery item created successfully! Redirecting...' });
+      setMessage({ type: 'success', text: 'Catalog item created successfully! Redirecting...' });
 
       setFormData({
         name: '',
@@ -358,16 +370,23 @@ const CreateGroceryItemForm = () => {
         router.push('/catalog');
       }, 1500);
     } catch (error) {
-      console.error('Error creating grocery item:', error);
-      setMessage({ type: 'error', text: 'Failed to create grocery item. Please try again.' });
+      console.error('Error creating catalog item:', error);
+      setMessage({ type: 'error', text: 'Failed to create catalog item. Please try again.' });
     } finally {
       setLoading(false);
       setUploadProgress(null);
     }
   };
 
+  const PLACEHOLDER_SVG = `<svg xmlns="http://www.w3.org/2000/svg" 
+    width="150" height="150"><rect fill="#ddd" 
+    width="150" height="150"/><text fill="#999" 
+    x="50%" y="50%" text-anchor="middle" dy=".3em">No Image</text></svg>`;
+
+  const PLACEHOLDER_SVG_DATA_URL = `data:image/svg+xml,${encodeURIComponent(PLACEHOLDER_SVG)}`;
+
   return (
-    <div style={{ backgroundColor: '#f0f8f0', minHeight: '100vh', padding: '2rem 0' }}>
+    <div className="create-catalog-page" style={{ backgroundColor: '#f0f8f0', minHeight: '100vh', padding: '2rem 0' }}>
       <Container>
         <Row className="mb-5">
           <Col className="text-center">
@@ -427,7 +446,7 @@ const CreateGroceryItemForm = () => {
                   <Row>
                     <Col md={6}>
                       <Form.Group className="mb-4">
-                        <Form.Label className="fw-bold">Grocery Item Name *</Form.Label>
+                        <Form.Label className="fw-bold">Catalog Item Name *</Form.Label>
                         <Form.Control
                           type="text"
                           name="name"
@@ -552,7 +571,7 @@ const CreateGroceryItemForm = () => {
                       }}
                     >
                       {imagePreview ? (
-                        <img
+                        <Image
                           src={imagePreview}
                           alt="Preview"
                           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
@@ -582,7 +601,7 @@ const CreateGroceryItemForm = () => {
 
                     <Button
                       variant={imagePreview ? 'outline-success' : 'success'}
-                      onClick={() => document.getElementById('grocery-image')?.click()}
+                      onClick={() => document.getElementById('catalog-image')?.click()}
                       disabled={loading}
                       size="lg"
                     >
@@ -599,7 +618,7 @@ const CreateGroceryItemForm = () => {
                             URL.revokeObjectURL(imagePreview);
                           }
                           setImagePreview(null);
-                          const input = document.getElementById('grocery-image') as HTMLInputElement | null;
+                          const input = document.getElementById('catalog-image') as HTMLInputElement | null;
                           if (input) input.value = '';
                         }}
                         disabled={loading}
@@ -610,7 +629,7 @@ const CreateGroceryItemForm = () => {
                   </div>
 
                   <Form.Control
-                    id="grocery-image"
+                    id="catalog-image"
                     name="image"
                     type="file"
                     accept="image/*"
@@ -659,9 +678,10 @@ const CreateGroceryItemForm = () => {
       <Modal show={showImageSearch} onHide={() => setShowImageSearch(false)} size="xl">
         <Modal.Header closeButton className="bg-light">
           <Modal.Title>
-            <span className="text-success">🔍</span> Google Image Search
+            <span className="text-success">🔍</span>
+            <span>Google Image Search</span>
             {formData.category && (
-              <small className="text-muted ms-2">(Category: {getCategoryDisplayName(formData.category)})</small>
+              <small className="text-muted ms-2">( Category: {getCategoryDisplayName(formData.category)})</small>
             )}
           </Modal.Title>
         </Modal.Header>
@@ -678,7 +698,7 @@ const CreateGroceryItemForm = () => {
               <Button variant="success" type="submit" disabled={searching || !searchQuery.trim()}>
                 {searching ? (
                   <>
-                    <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                    <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" />
                     Searching...
                   </>
                 ) : (
@@ -717,17 +737,28 @@ const CreateGroceryItemForm = () => {
             <>
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <Alert variant="success" className="mb-0 flex-grow-1 me-2">
-                  <strong>✨ Click any image to select it!</strong> Found {searchResults.length} results.
+                  <strong>Click any image to select it</strong>
+                  <span> Found </span>
+                  {searchResults.length}
+                  <span> results.</span>
                 </Alert>
                 <Button variant="outline-success" onClick={handleTryDifferentResults} disabled={searching}>
                   🔄 Try Different Results
                 </Button>
               </div>
               <Row>
-                {searchResults.map((result, index) => (
-                  <Col key={index} xs={6} md={4} lg={3} className="mb-3">
+                {searchResults.map((result) => (
+                  <Col key={result.link} xs={6} md={4} lg={3} className="mb-3">
                     <div
+                      role="button"
+                      tabIndex={0}
                       onClick={() => handleImageClick(result.link)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          handleImageClick(result.link);
+                        }
+                      }}
                       style={{
                         cursor: 'pointer',
                         border: '2px solid #dee2e6',
@@ -738,7 +769,7 @@ const CreateGroceryItemForm = () => {
                       }}
                       className="image-card"
                     >
-                      <img
+                      <Image
                         src={result.image.thumbnailLink}
                         alt={result.title}
                         style={{
@@ -748,8 +779,7 @@ const CreateGroceryItemForm = () => {
                           display: 'block',
                         }}
                         onError={(e) => {
-                          (e.target as HTMLImageElement).src =
-                            'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="150" height="150"%3E%3Crect fill="%23ddd" width="150" height="150"/%3E%3Ctext fill="%23999" x="50%25" y="50%25" text-anchor="middle" dy=".3em"%3ENo Image%3C/text%3E%3C/svg%3E';
+                          (e.target as HTMLImageElement).src = PLACEHOLDER_SVG_DATA_URL;
                         }}
                       />
                       <div className="image-overlay">
@@ -784,54 +814,14 @@ const CreateGroceryItemForm = () => {
           {!searching && searchResults.length === 0 && !searchError && (
             <div className="text-center text-muted py-5">
               <div className="display-1 mb-3">🔍</div>
-              <p className="mb-0">Enter a search term and click "Search"</p>
+              <p className="mb-0">Enter a search term and click &quot;Search&quot;</p>
               <small>Enhanced search will use category context automatically</small>
             </div>
           )}
         </Modal.Body>
       </Modal>
-
-      <style jsx global>{`
-        .image-card {
-          position: relative;
-        }
-
-        .image-card:hover {
-          border-color: #28a745 !important;
-          box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
-          transform: translateY(-4px);
-        }
-
-        .image-overlay {
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: rgba(40, 167, 69, 0);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: all 0.2s;
-          opacity: 0;
-        }
-
-        .image-card:hover .image-overlay {
-          background: rgba(40, 167, 69, 0.85);
-          opacity: 1;
-        }
-
-        .select-badge {
-          background: white;
-          color: #28a745;
-          padding: 8px 16px;
-          border-radius: 20px;
-          font-weight: bold;
-          font-size: 14px;
-        }
-      `}</style>
     </div>
   );
 };
 
-export default CreateGroceryItemForm;
+export default CreateCatalogItemForm;
