@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Row, Col, Container, Card, Button, ListGroup } from 'react-bootstrap';
+import swal from 'sweetalert';
 // components
 import StorageList, { StorageType } from '@/components/dashboard/StorageList';
 import AddStorageModal, { NewStorageData } from '@/components/dashboard/AddStorageModal';
@@ -16,36 +17,73 @@ const DashboardPage = () => {
 
   const [storages, setStorages] = useState<StorageType[]>([]);
   const [totalItems, setTotalItems] = useState(0);
+  const [locations, setLocations] = useState<{ id: string; name: string }[]>([]);
   const [expiringSoon, setExpiringSoon] = useState(0);
   const [shoppingListCount, setShoppingListCount] = useState(0);
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
-    // Mock data
-    const mockData: StorageType[] = [
-      { id: 1, name: 'Kitchen Fridge', type: 'Fridge', itemCount: 5 },
-      { id: 2, name: 'Garage Freezer', type: 'Freezer', itemCount: 8 },
-      { id: 3, name: 'House Pantry', type: 'Pantry', itemCount: 10 },
-    ];
-    setStorages(mockData);
-    setTotalItems(mockData.reduce((sum, s) => sum + (s.itemCount || 0), 0));
-    setExpiringSoon(3);
-    setShoppingListCount(5);
+    const load = async () => {
+      try {
+        const [storagesRes, locationsRes] = await Promise.all([
+          fetch('/api/storages', { cache: 'no-store' }),
+          fetch('/api/locations', { cache: 'no-store' }),
+        ]);
+        if (storagesRes.ok) {
+          const data: StorageType[] = await storagesRes.json();
+          setStorages(data);
+          setTotalItems(data.reduce((sum, s) => sum + (s.itemCount || 0), 0));
+        } else {
+          setStorages([]);
+          setTotalItems(0);
+        }
+        if (locationsRes.ok) {
+          const locs: { id: string; name: string }[] = await locationsRes.json();
+          setLocations(locs.map(l => ({ id: l.id, name: l.name })));
+        } else {
+          setLocations([]);
+        }
+      } finally {
+        setExpiringSoon(3);
+        setShoppingListCount(5);
+      }
+    };
+    load().catch(err => {
+      console.error('Failed to load dashboard data', err);
+    });
   }, []);
 
-  const handleAddStorage = (newStorage: NewStorageData) => {
-    const newEntry: StorageType = {
-      id: Date.now(),
-      ...newStorage,
-      itemCount: Number(newStorage.itemCount) || 0,
-    };
-    setStorages((prev) => [...prev, newEntry]);
-    setTotalItems((prev) => prev + (newEntry.itemCount || 0));
-  };
+  const locationsById = useMemo(() => {
+    const map: Record<string, string> = {};
+    for (const l of locations) map[l.id] = l.name;
+    return map;
+  }, [locations]);
 
-  const handleRemoveStorage = (id: number, count: number) => {
-    setStorages((prev) => prev.filter((s) => s.id !== id));
-    setTotalItems((prev) => prev - count);
+  const handleAddStorage = async (newStorage: NewStorageData) => {
+    try {
+      const response = await fetch('/api/storages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: newStorage.name,
+          type: newStorage.type,
+          locId: null, // Default to no location
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to add storage');
+      }
+
+      const createdStorage: StorageType = await response.json();
+      setStorages((prev) => [...prev, createdStorage]);
+      setTotalItems((prev) => prev + (createdStorage.itemCount || 0));
+    } catch (error) {
+      console.error('Error adding storage:', error);
+      const message = error instanceof Error ? error.message : 'Failed to add storage';
+      await swal('Error', message, 'error');
+    }
   };
 
   return (
@@ -120,21 +158,15 @@ const DashboardPage = () => {
               <div className={styles.storageHeader}>
                 <h2>Your Storage Units</h2>
                 <Button
-                  className={`ms-2 ${styles.btnGreen}`}
-                  onClick={() => router.push('/locations')}
+                  aria-label="Add Storage"
+                  className={`ms-2 ${styles.btnGreen} ${styles.roundBtn}`}
+                  onClick={() => setShowModal(true)}
                 >
-                  + Add Item
+                  +
                 </Button>
               </div>
-
-              <div className="mt-3 d-flex gap-2 flex-wrap">
-                <Button className={styles.btnBlue} onClick={() => setShowModal(true)}>
-                  + Add Storage
-                </Button>
-              </div>
-
               {/* Storage Units */}
-              <StorageList storages={storages} onRemove={handleRemoveStorage} />
+              <StorageList storages={storages} locationsById={locationsById} />
             </Card.Body>
           </Card>
         </Col>
