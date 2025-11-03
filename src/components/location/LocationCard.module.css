@@ -1,0 +1,82 @@
+.card {
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  border-color: #ced4da;
+}
+
+.cardEditing {
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 2px solid var(--bs-success, #28a745);
+  box-shadow: 0 4px 16px rgba(40, 167, 69, 0.15);
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+  padding: 1rem;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.title {
+  margin: 0;
+  font-weight: 700;
+  color: #212529;
+}
+
+.input {
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: inherit;
+}
+
+.inputName {
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-weight: 700;
+  flex: 1 1 auto;
+  margin-right: 0.5rem;
+}
+
+.addressText {
+  color: #6c757d;
+  font-size: 0.875rem;
+}
+
+/* Buttons */
+.iconBtn {
+  padding: 0.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconBtn + .iconBtn {
+  margin-left: 0.5rem; /* spacing between icon buttons */
+}
+
+/* Focus styles for better a11y */
+.input:focus,
+.inputName:focus {
+  outline: none;
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+/* Saving state */
+.saving {
+  opacity: 0.65;
+}

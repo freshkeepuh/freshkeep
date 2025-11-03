@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Spinner } from 'react-bootstrap';
 import { Pencil, Trash, Check, X } from 'react-bootstrap-icons';
+import styles from './LocationCard.module.css';
 
 interface LocationCardProps {
   id: string;
@@ -10,12 +11,14 @@ interface LocationCardProps {
   address: string;
   onEdit: (id: string, name: string, address: string) => void;
   onDelete: (id: string) => void;
+  className?: string;
 }
 
-const LocationCard = ({ id, name, address, onEdit, onDelete }: LocationCardProps) => {
+const LocationCard = ({ id, name, address, onEdit, onDelete, className }: LocationCardProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState(name);
   const [editAddress, setEditAddress] = useState(address);
+  const [saving, setSaving] = useState(false);
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -23,9 +26,14 @@ const LocationCard = ({ id, name, address, onEdit, onDelete }: LocationCardProps
     setEditAddress(address);
   };
 
-  const handleSaveClick = () => {
-    onEdit(id, editName, editAddress);
-    setIsEditing(false);
+  const handleSaveClick = async () => {
+    try {
+      setSaving(true);
+      await Promise.resolve(onEdit(id, editName, editAddress));
+      setIsEditing(false);
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleCancelClick = () => {
@@ -36,47 +44,36 @@ const LocationCard = ({ id, name, address, onEdit, onDelete }: LocationCardProps
 
   if (isEditing) {
     return (
-      <li
-        className="d-flex flex-column mb-3 p-3"
-        style={{
-          background: '#f8f9fa', // Slightly different background to indicate edit mode
-          borderRadius: '8px',
-          border: '2px solid #28a745',
-          boxShadow: '0 4px 16px rgba(40, 167, 69, 0.15)',
-        }}
-      >
+      <li className={[styles.item, styles.cardEditing, saving ? styles.saving : '', className].filter(Boolean).join(' ')}>
         {/* Edit form */}
-        <div className="d-flex align-items-center justify-content-between mb-2">
+        <div className={styles.row}>
           <Form.Control
             type="text"
             value={editName}
             onChange={(e) => setEditName(e.target.value)}
             size="sm"
-            className="fw-bold"
+            className={styles.inputName}
+            disabled={saving}
             placeholder="Location name"
-            style={{
-              flex: 1,
-              marginRight: '0.5rem',
-              border: '1px solid #ced4da',
-              borderRadius: '4px',
-            }}
           />
           <span>
             <Button
               variant="success"
               size="sm"
-              className="me-2 p-1"
+              className={styles.iconBtn}
               aria-label={`Save ${editName}`}
               onClick={handleSaveClick}
+              disabled={saving}
             >
-              <Check />
+              {saving ? <Spinner animation="border" size="sm" /> : <Check />}
             </Button>
             <Button
               variant="danger"
               size="sm"
-              className="p-1"
+              className={styles.iconBtn}
               aria-label="Cancel editing"
               onClick={handleCancelClick}
+              disabled={saving}
             >
               <X />
             </Button>
@@ -90,11 +87,8 @@ const LocationCard = ({ id, name, address, onEdit, onDelete }: LocationCardProps
             onChange={(e) => setEditAddress(e.target.value)}
             size="sm"
             placeholder="Address"
-            style={{
-              border: '1px solid #ced4da',
-              borderRadius: '4px',
-              fontSize: 'inherit',
-            }}
+            className={styles.input}
+            disabled={saving}
           />
         </div>
       </li>
@@ -102,22 +96,15 @@ const LocationCard = ({ id, name, address, onEdit, onDelete }: LocationCardProps
   }
 
   return (
-    <li
-      className="d-flex flex-column mb-3 p-3"
-      style={{
-        background: '#f8f9fa',
-        borderRadius: '8px',
-        border: '1px solid #dee2e6',
-      }}
-    >
+    <li className={[styles.item, styles.card, className].filter(Boolean).join(' ')}>
       {/* Header with name and action buttons */}
-      <div className="d-flex align-items-center justify-content-between mb-2">
-        <h6 className="mb-0 fw-bold text-dark">{name}</h6>
+      <div className={styles.row}>
+        <h6 className={styles.title}>{name}</h6>
         <span>
           <Button
             variant="outline-dark"
             size="sm"
-            className="me-2 p-1"
+            className={styles.iconBtn}
             aria-label={`Edit ${name}`}
             onClick={handleEditClick}
           >
@@ -126,7 +113,7 @@ const LocationCard = ({ id, name, address, onEdit, onDelete }: LocationCardProps
           <Button
             variant="outline-danger"
             size="sm"
-            className="p-1"
+            className={styles.iconBtn}
             aria-label={`Delete ${name}`}
             onClick={() => onDelete(id)}
           >
@@ -135,7 +122,7 @@ const LocationCard = ({ id, name, address, onEdit, onDelete }: LocationCardProps
         </span>
       </div>
       {/* Address */}
-      <div className="text-muted small">
+      <div className={styles.addressText}>
         <strong>Address: </strong>
         {address}
       </div>

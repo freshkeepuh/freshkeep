@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { Plus } from 'react-bootstrap-icons';
-import LocationCard from '../../components/LocationCard';
-import MapComponent from '../../components/Map';
+import LocationCard from '../../components/location/LocationCard';
+import MapComponent from '../../components/MapDisplay';
 import styles from './page.module.css';
 
 interface Location {
