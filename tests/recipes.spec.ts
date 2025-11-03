@@ -53,7 +53,7 @@ test.describe('Recipes (no code changes)', () => {
     await expect(page.getByRole('article')).toHaveCount(expected);
   });
 
-  test('Ingredient chips add/remove/dedupe ("Tomato")', async ({ page }) => {
+  test('Ingredient chips add/remove/deduplication ("Tomato")', async ({ page }) => {
     // Ingredient input uses placeholder "example: tomato, beef"
     await page.getByPlaceholder('example: tomato, beef').fill('Tomato');
     await page.getByRole('button', { name: 'Add' }).click();
