@@ -32,8 +32,9 @@ export default function FavoriteHeart({ recipeId, variant = 'oncard' }: Props) {
 
   // Toggle with optimistic UI; revert if the request fails
   const toggle = async () => {
+    const wasFavorite = isFavorite;
     setIsFavorite((v) => !v);
-    const method = isFavorite ? 'DELETE' : 'POST';
+    const method = wasFavorite ? 'DELETE' : 'POST';
     const res = await fetch(`/api/recipes/${recipeId}/favorite`, { method });
     if (!res.ok) {
       setIsFavorite((v) => !v);
