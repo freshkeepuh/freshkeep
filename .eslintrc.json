@@ -21,7 +21,6 @@
     "react/jsx-props-no-spreading": "off",
     "react/one-expression-per-line": "off",
     "react/react-in-jsx-scope": "off",
-    "react/require-default-props": "off",
-     "singleAttributePerLine": "off"
+    "react/require-default-props": "off"
   }
 }
