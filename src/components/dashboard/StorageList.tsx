@@ -41,7 +41,7 @@ export default function StorageList({ storages, onRemove }: StorageListProps) {
             <Card.Body className="text-center">
               <div className={styles.storageIcon}>{getIcon(storage.type)}</div>
               <Card.Title>{storage.name}</Card.Title>
-              <Card.Subtitle>{storage.location}</Card.Subtitle>
+              <Card.Subtitle>{storage.type}</Card.Subtitle>
               <Card.Text>
                 {storage.itemCount || 0}
                 {' '}

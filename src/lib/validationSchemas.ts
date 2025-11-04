@@ -45,17 +45,18 @@ export const AddStorageSchema = Yup.object({
   type: Yup.mixed<StorageType>()
     .oneOf(Object.values(StorageType))
     .required(),
-  picture: Yup.string().url('Must be a valid URL').required(),
-  items: Yup.array().of(Yup.object({
+  picture: Yup.string().url('Must be a valid URL').nullable(),
+  instances: Yup.array().of(Yup.object().shape({
     picture: Yup.string().url('Must be a valid URL').nullable(),
     id: Yup.string().required(),
     locId: Yup.string().required(),
-    conId: Yup.string().required(),
+    storId: Yup.string().required(),
+    prodId: Yup.string().required(),
     grocId: Yup.string().required(),
     unitId: Yup.string().required(),
     quantity: Yup.number().positive().required(),
     expiresAt: Yup.date().nullable(),
-  })),
+  })).nullable(),
 });
 
 export const EditStorageSchema = Yup.object({
@@ -66,7 +67,7 @@ export const EditStorageSchema = Yup.object({
     .oneOf(Object.values(StorageType))
     .required(),
   picture: Yup.string().url('Must be a valid URL').nullable(),
-  items: Yup.array().of(Yup.object({
+  instances: Yup.array().of(Yup.object().shape({
     picture: Yup.string().url('Must be a valid URL').nullable(),
     id: Yup.string().required(),
     locId: Yup.string().required(),

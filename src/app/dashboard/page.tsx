@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+
 'use client';
 
 import React, { useEffect, useState } from 'react';
@@ -24,10 +26,9 @@ const DashboardPage = () => {
   useEffect(() => {
     // Mock data
     const mockData: StorageType[] = [
-      // eslint-disable-next-line max-len
-      { id: 1, name: 'Kitchen Fridge', location: 'Main House 123 Ave Honolulu, HI 96814', type: 'Fridge', itemCount: 5 },
-      { id: 2, name: 'Garage Freezer', location: 'Guest House', type: 'Freezer', itemCount: 8 },
-      { id: 3, name: 'House Pantry', location: 'Main House 123 Ave Honolulu, HI 96814', type: 'Pantry', itemCount: 10 },
+      { id: 1, name: 'Kitchen Fridge', location: 'Main House - 123 Ave Honolulu, HI 96814', type: 'Fridge', itemCount: 5 },
+      { id: 2, name: 'Garage Freezer', location: 'Guest House - 456 Ave Honolulu, HI 96814', type: 'Freezer', itemCount: 8 },
+      { id: 3, name: 'House Pantry', location: 'Main House - 123 Ave Honolulu, HI 96814', type: 'Pantry', itemCount: 10 },
     ];
     setStorages(mockData);
     setTotalItems(mockData.reduce((sum, s) => sum + (s.itemCount || 0), 0));
