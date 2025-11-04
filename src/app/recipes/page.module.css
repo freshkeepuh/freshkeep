@@ -290,7 +290,7 @@
 .rpFavOnDetail { position: relative; border: none; }
 
 .rpFavIcon { width: 27px; height: 29px; }
-.rpActionLabel { font-size: 1rem; color:#2d5f3e } 
+.rpActionLabel { font-size: 1rem; color: #2d5f3e } 
 
 /* icon color: active */
 .rpFavBtn[aria-pressed="true"]  .rpFavIcon,
