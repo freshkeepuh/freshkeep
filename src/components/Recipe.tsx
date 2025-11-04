@@ -252,7 +252,7 @@ export default function RecipesPage({ initialRecipes }: Props) {
                   ) : (
                     <div className={styles.rpNoImg}>No image</div>
                   )}
-                  <FavoriteHeart recipeId={r.id} variant="badge" />
+                  <FavoriteHeart recipeId={r.id} variant="oncard" />
                 </div>
                 <div className={styles.rpCardBody}>
                   <div className={styles.rpCardTitle}>

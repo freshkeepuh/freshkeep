@@ -270,35 +270,45 @@
 }
 /* badge on card image */
 .rpFavBtn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
   border: 0;
   background: rgba(255,255,255,.85);
   border-radius: 999px;
-  width: 45px;
-  height: 45px;
-  display: grid;
-  place-items: center;
+  width: 45px; height: 45px;
+  display: grid; place-items: center;
   cursor: pointer;
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
 }
+.rpFavBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0,0,0,.2);
 
-/* inline (slug page) */
-.rpFavInlineBtn {
-  background: transparent;
-  border: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
 }
-.rpFavIcon { width: 25px; height: 25px; }
+/* Placement in recipe list */
+.rpFavOnCard { position: absolute; top: 10px; right: 10px; z-index: 2; }
+
+/* Placement in detail page */
+.rpFavOnDetail { position: relative; border: none; }
+
+.rpFavIcon { width: 27px; height: 29px; }
 .rpActionLabel { font-size: 1rem; color:#2d5f3e } 
 
 /* icon color: active */
 .rpFavBtn[aria-pressed="true"]  .rpFavIcon,
-.rpFavInlineBtn[aria-pressed="true"] .rpFavIcon { color: #e03131; }
+.rpFavOnDetail[aria-pressed="true"] .rpFavIcon { color: #e03131; }
 
 /* icon color: inactive */
 .rpFavBtn[aria-pressed="false"] .rpFavIcon,
-.rpFavInlineBtn[aria-pressed="false"] .rpFavIcon { color: #2d5f3e; }
+.rpFavOnDetail[aria-pressed="false"] .rpFavIcon { color: #2d5f3e; }
+
+/* CSS tooltip */
+.rpFavOnDetail[data-tip]:hover::after{
+  content: attr(data-tip);
+  position: absolute;
+  top: 100%; left: 50%;
+  transform: translate(-50%, 8px);
+  background: #1ea968c4; color: #fff;
+  font-size: 15px; line-height: 1;
+  padding: 6px 8px;
+  border-radius: 6px;
+  z-index: 20;
+}

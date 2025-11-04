@@ -151,7 +151,7 @@ export default async function RecipeViewPage(props: any) {
                   <h1 className={styles.rpViewTitle}>{recipe.title}</h1>
 
                   {/* Favorite toggle */}
-                  <FavoriteHeart recipeId={recipe.id} variant="inline" withLabel />
+                  <FavoriteHeart recipeId={recipe.id} variant="ondetail" />
                 </div>
                 {/* Stats (time, difficulty, and diet) */}
                 <div className={styles.rpRow}>
