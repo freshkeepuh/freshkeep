@@ -184,7 +184,7 @@ const CatalogPage = () => {
           </div>
           <h3 className="text-muted">No items found</h3>
           <p className="text-muted mb-4">You haven&apos;t added any products yet.</p>
-          <Button variant="success" href="/createCroceryItem" size="lg">
+          <Button variant="success" href="/createCatalogItem" size="lg">
             <i className="bi bi-plus-circle me-2" />
             Add Your First Product
           </Button>
