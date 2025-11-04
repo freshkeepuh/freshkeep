@@ -1,10 +1,11 @@
 import { prisma } from '@/lib/prisma';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { ArrowBigLeft, Heart, Share } from 'lucide-react';
+import { ArrowBigLeft } from 'lucide-react';
 import Link from 'next/link';
 import styles from '@/app/recipes/page.module.css';
 import slugify from '@/lib/slug';
+import FavoriteHeart from '@/components/FavoriteHeart';
 
 export const dynamic = 'force-dynamic';
 
@@ -149,19 +150,9 @@ export default async function RecipeViewPage(props: any) {
                 >
                   <h1 className={styles.rpViewTitle}>{recipe.title}</h1>
 
-                  {/* Favorite / Share placeholder */}
-                  <div className={styles.rpRow} style={{ gap: 16, marginLeft: 16 }}>
-                    <button className={styles.rpActionBtn} type="button" aria-label="Favorite">
-                      <Heart size={26} />
-                      <span className={styles.rpActionLabel}>favorite</span>
-                    </button>
-                    <button className={styles.rpActionBtn} type="button" aria-label="Share">
-                      <Share size={26} />
-                      <span className={styles.rpActionLabel}>share</span>
-                    </button>
-                  </div>
+                  {/* Favorite toggle */}
+                  <FavoriteHeart recipeId={recipe.id} variant="inline" withLabel />
                 </div>
-
                 {/* Stats (time, difficulty, and diet) */}
                 <div className={styles.rpRow}>
                   <div className={styles.rpStatPill}>
@@ -196,8 +187,7 @@ export default async function RecipeViewPage(props: any) {
                 {/* Instruction Steps */}
                 <ol className={styles.rpSteps}>
                   {(() => {
-                    // To satisfy eslint rule: react/no-array-index-key
-                    // Build a stable key from the step text + occurrence count (no array index).
+                    // Build a stable key from the step text + occurrence count (no array index) to satisfy eslint rule
                     const seen = new Map<string, number>();
                     return instructions.map((step, idx) => {
                       const slug = step.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');

@@ -164,23 +164,6 @@
   flex: 1;
 }
 
-/* Action Buttons (favorite/share) */
-.rpActionBtn {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: 0;
-}
-
-.rpActionLabel {
-  font-size: 0.75rem;
-  color: #666;
-}
-
 /* Stats Pills */
 .rpStatPill {
   flex: 1;
@@ -285,3 +268,37 @@
     grid-template-columns: 1fr;
   }
 }
+/* badge on card image */
+.rpFavBtn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: 0;
+  background: rgba(255,255,255,.85);
+  border-radius: 999px;
+  width: 45px;
+  height: 45px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+/* inline (slug page) */
+.rpFavInlineBtn {
+  background: transparent;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.rpFavIcon { width: 25px; height: 25px; }
+.rpActionLabel { font-size: 1rem; color:#2d5f3e } 
+
+/* icon color: active */
+.rpFavBtn[aria-pressed="true"]  .rpFavIcon,
+.rpFavInlineBtn[aria-pressed="true"] .rpFavIcon { color: #e03131; }
+
+/* icon color: inactive */
+.rpFavBtn[aria-pressed="false"] .rpFavIcon,
+.rpFavInlineBtn[aria-pressed="false"] .rpFavIcon { color: #2d5f3e; }
