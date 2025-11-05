@@ -153,7 +153,7 @@ const CatalogItemCard = ({
                         pattern="[0-9]*"
                         value={inputValue}
                         onChange={(e) => {
-                          const newValue = e.target.value;
+                          const newValue = e.target.value.replace(/[^0-9]/g, '');
                           setInputValue(newValue);
                           const val = parseInt(newValue, 10);
                           if (Number.isFinite(val) && val > 0) {
