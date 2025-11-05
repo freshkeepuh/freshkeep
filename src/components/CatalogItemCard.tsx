@@ -116,12 +116,26 @@ const CatalogItemCard = ({
                     <ListUl size={24} className="text-secondary" />
                   </Col>
                   <Col xs="auto">
-                    <div className="d-flex align-items-center">
-                      <Button variant="outline-danger" size="sm" onClick={decreaseQuantity}>
+                    <div className="d-flex align-items-center border rounded-pill overflow-hidden">
+                      <Button
+                        variant="outline-danger"
+                        size="sm"
+                        onClick={decreaseQuantity}
+                        className="border-0 px-3 rounded-0"
+                        style={{ fontWeight: 'bold' }}
+                      >
                         -
                       </Button>
-                      <div className="px-3 fw-bold">{quantity}</div>
-                      <Button variant="outline-success" size="sm" onClick={increaseQuantity}>
+                      <div className="px-3 fw-bold" style={{ minWidth: '45px', textAlign: 'center' }}>
+                        {quantity}
+                      </div>
+                      <Button
+                        variant="outline-success"
+                        size="sm"
+                        onClick={increaseQuantity}
+                        className="border-0 px-3 rounded-0"
+                        style={{ fontWeight: 'bold' }}
+                      >
                         +
                       </Button>
                     </div>
