@@ -46,7 +46,7 @@ const LocationsPage = () => {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [selectedId]);
 
   // Re-sync helper function
   const reloadLocations = async () => {
@@ -138,7 +138,6 @@ const LocationsPage = () => {
     const target = sel || locations[0];
     return { id: target.id, name: target.name, address: target.address1 };
   })();
-  
 
   return (
     <main className={styles.main}>

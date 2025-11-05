@@ -12,7 +12,7 @@ export const runtime = 'nodejs';
  */
 export async function GET(request: NextRequest, context: any) {
   try {
-    const { id } = await context.params;
+    const { id } = context.params;
     if (!id) {
       return NextResponse.json({ error: 'Location ID is required' }, { status: 400 });
     }
@@ -37,7 +37,7 @@ export async function GET(request: NextRequest, context: any) {
  */
 export async function DELETE(request: NextRequest, context: any) {
   try {
-    const { id } = await context.params;
+    const { id } = context.params;
     if (!id) {
       return NextResponse.json({ error: 'Location ID is required' }, { status: 400 });
     }
@@ -55,7 +55,7 @@ export async function DELETE(request: NextRequest, context: any) {
  */
 export async function PUT(request: NextRequest, context: any) {
   try {
-    const { id } = await context.params;
+    const { id } = context.params;
     if (!id) {
       return NextResponse.json({ error: 'Location ID is required' }, { status: 400 });
     }

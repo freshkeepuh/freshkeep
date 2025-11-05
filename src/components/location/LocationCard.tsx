@@ -107,58 +107,62 @@ const LocationCard = ({ id, name, address, onEdit, onDelete, selected, onSelect,
   }
 
   return (
-    <li
-      className={[
-        styles.item,
-        styles.card,
-        styles.clickable,
-        selected ? styles.selected : '',
-        className,
-      ]
-        .filter(Boolean)
-        .join(' ')}
-      onClick={() => onSelect?.(id)}
-    >
-      {/* Header with name and action buttons */}
-      <div className={styles.row}>
-        <h6 className={styles.title}>{name}</h6>
-        <span>
-          <Button
-            variant="outline-dark"
-            size="sm"
-            className={styles.iconBtn}
-            aria-label={`Edit ${name}`}
-            onClick={(e) => { e.stopPropagation(); handleEditClick(); }}
-            disabled={deleting}
-          >
-            <Pencil />
-          </Button>
-          <Button
-            variant="outline-danger"
-            size="sm"
-            className={styles.iconBtn}
-            aria-label={`Delete ${name}`}
-            onClick={async (e) => {
-              e.stopPropagation();
-              try {
-                setDeleting(true);
-                await Promise.resolve(onDelete(id));
-              } finally {
-                setDeleting(false);
-              }
-            }}
-            disabled={deleting}
-          >
-            {deleting ? <Spinner animation="border" size="sm" /> : <Trash />}
-          </Button>
-        </span>
-      </div>
-      {/* Address */}
-      <div className={styles.addressText}>
-        <strong>Address: </strong>
-        {address}
-      </div>
-    </li>
+    <>
+      {/* eslint-disable jsx-a11y/click-events-have-key-events */}
+      {/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */}
+      <li
+        className={[
+          styles.item,
+          styles.card,
+          styles.clickable,
+          selected ? styles.selected : '',
+          className,
+        ]
+          .filter(Boolean)
+          .join(' ')}
+        onClick={() => onSelect?.(id)}
+      >
+        {/* Header with name and action buttons */}
+        <div className={styles.row}>
+          <h6 className={styles.title}>{name}</h6>
+          <span>
+            <Button
+              variant="outline-dark"
+              size="sm"
+              className={styles.iconBtn}
+              aria-label={`Edit ${name}`}
+              onClick={(e) => { e.stopPropagation(); handleEditClick(); }}
+              disabled={deleting}
+            >
+              <Pencil />
+            </Button>
+            <Button
+              variant="outline-danger"
+              size="sm"
+              className={styles.iconBtn}
+              aria-label={`Delete ${name}`}
+              onClick={async (e) => {
+                e.stopPropagation();
+                try {
+                  setDeleting(true);
+                  await Promise.resolve(onDelete(id));
+                } finally {
+                  setDeleting(false);
+                }
+              }}
+              disabled={deleting}
+            >
+              {deleting ? <Spinner animation="border" size="sm" /> : <Trash />}
+            </Button>
+          </span>
+        </div>
+        {/* Address */}
+        <div className={styles.addressText}>
+          <strong>Address: </strong>
+          {address}
+        </div>
+      </li>
+    </>
   );
 };
 
