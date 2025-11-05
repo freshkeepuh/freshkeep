@@ -110,41 +110,68 @@ const CatalogItemCard = ({
                 Add to list
               </Button>
             ) : (
-              <div className="bg-light rounded p-2 w-100">
+              <div className="rounded p-2 w-100">
                 <Row className="justify-content-center align-items-center">
                   <Col xs="auto">
                     <ListUl size={24} className="text-secondary" />
                   </Col>
                   <Col xs="auto">
-                    <div 
-                      className="d-flex align-items-center rounded-pill overflow-hidden" 
-                      style={{ border: '2px solid #adb5bd' }}>
+                    <div
+                      className="d-flex align-items-center rounded-pill overflow-hidden"
+                      style={{ border: '2px solid #adb5bd' }}
+                    >
                       <Button
-                        variant="outline-danger"
+                        variant="light"
                         size="sm"
                         onClick={decreaseQuantity}
-                        className="border-0 px-3 rounded-0 py-2"
-                        style={{ fontWeight: '900', fontSize: '1.2rem' }}
+                        className="border-0 px-3 rounded-0 py-2 fw-bold"
+                        style={{
+                          fontSize: '1.2rem',
+                          color: 'var(--bs-danger)',
+                        }}
+                        onMouseDown={(e) => (e.currentTarget.style.backgroundColor = 'var(--bs-danger)')}
+                        onMouseUp={(e) => {
+                          e.currentTarget.style.backgroundColor = 'var(--bs-light)';
+                          e.currentTarget.style.color = 'var(--bs-danger)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = 'var(--bs-light)';
+                          e.currentTarget.style.color = 'var(--bs-danger)';
+                        }}
                       >
                         −
                       </Button>
-                      <div 
-                        className="px-3 fw-bold border-start border-end d-flex align-items-center" 
-                        style={{ 
-                          minWidth: '45px', 
-                          textAlign: 'center', 
-                          borderColor: '#adb5bd !important',
-                          minHeight: '42px'
+                      <div
+                        className="px-3 fw-bold d-flex align-items-center bg-white"
+                        style={{
+                          minWidth: '45px',
+                          textAlign: 'center',
+                          minHeight: '42px',
                         }}
                       >
                         {quantity}
                       </div>
                       <Button
-                        variant="outline-success"
+                        variant="light"
                         size="sm"
                         onClick={increaseQuantity}
-                        className="border-0 px-3 rounded-0 py-2"
-                        style={{ fontWeight: '900', fontSize: '1.2rem' }}
+                        className="border-0 px-3 rounded-0 py-2 fw-bold"
+                        style={{
+                          fontSize: '1.2rem',
+                          color: 'var(--bs-success)',
+                        }}
+                        onMouseDown={(e) => {
+                          e.currentTarget.style.backgroundColor = 'var(--bs-success)';
+                          e.currentTarget.style.color = 'white';
+                        }}
+                        onMouseUp={(e) => {
+                          e.currentTarget.style.backgroundColor = 'var(--bs-light)';
+                          e.currentTarget.style.color = 'var(--bs-success)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = 'var(--bs-light)';
+                          e.currentTarget.style.color = 'var(--bs-success)';
+                        }}
                       >
                         +
                       </Button>
