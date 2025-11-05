@@ -120,7 +120,14 @@ const CatalogItemCard = ({
               <div className="rounded w-100" style={{ height: '46px' }}>
                 <Row className="justify-content-center align-items-center h-100">
                   <Col xs="auto">
-                    <ListUl size={24} className="text-secondary" />
+                    <Button
+                      variant="link"
+                      href="/shoppingList"
+                      className="p-0"
+                      style={{ color: 'var(--bs-secondary)' }}
+                    >
+                      <ListUl size={24} />
+                    </Button>
                   </Col>
                   <Col xs="auto">
                     <div
