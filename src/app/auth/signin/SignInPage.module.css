@@ -24,14 +24,14 @@
 
 /* Left side background (replace image path as needed) */
 .left {
-  background-image: url('/images/sign-up/bg-left6.png');
+  background-image: url('/images/sign-in/yellow-vegetable-bg.png');
   filter: saturate(1.1) brightness(1.1) hue-rotate(-10deg);
 }
 
 
 /* Right side background */
 .right {
-  background-image: url('/images/sign-up/bg-right2.png');
+  background-image: url('/images/sign-in/white-vegetable-bg.png');
 }
 
 /* Overlay layers for readability */
