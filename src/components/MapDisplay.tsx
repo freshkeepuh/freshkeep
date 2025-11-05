@@ -1,18 +1,18 @@
 'use client';
 
-import { APIProvider, Map } from '@vis.gl/react-google-maps';
+import { APIProvider, Map, Marker } from '@vis.gl/react-google-maps';
 import { useEffect, useState } from 'react';
 
 type LatLng = { lat: number; lng: number };
 const FALLBACK_CENTER: LatLng = { lat: 21.3099, lng: -157.8581 };
 
 type Props = {
-  firstLocation?: { id: string; name: string; address: string };
+  location?: { id: string; name: string; address: string };
 };
 
-const MapComponent = ({ firstLocation }: Props) => {
+const MapComponent = ({ location }: Props) => {
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-  const address = firstLocation?.address;
+  const address = location?.address;
   const [center, setCenter] = useState<LatLng>(FALLBACK_CENTER);
   const [ready, setReady] = useState(false);
 
@@ -62,19 +62,22 @@ const MapComponent = ({ firstLocation }: Props) => {
   }
 
   return (
-    <APIProvider apiKey={apiKey || ''}>
+    <APIProvider apiKey={apiKey || ''} libraries={['marker']}>
       <Map
         defaultZoom={15}
         defaultCenter={center}
         style={{ width: '100%', height: '400px' }}
         gestureHandling="greedy"
-      />
+      >
+        {/* Basic classic marker at the current center */}
+        <Marker position={center} />
+      </Map>
     </APIProvider>
   );
 };
 
 MapComponent.defaultProps = {
-  firstLocation: undefined,
+  location: undefined,
 };
 
 export default MapComponent;
