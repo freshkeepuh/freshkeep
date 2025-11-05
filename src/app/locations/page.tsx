@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Button, Col, Container, Form, Row, Spinner } from 'react-bootstrap';
-import { Plus, Search } from 'react-bootstrap-icons';
+import { Plus, Search, GeoAlt } from 'react-bootstrap-icons';
 import LocationCard from '../../components/location/LocationCard';
 import MapComponent from '../../components/MapDisplay';
 import styles from './page.module.css';
@@ -23,6 +23,7 @@ const LocationsPage = () => {
   const [locations, setLocations] = useState<Location[]>([]);
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | undefined>(undefined);
 
   // Initial load from API
   useEffect(() => {
@@ -32,7 +33,12 @@ const LocationsPage = () => {
         const res = await fetch('/api/location', { cache: 'no-store' });
         if (!res.ok) return;
         const data = (await res.json()) as Location[];
-        if (!cancelled) setLocations(data ?? []);
+        if (!cancelled) {
+          setLocations(data ?? []);
+          if (!selectedId && data && data.length > 0) {
+            setSelectedId(data[0].id);
+          }
+        }
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -48,6 +54,10 @@ const LocationsPage = () => {
     if (!res.ok) return;
     const data = (await res.json()) as Location[];
     setLocations(data ?? []);
+    // If nothing is selected, auto-select the first location
+    if (!selectedId && data && data.length > 0) {
+      setSelectedId(data[0].id);
+    }
   };
 
   // Inline edit: only name and address1
@@ -114,15 +124,21 @@ const LocationsPage = () => {
         address={l.address1}
         onEdit={handleEditLocation}
         onDelete={handleDeleteLocation}
+        selected={l.id === selectedId}
+        onSelect={(id) => setSelectedId(id)}
       />
     ));
   } else {
     locationsList = <li className="text-muted text-center p-3">No locations found.</li>;
   }
 
-  const firstLocationForMap = locations.length > 0
-    ? { id: locations[0].id, name: locations[0].name, address: locations[0].address1 }
-    : undefined;
+  const selectedForMap = (() => {
+    if (locations.length === 0) return undefined;
+    const sel = selectedId && locations.find(l => l.id === selectedId);
+    const target = sel || locations[0];
+    return { id: target.id, name: target.name, address: target.address1 };
+  })();
+  
 
   return (
     <main className={styles.main}>
@@ -130,7 +146,10 @@ const LocationsPage = () => {
         {/* Title */}
         <Row className={`mb-4 align-items-center ${styles.titleRow}`}>
           <Col>
-            <h1 className="m-0">Locations</h1>
+            <div className={styles.titleBar}>
+              <GeoAlt className="text-success" size={24} />
+              <h1 className={`m-0 ${styles.titleText}`}>Locations</h1>
+            </div>
           </Col>
         </Row>
 
@@ -159,7 +178,7 @@ const LocationsPage = () => {
                         </>
                       ) : (
                         <>
-                          <Plus className="me-1" />
+                          <Plus className="me-1" size={22} />
                           Add Location
                         </>
                       )}
@@ -198,7 +217,7 @@ const LocationsPage = () => {
               {/* Google Maps */}
               <Row>
                 <Col className="text-center">
-                  <MapComponent firstLocation={firstLocationForMap} />
+                  <MapComponent location={selectedForMap} />
                 </Col>
               </Row>
             </div>

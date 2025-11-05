@@ -11,10 +11,12 @@ interface LocationCardProps {
   address: string;
   onEdit: (id: string, name: string, address: string) => void;
   onDelete: (id: string) => Promise<void> | void;
+  selected?: boolean;
+  onSelect?: (id: string) => void;
   className?: string;
 }
 
-const LocationCard = ({ id, name, address, onEdit, onDelete, className }: LocationCardProps) => {
+const LocationCard = ({ id, name, address, onEdit, onDelete, selected, onSelect, className }: LocationCardProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState(name);
   const [editAddress, setEditAddress] = useState(address);
@@ -109,10 +111,13 @@ const LocationCard = ({ id, name, address, onEdit, onDelete, className }: Locati
       className={[
         styles.item,
         styles.card,
+        styles.clickable,
+        selected ? styles.selected : '',
         className,
       ]
         .filter(Boolean)
         .join(' ')}
+      onClick={() => onSelect?.(id)}
     >
       {/* Header with name and action buttons */}
       <div className={styles.row}>
@@ -123,7 +128,7 @@ const LocationCard = ({ id, name, address, onEdit, onDelete, className }: Locati
             size="sm"
             className={styles.iconBtn}
             aria-label={`Edit ${name}`}
-            onClick={handleEditClick}
+            onClick={(e) => { e.stopPropagation(); handleEditClick(); }}
             disabled={deleting}
           >
             <Pencil />
@@ -133,7 +138,8 @@ const LocationCard = ({ id, name, address, onEdit, onDelete, className }: Locati
             size="sm"
             className={styles.iconBtn}
             aria-label={`Delete ${name}`}
-            onClick={async () => {
+            onClick={async (e) => {
+              e.stopPropagation();
               try {
                 setDeleting(true);
                 await Promise.resolve(onDelete(id));

@@ -13,8 +13,21 @@
 .cardEditing {
   background: #f8f9fa;
   border-radius: 8px;
-  border: 2px solid var(--bs-success, #28a745);
+  border: 2px solid var(--bs-success, #66b378);
   box-shadow: 0 4px 16px rgba(40, 167, 69, 0.15);
+}
+
+/* Selected (non-editing) state */
+.selected {
+  /* Lighter green accent using Bootstrap success RGB when available */
+  border: 2px solid rgba(var(--bs-success-rgb, 25, 135, 84), 0.45);
+  box-shadow: 0 4px 16px rgba(25, 135, 84, 0.12);
+}
+
+/* When selected, hovering should not change appearance */
+.selected:hover {
+  border-color: rgba(var(--bs-success-rgb, 25, 135, 84), 0.45);
+  box-shadow: 0 4px 16px rgba(25, 135, 84, 0.12);
 }
 
 .item {
@@ -22,6 +35,10 @@
   flex-direction: column;
   margin-bottom: 1rem;
   padding: 1rem;
+}
+
+.clickable {
+  cursor: pointer;
 }
 
 .row {
