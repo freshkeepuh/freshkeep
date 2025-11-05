@@ -3,6 +3,8 @@ import Card from 'react-bootstrap/Card';
 import Badge from 'react-bootstrap/Badge';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import { useState } from 'react';
+import { ListUl } from 'react-bootstrap-icons';
 
 interface CatalogItemCardProps {
   picture: string;
@@ -21,9 +23,27 @@ const CatalogItemCard = ({
   catalogItemType,
   inList,
 }: CatalogItemCardProps) => {
+  const [isInList, setIsInList] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+
+  // Handle quantity changes
+  const decreaseQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    } else {
+      setQuantity(0);
+      setIsInList(false);
+    }
+  };
+
+  const increaseQuantity = () => {
+    setQuantity(quantity + 1);
+  };
+
   // Placeholder function for handling add/remove button click
   const handleButtonClick = () => {
-    console.log(`${inList ? 'Removing' : 'Adding'} ${catalogItemTitle} ${inList ? 'from' : 'to'} list`);
+    setIsInList(true);
+    setQuantity(1);
   };
 
   // Placeholder function for handling image error
@@ -75,9 +95,30 @@ const CatalogItemCard = ({
           </Row>
 
           <Row className="px-3">
-            <Button variant={inList ? 'danger' : 'success'} onClick={handleButtonClick}>
-              {inList ? 'Remove' : 'Add'}
-            </Button>
+            {!isInList ? (
+              <Button variant="success" onClick={handleButtonClick}>
+                Add to list
+              </Button>
+            ) : (
+              <div className="bg-light rounded p-2 w-100">
+                <Row className="justify-content-center align-items-center">
+                  <Col xs="auto">
+                    <ListUl size={24} className="text-secondary" />
+                  </Col>
+                  <Col xs="auto">
+                    <div className="d-flex align-items-center">
+                      <Button variant="outline-danger" size="sm" onClick={decreaseQuantity}>
+                        -
+                      </Button>
+                      <div className="px-3 fw-bold">{quantity}</div>
+                      <Button variant="outline-success" size="sm" onClick={increaseQuantity}>
+                        +
+                      </Button>
+                    </div>
+                  </Col>
+                </Row>
+              </div>
+            )}
           </Row>
         </Card.Body>
       </Card>
