@@ -79,22 +79,22 @@
     { "name": "Vacation Home", "address1": "123 Main St", "address2": "", "city": "Hilo", "state": "HI", "zipcode": "12345", "country": "USA", "picture": "./images/locations/vacay_home.jpg" }
   ],
   "defaultStorageAreas": [
-    { "name": "Fridge1", "locationName": "Main Home", "type": "Refrigerator", "picture": "./images/containers/fridge.jpg" },
-    { "name": "Freezer1", "locationName": "Main Home", "type": "Freezer", "picture": "./images/containers/freezer.jpg" },
-    { "name": "Pantry1", "locationName": "Main Home", "type": "Pantry", "picture": "./images/containers/pantry.jpg" },
-    { "name": "Spice Rack1", "locationName": "Main Home", "type": "SpiceRack", "picture": "./images/containers/spice_rack.jpg" },
-    { "name": "Fridge2", "locationName": "Vacation Home", "type": "Refrigerator", "picture":  "./images/containers/fridge.jpg" },
-    { "name": "Freezer2", "locationName": "Vacation Home", "type": "Freezer", "picture":  "./images/containers/freezer.jpg" },
-    { "name": "Pantry2", "locationName": "Vacation Home", "type": "Pantry", "picture":  "./images/containers/pantry.jpg" },
-    { "name": "Spice Rack2", "locationName": "Vacation Home", "type": "SpiceRack", "picture":  "./images/containers/spice_rack.jpg" }
+    { "name": "Kitchen Fridge", "locationName": "Main Home", "type": "Refrigerator", "picture": "./images/containers/fridge.jpg" },
+    { "name": "Garage Freezer", "locationName": "Main Home", "type": "Freezer", "picture": "./images/containers/freezer.jpg" },
+    { "name": "House Pantry", "locationName": "Main Home", "type": "Pantry", "picture": "./images/containers/pantry.jpg" },
+    { "name": "Spice Rack", "locationName": "Main Home", "type": "SpiceRack", "picture": "./images/containers/spice_rack.jpg" },
+    { "name": "Fridge", "locationName": "Vacation Home", "type": "Refrigerator", "picture":  "./images/containers/fridge.jpg" },
+    { "name": "Freezer", "locationName": "Vacation Home", "type": "Freezer", "picture":  "./images/containers/freezer.jpg" },
+    { "name": "Pantry", "locationName": "Vacation Home", "type": "Pantry", "picture":  "./images/containers/pantry.jpg" },
+    { "name": "Spice Rack Vacation", "locationName": "Vacation Home", "type": "SpiceRack", "picture":  "./images/containers/spice_rack.jpg" }
   ],
   "defaultProductInstances": [
-    { "productName": "Milk", "storageAreaName": "Fridge1", "locationName": "Main Home", "quantity": 1, "unitName": "gallon", "expirationDate": null },
-    { "productName": "Eggs", "storageAreaName": "Fridge1", "locationName": "Main Home", "quantity": 1, "unitName": "dozen", "expirationDate": null },
-    { "productName": "Butter", "storageAreaName": "Fridge1", "locationName": "Main Home", "quantity": 1, "unitName": "pound", "expirationDate": null },
-    { "productName": "Cheese", "storageAreaName": "Fridge1", "locationName": "Main Home", "quantity": 0.5, "unitName": "pound", "expirationDate": null },
-    { "productName": "Chicken Breast", "storageAreaName": "Freezer1", "locationName": "Main Home", "quantity": 2, "unitName": "pound", "expirationDate": null },
-    { "productName": "Broccoli", "storageAreaName": "Fridge1", "locationName": "Main Home", "quantity": 1, "unitName": "pound", "expirationDate": null }
+    { "productName": "Milk", "storageAreaName": "Kitchen Fridge", "locationName": "Main Home", "quantity": 1, "unitName": "gallon", "expirationDate": null },
+    { "productName": "Eggs", "storageAreaName": "Kitchen Fridge", "locationName": "Main Home", "quantity": 1, "unitName": "dozen", "expirationDate": null },
+    { "productName": "Butter", "storageAreaName": "Kitchen Fridge", "locationName": "Main Home", "quantity": 1, "unitName": "pound", "expirationDate": null },
+    { "productName": "Cheese", "storageAreaName": "Kitchen Fridge", "locationName": "Main Home", "quantity": 0.5, "unitName": "pound", "expirationDate": null },
+    { "productName": "Chicken Breast", "storageAreaName": "Garage Freezer", "locationName": "Main Home", "quantity": 2, "unitName": "pound", "expirationDate": null },
+    { "productName": "Broccoli", "storageAreaName": "Kitchen Fridge", "locationName": "Main Home", "quantity": 1, "unitName": "pound", "expirationDate": null }
   ],
   "defaultShoppingLists": [
     { "name": "Weekly Groceries", "storeName": "Walmart", "isDefault": true },

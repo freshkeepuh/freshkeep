@@ -1,0 +1,37 @@
+.create-catalog-page .image-card {
+  position: relative;
+}
+
+.create-catalog-page .image-card:hover {
+  border-color: #28a745 !important;
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.2);
+  transform: translateY(-4px);
+}
+
+.create-catalog-page .image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(40, 167, 69, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  opacity: 0;
+}
+
+.create-catalog-page .image-card:hover .image-overlay {
+  background: rgba(40, 167, 69, 0.85);
+  opacity: 1;
+}
+
+.create-catalog-page .select-badge {
+  background: white;
+  color: #28a745;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 14px;
+}

@@ -3,7 +3,7 @@
 import { ProductCategory } from '@prisma/client';
 import { prisma } from './prisma';
 
-export interface CreateGroceryItemData {
+export interface CreateCatalogItemData {
   name: string;
   category: ProductCategory;
   storeName?: string;
@@ -15,9 +15,9 @@ export interface CreateGroceryItemData {
 }
 
 /**
- * Creates a new grocery item in the database and adds it to the catalog.
- * @param {Object} params - An object with grocery item properties
- * @param {string} params.name - The grocery item name
+ * Creates a new catalog item in the database and adds it to the catalog.
+ * @param {Object} params - An object with catalog item properties
+ * @param {string} params.name - The catalog item name
  * @param {ProductCategory} params.category - The product category
  * @param {string} [params.storeName] - The store name
  * @param {string} [params.unitId] - The unit ID
@@ -26,7 +26,7 @@ export interface CreateGroceryItemData {
  * @param {string|null} [params.picture] - The picture URL
  * @param {string} [params.userId] - The user ID
  */
-export async function createGroceryItem({
+export async function createCatalogItem({
   name,
   category,
   storeName,
@@ -35,7 +35,7 @@ export async function createGroceryItem({
   isNeeded = false,
   picture,
   userId,
-}: CreateGroceryItemData) {
+}: CreateCatalogItemData) {
   const result = await prisma.$transaction(async (tx) => {
     // Get or create unit
     let finalUnitId = unitId;
@@ -64,14 +64,14 @@ export async function createGroceryItem({
       where: { name },
     });
 
-    let groceryItem;
+    let catalogItem;
 
     if (existingProduct) {
       // If product exists, use it instead of creating a new one
-      groceryItem = existingProduct;
+      catalogItem = existingProduct;
     } else {
       // Create the product
-      groceryItem = await tx.product.create({
+      catalogItem = await tx.product.create({
         data: {
           name,
           category,
@@ -101,7 +101,7 @@ export async function createGroceryItem({
 
       await tx.product.update({
         where: {
-          id: groceryItem.id,
+          id: catalogItem.id,
         },
         data: {
           stores: {
@@ -145,9 +145,9 @@ export async function createGroceryItem({
       // Check if this item is already in user's catalog
       const existingCatalogEntry = await tx.catalog.findUnique({
         where: {
-          userId_groceryItemId: {
+          userId_catalogItemId: {
             userId: finalUserId,
-            groceryItemId: groceryItem.id,
+            catalogItemId: catalogItem.id,
           },
         },
       });
@@ -156,13 +156,13 @@ export async function createGroceryItem({
         await tx.catalog.create({
           data: {
             userId: finalUserId,
-            groceryItemId: groceryItem.id,
+            catalogItemId: catalogItem.id,
           },
         });
       }
     }
 
-    return groceryItem;
+    return catalogItem;
   });
 
   return result;
@@ -170,17 +170,17 @@ export async function createGroceryItem({
 /**
  * Adds an existing product to a user's catalog
  * @param userId - The user's ID
- * @param groceryItemId - The product ID to add to catalog
+ * @param catalogItemId - The product ID to add to catalog
  */
-export async function addToCatalog(userId: string, groceryItemId: string) {
+export async function addToCatalog(userId: string, catalogItemId: string) {
   try {
     const catalogItem = await prisma.catalog.create({
       data: {
         userId,
-        groceryItemId,
+        catalogItemId,
       },
       include: {
-        groceryItem: {
+        catalogItem: {
           include: {
             stores: true,
           },
@@ -201,14 +201,14 @@ export async function addToCatalog(userId: string, groceryItemId: string) {
 /**
  * Removes an item from a user's catalog
  * @param userId - The user's ID
- * @param groceryItemId - The product ID to remove from catalog
+ * @param catalogItemId - The product ID to remove from catalog
  */
-export async function removeFromCatalog(userId: string, groceryItemId: string) {
+export async function removeFromCatalog(userId: string, catalogItemId: string) {
   const catalogItem = await prisma.catalog.delete({
     where: {
-      userId_groceryItemId: {
+      userId_catalogItemId: {
         userId,
-        groceryItemId,
+        catalogItemId,
       },
     },
   });
@@ -226,7 +226,7 @@ export async function getUserCatalogItems(userId: string) {
       userId,
     },
     include: {
-      groceryItem: {
+      catalogItem: {
         include: {
           stores: true,
         },
@@ -246,7 +246,7 @@ export async function getUserCatalogItemsByStore(userId: string, storeName: stri
   const catalogItems = await prisma.catalog.findMany({
     where: {
       userId,
-      groceryItem: {
+      catalogItem: {
         stores: {
           some: {
             name: storeName,
@@ -255,7 +255,7 @@ export async function getUserCatalogItemsByStore(userId: string, storeName: stri
       },
     },
     include: {
-      groceryItem: {
+      catalogItem: {
         include: {
           stores: true,
         },
@@ -273,7 +273,7 @@ export async function debugUserCatalog(userId: string) {
   const catalogItems = await prisma.catalog.findMany({
     where: { userId },
     include: {
-      groceryItem: {
+      catalogItem: {
         include: {
           stores: true,
         },
