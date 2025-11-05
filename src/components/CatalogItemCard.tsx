@@ -112,18 +112,18 @@ const CatalogItemCard = ({
 
           <Row className="mt-auto px-3">
             {!isInList ? (
-              <Button variant="success" onClick={handleButtonClick}>
+              <Button variant="success" onClick={handleButtonClick} style={{ height: '46px' }}>
                 Add to list
               </Button>
             ) : (
-              <div className="rounded p-2 w-100">
-                <Row className="justify-content-center align-items-center">
+              <div className="rounded w-100" style={{ height: '46px' }}>
+                <Row className="justify-content-center align-items-center h-100">
                   <Col xs="auto">
                     <ListUl size={24} className="text-secondary" />
                   </Col>
                   <Col xs="auto">
                     <div
-                      className="d-flex align-items-center rounded-pill overflow-hidden"
+                      className="d-flex align-items-center rounded-pill overflow-hidden h-100"
                       style={{ border: '2px solid #adb5bd' }}
                     >
                       <Button
