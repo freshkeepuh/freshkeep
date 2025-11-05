@@ -44,10 +44,10 @@ const Welcome: React.FC = () => (
       {/* Buttons */}
       <Col xs={12} md={6} className="d-flex flex-column justify-content-center text-start ">
         <div className="mt-4 d-flex flex-wrap gap-4 justify-content-center">
-          <Button variant="success" href="/signin" className={`${styles.welcomeBtn}`}>
+          <Button variant="success" href="/auth/signin" className={`${styles.welcomeBtn}`}>
             Sign In
           </Button>
-          <Button variant="outline-success" href="/signup" className={`${styles.welcomeBtnOutline}`}>
+          <Button variant="outline-success" href="/auth/signup" className={`${styles.welcomeBtnOutline}`}>
             Sign Up
           </Button>
         </div>
