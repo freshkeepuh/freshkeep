@@ -35,9 +35,6 @@ const LocationsPage = () => {
         const data = (await res.json()) as Location[];
         if (!cancelled) {
           setLocations(data ?? []);
-          if (!selectedId && data && data.length > 0) {
-            setSelectedId(data[0].id);
-          }
         }
       } finally {
         if (!cancelled) setLoading(false);
@@ -46,7 +43,14 @@ const LocationsPage = () => {
     return () => {
       cancelled = true;
     };
-  }, [selectedId]);
+  }, []);
+
+  // Initialize selection when locations load
+  useEffect(() => {
+    if (!selectedId && locations && locations.length > 0) {
+      setSelectedId(locations[0].id);
+    }
+  }, [locations, selectedId]);
 
   // Re-sync helper function
   const reloadLocations = async () => {
@@ -134,7 +138,7 @@ const LocationsPage = () => {
 
   const selectedForMap = (() => {
     if (locations.length === 0) return undefined;
-    const sel = selectedId && locations.find(l => l.id === selectedId);
+    const sel = selectedId ? locations.find(l => l.id === selectedId) : undefined;
     const target = sel || locations[0];
     return { id: target.id, name: target.name, address: target.address1 };
   })();

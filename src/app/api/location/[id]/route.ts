@@ -74,7 +74,7 @@ export async function PUT(request: NextRequest, context: any) {
       state: body.state ?? current.state,
       zipcode: body.zipcode ?? current.zipcode,
       country: body.country ?? current.country,
-      picture: body.picture ?? current.picture,
+      picture: body.picture || current.picture,
     });
     return NextResponse.json(updated, { status: 200 });
   } catch (error: Error | any) {
