@@ -116,25 +116,35 @@ const CatalogItemCard = ({
                     <ListUl size={24} className="text-secondary" />
                   </Col>
                   <Col xs="auto">
-                    <div className="d-flex align-items-center border rounded-pill overflow-hidden">
+                    <div 
+                      className="d-flex align-items-center rounded-pill overflow-hidden" 
+                      style={{ border: '2px solid #adb5bd' }}>
                       <Button
                         variant="outline-danger"
                         size="sm"
                         onClick={decreaseQuantity}
-                        className="border-0 px-3 rounded-0"
-                        style={{ fontWeight: 'bold' }}
+                        className="border-0 px-3 rounded-0 py-2"
+                        style={{ fontWeight: '900', fontSize: '1.2rem' }}
                       >
-                        -
+                        −
                       </Button>
-                      <div className="px-3 fw-bold" style={{ minWidth: '45px', textAlign: 'center' }}>
+                      <div 
+                        className="px-3 fw-bold border-start border-end d-flex align-items-center" 
+                        style={{ 
+                          minWidth: '45px', 
+                          textAlign: 'center', 
+                          borderColor: '#adb5bd !important',
+                          minHeight: '42px'
+                        }}
+                      >
                         {quantity}
                       </div>
                       <Button
                         variant="outline-success"
                         size="sm"
                         onClick={increaseQuantity}
-                        className="border-0 px-3 rounded-0"
-                        style={{ fontWeight: 'bold' }}
+                        className="border-0 px-3 rounded-0 py-2"
+                        style={{ fontWeight: '900', fontSize: '1.2rem' }}
                       >
                         +
                       </Button>
