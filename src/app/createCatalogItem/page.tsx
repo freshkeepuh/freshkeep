@@ -452,7 +452,7 @@ const CreateCatalogItemForm = () => {
                           name="name"
                           value={formData.name}
                           onChange={handleChange}
-                          placeholder="e.g., Organic Bananas"
+                          placeholder="e.g., Olive Oil"
                           required
                           disabled={loading}
                           size="lg"
@@ -656,16 +656,17 @@ const CreateCatalogItemForm = () => {
 
           <Row>
             <Col>
-              <div className="d-flex justify-content-between">
+              <div className="d-flex justify-content-end gap-2">
                 <Button
                   variant="outline-secondary"
                   size="lg"
                   disabled={loading}
                   onClick={() => router.push('/catalog')}
+                  className="px-4"
                 >
                   Cancel
                 </Button>
-                <Button variant="success" type="submit" size="lg" disabled={loading} className="px-5">
+                <Button variant="success" type="submit" size="lg" disabled={loading} className="px-4">
                   {loading ? 'Creating...' : 'Create Item'}
                 </Button>
               </div>
