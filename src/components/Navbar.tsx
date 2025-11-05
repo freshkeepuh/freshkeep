@@ -107,7 +107,13 @@ const NavBar: React.FC = () => {
                     <Lock className="me-2" />
                     Change Password
                   </NavDropdown.Item>
-                  <NavDropdown.Item data-testid="navbar-link-signout" onClick={() => signOut({ callbackUrl: '/' })}>
+                  <NavDropdown.Item
+                    data-testid="navbar-link-signout"
+                    onClick={() => signOut({
+                      callbackUrl: `${window.location.origin}/`,
+                      redirect: true,
+                    })}
+                  >
                     <BoxArrowRight className="me-2" />
                     Sign Out
                   </NavDropdown.Item>

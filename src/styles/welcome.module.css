@@ -1,0 +1,83 @@
+.welcomeContainer {
+  background: linear-gradient(135deg, #f9fff9, #e8f5e9);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.homeBulletList {
+  font-size: clamp(1rem, 1.5vw, 1.2rem); /* scale for different screen sizes */
+  color: #333;
+  list-style: none;
+}
+
+.homeBulletList li {
+  margin-bottom: 0.6rem;
+  line-height: 1.6;
+  justify-content: center;
+
+}
+
+/* Buttons */
+.welcomeBtn {
+  background-color: #43a047;
+  border: none;
+  padding: 0.9rem 2.1rem;
+  font-size: 1.4rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.welcomeBtn:hover {
+  background-color: #2e7d32;
+  transform: translateY(-2px);
+}
+
+.welcomeBtnOutline {
+  color: #43a047;
+  border-color: #43a047;
+  padding: 0.9rem 2.1rem;
+  font-size: 1.4rem;
+  border-radius: 8px;
+  border-width: 2px;
+  transition: all 0.2s ease;
+}
+
+.welcomeBtnOutline:hover {
+  background-color: #43a047;
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+/* Animations for Logo & Buttons */
+.logoBounce {
+  animation: bounceIn 1s ease;
+}
+
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.fade-in {
+  animation: fadeInUp 1s ease-in-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
