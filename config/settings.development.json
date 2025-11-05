@@ -200,7 +200,7 @@
       "Finish with ground Sichuan peppercorns and green onion."
     ],
     "image": "/images/recipes/mushroom-tofu-mapo.jpg"
-  },
+    },
     {
       "title": "Shoyu Chicken",
       "cookTime": 40,
@@ -256,7 +256,7 @@
       "diet": "ANY",
       "ingredients": ["spam", "white rice", "nori", "soy sauce", "sugar"],
       "instructions": [
-        "Cut spam into 6–8 slices and pan-fry in a nonstick pan until both sides are lightly browned.",
+        "Cut spam into 6-8 slices and pan-fry in a nonstick pan until both sides are lightly browned.",
         "Mix soy sauce and sugar in the pan and cook until the spam slices are evenly coated and caramelized.",
         "Place a slice of glazed spam on top of a compact block of warm rice (use a musubi mold or shape by hand).",
         "Wrap a strip of nori around the center to hold it together.",
@@ -271,7 +271,7 @@
       "diet": "ANY",
       "ingredients": ["day-old rice", "kimchi", "gochujang", "soy sauce", "green onion", "egg", "oil", "sesame oil"],
       "instructions": [
-        "Heat oil in a large pan over medium heat and add chopped kimchi; cook for 1–2 minutes until fragrant.",
+        "Heat oil in a large pan over medium heat and add chopped kimchi; cook for 1-2 minutes until fragrant.",
         "Stir in a spoonful of gochujang and mix well to coat the kimchi.",
         "Add day-old rice, breaking up any clumps, and stir-fry until the rice is hot and evenly mixed.",
         "Add a splash of soy sauce and drizzle a little sesame oil for flavor.",
@@ -289,7 +289,7 @@
         "In a small bowl, mix soy sauce, worcestershire sauce, and ketchup to make yakisoba sauce.",
         "Heat oil in a pan and stir-fry sliced onion, cabbage, and carrot until slightly softened.",
         "Add the noodles to the pan, pour in the sauce, and toss until everything is evenly coated and hot.",
-        "Cook for another 2–3 minutes until the noodles absorb the sauce.",
+        "Cook for another 2-3 minutes until the noodles absorb the sauce.",
         "Serve warm and top with green onions or pickled ginger if desired."
       ],
       "image": "/images/recipes/vegetable-yakisoba.jpg"
@@ -331,7 +331,7 @@
       "ingredients": ["day-old rice", "frozen peas and carrots", "corn", "soy sauce", "garlic", "green onion", "oil", "sesame oil"],
       "instructions": [
         "Heat oil in a large skillet and sauté minced garlic for 30 seconds until fragrant.",
-        "Add frozen peas, carrots, and corn; stir-fry for 2–3 minutes.",
+        "Add frozen peas, carrots, and corn; stir-fry for 2-3 minutes.",
         "Add day-old rice and stir until hot and well mixed.",
         "Pour in soy sauce and toss to coat evenly.",
         "Finish with a drizzle of sesame oil and chopped green onions before serving."
@@ -378,7 +378,7 @@
       "ingredients": ["Okinawan sweet potatoes", "butter", "milk or cream", "salt"],
       "instructions": [
         "Peel and cut Okinawan sweet potatoes into cubes.",
-        "Boil in salted water for 12–15 minutes until tender when pierced with a fork.",
+        "Boil in salted water for 12-15 minutes until tender when pierced with a fork.",
         "Drain and mash with butter until smooth.",
         "Add warm milk or cream to reach the desired texture.",
         "Season with salt and serve warm as a side dish."
@@ -392,7 +392,7 @@
       "diet": "ANY",
       "ingredients": ["chicken thighs", "soy sauce", "sake", "ginger", "garlic", "potato starch", "oil", "lemon", "white rice"],
       "instructions": [
-        "Cut chicken thighs into bite-sized pieces and marinate in soy sauce, sake, grated ginger, and minced garlic for 10–15 minutes.",
+        "Cut chicken thighs into bite-sized pieces and marinate in soy sauce, sake, grated ginger, and minced garlic for 10-15 minutes.",
         "Coat each piece with potato starch until evenly covered.",
         "Heat oil to 350°F (175°C) and fry chicken in small batches until golden brown and crisp.",
         "Drain on a rack or paper towels and squeeze a little lemon juice over the top.",
@@ -410,7 +410,7 @@
         "Slice chicken breasts into thin strips and season lightly with salt.",
         "Heat oil in a large pan or wok and cook the chicken until no longer pink.",
         "Add minced garlic and mixed vegetables (like broccoli, carrots, and bell peppers).",
-        "Stir-fry for 3–5 minutes until vegetables are tender but still crisp.",
+        "Stir-fry for 3-5 minutes until vegetables are tender but still crisp.",
         "Pour in soy sauce and toss everything together for 1 more minute.",
         "Serve hot over rice or noodles."
       ],
@@ -427,7 +427,7 @@
         "Heat olive oil in a pan, then sauté minced onion and garlic until fragrant.",
         "Add ground beef and cook until browned, breaking it apart with a spatula.",
         "Stir in tomato sauce and season with salt and pepper.",
-        "Simmer for 10–15 minutes until thick and flavorful.",
+        "Simmer for 10-15 minutes until thick and flavorful.",
         "Serve sauce over spaghetti and sprinkle with parmesan if desired."
       ],
       "image": "/images/recipes/spaghetti-bolognese.jpg"
