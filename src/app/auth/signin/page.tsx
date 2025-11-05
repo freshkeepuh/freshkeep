@@ -42,7 +42,9 @@ const SignInPage = () => {
   return (
     <main className={`${styles.authHero} ${styles.twoUp}`}>
       {/* LEFT SIDE (hero) */}
-      <section className={`${styles.side} ${styles.left}`}>
+      <section
+        className={`${styles.side} ${styles.left}`}
+      >
         <div className={styles.overlayDark} />
         <div className={styles.welcomeWrap}>
           <WelcomeSection
@@ -53,7 +55,9 @@ const SignInPage = () => {
       </section>
 
       {/* RIGHT SIDE (form) */}
-      <section className={`${styles.side} ${styles.right}`}>
+      <section
+        className={`${styles.side} ${styles.right}`}
+      >
         <div className={styles.overlayLight} />
         <div className={styles.cardWrap}>
           <Card className={`shadow rounded-4 ${styles.glassyCard}`}>
