@@ -23,19 +23,25 @@ const CatalogItemCard = ({
 }: CatalogItemCardProps) => {
   const [isInList, setIsInList] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const [inputValue, setInputValue] = useState('1');
 
   // Handle quantity changes
   const decreaseQuantity = () => {
     if (quantity > 1) {
-      setQuantity(quantity - 1);
+      const newQuantity = quantity - 1;
+      setQuantity(newQuantity);
+      setInputValue(newQuantity.toString());
     } else {
       setQuantity(0);
+      setInputValue('0');
       setIsInList(false);
     }
   };
 
   const increaseQuantity = () => {
-    setQuantity(quantity + 1);
+    const newQuantity = quantity + 1;
+    setQuantity(newQuantity);
+    setInputValue(newQuantity.toString());
   };
 
   // Placeholder function for handling add/remove button click
@@ -141,16 +147,34 @@ const CatalogItemCard = ({
                       >
                         −
                       </Button>
-                      <div
-                        className="px-3 fw-bold d-flex align-items-center bg-white"
-                        style={{
-                          minWidth: '45px',
-                          textAlign: 'center',
-                          minHeight: '42px',
+                      <input
+                        type="text"
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                        value={inputValue}
+                        onChange={(e) => {
+                          const newValue = e.target.value;
+                          setInputValue(newValue);
+                          const val = parseInt(newValue, 10);
+                          if (Number.isFinite(val) && val > 0) {
+                            setQuantity(val);
+                          }
                         }}
-                      >
-                        {quantity}
-                      </div>
+                        onBlur={() => {
+                          // If empty or invalid, revert to previous quantity
+                          const val = parseInt(inputValue, 10);
+                          if (!Number.isFinite(val) || val <= 0) {
+                            setInputValue(quantity.toString());
+                          }
+                        }}
+                        className="px-3 fw-bold bg-white border-0 text-center quantity-input"
+                        style={{
+                          width: '60px',
+                          minHeight: '42px',
+                          WebkitAppearance: 'none',
+                          MozAppearance: 'textfield',
+                        }}
+                      />
                       <Button
                         variant="light"
                         size="sm"
