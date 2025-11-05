@@ -74,7 +74,6 @@ const CatalogPage = () => {
     storeName: CatalogItem.storeName || 'Unknown Store',
     storageType: 'Pantry',
     catalogItemType: CatalogItem.category,
-    inList: false, // Since isNeeded is not in the flattened structure
   });
 
   // Show loading while session is loading
@@ -201,7 +200,6 @@ const CatalogPage = () => {
                   storeName={cardProps.storeName}
                   storageType={cardProps.storageType}
                   catalogItemType={cardProps.catalogItemType}
-                  inList={cardProps.inList}
                 />
               </Col>
             );
