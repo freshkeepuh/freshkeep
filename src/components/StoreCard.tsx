@@ -2,13 +2,14 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Button, Form, Image, Card } from 'react-bootstrap';
-import { Pencil, Trash, Check, X } from 'react-bootstrap-icons';
+import { Button, Form, Image, Card, Modal } from 'react-bootstrap';
+import { Pencil, Trash, Check, X, GeoAlt } from 'react-bootstrap-icons';
 import { Store, Country } from '@prisma/client';
 import { FormProvider, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import AddressSubForm, { IAddressSubForm } from '@/components/AddressSubForm';
 import { storeValidation } from '@/lib/validationSchemas';
+import MapComponent from '@/components/MapDisplay';
 
 interface IStoreForm extends IAddressSubForm {
   id?: string | undefined;
@@ -38,6 +39,7 @@ const StoreCard = ({ store, onUpdate, onDelete }: StoreCardProps) => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [showMap, setShowMap] = useState(false);
 
   const handleEditClick = () => {
     try {
@@ -236,8 +238,19 @@ const StoreCard = ({ store, onUpdate, onDelete }: StoreCardProps) => {
           {store.phone}
         </Card.Text>
       </Card.Body>
-      <Card.Footer className="d-flex justify-content-end">
+      <Card.Footer className="d-flex align-items-center flex-wrap gap-2">
         <div>
+          <Button
+            variant="outline-success"
+            size="sm"
+            className="d-inline-flex align-items-center me-2"
+            onClick={() => setShowMap(true)}
+          >
+            <GeoAlt className="me-1" />
+            Map
+          </Button>
+        </div>
+        <div className="ms-sm-auto">
           <Button
             variant="outline-dark"
             size="sm"
@@ -261,6 +274,22 @@ const StoreCard = ({ store, onUpdate, onDelete }: StoreCardProps) => {
           )}
         </div>
       </Card.Footer>
+
+      {/* Map Modal */}
+      <Modal show={showMap} onHide={() => setShowMap(false)} size="lg" centered>
+        <Modal.Header closeButton>
+          <Modal.Title>{`${store.name} Map`}</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <MapComponent
+            location={{
+              id: store.id,
+              name: store.name,
+              address: store.address1,
+            }}
+          />
+        </Modal.Body>
+      </Modal>
     </Card>
   );
 };

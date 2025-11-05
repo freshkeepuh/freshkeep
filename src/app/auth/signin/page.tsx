@@ -10,9 +10,9 @@ import { signInValidation } from '@/lib/validationSchemas';
 import ErrorPopUp from '@/components/ErrorPopUp';
 import LogoHeader from '@/components/LogoHeader';
 import WelcomeSection from '@/components/WelcomeSection';
+import { redirect } from 'next/navigation';
 import EmailAddressField, { IEmailAddressField } from '@/components/EmailAddressField';
 import PasswordField, { IPasswordField } from '@/components/PasswordField';
-import { redirect } from 'next/navigation';
 
 import styles from './SignInPage.module.css';
 
@@ -44,7 +44,6 @@ const SignInPage = () => {
       {/* LEFT SIDE (hero) */}
       <section
         className={`${styles.side} ${styles.left}`}
-        style={{ backgroundImage: "url('/images/sign-in/bg-left.png')" }}
       >
         <div className={styles.overlayDark} />
         <div className={styles.welcomeWrap}>
@@ -58,7 +57,6 @@ const SignInPage = () => {
       {/* RIGHT SIDE (form) */}
       <section
         className={`${styles.side} ${styles.right}`}
-        style={{ backgroundImage: "url('/images/sign-in/bg-right.png')" }}
       >
         <div className={styles.overlayLight} />
         <div className={styles.cardWrap}>

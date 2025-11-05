@@ -9,10 +9,55 @@
   min-height: 80px;
 }
 
+/* Decorative title bar for the page header */
+.titleBar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, rgba(25, 135, 84, 0.08), rgba(25, 135, 84, 0.02));
+  border: 1px solid rgba(25, 135, 84, 0.15);
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.titleText {
+  font-size: 1.75rem;
+  line-height: 1.2;
+}
+
 .panel {
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   padding: 1.5rem;
   min-height: 500px;
+}
+
+/* Scrollable list area to cap height around 4 cards */
+.listScroll {
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: 0.25rem; /* keep content away from scrollbar */
+}
+
+/* Optional nicer scrollbar for WebKit */
+.listScroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.listScroll::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.listSection h4 {
+  margin-bottom: 0.75rem;
+}
+
+/* Add Button Size */
+.btnCompact {
+  font-size: 0.9rem;
+  padding: 0.15rem 0.4rem;
+  line-height: 1;
 }

@@ -24,14 +24,14 @@
 
 /* Left side background (replace image path as needed) */
 .left {
-  background-image: url('/images/sign-up/bg-left6.png');
+  background-image: url('/images/sign-in/yellow-vegetable-bg.png');
   filter: saturate(1.1) brightness(1.1) hue-rotate(-10deg);
 }
 
 
 /* Right side background */
 .right {
-  background-image: url('/images/sign-up/bg-right2.png');
+  background-image: url('/images/sign-in/white-vegetable-bg.png');
 }
 
 /* Overlay layers for readability */
@@ -41,7 +41,7 @@
   inset: 0;
   pointer-events: none;
 }
-.overlayDark  { background: rgba(0, 0, 0, 0.3); }
+.overlayDark  { background: rgba(0, 0, 0, 0.2); }
 .overlayLight { background: rgba(255, 255, 255, 0.12); }
 
 /* Welcome content (left container) */

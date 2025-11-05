@@ -79,22 +79,22 @@
     { "name": "Vacation Home", "address1": "123 Main St", "address2": "", "city": "Hilo", "state": "HI", "zipcode": "12345", "country": "USA", "picture": "./images/locations/vacay_home.jpg" }
   ],
   "defaultStorageAreas": [
-    { "name": "Fridge1", "locationName": "Main Home", "type": "Refrigerator", "picture": "./images/containers/fridge.jpg" },
-    { "name": "Freezer1", "locationName": "Main Home", "type": "Freezer", "picture": "./images/containers/freezer.jpg" },
-    { "name": "Pantry1", "locationName": "Main Home", "type": "Pantry", "picture": "./images/containers/pantry.jpg" },
-    { "name": "Spice Rack1", "locationName": "Main Home", "type": "SpiceRack", "picture": "./images/containers/spice_rack.jpg" },
-    { "name": "Fridge2", "locationName": "Vacation Home", "type": "Refrigerator", "picture":  "./images/containers/fridge.jpg" },
-    { "name": "Freezer2", "locationName": "Vacation Home", "type": "Freezer", "picture":  "./images/containers/freezer.jpg" },
-    { "name": "Pantry2", "locationName": "Vacation Home", "type": "Pantry", "picture":  "./images/containers/pantry.jpg" },
-    { "name": "Spice Rack2", "locationName": "Vacation Home", "type": "SpiceRack", "picture":  "./images/containers/spice_rack.jpg" }
+    { "name": "Kitchen Fridge", "locationName": "Main Home", "type": "Refrigerator", "picture": "./images/containers/fridge.jpg" },
+    { "name": "Garage Freezer", "locationName": "Main Home", "type": "Freezer", "picture": "./images/containers/freezer.jpg" },
+    { "name": "House Pantry", "locationName": "Main Home", "type": "Pantry", "picture": "./images/containers/pantry.jpg" },
+    { "name": "Spice Rack", "locationName": "Main Home", "type": "SpiceRack", "picture": "./images/containers/spice_rack.jpg" },
+    { "name": "Fridge", "locationName": "Vacation Home", "type": "Refrigerator", "picture":  "./images/containers/fridge.jpg" },
+    { "name": "Freezer", "locationName": "Vacation Home", "type": "Freezer", "picture":  "./images/containers/freezer.jpg" },
+    { "name": "Pantry", "locationName": "Vacation Home", "type": "Pantry", "picture":  "./images/containers/pantry.jpg" },
+    { "name": "Spice Rack Vacation", "locationName": "Vacation Home", "type": "SpiceRack", "picture":  "./images/containers/spice_rack.jpg" }
   ],
   "defaultProductInstances": [
-    { "productName": "Milk", "storageAreaName": "Fridge1", "locationName": "Main Home", "quantity": 1, "unitName": "gallon", "expirationDate": null },
-    { "productName": "Eggs", "storageAreaName": "Fridge1", "locationName": "Main Home", "quantity": 1, "unitName": "dozen", "expirationDate": null },
-    { "productName": "Butter", "storageAreaName": "Fridge1", "locationName": "Main Home", "quantity": 1, "unitName": "pound", "expirationDate": null },
-    { "productName": "Cheese", "storageAreaName": "Fridge1", "locationName": "Main Home", "quantity": 0.5, "unitName": "pound", "expirationDate": null },
-    { "productName": "Chicken Breast", "storageAreaName": "Freezer1", "locationName": "Main Home", "quantity": 2, "unitName": "pound", "expirationDate": null },
-    { "productName": "Broccoli", "storageAreaName": "Fridge1", "locationName": "Main Home", "quantity": 1, "unitName": "pound", "expirationDate": null }
+    { "productName": "Milk", "storageAreaName": "Kitchen Fridge", "locationName": "Main Home", "quantity": 1, "unitName": "gallon", "expirationDate": null },
+    { "productName": "Eggs", "storageAreaName": "Kitchen Fridge", "locationName": "Main Home", "quantity": 1, "unitName": "dozen", "expirationDate": null },
+    { "productName": "Butter", "storageAreaName": "Kitchen Fridge", "locationName": "Main Home", "quantity": 1, "unitName": "pound", "expirationDate": null },
+    { "productName": "Cheese", "storageAreaName": "Kitchen Fridge", "locationName": "Main Home", "quantity": 0.5, "unitName": "pound", "expirationDate": null },
+    { "productName": "Chicken Breast", "storageAreaName": "Garage Freezer", "locationName": "Main Home", "quantity": 2, "unitName": "pound", "expirationDate": null },
+    { "productName": "Broccoli", "storageAreaName": "Kitchen Fridge", "locationName": "Main Home", "quantity": 1, "unitName": "pound", "expirationDate": null }
   ],
   "defaultShoppingLists": [
     { "name": "Weekly Groceries", "storeName": "Walmart", "isDefault": true },
@@ -200,6 +200,267 @@
       "Finish with ground Sichuan peppercorns and green onion."
     ],
     "image": "/images/recipes/mushroom-tofu-mapo.jpg"
+    },
+    {
+      "title": "Shoyu Chicken",
+      "cookTime": 40,
+      "difficulty": "EASY",
+      "diet": "ANY",
+      "ingredients": ["chicken thighs", "soy sauce", "brown sugar", "garlic", "ginger", "water", "green onion"],
+      "instructions": [
+        "In a large pot, combine soy sauce, water, brown sugar, sliced ginger, and crushed garlic. Stir until the sugar dissolves.",
+        "Add chicken thighs, ensuring they are mostly covered by the sauce.",
+        "Bring to a boil over medium heat, then reduce to low heat and simmer for 25–30 minutes.",
+        "Flip the chicken halfway through so both sides absorb the flavor.",
+        "Remove the lid near the end to let the sauce reduce and thicken into a glaze.",
+        "Serve hot over steamed rice and garnish with chopped green onions."
+      ],
+      "image": "/images/recipes/shoyu-chicken.jpg"
+    },
+    {
+      "title": "Loco Moco",
+      "cookTime": 25,
+      "difficulty": "NORMAL",
+      "diet": "ANY",
+      "ingredients": ["ground beef", "egg", "white rice", "onion", "beef broth", "soy sauce", "butter", "flour", "salt", "pepper"],
+      "instructions": [
+        "Shape the ground beef into patties and season both sides with salt and pepper.",
+        "Cook patties in a skillet over medium-high heat until browned and cooked through; remove and set aside.",
+        "In the same pan, melt butter and sauté sliced onions until soft and golden.",
+        "Add flour and stir for 1 minute to form a roux.",
+        "Gradually whisk in beef broth and soy sauce until smooth; simmer until thickened into gravy.",
+        "Fry eggs sunny-side up in a separate pan.",
+        "Assemble: scoop rice onto a plate, top with a beef patty, pour gravy generously, and finish with a fried egg on top."
+      ],
+      "image": "/images/recipes/loco-moco.jpg"
+    },
+    {
+      "title": "Teriyaki Salmon",
+      "cookTime": 18,
+      "difficulty": "NORMAL",
+      "diet": "PESCETARIAN",
+      "ingredients": ["salmon fillets", "soy sauce", "mirin", "sugar", "ginger", "garlic", "sesame seeds"],
+      "instructions": [
+        "Whisk together soy sauce, mirin, sugar, grated ginger, and minced garlic to make the teriyaki sauce.",
+        "Heat a drizzle of oil in a skillet over medium heat and place salmon fillets skin-side down.",
+        "Cook for 2-3 minutes until the skin is crisp, then flip.",
+        "Pour the teriyaki sauce into the pan and simmer until the sauce thickens and coats the fish.",
+        "Spoon extra glaze over the top and sprinkle with sesame seeds before serving."
+      ],
+      "image": "/images/recipes/teriyaki-salmon.jpg"
+    },
+    {
+      "title": "Spam Musubi",
+      "cookTime": 20,
+      "difficulty": "EASY",
+      "diet": "ANY",
+      "ingredients": ["spam", "white rice", "nori", "soy sauce", "sugar"],
+      "instructions": [
+        "Cut spam into 6-8 slices and pan-fry in a nonstick pan until both sides are lightly browned.",
+        "Mix soy sauce and sugar in the pan and cook until the spam slices are evenly coated and caramelized.",
+        "Place a slice of glazed spam on top of a compact block of warm rice (use a musubi mold or shape by hand).",
+        "Wrap a strip of nori around the center to hold it together.",
+        "Let it cool slightly before serving or wrapping for later."
+      ],
+      "image": "/images/recipes/spam-musubi.jpg"
+    },
+    {
+      "title": "Kimchi Fried Rice",
+      "cookTime": 15,
+      "difficulty": "EASY",
+      "diet": "ANY",
+      "ingredients": ["day-old rice", "kimchi", "gochujang", "soy sauce", "green onion", "egg", "oil", "sesame oil"],
+      "instructions": [
+        "Heat oil in a large pan over medium heat and add chopped kimchi; cook for 1-2 minutes until fragrant.",
+        "Stir in a spoonful of gochujang and mix well to coat the kimchi.",
+        "Add day-old rice, breaking up any clumps, and stir-fry until the rice is hot and evenly mixed.",
+        "Add a splash of soy sauce and drizzle a little sesame oil for flavor.",
+        "Top with a fried egg and sprinkle chopped green onions before serving."
+      ],
+      "image": "/images/recipes/kimchi-fried-rice.jpg"
+    },
+    {
+      "title": "Vegetable Yakisoba",
+      "cookTime": 20,
+      "difficulty": "EASY",
+      "diet": "VEGETARIAN",
+      "ingredients": ["yaki soba noodles", "cabbage", "carrot", "onion", "soy sauce", "worcestershire", "ketchup", "oil"],
+      "instructions": [
+        "In a small bowl, mix soy sauce, worcestershire sauce, and ketchup to make yakisoba sauce.",
+        "Heat oil in a pan and stir-fry sliced onion, cabbage, and carrot until slightly softened.",
+        "Add the noodles to the pan, pour in the sauce, and toss until everything is evenly coated and hot.",
+        "Cook for another 2-3 minutes until the noodles absorb the sauce.",
+        "Serve warm and top with green onions or pickled ginger if desired."
+      ],
+      "image": "/images/recipes/vegetable-yakisoba.jpg"
+    },
+    {
+      "title": "Huli Huli Chicken",
+      "cookTime": 60,
+      "difficulty": "NORMAL",
+      "diet": "ANY",
+      "ingredients": ["chicken thighs", "pineapple juice", "soy sauce", "brown sugar", "ketchup", "ginger", "garlic"],
+      "instructions": [
+        "In a bowl, combine pineapple juice, soy sauce, brown sugar, ketchup, grated ginger, and minced garlic.",
+        "Marinate chicken thighs in the mixture for at least 30 minutes (or overnight for more flavor).",
+        "Preheat the grill to medium heat and cook the chicken, turning and basting with leftover sauce every few minutes.",
+        "Continue grilling until the chicken is cooked through and slightly charred at the edges.",
+        "Let it rest for a few minutes, then slice and serve with rice."
+      ],
+      "image": "/images/recipes/huli-huli-chicken.jpg"
+    },
+    {
+      "title": "Miso Soup with Tofu",
+      "cookTime": 10,
+      "difficulty": "EASY",
+      "diet": "VEGAN",
+      "ingredients": ["dashi (veg or kombu)", "miso paste", "soft tofu", "wakame", "green onion"],
+      "instructions": [
+        "Bring dashi broth to a gentle simmer in a small pot.",
+        "Place miso paste in a ladle, add a little hot broth, and stir until smooth before mixing it back into the pot.",
+        "Add cubed tofu and soaked wakame seaweed; warm gently without boiling.",
+        "Garnish with sliced green onions and serve hot."
+      ],
+      "image": "/images/recipes/miso-soup-tofu.jpg"
+    },
+    {
+      "title": "Veggie Fried Rice",
+      "cookTime": 15,
+      "difficulty": "EASY",
+      "diet": "VEGAN",
+      "ingredients": ["day-old rice", "frozen peas and carrots", "corn", "soy sauce", "garlic", "green onion", "oil", "sesame oil"],
+      "instructions": [
+        "Heat oil in a large skillet and sauté minced garlic for 30 seconds until fragrant.",
+        "Add frozen peas, carrots, and corn; stir-fry for 2-3 minutes.",
+        "Add day-old rice and stir until hot and well mixed.",
+        "Pour in soy sauce and toss to coat evenly.",
+        "Finish with a drizzle of sesame oil and chopped green onions before serving."
+      ],
+      "image": "/images/recipes/veggie-fried-rice.jpg"
+    },
+    {
+      "title": "Tofu Katsu Curry",
+      "cookTime": 30,
+      "difficulty": "NORMAL",
+      "diet": "VEGAN",
+      "ingredients": ["firm tofu", "flour", "plant milk", "panko", "Japanese curry roux", "onion", "carrot", "potato", "oil", "salt", "pepper"],
+      "instructions": [
+        "Press tofu for 10 minutes to remove excess water, then slice into thick pieces.",
+        "Season with salt and pepper, dredge in flour, dip in plant milk, then coat with panko.",
+        "Fry tofu slices in hot oil until golden brown and crisp; set aside on a paper towel.",
+        "In a saucepan, sauté onions, carrots, and potatoes until slightly softened, then add water and simmer until tender.",
+        "Stir in curry roux blocks to thicken the sauce.",
+        "Serve tofu katsu over rice topped with the warm curry sauce."
+      ],
+      "image": "/images/recipes/tofu-katsu-curry.jpg"
+    },
+    {
+      "title": "Garlic Butter Steak Bites",
+      "cookTime": 12,
+      "difficulty": "EASY",
+      "diet": "ANY",
+      "ingredients": ["sirloin steak", "butter", "garlic", "soy sauce", "black pepper", "green onion"],
+      "instructions": [
+        "Cut steak into bite-sized cubes and pat dry with paper towels.",
+        "Season with salt and black pepper.",
+        "Heat a pan over high heat and sear the steak cubes for 1-2 minutes per side until browned.",
+        "Reduce heat to medium, add butter and minced garlic, and cook for 30 seconds.",
+        "Add a splash of soy sauce and toss the steak in the garlic butter.",
+        "Sprinkle with chopped green onions before serving."
+      ],
+      "image": "/images/recipes/garlic-butter-steak-bites.jpg"
+    },
+    {
+      "title": "Okinawan Sweet Potato Mash",
+      "cookTime": 25,
+      "difficulty": "EASY",
+      "diet": "VEGETARIAN",
+      "ingredients": ["Okinawan sweet potatoes", "butter", "milk or cream", "salt"],
+      "instructions": [
+        "Peel and cut Okinawan sweet potatoes into cubes.",
+        "Boil in salted water for 12-15 minutes until tender when pierced with a fork.",
+        "Drain and mash with butter until smooth.",
+        "Add warm milk or cream to reach the desired texture.",
+        "Season with salt and serve warm as a side dish."
+      ],
+      "image": "/images/recipes/okinawan-sweet-potato-mash.jpg"
+    },
+    {
+      "title": "Chicken Karaage Rice Bowl",
+      "cookTime": 30,
+      "difficulty": "NORMAL",
+      "diet": "ANY",
+      "ingredients": ["chicken thighs", "soy sauce", "sake", "ginger", "garlic", "potato starch", "oil", "lemon", "white rice"],
+      "instructions": [
+        "Cut chicken thighs into bite-sized pieces and marinate in soy sauce, sake, grated ginger, and minced garlic for 10-15 minutes.",
+        "Coat each piece with potato starch until evenly covered.",
+        "Heat oil to 350°F (175°C) and fry chicken in small batches until golden brown and crisp.",
+        "Drain on a rack or paper towels and squeeze a little lemon juice over the top.",
+        "Serve over a bowl of hot white rice."
+      ],
+      "image": "/images/recipes/chicken-karaage-bowl.jpg"
+    },
+    {
+      "title": "Chicken Stir Fry",
+      "cookTime": 20,
+      "difficulty": "EASY",
+      "diet": "ANY",
+      "ingredients": ["chicken breast", "soy sauce", "garlic", "mixed vegetables", "oil"],
+      "instructions": [
+        "Slice chicken breasts into thin strips and season lightly with salt.",
+        "Heat oil in a large pan or wok and cook the chicken until no longer pink.",
+        "Add minced garlic and mixed vegetables (like broccoli, carrots, and bell peppers).",
+        "Stir-fry for 3-5 minutes until vegetables are tender but still crisp.",
+        "Pour in soy sauce and toss everything together for 1 more minute.",
+        "Serve hot over rice or noodles."
+      ],
+      "image": "/images/recipes/chicken-stir-fry.jpg"
+    },
+    {
+      "title": "Spaghetti Bolognese",
+      "cookTime": 30,
+      "difficulty": "NORMAL",
+      "diet": "ANY",
+      "ingredients": ["spaghetti", "ground beef", "tomato sauce", "onion", "garlic", "olive oil", "salt", "pepper"],
+      "instructions": [
+        "Cook spaghetti in a large pot of salted water until al dente; drain and set aside.",
+        "Heat olive oil in a pan, then sauté minced onion and garlic until fragrant.",
+        "Add ground beef and cook until browned, breaking it apart with a spatula.",
+        "Stir in tomato sauce and season with salt and pepper.",
+        "Simmer for 10-15 minutes until thick and flavorful.",
+        "Serve sauce over spaghetti and sprinkle with parmesan if desired."
+      ],
+      "image": "/images/recipes/spaghetti-bolognese.jpg"
+    },
+    {
+      "title": "Omelette",
+      "cookTime": 10,
+      "difficulty": "EASY",
+      "diet": "ANY",
+      "ingredients": ["eggs", "milk", "salt", "pepper", "butter"],
+      "instructions": [
+        "Crack eggs into a bowl, add milk, salt, and pepper, and whisk until smooth and slightly frothy.",
+        "Heat butter in a nonstick pan over medium heat until melted.",
+        "Pour in the egg mixture and swirl to coat the pan evenly.",
+        "When the bottom is set but the top is still soft, fold the omelette in half.",
+        "Cook another 30 seconds, then slide onto a plate."
+      ],
+      "image": "/images/recipes/omelette.jpg"
+    },
+    {
+      "title": "Pancakes",
+      "cookTime": 15,
+      "difficulty": "EASY",
+      "diet": "VEGETARIAN",
+      "ingredients": ["flour", "milk", "egg", "sugar", "baking powder", "butter"],
+      "instructions": [
+        "In a bowl, whisk together flour, sugar, and baking powder.",
+        "Add milk and egg, and stir until you get a smooth batter.",
+        "Melt butter in a pan over medium heat and pour in about 1/4 cup of batter per pancake.",
+        "Cook until bubbles form on the surface, then flip and cook the other side until golden.",
+        "Serve with butter, syrup, or fruit."
+      ],
+      "image": "/images/recipes/pancakes.jpg"
   }
-  ]
+]
 }

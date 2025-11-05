@@ -1,11 +1,13 @@
 'use client';
 
-import React from 'react';
-import { Card, Button, Row, Col } from 'react-bootstrap';
+import React, { useMemo } from 'react';
+import { Card, Row, Col } from 'react-bootstrap';
+import { useRouter } from 'next/navigation';
 import styles from '../../styles/dashboard.module.css';
 
 export interface StorageType {
-  id: number;
+  id: string;
+  locId?: string;
   name: string;
   location?: string;
   type: 'Fridge' | 'Freezer' | 'Pantry' | 'Spice Rack' | 'Other';
@@ -14,10 +16,12 @@ export interface StorageType {
 
 interface StorageListProps {
   storages: StorageType[];
-  onRemove: (id: number, count: number) => void;
+  // onRemove: (id: string, count: number) => void;
+  locationsById?: Record<string, string>;
 }
 
-export default function StorageList({ storages, onRemove }: StorageListProps) {
+export default function StorageList({ storages, locationsById = {} }: StorageListProps) {
+  const router = useRouter();
   const getIcon = (type: string) => {
     switch (type) {
       case 'Fridge':
@@ -33,31 +37,47 @@ export default function StorageList({ storages, onRemove }: StorageListProps) {
     }
   };
 
+  const grouped = useMemo(() => {
+    const byLoc: Record<string, StorageType[]> = {};
+    for (const s of storages) {
+      const key = s.locId || 'unassigned';
+      if (!byLoc[key]) byLoc[key] = [];
+      byLoc[key].push(s);
+    }
+    return byLoc;
+  }, [storages]);
+
+  const locationKeys = Object.keys(grouped);
+
   return (
-    <Row xs={1} md={2} className={`g-3 mt-3 ${styles.storageGrid}`}>
-      {storages.map((storage) => (
-        <Col key={storage.id}>
-          <Card className={styles.storageCard}>
-            <Card.Body className="text-center">
-              <div className={styles.storageIcon}>{getIcon(storage.type)}</div>
-              <Card.Title>{storage.name}</Card.Title>
-              <Card.Subtitle>{storage.type}</Card.Subtitle>
-              <Card.Text>
-                {storage.itemCount || 0}
-                {' '}
-                items
-              </Card.Text>
-              <Button
-                size="sm"
-                variant="outline-danger"
-                onClick={() => onRemove(storage.id, storage.itemCount || 0)}
-              >
-                Remove
-              </Button>
-            </Card.Body>
-          </Card>
-        </Col>
+    <div className={styles.locationWrap}>
+      {locationKeys.map((locKey) => (
+        <div key={locKey} className={styles.locationGroup}>
+          <div className={styles.locationHeader}>
+            {locationsById[locKey] || (locKey === 'unassigned' ? 'Unassigned' : 'Unknown Location')}
+          </div>
+          <Row className={`g-3 mt-2 ${styles.storageGrid}`}>
+            {grouped[locKey].map((storage) => (
+              <Col key={storage.id} xs="auto" className={styles.storageCol}>
+                <Card
+                  className={styles.storageCard}
+                  role="button"
+                  onClick={() => router.push(`/storage/${storage.id}`)}
+                >
+                  <Card.Body className="text-center">
+                    <div className={styles.storageIcon}>{getIcon(storage.type)}</div>
+                    <Card.Title className={styles.storageTitle}>{storage.name}</Card.Title>
+                    <Card.Text>
+                      {storage.itemCount || 0}
+                      items
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </div>
       ))}
-    </Row>
+    </div>
   );
 }

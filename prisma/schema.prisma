@@ -43,6 +43,7 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   catalog   Catalog[]
+  favoriteRecipes  Recipe[]
 }
 
 /**
@@ -53,18 +54,18 @@ model User {
  * Uses: Unit
  */
 model Unit {
-  id                String             @id @default(uuid()) @map("_id")
-  name              String             @unique
-  abbr              String             @unique
-  base              Unit?              @relation("UnitsToUnits", fields: [baseId], references: [id])
-  baseId            String?
-  factor            Float              @default(1.0)
-  children          Unit[]             @relation("UnitsToUnits")
-  products          Product[]
-  instances         ProductInstance[]
-  items             ShoppingListItem[]
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
+  id        String             @id @default(uuid()) @map("_id")
+  name      String             @unique
+  abbr      String             @unique
+  base      Unit?              @relation("UnitsToUnits", fields: [baseId], references: [id])
+  baseId    String?
+  factor    Float              @default(1.0)
+  children  Unit[]             @relation("UnitsToUnits")
+  products  Product[]
+  instances ProductInstance[]
+  items     ShoppingListItem[]
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
 }
 
 // TODO: Create Icons in public/icons/{country}.svg, flags?
@@ -85,19 +86,19 @@ enum Country {
  * Uses: Country, Container, ProductInstance
  */
 model Location {
-  id         String            @id @default(uuid()) @map("_id")
-  name       String            @unique
-  address1   String
-  address2   String?
-  city       String
-  state      String
-  zipcode    String
-  country    Country           @default(USA)
-  picture    String?
-  areas      StorageArea[]
-  instances  ProductInstance[]
-  createdAt  DateTime          @default(now())
-  updatedAt  DateTime          @updatedAt
+  id        String            @id @default(uuid()) @map("_id")
+  name      String            @unique
+  address1  String
+  address2  String?
+  city      String
+  state     String
+  zipcode   String
+  country   Country           @default(USA)
+  picture   String?
+  areas     StorageArea[]
+  instances ProductInstance[]
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
 }
 
 // TODO: Create Icons in public/icons/{storagetype}.svg
@@ -165,21 +166,21 @@ enum ProductCategory {
  * Uses: ProductCategory, Unit
  */
 model Product {
-  id                String             @id @default(uuid()) @map("_id")
-  name              String             @unique
-  brand             String?
-  category          ProductCategory
-  unitId            String
-  defaultQty        Float              @default(1.0)
-  isNeeded          Boolean            @default(false)
-  picture           String?
-  unit              Unit               @relation(fields: [unitId], references: [id])
-  instances         ProductInstance[]
-  items             ShoppingListItem[]
-  stores            Store[]
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
-  catalog           Catalog[]
+  id         String             @id @default(uuid()) @map("_id")
+  name       String             @unique
+  brand      String?
+  category   ProductCategory
+  unitId     String
+  defaultQty Float              @default(1.0)
+  isNeeded   Boolean            @default(false)
+  picture    String?
+  unit       Unit               @relation(fields: [unitId], references: [id])
+  instances  ProductInstance[]
+  items      ShoppingListItem[]
+  stores     Store[]
+  createdAt  DateTime           @default(now())
+  updatedAt  DateTime           @updatedAt
+  catalog    Catalog[]
 
   @@index([category, name], name: "category_name_idx")
 }
@@ -191,19 +192,19 @@ model Product {
  * Uses: Location, Container, Product, and Unit
  */
 model ProductInstance {
-  id        String    @id @default(uuid()) @map("_id")
+  id        String      @id @default(uuid()) @map("_id")
   locId     String
   storId    String
   prodId    String
   unitId    String
-  quantity  Float     @default(0.0)
+  quantity  Float       @default(0.0)
   expiresAt DateTime?
-  location  Location  @relation(fields: [locId], references: [id])
+  location  Location    @relation(fields: [locId], references: [id])
   storage   StorageArea @relation(fields: [storId], references: [id])
-  product   Product   @relation(fields: [prodId], references: [id])
-  unit      Unit      @relation(fields: [unitId], references: [id])
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  product   Product     @relation(fields: [prodId], references: [id])
+  unit      Unit        @relation(fields: [unitId], references: [id])
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
 
   @@unique([locId, storId, prodId, unitId, expiresAt])
 }
@@ -293,11 +294,11 @@ enum RecipeDiet {
  * The Recipe
  * Stores a single recipe with metadata and ingredients.
  * Used By: Recipe Page
- * Uses: RecipeDifficulty, RecipeDiet
+ * Uses: RecipeDifficulty, RecipeDiet, User
  */
 model Recipe {
   id           String           @id @default(uuid()) @map("_id")
-  title        String 
+  title        String
   slug         String?          @unique
   cookTime     Int
   difficulty   RecipeDifficulty
@@ -307,6 +308,7 @@ model Recipe {
   image        String?
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
+  favoredBy    User[]
 }
 
 /**
@@ -317,11 +319,11 @@ model Recipe {
 model Catalog {
   id            String   @id @default(uuid()) @map("_id")
   userId        String
-  groceryItemId String
+  catalogItemId String
   user          User     @relation(fields: [userId], references: [id])
-  groceryItem   Product  @relation(fields: [groceryItemId], references: [id])
+  catalogItem   Product  @relation(fields: [catalogItemId], references: [id])
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  @@unique([userId, groceryItemId])
+  @@unique([userId, catalogItemId])
 }

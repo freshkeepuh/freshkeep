@@ -1,6 +1,6 @@
 'use client';
 
-import { signIn } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useForm, UseFormRegister } from 'react-hook-form';
@@ -20,6 +20,7 @@ import styles from './SignUpPage.module.css';
 type SignUpForm = IEmailAddressField & IPasswordField & IConfirmPasswordField;
 
 const SignUpPage = () => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -38,12 +39,9 @@ const SignUpPage = () => {
         setShowError(true);
         return;
       }
-      const result = await signIn('credentials', { redirect: false, ...data });
-      if (!result?.ok) {
-        setShowError(true);
-      } else {
-        window.location.href = result?.url || '/';
-      }
+
+      // ✅ Redirect to sign-in instead of auto sign-in
+      router.push('/auth/signin?registered=1');
     } catch (error) {
       setShowError(true);
     }
