@@ -10,9 +10,9 @@ import { signInValidation } from '@/lib/validationSchemas';
 import ErrorPopUp from '@/components/ErrorPopUp';
 import LogoHeader from '@/components/LogoHeader';
 import WelcomeSection from '@/components/WelcomeSection';
+import { redirect } from 'next/navigation';
 import EmailAddressField, { IEmailAddressField } from '@/components/EmailAddressField';
 import PasswordField, { IPasswordField } from '@/components/PasswordField';
-import { redirect } from 'next/navigation';
 
 import styles from './SignInPage.module.css';
 
@@ -42,10 +42,7 @@ const SignInPage = () => {
   return (
     <main className={`${styles.authHero} ${styles.twoUp}`}>
       {/* LEFT SIDE (hero) */}
-      <section
-        className={`${styles.side} ${styles.left}`}
-        style={{ backgroundImage: "url('/images/sign-in/bg-left.png')" }}
-      >
+      <section className={`${styles.side} ${styles.left}`}>
         <div className={styles.overlayDark} />
         <div className={styles.welcomeWrap}>
           <WelcomeSection
@@ -56,10 +53,7 @@ const SignInPage = () => {
       </section>
 
       {/* RIGHT SIDE (form) */}
-      <section
-        className={`${styles.side} ${styles.right}`}
-        style={{ backgroundImage: "url('/images/sign-in/bg-right.png')" }}
-      >
+      <section className={`${styles.side} ${styles.right}`}>
         <div className={styles.overlayLight} />
         <div className={styles.cardWrap}>
           <Card className={`shadow rounded-4 ${styles.glassyCard}`}>
