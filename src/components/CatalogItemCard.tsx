@@ -12,7 +12,6 @@ interface CatalogItemCardProps {
   storeName: string;
   storageType: string;
   catalogItemType: string;
-  inList: boolean;
 }
 
 const CatalogItemCard = ({
@@ -21,7 +20,6 @@ const CatalogItemCard = ({
   storeName,
   storageType,
   catalogItemType,
-  inList,
 }: CatalogItemCardProps) => {
   const [isInList, setIsInList] = useState(false);
   const [quantity, setQuantity] = useState(1);
@@ -54,7 +52,7 @@ const CatalogItemCard = ({
   return (
     <div
       className="rounded-5 bg-success d-flex justify-content-center align-items-center px-2 py-2"
-      style={{ width: '320px', height: '350x', transition: 'transform 0.3s ease' }}
+      style={{ width: '320px', height: '400px', transition: 'transform 0.3s ease' }}
       onMouseEnter={(e) => {
         e.currentTarget.style.transform = 'translateY(-10px)';
       }}
@@ -62,39 +60,51 @@ const CatalogItemCard = ({
         e.currentTarget.style.transform = 'translateY(0px)';
       }}
     >
-      <Card className="rounded-5" style={{ width: '18rem' }}>
-        <Card.Img
-          variant="top"
-          src={picture}
-          className="mx-auto d-block"
-          onError={handleImageError}
+      <Card className="rounded-5" style={{ width: '18rem', height: '380px' }}>
+        <div
           style={{
-            maxWidth: '150px',
-            maxHeight: '150px',
-            objectFit: 'cover',
-            objectPosition: 'center',
+            height: '160px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '1rem',
           }}
-        />
+        >
+          <Card.Img
+            variant="top"
+            src={picture}
+            className="mx-auto d-block"
+            onError={handleImageError}
+            style={{
+              width: '140px',
+              height: '140px',
+              objectFit: 'contain',
+              objectPosition: 'center',
+            }}
+          />
+        </div>
 
-        <Card.Body>
-          <Card.Title>{catalogItemTitle}</Card.Title>
+        <Card.Body className="d-flex flex-column">
+          <div>
+            <Card.Title>{catalogItemTitle}</Card.Title>
 
-          <Row className="mb-2">
-            <Col>
-              <Card.Text className="mb-1">Store:</Card.Text>
-              <Badge bg="secondary">{storeName}</Badge>
-            </Col>
-            <Col>
-              <Card.Text className="mb-1">Storage:</Card.Text>
-              <Badge bg="secondary">{storageType}</Badge>
-            </Col>
-            <Col>
-              <Card.Text className="mb-1">Type:</Card.Text>
-              <Badge bg="secondary">{catalogItemType}</Badge>
-            </Col>
-          </Row>
+            <Row className="mb-2">
+              <Col>
+                <Card.Text className="mb-1">Store:</Card.Text>
+                <Badge bg="secondary">{storeName}</Badge>
+              </Col>
+              <Col>
+                <Card.Text className="mb-1">Storage:</Card.Text>
+                <Badge bg="secondary">{storageType}</Badge>
+              </Col>
+              <Col>
+                <Card.Text className="mb-1">Type:</Card.Text>
+                <Badge bg="secondary">{catalogItemType}</Badge>
+              </Col>
+            </Row>
+          </div>
 
-          <Row className="px-3">
+          <Row className="mt-auto px-3">
             {!isInList ? (
               <Button variant="success" onClick={handleButtonClick}>
                 Add to list
