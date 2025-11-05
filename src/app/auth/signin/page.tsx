@@ -43,8 +43,8 @@ const SignInPage = () => {
     <main className={`${styles.authHero} ${styles.twoUp}`}>
       {/* LEFT SIDE (hero) */}
       <section
-        className={`${styles.side} ${styles.left}`}
-        style={{ backgroundImage: "url('/images/sign-in/bg-left.png')" }}
+        className={`${styles.side}`}
+        style={{ backgroundImage: "url('/images/sign-in/yellow-vegetable-bg.png')" }}
       >
         <div className={styles.overlayDark} />
         <div className={styles.welcomeWrap}>
@@ -58,7 +58,7 @@ const SignInPage = () => {
       {/* RIGHT SIDE (form) */}
       <section
         className={`${styles.side} ${styles.right}`}
-        style={{ backgroundImage: "url('/images/sign-in/bg-right.png')" }}
+        style={{ backgroundImage: "url('/images/sign-in/white-vegetable-bg.png')" }}
       >
         <div className={styles.overlayLight} />
         <div className={styles.cardWrap}>
