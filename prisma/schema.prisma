@@ -43,6 +43,7 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   catalog   Catalog[]
+  favoriteRecipes  Recipe[]
 }
 
 /**
@@ -292,7 +293,7 @@ enum RecipeDiet {
  * The Recipe
  * Stores a single recipe with metadata and ingredients.
  * Used By: Recipe Page
- * Uses: RecipeDifficulty, RecipeDiet
+ * Uses: RecipeDifficulty, RecipeDiet, User
  */
 model Recipe {
   id           String           @id @default(uuid()) @map("_id")
@@ -306,6 +307,7 @@ model Recipe {
   image        String?
   createdAt    DateTime         @default(now())
   updatedAt    DateTime         @updatedAt
+  favoredBy    User[]
 }
 
 /**

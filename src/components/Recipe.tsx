@@ -5,6 +5,7 @@ import styles from '@/app/recipes/page.module.css';
 import Image from 'next/image';
 import Link from 'next/link';
 import slugify from '@/lib/slug';
+import FavoriteHeart from './FavoriteHeart';
 
 // Strict UI type
 export interface Recipe {
@@ -251,6 +252,7 @@ export default function RecipesPage({ initialRecipes }: Props) {
                   ) : (
                     <div className={styles.rpNoImg}>No image</div>
                   )}
+                  <FavoriteHeart recipeId={r.id} variant="oncard" />
                 </div>
                 <div className={styles.rpCardBody}>
                   <div className={styles.rpCardTitle}>
