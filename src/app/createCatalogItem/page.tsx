@@ -1,3 +1,5 @@
+/* eslint-disable function-paren-newline */
+/* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable react/jsx-one-expression-per-line */
 
 'use client';
@@ -90,10 +92,14 @@ const storageOptions = ['Pantry', 'Refrigerator', 'Freezer', 'Counter', 'Cabinet
 const CreateCatalogItemForm = () => {
   const { data: session } = useSession();
   const router = useRouter();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    name: string;
+    storeName: string;
+    category: ProductCategory | '';
+  }>({
     name: '',
     storeName: '',
-    category: '' as ProductCategory | '',
+    category: '',
   });
 
   const [loading, setLoading] = useState(false);
@@ -110,6 +116,20 @@ const CreateCatalogItemForm = () => {
   const [searching, setSearching] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
   const [searchAttempt, setSearchAttempt] = useState(0);
+
+  // State for category dropdown search
+  const [categorySearch, setCategorySearch] = useState('');
+
+  // Sort and filter categories
+  const sortedCategories = Object.values(ProductCategory).sort((a, b) =>
+    getCategoryDisplayName(a).localeCompare(getCategoryDisplayName(b)),
+  );
+
+  const filteredCategories = sortedCategories.filter((category) => {
+    const displayName = getCategoryDisplayName(category).toLowerCase();
+    const searchTerm = categorySearch.toLowerCase();
+    return displayName.includes(searchTerm);
+  });
 
   const handleChange = (e: React.ChangeEvent<any>) => {
     const { name, value } = e.target;
@@ -384,7 +404,6 @@ const CreateCatalogItemForm = () => {
     x="50%" y="50%" text-anchor="middle" dy=".3em">No Image</text></svg>`;
 
   const PLACEHOLDER_SVG_DATA_URL = `data:image/svg+xml,${encodeURIComponent(PLACEHOLDER_SVG)}`;
-
   return (
     <div className="create-catalog-page" style={{ backgroundColor: '#f0f8f0', minHeight: '100vh', padding: '2rem 0' }}>
       <Container>
@@ -503,10 +522,23 @@ const CreateCatalogItemForm = () => {
                               overflowY: 'auto',
                             }}
                           >
-                            {Object.values(ProductCategory).map((category) => (
+                            <div className="px-2 pb-2">
+                              <Form.Control
+                                type="text"
+                                placeholder="Search categories..."
+                                value={categorySearch}
+                                onChange={(e) => setCategorySearch(e.target.value)}
+                                onClick={(e) => e.stopPropagation()}
+                                autoFocus
+                              />
+                            </div>
+                            {filteredCategories.map((category) => (
                               <Dropdown.Item
                                 key={category}
-                                onClick={() => setFormData((prev) => ({ ...prev, category }))}
+                                onClick={() => {
+                                  setFormData((prev) => ({ ...prev, category }));
+                                  setCategorySearch('');
+                                }}
                                 active={formData.category === category}
                               >
                                 {getCategoryDisplayName(category)}
