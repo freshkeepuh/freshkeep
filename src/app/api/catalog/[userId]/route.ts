@@ -17,7 +17,7 @@ export async function GET(request: NextRequest, { params }: any) {
     const userCatalogItems = await prisma.catalog.findMany({
       where: { userId },
       include: {
-        groceryItem: {
+        catalogItem: {
           include: { stores: true },
         },
       },
@@ -27,13 +27,13 @@ export async function GET(request: NextRequest, { params }: any) {
 
     const formattedItems = userCatalogItems.map((catalogItem) => ({
       id: catalogItem.id,
-      name: catalogItem.groceryItem.name,
-      storeName: catalogItem.groceryItem.stores.length > 0 ? catalogItem.groceryItem.stores[0].name : 'Unknown Store',
-      stores: catalogItem.groceryItem.stores.map((store) => store.name),
-      category: catalogItem.groceryItem.category,
+      name: catalogItem.catalogItem.name,
+      storeName: catalogItem.catalogItem.stores.length > 0 ? catalogItem.catalogItem.stores[0].name : 'Unknown Store',
+      stores: catalogItem.catalogItem.stores.map((store) => store.name),
+      category: catalogItem.catalogItem.category,
       userId: catalogItem.userId,
-      picture: catalogItem.groceryItem.picture || '',
-      productId: catalogItem.groceryItemId,
+      picture: catalogItem.catalogItem.picture || '',
+      productId: catalogItem.catalogItemId,
       createdAt: catalogItem.createdAt.toISOString(),
       updatedAt: catalogItem.updatedAt.toISOString(),
     }));

@@ -7,7 +7,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import GroceryItemCard from '../../components/GroceryItemCard';
+import CatalogItemCard from '../../components/CatalogItemCard';
 
 // Update the interface to match the actual API response
 interface CatalogItem {
@@ -38,7 +38,7 @@ const CatalogPage = () => {
 
       try {
         setLoading(true);
-        console.log('Fetching shop items for user:', currentUserId);
+        console.log('Fetching catalog items for user:', currentUserId);
 
         const response = await fetch(`/api/catalog/${currentUserId}`);
         console.log('Response status:', response.status);
@@ -46,7 +46,7 @@ const CatalogPage = () => {
         if (!response.ok) {
           const errorText = await response.text();
           console.error('API Error:', errorText);
-          throw new Error(`Failed to fetch shop items: ${response.status}`);
+          throw new Error(`Failed to fetch catalog items: ${response.status}`);
         }
 
         const data = await response.json();
@@ -55,9 +55,9 @@ const CatalogPage = () => {
         setCatalogItems(data);
         setError(null);
       } catch (err) {
-        console.error('Error fetching shop items:', err);
+        console.error('Error fetching catalog items:', err);
         const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-        setError(`Failed to load shop items: ${errorMessage}`);
+        setError(`Failed to load catalog items: ${errorMessage}`);
         setCatalogItems([]);
       } finally {
         setLoading(false);
@@ -69,11 +69,11 @@ const CatalogPage = () => {
   }, [currentUserId, status]);
 
   const mapCatalogItemToCardProps = (CatalogItem: CatalogItem) => ({
-    groceryItemImage: CatalogItem.picture || 'http://bit.ly/4q71ybS',
-    groceryItemTitle: CatalogItem.name,
+    catalogItemImage: CatalogItem.picture || 'http://bit.ly/4q71ybS',
+    catalogItemTitle: CatalogItem.name,
     storeName: CatalogItem.storeName || 'Unknown Store',
     storageType: 'Pantry',
-    groceryItemType: CatalogItem.category,
+    catalogItemType: CatalogItem.category,
     inList: false, // Since isNeeded is not in the flattened structure
   });
 
@@ -81,7 +81,7 @@ const CatalogPage = () => {
   if (status === 'loading') {
     return (
       <Container fluid className="p-5">
-        <h1>Shop</h1>
+        <h1>Catalog</h1>
         <div className="text-center py-5">
           <div className="spinner-border text-success" role="status">
             <span className="visually-hidden">Loading...</span>
@@ -116,7 +116,7 @@ const CatalogPage = () => {
   if (loading) {
     return (
       <Container fluid className="p-5">
-        <h1>Shop</h1>
+        <h1>Catalog</h1>
         <div className="text-center py-5">
           <div className="spinner-border text-success" role="status">
             <span className="visually-hidden">Loading...</span>
@@ -131,7 +131,7 @@ const CatalogPage = () => {
   if (error) {
     return (
       <Container fluid className="p-5">
-        <h1>Shop</h1>
+        <h1>Catalog</h1>
         <div className="text-center py-5">
           <div className="alert alert-danger" role="alert">
             <h4 className="alert-heading">Oops! Something went wrong</h4>
@@ -159,7 +159,7 @@ const CatalogPage = () => {
       >
         <Row className=" align-items-center justify-content-center py-3" style={{ height: '50px' }}>
           <Col xs="auto" className="px-1">
-            <Form.Control type="search" placeholder="Search groceryItems..." style={{ width: '400px' }} />
+            <Form.Control type="search" placeholder="Search catalogItems..." style={{ width: '400px' }} />
           </Col>
           <Col xs="auto" className="ps-1">
             <Button variant="light">Filters</Button>
@@ -170,7 +170,7 @@ const CatalogPage = () => {
             </Button>
           </Col>
           <Col xs="auto" className="ps-1">
-            <Button variant="light" href="/createGroceryItem">
+            <Button variant="light" href="/createCatalogItem">
               Add to Catalog
             </Button>
           </Col>
@@ -184,7 +184,7 @@ const CatalogPage = () => {
           </div>
           <h3 className="text-muted">No items found</h3>
           <p className="text-muted mb-4">You haven&apos;t added any products yet.</p>
-          <Button variant="success" href="/createGroceryItem" size="lg">
+          <Button variant="success" href="/createCatalogItem" size="lg">
             <i className="bi bi-plus-circle me-2" />
             Add Your First Product
           </Button>
@@ -195,12 +195,12 @@ const CatalogPage = () => {
             const cardProps = mapCatalogItemToCardProps(CatalogItem);
             return (
               <Col key={CatalogItem.id} lg={3} md={4} sm={6} className="mb-4">
-                <GroceryItemCard
-                  picture={cardProps.groceryItemImage}
-                  groceryItemTitle={cardProps.groceryItemTitle}
+                <CatalogItemCard
+                  picture={cardProps.catalogItemImage}
+                  catalogItemTitle={cardProps.catalogItemTitle}
                   storeName={cardProps.storeName}
                   storageType={cardProps.storageType}
-                  groceryItemType={cardProps.groceryItemType}
+                  catalogItemType={cardProps.catalogItemType}
                   inList={cardProps.inList}
                 />
               </Col>

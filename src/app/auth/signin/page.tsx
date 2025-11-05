@@ -10,9 +10,9 @@ import { signInValidation } from '@/lib/validationSchemas';
 import ErrorPopUp from '@/components/ErrorPopUp';
 import LogoHeader from '@/components/LogoHeader';
 import WelcomeSection from '@/components/WelcomeSection';
+import { redirect } from 'next/navigation';
 import EmailAddressField, { IEmailAddressField } from '@/components/EmailAddressField';
 import PasswordField, { IPasswordField } from '@/components/PasswordField';
-import { redirect } from 'next/navigation';
 
 import styles from './SignInPage.module.css';
 
