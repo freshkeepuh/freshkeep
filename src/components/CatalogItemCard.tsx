@@ -48,6 +48,7 @@ const CatalogItemCard = ({
   const handleButtonClick = () => {
     setIsInList(true);
     setQuantity(1);
+    setInputValue('1');
   };
 
   // Placeholder function for handling image error
@@ -156,8 +157,13 @@ const CatalogItemCard = ({
                           const newValue = e.target.value.replace(/[^0-9]/g, '');
                           setInputValue(newValue);
                           const val = parseInt(newValue, 10);
-                          if (Number.isFinite(val) && val > 0) {
-                            setQuantity(val);
+                          if (Number.isFinite(val)) {
+                            if (val > 0) {
+                              setQuantity(val);
+                            } else {
+                              setQuantity(0);
+                              setIsInList(false);
+                            }
                           }
                         }}
                         onBlur={() => {
