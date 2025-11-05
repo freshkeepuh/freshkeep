@@ -60,33 +60,6 @@ const getCategoryDisplayName = (category: ProductCategory): string => {
   return displayNames[category];
 };
 
-const getCategorySearchContext = (category: ProductCategory | ''): string => {
-  if (!category) return 'grocery food product';
-
-  const contextMap: Record<ProductCategory, string> = {
-    [ProductCategory.Fruits]: 'fresh fruit produce',
-    [ProductCategory.Vegetables]: 'fresh vegetable produce',
-    [ProductCategory.CannedGoods]: 'canned food product',
-    [ProductCategory.Dairy]: 'dairy product milk cheese',
-    [ProductCategory.Meat]: 'meat protein butcher',
-    [ProductCategory.FishSeafood]: 'fish seafood fresh',
-    [ProductCategory.Deli]: 'deli meat cheese',
-    [ProductCategory.Condiments]: 'condiment sauce grocery',
-    [ProductCategory.Spices]: 'spice seasoning jar',
-    [ProductCategory.Snacks]: 'snack food packaged',
-    [ProductCategory.Bakery]: 'bakery bread fresh',
-    [ProductCategory.Beverages]: 'beverage drink bottle',
-    [ProductCategory.Pasta]: 'pasta noodles packaged',
-    [ProductCategory.Grains]: 'grain rice packaged',
-    [ProductCategory.Cereal]: 'cereal breakfast box',
-    [ProductCategory.Baking]: 'baking ingredient grocery',
-    [ProductCategory.FrozenFoods]: 'frozen food product',
-    [ProductCategory.Other]: 'grocery food product',
-  };
-
-  return contextMap[category];
-};
-
 const storageOptions = ['Pantry', 'Refrigerator', 'Freezer', 'Counter', 'Cabinet', 'Other'];
 
 const CreateCatalogItemForm = () => {
@@ -115,8 +88,7 @@ const CreateCatalogItemForm = () => {
   const [searchResults, setSearchResults] = useState<GoogleImageResult[]>([]);
   const [searching, setSearching] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
-  const [searchAttempt, setSearchAttempt] = useState(0);
-
+  const [searchOffset, setSearchOffset] = useState(1);
   // State for category dropdown search
   const [categorySearch, setCategorySearch] = useState('');
 
@@ -127,8 +99,15 @@ const CreateCatalogItemForm = () => {
 
   const filteredCategories = sortedCategories.filter((category) => {
     const displayName = getCategoryDisplayName(category).toLowerCase();
-    const searchTerm = categorySearch.toLowerCase();
-    return displayName.includes(searchTerm);
+    const searchTerm = categorySearch.toLowerCase().trim();
+
+    // If no search term, show all categories
+    if (!searchTerm) return true;
+
+    // Split search term into words for more flexible matching
+    const searchWords = searchTerm.split(/\s+/);
+
+    return searchWords.every((word) => displayName.includes(word));
   });
 
   const handleChange = (e: React.ChangeEvent<any>) => {
@@ -151,34 +130,26 @@ const CreateCatalogItemForm = () => {
     }
   };
 
-  const buildEnhancedQuery = (query: string, attempt: number = 0): string => {
-    const categoryContext = getCategorySearchContext(formData.category);
-
-    const exclusions = `-logo-icon -tech -electronics -company -corporation -brand 
-      -iphone -ipad -macbook -laptop -computer -app -software`;
-
-    const strategies = [
-      `"${query}" ${categoryContext} ${exclusions}`,
-
-      `${query} fresh grocery supermarket ${exclusions}`,
-
-      `${query} walmart target costco product ${exclusions}`,
-
-      `${query} packaged product food item ${exclusions}`,
-    ];
+  const buildEnhancedQuery = (query: string): string => {
+    const storeName = formData.storeName.trim();
+    return storeName ? `${query} ${storeName}` : `${query} original regular`;
 
     return strategies[attempt % strategies.length];
   };
 
-  const searchGoogleImages = async (query: string, attemptOverride?: number) => {
+  const searchGoogleImages = async (query: string) => {
     if (!query.trim()) return;
 
     setSearching(true);
     setSearchError(null);
 
     try {
-      const currentAttempt = attemptOverride !== undefined ? attemptOverride : searchAttempt;
-      const enhancedQuery = buildEnhancedQuery(query, currentAttempt);
+      // Google's search API only allows up to index 100
+      if (searchOffset > 90) {
+        setSearchOffset(1); // Reset to first page
+      }
+
+      const enhancedQuery = buildEnhancedQuery(query);
 
       const params = new URLSearchParams({
         key: GOOGLE_API_KEY ?? '',
@@ -186,34 +157,31 @@ const CreateCatalogItemForm = () => {
         q: enhancedQuery,
         searchType: 'image',
         num: '10',
-        imgSize: 'medium',
         safe: 'active',
-        imgType: 'photo',
-        imgColorType: 'color',
-        fileType: 'jpg,png',
+        start: searchOffset.toString(),
       });
 
       const apiUrl = `https://www.googleapis.com/customsearch/v1?${params.toString()}`;
 
-      console.log('Search attempt:', currentAttempt);
-      console.log('Enhanced query:', enhancedQuery);
+      console.log('Search query:', enhancedQuery);
 
       const response = await fetch(apiUrl);
+      const data = await response.json();
 
       if (!response.ok) {
-        const errorData = await response.json();
-        console.error('API Error:', errorData);
+        console.error('API Error:', data);
 
         if (response.status === 403) {
           throw new Error('API key issue. Please check your Google API key configuration.');
         } else if (response.status === 429) {
-          throw new Error('Too many requests. Please try again later.');
+          throw new Error('Too many requests. Please try again in a few minutes.');
+        } else if (data.error?.message?.includes('index')) {
+          setSearchOffset(1); // Reset offset if we hit the index limit
+          throw new Error('Reached end of results. Starting from beginning...');
         } else {
-          throw new Error(errorData.error?.message || 'Search failed');
+          throw new Error(data.error?.message || 'Search failed');
         }
       }
-
-      const data = await response.json();
 
       if (!data.items || data.items.length === 0) {
         setSearchError(
@@ -235,14 +203,17 @@ const CreateCatalogItemForm = () => {
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setSearchAttempt(0);
-    searchGoogleImages(searchQuery, 0);
+    setSearchOffset(1); // Reset offset for new search
+    searchGoogleImages(searchQuery);
   };
 
   const handleTryDifferentResults = () => {
-    const nextAttempt = searchAttempt + 1;
-    setSearchAttempt(nextAttempt);
-    searchGoogleImages(searchQuery, nextAttempt);
+    setSearchOffset((prev) => {
+      // If we're approaching the limit, reset to beginning
+      const next = prev + 10;
+      return next > 90 ? 1 : next;
+    });
+    searchGoogleImages(searchQuery);
   };
 
   const handleImageClick = (imageUrl: string) => {
@@ -771,9 +742,9 @@ const CreateCatalogItemForm = () => {
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <Alert variant="success" className="mb-0 flex-grow-1 me-2">
                   <strong>Click any image to select it</strong>
-                  <span> Found </span>
+                  <span> • Found </span>
                   {searchResults.length}
-                  <span> results.</span>
+                  <span> results</span>
                 </Alert>
                 <Button variant="outline-success" onClick={handleTryDifferentResults} disabled={searching}>
                   🔄 Try Different Results
