@@ -12,3 +12,15 @@ body {
   display: flex;
   flex-direction: column;
 }
+
+/* Hide number input spinners */
+input[type='number'].quantity-input::-webkit-inner-spin-button,
+input[type='number'].quantity-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'].quantity-input {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
