@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Button, Col, Container, Form, Row } from 'react-bootstrap';
-import { Plus } from 'react-bootstrap-icons';
+import { Button, Col, Container, Form, Row, Spinner } from 'react-bootstrap';
+import { Plus, Search } from 'react-bootstrap-icons';
 import LocationCard from '../../components/location/LocationCard';
 import MapComponent from '../../components/MapDisplay';
 import styles from './page.module.css';
@@ -22,13 +22,14 @@ interface Location {
 const LocationsPage = () => {
   const [locations, setLocations] = useState<Location[]>([]);
   const [loading, setLoading] = useState(true);
+  const [adding, setAdding] = useState(false);
 
   // Initial load from API
   useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
-  const res = await fetch('/api/location', { cache: 'no-store' });
+        const res = await fetch('/api/location', { cache: 'no-store' });
         if (!res.ok) return;
         const data = (await res.json()) as Location[];
         if (!cancelled) setLocations(data ?? []);
@@ -43,7 +44,7 @@ const LocationsPage = () => {
 
   // Re-sync helper function
   const reloadLocations = async () => {
-  const res = await fetch('/api/location', { cache: 'no-store' });
+    const res = await fetch('/api/location', { cache: 'no-store' });
     if (!res.ok) return;
     const data = (await res.json()) as Location[];
     setLocations(data ?? []);
@@ -80,21 +81,24 @@ const LocationsPage = () => {
   const handleAddLocation = async () => {
     const num = getNextAutoNumber();
     const name = `New location ${num}`;
-
-    await fetch('/api/location', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name,
-        address1: '2500 Campus Rd',
-        city: 'Honolulu',
-        state: 'HI',
-        zipcode: '96822',
-        country: 'USA',
-      }),
-    });
-
-    await reloadLocations();
+    try {
+      setAdding(true);
+      await fetch('/api/location', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          address1: '2500 Campus Rd',
+          city: 'Honolulu',
+          state: 'HI',
+          zipcode: '96822',
+          country: 'USA',
+        }),
+      });
+      await reloadLocations();
+    } finally {
+      setAdding(false);
+    }
   };
 
   // Locations list
@@ -135,7 +139,33 @@ const LocationsPage = () => {
           <Col md={4}>
             <div className={`d-flex flex-column h-100 ${styles.panel}`}>
               <div className={styles.listSection}>
-                <h4>Your Locations</h4>
+                <Row className="align-items-center mb-2">
+                  <Col>
+                    <h4 className="mb-2">Your Locations</h4>
+                  </Col>
+                  <Col xs="auto">
+                    <Button
+                      variant="success"
+                      size="sm"
+                      aria-label="Add Location"
+                      onClick={handleAddLocation}
+                      className={`d-flex align-items-center ${styles.btnCompact}`}
+                      disabled={adding}
+                    >
+                      {adding ? (
+                        <>
+                          <Spinner animation="border" size="sm" className="me-1" />
+                          Adding…
+                        </>
+                      ) : (
+                        <>
+                          <Plus className="me-1" />
+                          Add Location
+                        </>
+                      )}
+                    </Button>
+                  </Col>
+                </Row>
                 <div className={styles.listScroll}>
                   <ul className="list-unstyled mb-0">{locationsList}</ul>
                 </div>
@@ -151,17 +181,16 @@ const LocationsPage = () => {
                 <Col>
                   <Form.Control type="text" placeholder="Search for a location or address..." />
                 </Col>
-                {/* Add Location Button */}
+                {/* Search Button */}
                 <Col xs="auto">
                   <Button
-                    variant="success"
+                    variant="outline-secondary"
                     size="sm"
-                    aria-label="Add Location"
-                    onClick={handleAddLocation}
+                    aria-label="Search locations"
                     className="d-flex align-items-center"
                   >
-                    <Plus className="me-1" />
-                    Add
+                    <Search className="me-1" />
+                    Search
                   </Button>
                 </Col>
               </Row>

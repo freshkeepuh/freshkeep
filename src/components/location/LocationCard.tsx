@@ -10,7 +10,7 @@ interface LocationCardProps {
   name: string;
   address: string;
   onEdit: (id: string, name: string, address: string) => void;
-  onDelete: (id: string) => void;
+  onDelete: (id: string) => Promise<void> | void;
   className?: string;
 }
 
@@ -19,6 +19,7 @@ const LocationCard = ({ id, name, address, onEdit, onDelete, className }: Locati
   const [editName, setEditName] = useState(name);
   const [editAddress, setEditAddress] = useState(address);
   const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -43,8 +44,16 @@ const LocationCard = ({ id, name, address, onEdit, onDelete, className }: Locati
   };
 
   if (isEditing) {
+    const editingLiClass = [
+      styles.item,
+      styles.cardEditing,
+      saving ? styles.saving : '',
+      className,
+    ]
+      .filter(Boolean)
+      .join(' ');
     return (
-      <li className={[styles.item, styles.cardEditing, saving ? styles.saving : '', className].filter(Boolean).join(' ')}>
+      <li className={editingLiClass}>
         {/* Edit form */}
         <div className={styles.row}>
           <Form.Control
@@ -96,7 +105,15 @@ const LocationCard = ({ id, name, address, onEdit, onDelete, className }: Locati
   }
 
   return (
-    <li className={[styles.item, styles.card, className].filter(Boolean).join(' ')}>
+    <li
+      className={[
+        styles.item,
+        styles.card,
+        className,
+      ]
+        .filter(Boolean)
+        .join(' ')}
+    >
       {/* Header with name and action buttons */}
       <div className={styles.row}>
         <h6 className={styles.title}>{name}</h6>
@@ -107,6 +124,7 @@ const LocationCard = ({ id, name, address, onEdit, onDelete, className }: Locati
             className={styles.iconBtn}
             aria-label={`Edit ${name}`}
             onClick={handleEditClick}
+            disabled={deleting}
           >
             <Pencil />
           </Button>
@@ -115,9 +133,17 @@ const LocationCard = ({ id, name, address, onEdit, onDelete, className }: Locati
             size="sm"
             className={styles.iconBtn}
             aria-label={`Delete ${name}`}
-            onClick={() => onDelete(id)}
+            onClick={async () => {
+              try {
+                setDeleting(true);
+                await Promise.resolve(onDelete(id));
+              } finally {
+                setDeleting(false);
+              }
+            }}
+            disabled={deleting}
           >
-            <Trash />
+            {deleting ? <Spinner animation="border" size="sm" /> : <Trash />}
           </Button>
         </span>
       </div>

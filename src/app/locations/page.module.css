@@ -37,3 +37,10 @@
 .listSection h4 {
   margin-bottom: 0.75rem;
 }
+
+/* Add Button Size */
+.btnCompact {
+  font-size: 0.9rem;
+  padding: 0.15rem 0.4rem;
+  line-height: 1.4;
+}
