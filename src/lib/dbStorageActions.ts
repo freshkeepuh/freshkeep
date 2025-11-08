@@ -4,7 +4,7 @@
 
 'use server';
 
-import { StorageType, StorageArea } from '@prisma/client';
+import { StorageType } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
 import {
   productInstanceSelect,
@@ -25,7 +25,7 @@ export async function createStorage(data: {
   type: string,
   picture: string | undefined,
 }) {
-  const newStorage = await prisma.StorageArea.create({
+  const newStorage = await prisma.storageArea.create({
     data: {
       locId: data.locId,
       name: data.name,
@@ -65,7 +65,7 @@ export async function readStorages() {
  */
 export async function readStorage(id: string | null | undefined) {
   if (!id) return null;
-  const storage = await prisma.StorageArea.findUnique({
+  const storage = await prisma.storageArea.findUnique({
     where: { id },
     select: {
       locId: true,
@@ -124,7 +124,7 @@ export async function updateStorage(id: string, data: {
  * @returns The deleted storage if found, otherwise null.
  */
 export async function deleteStorage(id: string) {
-  const deletedStorage = await prisma.StorageArea.delete({
+  const deletedStorage = await prisma.storageArea.delete({
     where: { id },
     select: storageSelect,
   });
