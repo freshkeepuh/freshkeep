@@ -1,5 +1,3 @@
-/* eslint-disable max-len */
-
 'use client';
 
 import React, { useEffect, useMemo, useState } from 'react';
