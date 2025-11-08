@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { Button, Col, Container, Form, Row, Spinner } from 'react-bootstrap';
 import { Plus, Search, GeoAlt } from 'react-bootstrap-icons';
-import { Country } from '@prisma/client';
 import LocationCard from '../../components/location/LocationCard';
 import MapComponent from '../../components/MapDisplay';
 import styles from './page.module.css';
