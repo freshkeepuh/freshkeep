@@ -3,8 +3,8 @@
 import { Col, Container, Row } from 'react-bootstrap';
 import ReportFilter from '@/components/ReportFilter';
 
-const RestockReport = () => {
-  return <Container>
+const RestockReport = () => (
+  <Container>
     <Row>
       <Col>
         <ReportFilter title="Restock Report" onSearch={() => {}} />
@@ -15,7 +15,7 @@ const RestockReport = () => {
         {/* Restock report content goes here */}
       </Col>
     </Row>
-  </Container>;
-};
+  </Container>
+);
 
 export default RestockReport;

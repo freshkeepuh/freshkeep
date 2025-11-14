@@ -3,8 +3,8 @@
 import { Col, Container, Row } from 'react-bootstrap';
 import ReportFilter from '@/components/ReportFilter';
 
-const ExpiringReport = () => {
-  return <Container>
+const ExpiringReport = () => (
+  <Container>
     <Row>
       <Col>
         <ReportFilter title="Expiring Report" onSearch={() => {}} />
@@ -15,7 +15,7 @@ const ExpiringReport = () => {
         {/* Expiring report content goes here */}
       </Col>
     </Row>
-  </Container>;
-};
+  </Container>
+);
 
 export default ExpiringReport;
