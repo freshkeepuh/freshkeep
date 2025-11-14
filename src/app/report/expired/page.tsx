@@ -3,19 +3,19 @@
 import { Col, Container, Row } from 'react-bootstrap';
 import ReportFilter from '@/components/ReportFilter';
 
-const InventoryReport = () => {
+const ExpiredReport = () => {
   return <Container>
     <Row>
       <Col>
-        <ReportFilter title="Inventory Report" onSearch={() => {}} />
+        <ReportFilter title="Expired Report" onSearch={() => {}} />
       </Col>
     </Row>
     <Row>
       <Col>
-        {/* Inventory report content goes here */}
+        {/* Expired report content goes here */}
       </Col>
     </Row>
   </Container>;
 };
 
-export default InventoryReport;
+export default ExpiredReport;
