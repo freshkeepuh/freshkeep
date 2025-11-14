@@ -5,6 +5,7 @@ import { Col, Container, Form, Row } from 'react-bootstrap';
 import { useFormContext } from 'react-hook-form';
 import CountryDropDown, { ICountryField } from '@/components/CountryDropDown';
 import { Country } from '@prisma/client';
+import RequiredLabel from './RequiredLabel';
 
 export interface IAddressSubForm extends ICountryField {
   address1: string;
@@ -33,7 +34,7 @@ const AddressSubForm = ({ address, isEditing }: AddressSubFormProps) => {
     return (
       <>
         <Form.Group>
-          <Form.Label aria-required="true">Address 1: *</Form.Label>
+          <RequiredLabel>Address 1:</RequiredLabel>
           <Form.Control
             id="address1"
             type="text"
@@ -64,7 +65,7 @@ const AddressSubForm = ({ address, isEditing }: AddressSubFormProps) => {
           <Row>
             <Col>
               <Form.Group>
-                <Form.Label>City:</Form.Label>
+                <RequiredLabel>City:</RequiredLabel>
                 <Form.Control
                   id="city"
                   type="text"
@@ -80,7 +81,7 @@ const AddressSubForm = ({ address, isEditing }: AddressSubFormProps) => {
             </Col>
             <Col>
               <Form.Group>
-                <Form.Label>State:</Form.Label>
+                <RequiredLabel>State:</RequiredLabel>
                 <Form.Control
                   id="state"
                   type="text"
@@ -96,7 +97,7 @@ const AddressSubForm = ({ address, isEditing }: AddressSubFormProps) => {
             </Col>
             <Col>
               <Form.Group>
-                <Form.Label>Zipcode:</Form.Label>
+                <RequiredLabel>Zipcode:</RequiredLabel>
                 <Form.Control
                   id="zipcode"
                   type="text"
@@ -113,7 +114,7 @@ const AddressSubForm = ({ address, isEditing }: AddressSubFormProps) => {
           </Row>
         </Container>
         <Form.Group>
-          <Form.Label>Country:</Form.Label>
+          <RequiredLabel>Country:</RequiredLabel>
           <CountryDropDown />
           <Form.Control.Feedback type="invalid">
             {errors.country && errors.country.message?.toString()}
