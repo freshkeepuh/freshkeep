@@ -89,10 +89,9 @@ const CreateCatalogItemForm = () => {
   const [searching, setSearching] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
   const [searchOffset, setSearchOffset] = useState(1);
-  // State for category dropdown search
+
   const [categorySearch, setCategorySearch] = useState('');
 
-  // Sort and filter categories
   const sortedCategories = Object.values(ProductCategory).sort((a, b) =>
     getCategoryDisplayName(a).localeCompare(getCategoryDisplayName(b)),
   );
@@ -101,10 +100,8 @@ const CreateCatalogItemForm = () => {
     const displayName = getCategoryDisplayName(category).toLowerCase();
     const searchTerm = categorySearch.toLowerCase().trim();
 
-    // If no search term, show all categories
     if (!searchTerm) return true;
 
-    // Split search term into words for more flexible matching
     const searchWords = searchTerm.split(/\s+/);
 
     return searchWords.every((word) => displayName.includes(word));
@@ -142,9 +139,8 @@ const CreateCatalogItemForm = () => {
     setSearchError(null);
 
     try {
-      // Google's search API only allows up to index 100
       if (searchOffset > 90) {
-        setSearchOffset(1); // Reset to first page
+        setSearchOffset(1);
       }
 
       const enhancedQuery = buildEnhancedQuery(query);
@@ -174,7 +170,7 @@ const CreateCatalogItemForm = () => {
         } else if (response.status === 429) {
           throw new Error('Too many requests. Please try again in a few minutes.');
         } else if (data.error?.message?.includes('index')) {
-          setSearchOffset(1); // Reset offset if we hit the index limit
+          setSearchOffset(1);
           throw new Error('Reached end of results. Starting from beginning...');
         } else {
           throw new Error(data.error?.message || 'Search failed');
@@ -201,13 +197,12 @@ const CreateCatalogItemForm = () => {
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setSearchOffset(1); // Reset offset for new search
+    setSearchOffset(1);
     searchGoogleImages(searchQuery);
   };
 
   const handleTryDifferentResults = () => {
     setSearchOffset((prev) => {
-      // If we're approaching the limit, reset to beginning
       const next = prev + 10;
       return next > 90 ? 1 : next;
     });
@@ -314,7 +309,6 @@ const CreateCatalogItemForm = () => {
     try {
       let finalImageUrl: string | null = null;
 
-      // Priority: Selected Google image URL > Uploaded file
       if (selectedImageUrl) {
         finalImageUrl = selectedImageUrl;
         console.log('Using Google image URL:', selectedImageUrl);
