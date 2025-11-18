@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useState, useTransition, FormEvent } from "react";
-import Link from "next/link";
+import { useState, useTransition, type FormEvent } from 'react';
+import Link from 'next/link';
 
-import { DIFFICULTY_OPTIONS, DIET_OPTIONS } from "@/lib/recipeUI";
-import styles from "./recipesPage.module.css";
+import { DIFFICULTY_OPTIONS, DIET_OPTIONS } from '@/lib/recipeUI';
+import styles from './recipesPage.module.css';
 
 type AddRecipeFormProps = {
   action: (formData: FormData) => Promise<void>;
@@ -14,15 +14,31 @@ type AddRecipeFormProps = {
 const RequiredStar = ({ active }: { active: boolean }) => (
   <span
     style={{
-      color: "#d93025",
+      color: '#d93025',
       marginLeft: 4,
       opacity: active ? 1 : 0,
-      transition: "opacity 0.25s ease",
+      transition: 'opacity 0.25s ease',
     }}
   >
     *
   </span>
 );
+
+// Multiline placeholders without long lines
+const INGREDIENTS_PLACEHOLDER = [
+  'Salmon fillet',
+  'Furikake',
+  'Rice',
+  'Soy sauce',
+  'Green onions',
+].join('\n');
+
+const INSTRUCTIONS_PLACEHOLDER = [
+  'Preheat oven to 400°F (200°C)',
+  'Season salmon with salt and pepper',
+  'Spread mayo on top, sprinkle furikake',
+  'Bake 12–15 minutes until cooked through',
+].join('\n');
 
 export default function AddRecipeForm({ action }: AddRecipeFormProps) {
   const [error, setError] = useState<string | null>(null);
@@ -33,30 +49,30 @@ export default function AddRecipeForm({ action }: AddRecipeFormProps) {
     const errors: Record<string, string> = {};
 
     // Title
-    if (!formData.get("title")?.toString().trim()) {
-      errors.title = "Title is required.";
+    if (!formData.get('title')?.toString().trim()) {
+      errors.title = 'Title is required.';
     }
 
     // Ingredients
-    const ingredients = formData.get("ingredients")?.toString().trim();
+    const ingredients = formData.get('ingredients')?.toString().trim();
     if (!ingredients) {
-      errors.ingredients = "At least one ingredient is required.";
+      errors.ingredients = 'At least one ingredient is required.';
     }
 
     // Instructions
-    const instructions = formData.get("instructions")?.toString().trim();
+    const instructions = formData.get('instructions')?.toString().trim();
     if (!instructions) {
-      errors.instructions = "Instructions are required.";
+      errors.instructions = 'Instructions are required.';
     }
 
     // Cook time – required and must be > 0
-    const cookTimeRaw = formData.get("cookTime")?.toString().trim();
+    const cookTimeRaw = formData.get('cookTime')?.toString().trim();
     const cookTimeNum = Number(cookTimeRaw);
 
     if (!cookTimeRaw) {
-      errors.cookTime = "Cook time is required.";
+      errors.cookTime = 'Cook time is required.';
     } else if (Number.isNaN(cookTimeNum) || cookTimeNum <= 0) {
-      errors.cookTime = "Cook time must be greater than zero.";
+      errors.cookTime = 'Cook time must be greater than zero.';
     }
 
     return errors;
@@ -70,7 +86,7 @@ export default function AddRecipeForm({ action }: AddRecipeFormProps) {
     setFieldErrors(foundErrors);
 
     if (Object.keys(foundErrors).length > 0) {
-      setError("Please fix the highlighted fields.");
+      setError('Please fix the highlighted fields.');
       return;
     }
 
@@ -78,16 +94,21 @@ export default function AddRecipeForm({ action }: AddRecipeFormProps) {
     startTransition(async () => {
       try {
         await action(formData);
-      } catch (err: any) {
-        setError(
-          err?.message ?? "Something went wrong while creating the recipe."
-        );
+      } catch (err: unknown) {
+        const message = err instanceof Error
+          ? err.message
+          : 'Something went wrong while creating the recipe.';
+        setError(message);
       }
     });
   };
 
-  const errorClass = (field: string) =>
-    fieldErrors[field] ? "form-control is-invalid" : "form-control";
+  const errorClass = (field: string) => {
+    if (fieldErrors[field]) {
+      return 'form-control is-invalid';
+    }
+    return 'form-control';
+  };
 
   return (
     <form
@@ -106,36 +127,52 @@ export default function AddRecipeForm({ action }: AddRecipeFormProps) {
 
       {/* Title */}
       <div className="col-12">
-        <label htmlFor="title" className="form-label fw-semibold">
-          Title <RequiredStar active={!!fieldErrors.title} />
+        <label
+          htmlFor="title"
+          className="form-label fw-semibold w-100"
+        >
+          <span>
+            Title
+            <RequiredStar active={!!fieldErrors.title} />
+          </span>
+          <input
+            id="title"
+            name="title"
+            type="text"
+            className={errorClass('title')}
+            placeholder="Furikake Salmon Bowl"
+          />
         </label>
-        <input
-          id="title"
-          name="title"
-          type="text"
-          className={errorClass("title")}
-          placeholder="Furikake Salmon Bowl"
-        />
         {fieldErrors.title && (
-          <div className="invalid-feedback">{fieldErrors.title}</div>
+          <div className="invalid-feedback d-block">
+            {fieldErrors.title}
+          </div>
         )}
       </div>
 
       {/* Cook Time */}
-      <div className="col-12" style={{ maxWidth: "250px" }}>
-        <label htmlFor="cookTime" className="form-label fw-semibold">
-          Cook Time (minutes) <RequiredStar active={!!fieldErrors.cookTime} />
+      <div className="col-12" style={{ maxWidth: '250px' }}>
+        <label
+          htmlFor="cookTime"
+          className="form-label fw-semibold w-100"
+        >
+          <span>
+            Cook Time (minutes)
+            <RequiredStar active={!!fieldErrors.cookTime} />
+          </span>
+          <input
+            id="cookTime"
+            name="cookTime"
+            type="number"
+            min={1}
+            className={errorClass('cookTime')}
+            placeholder="30"
+          />
         </label>
-        <input
-          id="cookTime"
-          name="cookTime"
-          type="number"
-          min={1}
-          className={errorClass("cookTime")}
-          placeholder="30"
-        />
         {fieldErrors.cookTime && (
-          <div className="invalid-feedback">{fieldErrors.cookTime}</div>
+          <div className="invalid-feedback d-block">
+            {fieldErrors.cookTime}
+          </div>
         )}
       </div>
 
@@ -144,91 +181,120 @@ export default function AddRecipeForm({ action }: AddRecipeFormProps) {
         <div className={styles.rpGrid3}>
           {/* Difficulty */}
           <div>
-            <label htmlFor="difficulty" className="form-label fw-semibold">
-              Difficulty <RequiredStar active={false} />
-            </label>
-            <select
-              id="difficulty"
-              name="difficulty"
-              className={styles.rpSelect}
-              defaultValue="ANY"
+            <label
+              htmlFor="difficulty"
+              className="form-label fw-semibold w-100"
             >
-              {DIFFICULTY_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
+              <span>
+                Difficulty
+                <RequiredStar active={false} />
+              </span>
+              <select
+                id="difficulty"
+                name="difficulty"
+                className={styles.rpSelect}
+                defaultValue="ANY"
+              >
+                {DIFFICULTY_OPTIONS.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+            </label>
           </div>
 
           {/* Diet */}
           <div>
-            <label htmlFor="diet" className="form-label fw-semibold">
-              Diet <RequiredStar active={false} />
-            </label>
-            <select
-              id="diet"
-              name="diet"
-              className={styles.rpSelect}
-              defaultValue="ANY"
+            <label
+              htmlFor="diet"
+              className="form-label fw-semibold w-100"
             >
-              {DIET_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
+              <span>
+                Diet
+                <RequiredStar active={false} />
+              </span>
+              <select
+                id="diet"
+                name="diet"
+                className={styles.rpSelect}
+                defaultValue="ANY"
+              >
+                {DIET_OPTIONS.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+            </label>
           </div>
 
           {/* Image Upload */}
           <div>
-            <label htmlFor="image" className="form-label fw-semibold">
-              Recipe Image
+            <label
+              htmlFor="image"
+              className="form-label fw-semibold w-100"
+            >
+              <span>Recipe Image</span>
+              <input
+                id="image"
+                name="image"
+                type="file"
+                accept="image/*"
+                className="form-control"
+              />
             </label>
-            <input
-              id="image"
-              name="image"
-              type="file"
-              accept="image/*"
-              className="form-control"
-            />
           </div>
         </div>
       </div>
 
       {/* Ingredients */}
       <div className="col-12">
-        <label htmlFor="ingredients" className="form-label fw-semibold">
-          Ingredients (one per line)
-          <RequiredStar active={!!fieldErrors.ingredients} />
+        <label
+          htmlFor="ingredients"
+          className="form-label fw-semibold w-100"
+        >
+          <span>
+            Ingredients (one per line)
+            <RequiredStar active={!!fieldErrors.ingredients} />
+          </span>
+          <textarea
+            id="ingredients"
+            name="ingredients"
+            className={errorClass('ingredients')}
+            rows={6}
+            placeholder={INGREDIENTS_PLACEHOLDER}
+          />
         </label>
-        <textarea
-          id="ingredients"
-          name="ingredients"
-          className={errorClass("ingredients")}
-          rows={6}
-          placeholder={`Salmon fillet\nFurikake\nRice\nSoy sauce\nGreen onions`}
-        />
         {fieldErrors.ingredients && (
-          <div className="invalid-feedback">{fieldErrors.ingredients}</div>
+          <div className="invalid-feedback d-block">
+            {fieldErrors.ingredients}
+          </div>
         )}
       </div>
 
       {/* Instructions */}
       <div className="col-12">
-        <label htmlFor="instructions" className="form-label fw-semibold">
-          Instructions (each step on a new line)
-          <RequiredStar active={!!fieldErrors.instructions} />
+        <label
+          htmlFor="instructions"
+          className="form-label fw-semibold w-100"
+        >
+          <span>
+            Instructions (each step on a new line)
+            <RequiredStar active={!!fieldErrors.instructions} />
+          </span>
+          <textarea
+            id="instructions"
+            name="instructions"
+            className={errorClass('instructions')}
+            rows={8}
+            placeholder={INSTRUCTIONS_PLACEHOLDER}
+          />
         </label>
-        <textarea
-          id="instructions"
-          name="instructions"
-          className={errorClass("instructions")}
-          rows={8}
-          placeholder={`Preheat oven to 400°F (200°C)\nSeason salmon with salt and pepper\nSpread mayo on top, sprinkle furikake\nBake 12–15 minutes until cooked through`}
-        />
         {fieldErrors.instructions && (
-          <div className="invalid-feedback">{fieldErrors.instructions}</div>
+          <div className="invalid-feedback d-block">
+            {fieldErrors.instructions}
+          </div>
         )}
       </div>
 
@@ -239,7 +305,7 @@ export default function AddRecipeForm({ action }: AddRecipeFormProps) {
           className={styles.rpBtnDark}
           disabled={isPending}
         >
-          {isPending ? "Saving…" : "Save Recipe"}
+          {isPending ? 'Saving…' : 'Save Recipe'}
         </button>
 
         <Link href="/recipes" className={styles.rpBtnSecondary}>

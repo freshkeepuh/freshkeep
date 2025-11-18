@@ -1,22 +1,21 @@
-// src/app/recipes/add/page.tsx
-import { redirect } from "next/navigation";
-import { prisma } from "@/lib/prisma";
-import type { RecipeDifficulty, RecipeDiet } from "@prisma/client";
-import AddRecipeForm from "./AddRecipeForm";
-import path from "node:path";
-import fs from "node:fs/promises";
-import Link from "next/link";
-import styles from "./recipesPage.module.css";
+import path from 'node:path';
+import fs from 'node:fs/promises';
+import { redirect } from 'next/navigation';
+import Link from 'next/link';
+import { prisma } from '@/lib/prisma';
+import type { RecipeDifficulty, RecipeDiet } from '@prisma/client';
+import AddRecipeForm from './AddRecipeForm';
+import styles from './recipesPage.module.css';
 
-export const runtime = "nodejs"; // ensure we can use the filesystem
+export const runtime = 'nodejs'; // ensure we can use the filesystem
 
 // "Furikake Salmon Bowl" -> "furikake-salmon-bowl"
 function slugify(value: string) {
   return value
     .toLowerCase()
     .trim()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
 }
 
 // Save uploaded image into /public/uploads and return its URL
@@ -24,11 +23,11 @@ async function saveImageFile(file: File, slug: string): Promise<string> {
   const bytes = await file.arrayBuffer();
   const buffer = Buffer.from(bytes);
 
-  const originalName = file.name || "image";
-  const ext = path.extname(originalName) || ".png";
+  const originalName = file.name || 'image';
+  const ext = path.extname(originalName) || '.png';
   const fileName = `${slug}-${Date.now()}${ext}`;
 
-  const uploadDir = path.join(process.cwd(), "public", "uploads");
+  const uploadDir = path.join(process.cwd(), 'public', 'uploads');
   await fs.mkdir(uploadDir, { recursive: true });
 
   const filePath = path.join(uploadDir, fileName);
@@ -37,59 +36,75 @@ async function saveImageFile(file: File, slug: string): Promise<string> {
   return `/uploads/${fileName}`;
 }
 
-async function createRecipe(formData: FormData) {
-  "use server";
+function resolveDifficulty(raw: string): RecipeDifficulty {
+  const allowed: RecipeDifficulty[] = ['EASY', 'NORMAL', 'HARD'];
 
-  const title = (formData.get("title") ?? "").toString().trim();
+  if (raw === 'ANY') {
+    return 'EASY';
+  }
+
+  if (allowed.includes(raw as RecipeDifficulty)) {
+    return raw as RecipeDifficulty;
+  }
+
+  return 'EASY';
+}
+
+function resolveDiet(raw: string): RecipeDiet {
+  const allowed: RecipeDiet[] = ['VEGAN', 'VEGETARIAN', 'PESCETARIAN'];
+
+  if (raw === 'ANY') {
+    return 'VEGETARIAN';
+  }
+
+  if (allowed.includes(raw as RecipeDiet)) {
+    return raw as RecipeDiet;
+  }
+
+  return 'VEGETARIAN';
+}
+
+async function createRecipe(formData: FormData) {
+  'use server';
+
+  const title = (formData.get('title') ?? '').toString().trim();
   if (!title) {
-    throw new Error("Please enter a title for your recipe.");
+    throw new Error('Please enter a title for your recipe.');
   }
 
   const slug = slugify(title);
 
-  const cookTimeStr = (formData.get("cookTime") ?? "").toString().trim();
-  const cookTime = Number(cookTimeStr || "0");
+  const cookTimeStr = (formData.get('cookTime') ?? '')
+    .toString()
+    .trim();
+  const cookTime = Number(cookTimeStr || '0');
   if (Number.isNaN(cookTime) || cookTime <= 0) {
-    throw new Error("Cook time must be a positive number of minutes.");
+    throw new Error('Cook time must be a positive number of minutes.');
   }
 
-  // Difficulty – allow "ANY" in UI but map to a real enum value
-  const difficultyRaw = (formData.get("difficulty") ?? "ANY").toString();
-  const allowedDifficulties: RecipeDifficulty[] = ["EASY", "NORMAL", "HARD"];
-  const difficulty: RecipeDifficulty =
-    difficultyRaw === "ANY"
-      ? "EASY"
-      : allowedDifficulties.includes(difficultyRaw as RecipeDifficulty)
-      ? (difficultyRaw as RecipeDifficulty)
-      : "EASY";
+  const difficultyRaw = (formData.get('difficulty') ?? 'ANY').toString();
+  const difficulty = resolveDifficulty(difficultyRaw);
 
-  // Diet – allow "ANY" in UI but map to a real enum value
-  const dietRaw = (formData.get("diet") ?? "ANY").toString();
-  const allowedDiets: RecipeDiet[] = ["VEGAN", "VEGETARIAN", "PESCETARIAN"];
-  const diet: RecipeDiet =
-    dietRaw === "ANY"
-      ? "VEGETARIAN"
-      : allowedDiets.includes(dietRaw as RecipeDiet)
-      ? (dietRaw as RecipeDiet)
-      : "VEGETARIAN";
+  const dietRaw = (formData.get('diet') ?? 'ANY').toString();
+  const diet = resolveDiet(dietRaw);
 
-  const ingredientsRaw = (formData.get("ingredients") ?? "").toString();
+  const ingredientsRaw = (formData.get('ingredients') ?? '').toString();
   const ingredients = ingredientsRaw
-    .split("\n")
+    .split('\n')
     .map((i) => i.trim())
     .filter(Boolean);
 
-  const instructionsRaw = (formData.get("instructions") ?? "").toString();
+  const instructionsRaw = (formData.get('instructions') ?? '').toString();
   const instructions = instructionsRaw
-    .split("\n")
+    .split('\n')
     .map((line) => line.trim())
     .filter(Boolean);
 
   // Optional image
   let image: string | null = null;
-  const imageFile = formData.get("image") as File | null;
+  const imageFile = formData.get('image') as File | null;
   if (imageFile && imageFile.size > 0) {
-    image = await saveImageFile(imageFile, slug || "recipe");
+    image = await saveImageFile(imageFile, slug || 'recipe');
   }
 
   try {
@@ -106,13 +121,14 @@ async function createRecipe(formData: FormData) {
       },
     });
   } catch (err) {
-    console.error("Error creating recipe:", err);
+    // eslint-disable-next-line no-console
+    console.error('Error creating recipe:', err);
     throw new Error(
-      "We couldn’t save this recipe. Please double-check the fields and try again."
+      'We couldn’t save this recipe. Please double-check the fields and try again.',
     );
   }
 
-  redirect("/recipes");
+  redirect('/recipes');
 }
 
 export default function Page() {
