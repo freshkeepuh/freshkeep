@@ -281,7 +281,6 @@
 .rpFavBtn:hover {
   transform: translateY(-1px);
   box-shadow: 0 6px 16px rgba(0,0,0,.2);
-
 }
 /* Placement in recipe list */
 .rpFavOnCard { position: absolute; top: 10px; right: 10px; z-index: 2; }
