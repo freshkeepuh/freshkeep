@@ -26,8 +26,8 @@ const StorageTypeDropDown: React.FC<StorageTypeDropDownProps> = (
     label = 'Storage Type',
     disabled = false,
     required = false,
-    onChange = () => { /* no-op */ }
-  }
+    onChange = () => { /* no-op */ },
+  },
 ) => {
   const [isDisabled] = React.useState(disabled);
   const context = useFormContext();
@@ -65,7 +65,7 @@ const StorageTypeDropDown: React.FC<StorageTypeDropDownProps> = (
       <Form.Control.Feedback type="invalid">
         {errors.storageType ? errors.storageType.message?.toString() : null}
       </Form.Control.Feedback>
-  </>
+    </>
   );
 };
 

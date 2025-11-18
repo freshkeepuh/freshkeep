@@ -12,19 +12,14 @@ interface StorageAreaDropDownProps {
   onChange?: React.ChangeEventHandler<HTMLSelectElement>;
 }
 
-/**
- * 
- * @param 
- * @returns 
- */
 const StorageAreaDropDown: React.FC<StorageAreaDropDownProps> = (
   {
     label = 'Storage Area',
     disabled = false,
     required = false,
     storageAreas = [],
-    onChange = () => { /* no-op */ }
-  }
+    onChange = () => { /* no-op */ },
+  },
 ) => {
   const context = useFormContext();
   if (!context) {

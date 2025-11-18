@@ -18,8 +18,8 @@ const LocationDropDown: React.FC<LocationDropDownProps> = (
     disabled = false,
     required = false,
     locations = [],
-    onChange = () => { /* no-op */ }
-  }
+    onChange = () => { /* no-op */ },
+  },
 ) => {
   const context = useFormContext();
   if (!context) {

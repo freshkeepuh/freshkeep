@@ -20,7 +20,11 @@ interface CountryFilterProps {
  *   useForm({ defaultValues: { storageType: StorageType.Freezer } })
  */
 const CountryFilter: React.FC<CountryFilterProps> = (
-  { label = 'Country', disabled = false, onChange = () => { /* no-op */ } }
+  {
+    label = 'Country',
+    disabled = false,
+    onChange = () => { /* no-op */ },
+  },
 ) => {
   const [isDisabled] = React.useState(disabled);
   const context = useFormContext();

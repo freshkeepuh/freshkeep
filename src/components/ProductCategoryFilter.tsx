@@ -20,7 +20,11 @@ interface ProductCategoryFilterProps {
  *   useForm({ defaultValues: { productCategory: ProductCategory.Freezer } })
  */
 const ProductCategoryFilter: React.FC<ProductCategoryFilterProps> = (
-  { label = 'Storage Type', disabled = false, onChange = () => { /* no-op */ } }
+  {
+    label = 'Storage Type',
+    disabled = false,
+    onChange = () => { /* no-op */ },
+  },
 ) => {
   const [isDisabled] = React.useState(disabled);
   const context = useFormContext();

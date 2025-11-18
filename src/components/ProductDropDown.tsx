@@ -12,19 +12,14 @@ interface ProductDropDownProps {
   onChange?: React.ChangeEventHandler<HTMLSelectElement>;
 }
 
-/**
- * 
- * @param 
- * @returns 
- */
 const ProductDropDown: React.FC<ProductDropDownProps> = (
   {
     label = 'Product',
     disabled = false,
     required = false,
     products = [],
-    onChange = () => { /* no-op */ }
-  }
+    onChange = () => { /* no-op */ },
+  },
 ) => {
   const context = useFormContext();
   if (!context) {

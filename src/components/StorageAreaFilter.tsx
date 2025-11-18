@@ -2,7 +2,6 @@ import React from 'react';
 import { Form } from 'react-bootstrap';
 import { StorageArea } from '@prisma/client';
 import { useFormContext } from 'react-hook-form';
-import { on } from 'events';
 
 interface StorageAreaFilterProps {
   label?: string;
@@ -17,7 +16,7 @@ const StorageAreaFilter: React.FC<StorageAreaFilterProps> = (
     disabled = false,
     storageAreas = [],
     onChange = () => { /* no-op */ },
-  }
+  },
 ) => {
   const context = useFormContext();
   if (!context) {

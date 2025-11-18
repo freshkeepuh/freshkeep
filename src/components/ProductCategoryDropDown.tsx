@@ -26,8 +26,8 @@ const ProductCategoryDropDown: React.FC<ProductCategoryDropDownProps> = (
     label = 'Product Category',
     disabled = false,
     required = false,
-    onChange = () => { /* no-op */ }
-  }
+    onChange = () => { /* no-op */ },
+  },
 ) => {
   const [isDisabled] = React.useState(disabled);
   const context = useFormContext();
@@ -66,7 +66,7 @@ const ProductCategoryDropDown: React.FC<ProductCategoryDropDownProps> = (
       <Form.Control.Feedback type="invalid">
         {errors.productCategory ? errors.productCategory.message?.toString() : null}
       </Form.Control.Feedback>
-  </>
+    </>
   );
 };
 

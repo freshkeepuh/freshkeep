@@ -12,7 +12,7 @@ interface CountryDropDownProps {
   disabled?: boolean;
   required?: boolean;
   onChange?: React.ChangeEventHandler<HTMLSelectElement>;
- }
+}
 
 /**
  * CountryDropDown component.
@@ -26,10 +26,9 @@ const CountryDropDown: React.FC<CountryDropDownProps> = (
     label = 'Country',
     disabled = false,
     required = false,
-    onChange = () => { /* no-op */ }
-  }
+    onChange = () => { /* no-op */ },
+  },
 ) => {
-const [isDisabled] = React.useState(disabled);
   const context = useFormContext();
   if (!context) {
     throw new Error('CountryDropDown must be used within a FormProvider');

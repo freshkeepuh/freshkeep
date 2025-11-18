@@ -20,7 +20,11 @@ interface StorageTypeFilterProps {
  *   useForm({ defaultValues: { storageType: StorageType.Freezer } })
  */
 const StorageTypeFilter: React.FC<StorageTypeFilterProps> = (
-  { label = 'Storage Type', disabled = false, onChange = () => { /* no-op */ } }
+  {
+    label = 'Storage Type',
+    disabled = false,
+    onChange = () => { /* no-op */ },
+  },
 ) => {
   const [isDisabled] = React.useState(disabled);
   const context = useFormContext();

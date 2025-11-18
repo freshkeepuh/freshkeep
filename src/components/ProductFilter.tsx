@@ -15,8 +15,8 @@ const ProductFilter: React.FC<ProductFilterProps> = (
     label = 'Product',
     disabled = false,
     products = [],
-    onChange = () => { /* no-op */ }
-  }
+    onChange = () => { /* no-op */ },
+  },
 ) => {
   const context = useFormContext();
   if (!context) {

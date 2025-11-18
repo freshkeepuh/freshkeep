@@ -16,7 +16,7 @@ const LocationFilter: React.FC<LocationFilterProps> = (
     disabled = false,
     locations = [],
     onChange = () => { /* no-op */ },
-  }
+  },
 ) => {
   const context = useFormContext();
   if (!context) {
