@@ -11,7 +11,7 @@ import {
   productInstanceSelect,
   productSelect,
   productsSelect,
-  storagesSelect,
+  storageAreasSelect,
   unitsSelect,
 } from '@/lib/dbActionTypes';
 
@@ -76,7 +76,7 @@ export async function createProductInstance(data: {
         ...locationsSelect,
       },
       storage: {
-        ...storagesSelect,
+        ...storageAreasSelect,
       },
       product: {
         ...productsSelect,
@@ -123,7 +123,7 @@ export async function readProductInstances() {
           ...locationsSelect,
         },
         storage: {
-          ...storagesSelect,
+          ...storageAreasSelect,
         },
         product: {
           ...productsSelect,
@@ -173,7 +173,7 @@ export async function readProductInstance(id: string | null | undefined) {
         ...locationsSelect,
       },
       storage: {
-        ...storagesSelect,
+        ...storageAreasSelect,
       },
       product: {
         ...productsSelect,

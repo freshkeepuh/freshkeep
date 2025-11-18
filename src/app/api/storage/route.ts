@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { readStorages, createStorage } from '@/lib/dbStorageAreaActions';
+import { readStorageAreas, createStorageArea } from '@/lib/dbStorageAreaActions';
 
 export const runtime = 'nodejs';
 
@@ -36,7 +36,7 @@ function mapTypeToDb(type: string): string {
 const COUNT_KEY = '_count';
 export async function GET() {
   try {
-    const storages = await readStorages();
+    const storages = await readStorageAreas();
     const data = storages.map((s) => ({
       id: s.id,
       locId: s.locId,
@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
     }
 
     const dbType = mapTypeToDb(type);
-    const newStorage = await createStorage({
+    const newStorage = await createStorageArea({
       name,
       type: dbType,
       locId: locId || null,

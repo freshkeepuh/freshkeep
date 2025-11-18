@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import getResponseError from '@/lib/routeHelpers';
-import { deleteStorage, readStorage } from '@/lib/dbStorageAreaActions';
+import { deleteStorageArea, readStorageArea } from '@/lib/dbStorageAreaActions';
 
 export const runtime = 'nodejs';
 
@@ -17,7 +17,7 @@ export async function GET(request: NextRequest, context: any) {
       return NextResponse.json({ error: 'Storage ID is required' }, { status: 400 });
     }
 
-    const storage = await readStorage(id);
+    const storage = await readStorageArea(id);
 
     if (!storage) {
       return NextResponse.json({ error: 'Storage not found' }, { status: 404 });
@@ -42,7 +42,7 @@ export async function DELETE(request: NextRequest, context: any) {
       return NextResponse.json({ error: 'Storage ID is required' }, { status: 400 });
     }
 
-    await deleteStorage(id);
+    await deleteStorageArea(id);
 
     return NextResponse.json({ message: 'Storage deleted successfully' });
   } catch (error: Error | any) {
