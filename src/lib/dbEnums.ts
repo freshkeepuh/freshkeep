@@ -1,4 +1,4 @@
-import { Country, ProductCategory, StorageType } from "@prisma/client";
+import { Country, ProductCategory, StorageType } from '@prisma/client';
 
 const countryDisplayNames: Record<Country, string> = {
   [Country.USA]: 'United States',
@@ -22,7 +22,7 @@ export const getCountryDisplayName = (country: Country): string => (
 export const getCountryFromDisplayName = (displayName: string): Country | null => {
   const entry = Object.entries(countryDisplayNames).find(([, name]) => name === displayName);
   return entry ? (entry[0] as Country) : null;
-}
+};
 
 const storageTypeDisplayNames: Record<StorageType, string> = {
   [StorageType.Freezer]: 'Freezer',
@@ -49,7 +49,7 @@ export const getStorageTypeDisplayName = (storageType: StorageType): string => (
 export const getStorageTypeFromDisplayName = (displayName: string): StorageType | null => {
   const entry = Object.entries(storageTypeDisplayNames).find(([, name]) => name === displayName);
   return entry ? (entry[0] as StorageType) : null;
-}
+};
 
 const productCategoryDisplayNames: Record<ProductCategory, string> = {
   [ProductCategory.Fruits]: 'Fruits',
@@ -72,15 +72,14 @@ const productCategoryDisplayNames: Record<ProductCategory, string> = {
   [ProductCategory.Other]: 'Other',
 };
 
-
 /**
  * Gets the display name for a given product category.
  * @param category The Product Category Enum Type
  * @returns The Display Name of the Product Category
  */
-export const getProductCategoryDisplayName = (category: ProductCategory): string => {
-  return productCategoryDisplayNames[category];
-};
+export const getProductCategoryDisplayName = (category: ProductCategory): string => (
+  productCategoryDisplayNames[category] ?? category
+);
 
 /**
  * Gets the product category enum value from a display name.
@@ -90,4 +89,4 @@ export const getProductCategoryDisplayName = (category: ProductCategory): string
 export const getProductCategoryFromDisplayName = (displayName: string): ProductCategory | null => {
   const entry = Object.entries(productCategoryDisplayNames).find(([, name]) => name === displayName);
   return entry ? (entry[0] as ProductCategory) : null;
-}
+};
