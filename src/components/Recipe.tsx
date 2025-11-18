@@ -248,7 +248,13 @@ export default function RecipesPage({ initialRecipes }: Props) {
               <article key={r.id} className={styles.rpCardItem}>
                 <div className={styles.rpCardMedia} style={{ position: 'relative', height: 180 }}>
                   {r.image ? (
-                    <Image src={r.image} alt={r.title} fill style={{ objectFit: 'cover' }} />
+                    <Image
+                      src={r.image}
+                      alt={r.title}
+                      fill
+                      sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 100vw"
+                      style={{ objectFit: 'cover' }}
+                    />
                   ) : (
                     <div className={styles.rpNoImg}>No image</div>
                   )}
