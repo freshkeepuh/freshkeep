@@ -133,8 +133,6 @@ const CreateCatalogItemForm = () => {
   const buildEnhancedQuery = (query: string): string => {
     const storeName = formData.storeName.trim();
     return storeName ? `${query} ${storeName}` : `${query} original regular`;
-
-    return strategies[attempt % strategies.length];
   };
 
   const searchGoogleImages = async (query: string) => {
@@ -490,10 +488,18 @@ const CreateCatalogItemForm = () => {
                             className="w-100"
                             style={{
                               maxHeight: '300px',
-                              overflowY: 'auto',
                             }}
                           >
-                            <div className="px-2 pb-2">
+                            <div
+                              className="px-2 pb-2"
+                              style={{
+                                position: 'sticky',
+                                top: 0,
+                                backgroundColor: 'white',
+                                zIndex: 1,
+                                paddingTop: '0.5rem',
+                              }}
+                            >
                               <Form.Control
                                 type="text"
                                 placeholder="Search categories..."
@@ -503,18 +509,25 @@ const CreateCatalogItemForm = () => {
                                 autoFocus
                               />
                             </div>
-                            {filteredCategories.map((category) => (
-                              <Dropdown.Item
-                                key={category}
-                                onClick={() => {
-                                  setFormData((prev) => ({ ...prev, category }));
-                                  setCategorySearch('');
-                                }}
-                                active={formData.category === category}
-                              >
-                                {getCategoryDisplayName(category)}
-                              </Dropdown.Item>
-                            ))}
+                            <div
+                              style={{
+                                maxHeight: '240px',
+                                overflowY: 'auto',
+                              }}
+                            >
+                              {filteredCategories.map((category) => (
+                                <Dropdown.Item
+                                  key={category}
+                                  onClick={() => {
+                                    setFormData((prev) => ({ ...prev, category }));
+                                    setCategorySearch('');
+                                  }}
+                                  active={formData.category === category}
+                                >
+                                  {getCategoryDisplayName(category)}
+                                </Dropdown.Item>
+                              ))}
+                            </div>
                           </Dropdown.Menu>
                         </Dropdown>
                         <input type="hidden" name="category" value={formData.category} required />
