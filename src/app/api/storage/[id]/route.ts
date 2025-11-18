@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import getResponseError from '@/lib/routeHelpers';
-import { deleteStorage, readStorage } from '@/lib/dbStorageActions';
+import { deleteStorage, readStorage } from '@/lib/dbStorageAreaActions';
 
 export const runtime = 'nodejs';
 
