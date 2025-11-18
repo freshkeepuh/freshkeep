@@ -2,8 +2,11 @@ import { prisma } from '@/lib/prisma';
 import RecipesPage from '@/components/Recipe';
 import type { Recipe as UiRecipe } from '@/components/Recipe';
 import type { RecipeDifficulty, RecipeDiet } from '@prisma/client';
+import { splitIngredientsByStock } from '@/lib/ingredientMatch';
 
-// Converts database difficulty to UI label
+/**
+ * Maps Prisma RecipeDifficulty enum to UI difficulty label.
+ */
 const toUiDifficulty = (d: RecipeDifficulty): UiRecipe['difficulty'] => {
   switch (d) {
     case 'EASY': return 'Easy';
@@ -13,7 +16,9 @@ const toUiDifficulty = (d: RecipeDifficulty): UiRecipe['difficulty'] => {
   }
 };
 
-// Converts database diet to UI label
+/**
+ * Maps Prisma RecipeDiet enum to UI diet label.
+ */
 const toUiDiet = (d: RecipeDiet): UiRecipe['diet'] => {
   switch (d) {
     case 'VEGAN': return 'Vegan';
@@ -23,42 +28,44 @@ const toUiDiet = (d: RecipeDiet): UiRecipe['diet'] => {
   }
 };
 
-// Small helper to normalize strings for matching
-const norm = (s: string) => s.toLowerCase().trim();
+/**
+ * Server component for /recipes.
+ * Loads recipes, stock, and locations, then passes data to the client page.
+ */
+export default async function Page(props: any) {
+  // Normalize searchParams (Next may give it as a Promise)
+  const rawSearchParams = await Promise.resolve(props?.searchParams ?? {});
+  const selectedLocationId = typeof rawSearchParams.locationId === 'string' && rawSearchParams.locationId.length > 0
+    ? rawSearchParams.locationId
+    : '';
 
-// Basic match between ingredient text and product name
-const ingredientMatchesProduct = (ingredient: string, productName: string) => {
-  const ing = norm(ingredient);
-  const prod = norm(productName);
-  return ing.includes(prod) || prod.includes(ing);
-};
+  // Load recipes, in-stock product instances and locations
+  const [rows, instances, locations] = await Promise.all([
+    prisma.recipe.findMany({ orderBy: { createdAt: 'asc' } }),
+    prisma.productInstance.findMany({
+      where: {
+        quantity: { gt: 0 },
+        ...(selectedLocationId ? { locId: selectedLocationId } : {}),
+      },
+      include: { product: true },
+    }),
+    prisma.location.findMany({ orderBy: { name: 'asc' } }),
+  ]);
 
-// Loads recipes from the database and sends them to the client component
-export default async function Page() {
-  // Load all recipes
-  const rows = await prisma.recipe.findMany({ orderBy: { createdAt: 'asc' } });
-
-  // Load all products that are in stock
-  const instances = await prisma.productInstance.findMany({
-    where: { quantity: { gt: 0 } },
-    include: { product: true },
-  });
-
-  // Get product names we have
+  // Collect product names that are in stock at the selected location
   const haveNames = instances
     .map((inst) => inst.product?.name)
     .filter((name): name is string => !!name);
 
-  // Map recipes -> UI with counts
+  // Build recipe objects with have/missing counts
   const initialRecipes: UiRecipe[] = rows.map((r) => {
     const ingredients = (r.ingredients as string[]) ?? [];
-    const totalIngredients = ingredients.length;
 
-    const haveCount = ingredients.filter((ing) => haveNames.some(
-      (prodName) => ingredientMatchesProduct(ing, prodName),
-    )).length;
-
-    const missingCount = Math.max(totalIngredients - haveCount, 0);
+    const {
+      haveCount,
+      missingCount,
+      totalIngredients,
+    } = splitIngredientsByStock(ingredients, haveNames);
 
     return {
       id: r.id,
@@ -75,6 +82,18 @@ export default async function Page() {
     };
   });
 
-  // Returns the client-side Recipe page with initial data
-  return <RecipesPage initialRecipes={initialRecipes} />;
+  // Shape locations for the dropdown
+  const locationOptions = locations.map((loc) => ({
+    id: loc.id,
+    name: loc.name,
+  }));
+
+  // Render client-side recipes page with initial data
+  return (
+    <RecipesPage
+      initialRecipes={initialRecipes}
+      locations={locationOptions}
+      selectedLocationId={selectedLocationId}
+    />
+  );
 }
