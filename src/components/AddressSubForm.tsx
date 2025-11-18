@@ -116,8 +116,7 @@ const AddressSubForm = ({ address, isEditing }: AddressSubFormProps) => {
         <Form.Group>
           <CountryDropDown
             label="Country:"
-            required={true}
-            disabled={false}
+            required
             onChange={() => { /* no-op */ }}
           />
         </Form.Group>
