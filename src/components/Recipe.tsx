@@ -289,6 +289,7 @@ export default function RecipesPage({ initialRecipes }: Props) {
                     <p className={styles.rpH3}>Ingredients:</p>
                     <p className={styles.rpText}>{r.ingredients.join(', ')}</p>
                   </div>
+
                   {/* View Recipe button */}
                   <Link
                     href={`/recipes/${encodeURIComponent(r.slug || slugify(r.title))}`}
@@ -296,6 +297,11 @@ export default function RecipesPage({ initialRecipes }: Props) {
                   >
                     View Recipe
                   </Link>
+                </div>
+                {/* Static Have / Missing summary */}
+                <div className={styles.rpMatchBar}>
+                  <span className={styles.rpMatchHave}>Have: 3/12</span>
+                  <span className={styles.rpMatchMissing}>Missing: 9/12</span>
                 </div>
               </article>
             ))}

@@ -44,6 +44,10 @@ export default async function RecipeViewPage(props: any) {
     ? (recipe.instructions as any)
     : [];
 
+  // Temporary: Put first 4 = "In Stock", rest = "Missing"
+  const inStock = ingredients.slice(0, 4);
+  const missing = ingredients.slice(4);
+
   const difficultyMeta = {
     EASY: { label: 'Easy', icon: '⭐️' },
     NORMAL: { label: 'Normal', icon: '⭐️⭐️' },
@@ -112,25 +116,52 @@ export default async function RecipeViewPage(props: any) {
                   <h2 className={styles.rpH1}>Ingredients</h2>
                 </div>
 
-                {/* Ingredients Checklist */}
-                <div className={styles.rpIngredientsGrid}>
-                  {ingredients.map((item, idx) => {
-                    const id = `ing-${item.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}-${idx}`;
-                    return (
-                      <div key={id} className={styles.rpIngredientItem}>
-                        <input
-                          id={id}
-                          type="checkbox"
-                          className={styles.rpCheckbox}
-                          name="ingredients"
-                          value={item}
-                        />
-                        <label htmlFor={id} className={styles.rpMedium}>
-                          {item}
-                        </label>
-                      </div>
-                    );
-                  })}
+                {/* In Stock section */}
+                <div className={styles.rpBlock}>
+                  <h3 className={styles.rpH2} style={{ color: '#16a34a' }}>In Stock:</h3>
+                  <div className={styles.rpIngredientsGrid}>
+                    {inStock.map((item, idx) => {
+                      const id = `have-${item.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}-${idx}`;
+                      return (
+                        <div key={id} className={styles.rpIngredientItem}>
+                          <input
+                            id={id}
+                            type="checkbox"
+                            className={styles.rpCheckbox}
+                            name="ingredients-have"
+                            value={item}
+                          />
+                          <label htmlFor={id} className={styles.rpMedium}>
+                            {item}
+                          </label>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Missing section */}
+                <div className={styles.rpBlock}>
+                  <h3 className={styles.rpH2} style={{ color: '#dc2626' }}>Missing:</h3>
+                  <div className={styles.rpIngredientsGrid}>
+                    {missing.map((item, idx) => {
+                      const id = `miss-${item.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}-${idx}`;
+                      return (
+                        <div key={id} className={styles.rpIngredientItem}>
+                          <input
+                            id={id}
+                            type="checkbox"
+                            className={styles.rpCheckbox}
+                            name="ingredients-miss"
+                            value={item}
+                          />
+                          <label htmlFor={id} className={styles.rpMedium}>
+                            {item}
+                          </label>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
 
                 {/* Action Buttons */}
