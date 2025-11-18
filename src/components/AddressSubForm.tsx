@@ -3,11 +3,11 @@
 import React from 'react';
 import { Col, Container, Form, Row } from 'react-bootstrap';
 import { useFormContext } from 'react-hook-form';
-import CountryDropDown, { ICountryField } from '@/components/CountryDropDown';
+import CountryDropDown from '@/components/CountryDropDown';
 import { Country } from '@prisma/client';
-import RequiredLabel from './RequiredLabel';
+import RequiredLabel from '@/components/RequiredLabel';
 
-export interface IAddressSubForm extends ICountryField {
+export interface IAddressSubForm {
   address1: string;
   address2?: string | undefined;
   city: string;
@@ -34,7 +34,7 @@ const AddressSubForm = ({ address, isEditing }: AddressSubFormProps) => {
     return (
       <>
         <Form.Group>
-          <RequiredLabel>Address 1:</RequiredLabel>
+          <RequiredLabel htmlFor="address1">Address 1:</RequiredLabel>
           <Form.Control
             id="address1"
             type="text"
@@ -65,7 +65,7 @@ const AddressSubForm = ({ address, isEditing }: AddressSubFormProps) => {
           <Row>
             <Col>
               <Form.Group>
-                <RequiredLabel>City:</RequiredLabel>
+                <RequiredLabel htmlFor="city">City:</RequiredLabel>
                 <Form.Control
                   id="city"
                   type="text"
@@ -81,7 +81,7 @@ const AddressSubForm = ({ address, isEditing }: AddressSubFormProps) => {
             </Col>
             <Col>
               <Form.Group>
-                <RequiredLabel>State:</RequiredLabel>
+                <RequiredLabel htmlFor="state">State:</RequiredLabel>
                 <Form.Control
                   id="state"
                   type="text"
@@ -97,7 +97,7 @@ const AddressSubForm = ({ address, isEditing }: AddressSubFormProps) => {
             </Col>
             <Col>
               <Form.Group>
-                <RequiredLabel>Zipcode:</RequiredLabel>
+                <RequiredLabel htmlFor="zipcode">Zipcode:</RequiredLabel>
                 <Form.Control
                   id="zipcode"
                   type="text"
@@ -114,11 +114,12 @@ const AddressSubForm = ({ address, isEditing }: AddressSubFormProps) => {
           </Row>
         </Container>
         <Form.Group>
-          <RequiredLabel>Country:</RequiredLabel>
-          <CountryDropDown />
-          <Form.Control.Feedback type="invalid">
-            {errors.country && errors.country.message?.toString()}
-          </Form.Control.Feedback>
+          <CountryDropDown
+            label="Country:"
+            required={true}
+            disabled={false}
+            onChange={() => { /* no-op */ }}
+          />
         </Form.Group>
       </>
     );
