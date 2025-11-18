@@ -1,0 +1,314 @@
+/* page */
+.rpPage { min-height: 100vh; background: #ffffff; padding-bottom:112px; }
+
+/* layout */
+.rpMain { padding: 32px 16px; }
+.rpMainInner { max-width: 60rem; margin: 0 auto; }
+
+/* search card */
+.rpCard {
+  background: #c2edcb;
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 6px 24px -8px rgba(0,0,0,.12);
+  border: 1px solid rgba(0,0,0,.05);
+  margin-bottom: 24px;
+}
+
+/* text */
+.rpBlock { margin-bottom: 20px; }
+.rpH1 { margin: 0; font-size: 1.5rem; font-weight: 700; }
+.rpH2 { margin: 0 0 10px; font-size: 1.25rem; font-weight: 700; }
+.rpH3 { margin: 0 0 8px; font-size: 1.1rem; font-weight: 700; }
+.rpH4 { margin: 0 0 8px; font-size: 0.9rem; font-weight: 700; }
+.rpMedium { margin: 0; font-size: 1rem; font-weight: 500; }
+.rpText { margin: 0; font-size: 0.8rem; line-height: 1.5; }
+
+/* rows */
+.rpRow {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center; /* aligns buttons with inputs */
+}
+
+/* buttons */
+.rpBtnDark {
+  background: #198754; color: #fff; border: 0; border-radius: 999px;
+  padding: 10px 22px; font-weight: 600; cursor: pointer;
+}
+.rpBtnDark:hover { background: #27bc76; }
+
+/* chips */
+.rpChips { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+.rpChip {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #27bc76; padding: 6px 12px; border-radius: 999px; font-size: .9rem; color: white;
+}
+.rpChipX { border: 0; background: transparent; color: #475569; cursor: pointer; }
+.rpChipX:hover { color: #ef4444; }
+
+/* search inputs */
+.rpSearchWrap { position: relative; flex: 1; }
+.rpInputSearch {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 14px;
+  padding: 12px 14px 12px 40px;
+  outline: none;
+}
+.rpInputSearch:focus { box-shadow: 0 0 0 4px rgba(15,23,42,.08); }
+.rpSearchIcon {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: #94a3b8;
+}
+
+/* selects */
+.rpSelect {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 14px;
+  padding: 10px 12px;
+  outline: none; background: #fff;
+}
+.rpSelect:focus { box-shadow: 0 0 0 4px rgba(15,23,42,.08); }
+
+/* filter grid */
+.rpGrid3 { display: grid; grid-template-columns: 1fr; gap: 16px; }
+@media (min-width: 768px) { .rpGrid3 { grid-template-columns: repeat(3, 1fr); } }
+
+/* results count */
+.rpCount { color: #47695c; margin: 8px 0 16px; }
+.rpCountStrong { font-weight: 700; }
+
+/* cards grid */
+.rpCards { display: grid; grid-template-columns: 1fr; gap: 20px; }
+@media (min-width: 768px) { .rpCards { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .rpCards { grid-template-columns: repeat(3, 1fr); } }
+
+/* card item */
+.rpCardItem {
+  background: #c0e8c8;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(0,0,0,.05), 0 6px 24px -8px rgba(0,0,0,.12);
+  border: 1px solid rgba(0,0,0,.05);
+  display: flex;
+  flex-direction: column;
+}
+.rpCardMedia { position: relative; width: 100%; height: 180px; overflow: hidden; border-radius: 12px; background: #f4f4f4; }
+.rpCardBody { flex: 1 1 auto; display: flex; flex-direction: column; padding: 20px; gap: 2px; }
+.rpCardTitle { display: flex; gap: 8px; align-items: center; }
+
+/* meta row */
+.rpMeta { display: flex; gap: 20px; color: #475569; font-size: .8rem; margin-bottom: 24px; }
+.rpMeta > div { display: flex; gap: 6px; align-items: center; }
+
+/* ingredients */
+.rpIngredients { margin-bottom: 16px; }
+
+/* CTA button */
+.rpBtnLight {
+  width: 100%;
+  background: #198754; color: #ffffff;
+  border: 0; border-radius: 12px; padding: 10px 14px; font-weight: 600; cursor: pointer;
+  margin-top: auto;
+  text-decoration: none;
+}
+.rpBtnLight:hover { background: #27bc76; }
+
+/* empty state */
+.rpEmpty { border: 0; background: transparent; padding: 0; text-align: left; }
+
+/* Back Button */
+.rpBackBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #94e3a5;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #2d5f3e;
+  text-decoration: none;
+  cursor: pointer;
+  margin-bottom: 24px;
+  transition: all 0.2s ease;
+}
+
+.rpBackBtn:hover { background: #27bc76; }
+.rpBackIcon { font-size: 1.2rem; line-height: 1; }
+
+/* Image Container */
+.rpViewImage {
+  padding: 0;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.rpViewImageWrap {
+  position: relative;
+  width: 100%;
+  padding-top: 75%;
+  overflow: hidden;
+}
+
+/* Title */
+.rpViewTitle {
+  margin: 0;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #2d5f3e;
+  flex: 1;
+}
+
+/* Stats Pills */
+.rpStatPill {
+  flex: 1;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 12px 16px;
+  text-align: center;
+}
+
+.rpStatLabel {
+  font-size: 0.7rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.rpStatValue {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+/* Ingredients Grid */
+.rpIngredientsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.rpIngredientItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.rpCheckbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+/* Secondary Button */
+.rpBtnSecondary {
+  background: #f5f5f5;
+  border: 1px solid #e0e0e0;
+  border-radius: 999px;
+  padding: 10px 24px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.rpBtnSecondary:hover {
+  background: #ebebeb;
+}
+
+/* Instructions Steps */
+.rpSteps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 14px;
+}
+
+.rpStep {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding-bottom: 1rem;
+}
+
+.rpStepNumber {
+  min-width: 32px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #6acc9b;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .rpViewTitle {
+    font-size: 1.5rem;
+  }
+
+  .rpIngredientsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+/* badge on card image */
+.rpFavBtn {
+  border: 0;
+  background: rgba(255,255,255,.85);
+  border-radius: 999px;
+  width: 45px; height: 45px;
+  display: grid; place-items: center;
+  cursor: pointer;
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+}
+.rpFavBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0,0,0,.2);
+
+}
+/* Placement in recipe list */
+.rpFavOnCard { position: absolute; top: 10px; right: 10px; z-index: 2; }
+
+/* Placement in detail page */
+.rpFavOnDetail { position: relative; border: none; }
+
+.rpFavIcon { width: 27px; height: 29px; }
+.rpActionLabel { font-size: 1rem; color: #2d5f3e } 
+
+/* icon color: active */
+.rpFavBtn[aria-pressed="true"]  .rpFavIcon,
+.rpFavOnDetail[aria-pressed="true"] .rpFavIcon { color: #e03131; }
+
+/* icon color: inactive */
+.rpFavBtn[aria-pressed="false"] .rpFavIcon,
+.rpFavOnDetail[aria-pressed="false"] .rpFavIcon { color: #2d5f3e; }
+
+/* CSS tooltip */
+.rpFavOnDetail[data-tip]:hover::after{
+  content: attr(data-tip);
+  position: absolute;
+  top: 100%; left: 50%;
+  transform: translate(-50%, 8px);
+  background: #1ea968c4; color: #fff;
+  font-size: 15px; line-height: 1;
+  padding: 6px 8px;
+  border-radius: 6px;
+  z-index: 20;
+}
