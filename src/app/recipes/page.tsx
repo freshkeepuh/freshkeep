@@ -23,21 +23,57 @@ const toUiDiet = (d: RecipeDiet): UiRecipe['diet'] => {
   }
 };
 
+// Small helper to normalize strings for matching
+const norm = (s: string) => s.toLowerCase().trim();
+
+// Basic match between ingredient text and product name
+const ingredientMatchesProduct = (ingredient: string, productName: string) => {
+  const ing = norm(ingredient);
+  const prod = norm(productName);
+  return ing.includes(prod) || prod.includes(ing);
+};
+
 // Loads recipes from the database and sends them to the client component
 export default async function Page() {
+  // Load all recipes
   const rows = await prisma.recipe.findMany({ orderBy: { createdAt: 'asc' } });
 
-  // Converts Prisma data to UI format
-  const initialRecipes: UiRecipe[] = rows.map((r) => ({
-    id: r.id,
-    slug: r.slug!,
-    title: r.title,
-    cookTime: r.cookTime,
-    difficulty: toUiDifficulty(r.difficulty),
-    diet: toUiDiet(r.diet),
-    ingredients: (r.ingredients as string[]) ?? [],
-    image: r.image ?? undefined,
-  }));
+  // Load all products that are in stock
+  const instances = await prisma.productInstance.findMany({
+    where: { quantity: { gt: 0 } },
+    include: { product: true },
+  });
+
+  // Get product names we have
+  const haveNames = instances
+    .map((inst) => inst.product?.name)
+    .filter((name): name is string => !!name);
+
+  // Map recipes -> UI with counts
+  const initialRecipes: UiRecipe[] = rows.map((r) => {
+    const ingredients = (r.ingredients as string[]) ?? [];
+    const totalIngredients = ingredients.length;
+
+    const haveCount = ingredients.filter((ing) => haveNames.some(
+      (prodName) => ingredientMatchesProduct(ing, prodName),
+    )).length;
+
+    const missingCount = Math.max(totalIngredients - haveCount, 0);
+
+    return {
+      id: r.id,
+      slug: r.slug!,
+      title: r.title,
+      cookTime: r.cookTime,
+      difficulty: toUiDifficulty(r.difficulty),
+      diet: toUiDiet(r.diet),
+      ingredients,
+      image: r.image ?? undefined,
+      haveCount,
+      missingCount,
+      totalIngredients,
+    };
+  });
 
   // Returns the client-side Recipe page with initial data
   return <RecipesPage initialRecipes={initialRecipes} />;

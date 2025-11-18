@@ -9,6 +9,15 @@ import FavoriteHeart from '@/components/FavoriteHeart';
 
 export const dynamic = 'force-dynamic';
 
+// Helpers to match ingredient text to product names
+const norm = (s: string) => s.toLowerCase().trim();
+
+const ingredientMatchesProduct = (ingredient: string, productName: string) => {
+  const ing = norm(ingredient);
+  const prod = norm(productName);
+  return ing.includes(prod) || prod.includes(ing);
+};
+
 export default async function RecipeViewPage(props: any) {
   const { slug: routeSlug } = await Promise.resolve(props?.params);
 
@@ -44,10 +53,21 @@ export default async function RecipeViewPage(props: any) {
     ? (recipe.instructions as any)
     : [];
 
-  // Temporary: Put first 4 = "In Stock", rest = "Missing"
-  const inStock = ingredients.slice(0, 4);
-  const missing = ingredients.slice(4);
+  // Load all items we currently have
+  const instances = await prisma.productInstance.findMany({
+    where: { quantity: { gt: 0 } },
+    include: { product: true },
+  });
 
+  const haveNames = instances
+    .map((inst) => inst.product?.name)
+    .filter((name): name is string => !!name);
+
+  // Ingredients that match something in stock
+  const inStock = ingredients.filter((ing) => haveNames.some((prodName) => ingredientMatchesProduct(ing, prodName)));
+
+  // Ingredients that do NOT match anything in stock
+  const missing = ingredients.filter((ing) => !haveNames.some((prodName) => ingredientMatchesProduct(ing, prodName)));
   const difficultyMeta = {
     EASY: { label: 'Easy', icon: '⭐️' },
     NORMAL: { label: 'Normal', icon: '⭐️⭐️' },
@@ -220,7 +240,7 @@ export default async function RecipeViewPage(props: any) {
                 {/* Instruction Steps */}
                 <ol className={styles.rpSteps}>
                   {(() => {
-                    // Build a stable key from the step text + occurrence count (no array index) to satisfy eslint rule
+                    // Make a stable key for each step (no array index) for eslint
                     const seen = new Map<string, number>();
                     return instructions.map((step, idx) => {
                       const slug = step.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');

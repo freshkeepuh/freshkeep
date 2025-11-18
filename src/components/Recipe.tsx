@@ -17,6 +17,9 @@ export interface Recipe {
   diet: 'Vegan' | 'Vegetarian' | 'Pescetarian' | 'Any';
   ingredients: string[];
   image?: string;
+  haveCount?: number;
+  missingCount?: number;
+  totalIngredients?: number;
 }
 
 // Props passed from server component
@@ -298,11 +301,26 @@ export default function RecipesPage({ initialRecipes }: Props) {
                     View Recipe
                   </Link>
                 </div>
-                {/* Static Have / Missing summary */}
+                {/* Match bar: how many ingredients we have / are missing */}
+                {typeof r.haveCount === 'number' && typeof r.totalIngredients === 'number' && (
                 <div className={styles.rpMatchBar}>
-                  <span className={styles.rpMatchHave}>Have: 3/12</span>
-                  <span className={styles.rpMatchMissing}>Missing: 9/12</span>
+                  <span className={styles.rpMatchHave}>
+                    Have:
+                    {' '}
+                    {r.haveCount}
+                    /
+                    {r.totalIngredients}
+                  </span>
+                  <span className={styles.rpMatchMissing}>
+                    Missing:
+                    {' '}
+                    {r.totalIngredients - r.haveCount}
+                    /
+                    {r.totalIngredients}
+                  </span>
                 </div>
+                )}
+
               </article>
             ))}
             {/* Empty state */}
