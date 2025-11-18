@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Button, Col, Container, Form, Row } from 'react-bootstrap';
-import { Plus } from 'react-bootstrap-icons';
-import LocationCard from '../../components/LocationCard';
-import MapComponent from '../../components/Map';
+import { Button, Col, Container, Form, Row, Spinner } from 'react-bootstrap';
+import { Plus, Search, GeoAlt } from 'react-bootstrap-icons';
+import LocationCard from '../../components/location/LocationCard';
+import MapComponent from '../../components/MapDisplay';
 import styles from './page.module.css';
 
 interface Location {
@@ -22,16 +22,20 @@ interface Location {
 const LocationsPage = () => {
   const [locations, setLocations] = useState<Location[]>([]);
   const [loading, setLoading] = useState(true);
+  const [adding, setAdding] = useState(false);
+  const [selectedId, setSelectedId] = useState<string | undefined>(undefined);
 
   // Initial load from API
   useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch('/api/locations', { cache: 'no-store' });
+        const res = await fetch('/api/location', { cache: 'no-store' });
         if (!res.ok) return;
         const data = (await res.json()) as Location[];
-        if (!cancelled) setLocations(data ?? []);
+        if (!cancelled) {
+          setLocations(data ?? []);
+        }
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -41,27 +45,38 @@ const LocationsPage = () => {
     };
   }, []);
 
+  // Initialize selection when locations load
+  useEffect(() => {
+    if (!selectedId && locations && locations.length > 0) {
+      setSelectedId(locations[0].id);
+    }
+  }, [locations, selectedId]);
+
   // Re-sync helper function
   const reloadLocations = async () => {
-    const res = await fetch('/api/locations', { cache: 'no-store' });
+    const res = await fetch('/api/location', { cache: 'no-store' });
     if (!res.ok) return;
     const data = (await res.json()) as Location[];
     setLocations(data ?? []);
+    // If nothing is selected, auto-select the first location
+    if (!selectedId && data && data.length > 0) {
+      setSelectedId(data[0].id);
+    }
   };
 
   // Inline edit: only name and address1
   const handleEditLocation = async (id: string, name: string, address: string) => {
-    await fetch('/api/locations', {
+    await fetch(`/api/location/${encodeURIComponent(id)}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id, name, address1: address }),
+      body: JSON.stringify({ name, address1: address }),
     });
     await reloadLocations();
   };
 
   // Delete location
   const handleDeleteLocation = async (id: string) => {
-    await fetch(`/api/locations?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+    await fetch(`/api/location/${encodeURIComponent(id)}`, { method: 'DELETE' });
     await reloadLocations();
   };
 
@@ -80,21 +95,24 @@ const LocationsPage = () => {
   const handleAddLocation = async () => {
     const num = getNextAutoNumber();
     const name = `New location ${num}`;
-
-    await fetch('/api/locations', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name,
-        address1: '2500 Campus Rd',
-        city: 'Honolulu',
-        state: 'HI',
-        zipcode: '96822',
-        country: 'USA',
-      }),
-    });
-
-    await reloadLocations();
+    try {
+      setAdding(true);
+      await fetch('/api/location', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          address1: '2500 Campus Rd',
+          city: 'Honolulu',
+          state: 'HI',
+          zipcode: '96822',
+          country: 'USA',
+        }),
+      });
+      await reloadLocations();
+    } finally {
+      setAdding(false);
+    }
   };
 
   // Locations list
@@ -110,15 +128,20 @@ const LocationsPage = () => {
         address={l.address1}
         onEdit={handleEditLocation}
         onDelete={handleDeleteLocation}
+        selected={l.id === selectedId}
+        onSelect={(id) => setSelectedId(id)}
       />
     ));
   } else {
     locationsList = <li className="text-muted text-center p-3">No locations found.</li>;
   }
 
-  const firstLocationForMap = locations.length > 0
-    ? { id: locations[0].id, name: locations[0].name, address: locations[0].address1 }
-    : undefined;
+  const selectedForMap = (() => {
+    if (locations.length === 0) return undefined;
+    const sel = selectedId ? locations.find(l => l.id === selectedId) : undefined;
+    const target = sel || locations[0];
+    return { id: target.id, name: target.name, address: target.address1 };
+  })();
 
   return (
     <main className={styles.main}>
@@ -126,7 +149,10 @@ const LocationsPage = () => {
         {/* Title */}
         <Row className={`mb-4 align-items-center ${styles.titleRow}`}>
           <Col>
-            <h1 className="m-0">Location Management</h1>
+            <div className={styles.titleBar}>
+              <GeoAlt className="text-success" size={24} />
+              <h1 className={`m-0 ${styles.titleText}`}>Locations</h1>
+            </div>
           </Col>
         </Row>
 
@@ -134,9 +160,37 @@ const LocationsPage = () => {
           {/* Location List */}
           <Col md={4}>
             <div className={`d-flex flex-column h-100 ${styles.panel}`}>
-              <div>
-                <h4>Locations</h4>
-                <ul className="list-unstyled">{locationsList}</ul>
+              <div className={styles.listSection}>
+                <Row className="align-items-center mb-2">
+                  <Col>
+                    <h4 className="mb-2">Your Locations</h4>
+                  </Col>
+                  <Col xs="auto">
+                    <Button
+                      variant="success"
+                      size="sm"
+                      aria-label="Add Location"
+                      onClick={handleAddLocation}
+                      className={`d-flex align-items-center ${styles.btnCompact}`}
+                      disabled={adding}
+                    >
+                      {adding ? (
+                        <>
+                          <Spinner animation="border" size="sm" className="me-1" />
+                          Adding…
+                        </>
+                      ) : (
+                        <>
+                          <Plus className="me-1" size={22} />
+                          Add Location
+                        </>
+                      )}
+                    </Button>
+                  </Col>
+                </Row>
+                <div className={styles.listScroll}>
+                  <ul className="list-unstyled mb-0">{locationsList}</ul>
+                </div>
               </div>
             </div>
           </Col>
@@ -149,17 +203,16 @@ const LocationsPage = () => {
                 <Col>
                   <Form.Control type="text" placeholder="Search for a location or address..." />
                 </Col>
-                {/* Add Location Button */}
+                {/* Search Button */}
                 <Col xs="auto">
                   <Button
-                    variant="success"
+                    variant="outline-secondary"
                     size="sm"
-                    aria-label="Add Location"
-                    onClick={handleAddLocation}
+                    aria-label="Search locations"
                     className="d-flex align-items-center"
                   >
-                    <Plus className="me-1" />
-                    Add
+                    <Search className="me-1" />
+                    Search
                   </Button>
                 </Col>
               </Row>
@@ -167,7 +220,7 @@ const LocationsPage = () => {
               {/* Google Maps */}
               <Row>
                 <Col className="text-center">
-                  <MapComponent firstLocation={firstLocationForMap} />
+                  <MapComponent location={selectedForMap} />
                 </Col>
               </Row>
             </div>
