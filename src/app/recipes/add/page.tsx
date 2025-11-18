@@ -104,7 +104,13 @@ async function createRecipe(formData: FormData) {
   let image: string | null = null;
   const imageFile = formData.get('image') as File | null;
   if (imageFile && imageFile.size > 0) {
-    image = await saveImageFile(imageFile, slug || 'recipe');
+    try {
+      image = await saveImageFile(imageFile, slug || 'recipe');
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error('Error uploading image:', err);
+      image = null; // Proceed without image
+    }
   }
 
   try {
