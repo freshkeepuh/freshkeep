@@ -7,7 +7,7 @@ const InventoryReport = () => (
   <Container>
     <Row>
       <Col>
-        <ReportFilter title="Inventory Report" onSearch={() => {}} />
+        <ReportFilter title="Inventory" onSearch={() => {}} />
       </Col>
     </Row>
     <Row>

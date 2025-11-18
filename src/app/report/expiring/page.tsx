@@ -7,7 +7,7 @@ const ExpiringReport = () => (
   <Container>
     <Row>
       <Col>
-        <ReportFilter title="Expiring Report" onSearch={() => {}} />
+        <ReportFilter title="Expiring" onSearch={() => {}} />
       </Col>
     </Row>
     <Row>
