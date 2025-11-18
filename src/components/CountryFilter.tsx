@@ -5,34 +5,27 @@ import { Form } from 'react-bootstrap';
 import { useFormContext } from 'react-hook-form';
 import { Country } from '@prisma/client'; // Update the path as needed
 import { getCountryDisplayName } from '@/lib/dbEnums';
-import RequiredLabel from './RequiredLabel';
 
-interface CountryDropDownProps {
+interface CountryFilterProps {
   label?: string;
   disabled?: boolean;
-  required?: boolean;
   onChange?: React.ChangeEventHandler<HTMLSelectElement>;
- }
+}
 
 /**
- * CountryDropDown component.
+ * StorageTypeFilter component.
  *
- * Note: The default value for the country field should be set via useForm initialization,
+ * Note: The default value for the storageType field should be set via useForm initialization,
  * not via a prop or defaultValue on the select element. Example:
- *   useForm({ defaultValues: { country: Country.USA } })
+ *   useForm({ defaultValues: { storageType: StorageType.Freezer } })
  */
-const CountryDropDown: React.FC<CountryDropDownProps> = (
-  {
-    label = 'Country',
-    disabled = false,
-    required = false,
-    onChange = () => { /* no-op */ }
-  }
+const CountryFilter: React.FC<CountryFilterProps> = (
+  { label = 'Country', disabled = false, onChange = () => { /* no-op */ } }
 ) => {
-const [isDisabled] = React.useState(disabled);
+  const [isDisabled] = React.useState(disabled);
   const context = useFormContext();
   if (!context) {
-    throw new Error('CountryDropDown must be used within a FormProvider');
+    throw new Error('CountryFilter must be used within a FormProvider');
   }
   const {
     register,
@@ -40,18 +33,17 @@ const [isDisabled] = React.useState(disabled);
   } = context;
   return (
     <>
-      {(label && !required) && <Form.Label htmlFor="country">{label}</Form.Label>}
-      {(label && required) && <RequiredLabel htmlFor="country">{label}</RequiredLabel>}
+      {label && <Form.Label htmlFor="storageTypeFilter">{label}</Form.Label>}
       <Form.Select
-        id="country"
+        id="storageTypeFilter"
         size="lg"
-        aria-label="Country"
-        {...register('country')}
-        disabled={disabled}
-        required={required}
-        isInvalid={!!errors.country}
+        aria-label="Storage Type Filter"
+        {...register('storageType')}
+        disabled={isDisabled}
         onChange={onChange}
+        isInvalid={!!errors.storageType}
       >
+        <option key="all" value="">All</option>
         {
           Object.values(Country)
             .filter((country) => typeof country === 'string')
@@ -64,10 +56,10 @@ const [isDisabled] = React.useState(disabled);
         }
       </Form.Select>
       <Form.Control.Feedback type="invalid">
-        {errors.country ? errors.country.message?.toString() : null}
+        {errors.storageType ? errors.storageType.message?.toString() : null}
       </Form.Control.Feedback>
     </>
   );
 };
 
-export default CountryDropDown;
+export default CountryFilter;
