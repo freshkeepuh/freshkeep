@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { prisma } from '@/lib/prisma';
 import type { RecipeDifficulty, RecipeDiet } from '@prisma/client';
-import AddRecipeForm from './addrecipeForm.tsx';
+import AddRecipeForm from '@/components/AddRecipeForm';
 import styles from './recipesPage.module.css';
 
 export const runtime = 'nodejs'; // ensure we can use the filesystem
@@ -137,7 +137,7 @@ export default function Page() {
       <main className={styles.rpMain}>
         <div className={styles.rpMainInner}>
           {/* Back button */}
-          <Link href='/recipes' className={styles.rpBackBtn}>
+          <Link href="/recipes" className={styles.rpBackBtn}>
             <span className={styles.rpBackIcon}>←</span>
             Back to Recipes
           </Link>

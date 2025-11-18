@@ -4,7 +4,7 @@ import { useState, useTransition, type FormEvent } from 'react';
 import Link from 'next/link';
 
 import { DIFFICULTY_OPTIONS, DIET_OPTIONS } from '@/lib/recipeUI';
-import styles from './recipesPage.module.css';
+import styles from '@/app/recipes/add/recipesPage.module.css';
 
 type AddRecipeFormProps = {
   action: (formData: FormData) => Promise<void>;
