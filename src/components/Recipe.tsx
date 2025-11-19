@@ -5,6 +5,7 @@ import styles from '@/app/recipes/page.module.css';
 import Image from 'next/image';
 import Link from 'next/link';
 import slugify from '@/lib/slug';
+import { filterRecipes } from '@/utils/filterRecipes';
 import FavoriteHeart from './FavoriteHeart';
 
 // Strict UI type
@@ -82,39 +83,15 @@ export default function RecipesPage({ initialRecipes }: Props) {
   };
 
   // Memoized filtered recipes based on current filters and search
-  const filteredRecipes = useMemo(() => {
+  const filtered = useMemo(() => {
     const maxMinutes = parseMaxTime(maxTime);
-    const q = committedQuery.toLowerCase();
 
-    // Filter logic
-    return recipes.filter((r) => {
-      const matchesQuery = q.length === 0
-        || r.title.toLowerCase().includes(q)
-        || r.ingredients.some((ing) => ing.toLowerCase().includes(q));
-
-      // Check cook time, difficulty & diet dropdowns
-      const matchesTime = maxMinutes == null || r.cookTime <= maxMinutes;
-      const matchesDifficulty = difficulty === 'Any' || r.difficulty === difficulty;
-      const matchesDiet = diet === 'Any' || r.diet === diet;
-
-      // Check ingredients
-      const recipeIngs = Array.isArray(r.ingredients)
-        ? r.ingredients.map((i) => String(i).toLowerCase())
-        : [];
-
-      const matchesIngredients = ingredients.length === 0
-      || ingredients.every((chip) => {
-        const c = chip.trim().toLowerCase();
-        if (!c) return true;
-        return recipeIngs.some((ing) => ing.includes(c));
-      });
-      return (
-        matchesQuery
-        && matchesTime
-        && matchesDifficulty
-        && matchesDiet
-        && matchesIngredients
-      );
+    return filterRecipes(recipes, {
+      searchQuery: committedQuery,
+      ingredients,
+      maxMinutes,
+      difficulty,
+      diet,
     });
   }, [recipes, committedQuery, maxTime, difficulty, diet, ingredients]);
 
@@ -238,13 +215,13 @@ export default function RecipesPage({ initialRecipes }: Props) {
           <p className={styles.rpCount}>
             Showing
             {' '}
-            <span className={styles.rpCountStrong}>{filteredRecipes.length}</span>
+            <span className={styles.rpCountStrong}>{filtered.length}</span>
             {' '}
             results
           </p>
           {/* Recipe cards */}
           <section className={styles.rpCards}>
-            {filteredRecipes.map((r) => (
+            {filtered.map((r) => (
               <article key={r.id} className={styles.rpCardItem}>
                 <div className={styles.rpCardMedia} style={{ position: 'relative', height: 180 }}>
                   {r.image ? (
@@ -306,7 +283,7 @@ export default function RecipesPage({ initialRecipes }: Props) {
               </article>
             ))}
             {/* Empty state */}
-            {filteredRecipes.length === 0 && (
+            {filtered.length === 0 && (
               <div className={styles.rpEmpty}><p>No recipes match your filters.</p></div>
             )}
           </section>
