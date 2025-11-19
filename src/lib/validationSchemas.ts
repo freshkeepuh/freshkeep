@@ -40,7 +40,7 @@ export const signInValidation = Yup.object().shape({
 });
 
 export const AddStorageSchema = Yup.object({
-  location: Yup.string().required(),
+  locId: Yup.string().required(),
   name: Yup.string().required(),
   type: Yup.mixed<StorageType>()
     .oneOf(Object.values(StorageType))
