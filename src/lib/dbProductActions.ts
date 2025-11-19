@@ -97,15 +97,7 @@ export async function createProductInstance(data: {
 export async function readProducts() {
   const products = await prisma.product.findMany(
     {
-      select: {
-        instances: {
-          ...unitsSelect,
-          ...productInstanceSelect,
-        },
-        ...unitsSelect,
-        ...productSelect,
-      },
-      orderBy: { category: 'asc', name: 'asc' },
+      select: productSelect,
     },
   );
   return products;

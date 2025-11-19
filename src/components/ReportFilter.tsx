@@ -36,14 +36,17 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
   const [currProducts, setCurrentProducts] = useState<Product[] | undefined>(undefined);
   const [origProducts, setOriginalProducts] = useState<Product[] | undefined>(undefined);
   const [isDisabled, setIsDisabled] = useState(false);
-  const methods = useForm({ defaultValues: {
-    location: '',
-    storageType: '',
-    storageArea: '',
-    productCategory: '',
-    product: '',
-  }, mode: "all" });
-  
+  const methods = useForm({
+    defaultValues: {
+      location: '',
+      storageType: '',
+      storageArea: '',
+      productCategory: '',
+      product: '',
+    },
+    mode: "all",
+  });
+
   const onChange: React.ChangeEventHandler<HTMLSelectElement> = (event: React.ChangeEvent<HTMLSelectElement>) => {
     try {
       setIsDisabled(true);
@@ -52,13 +55,13 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
         case 'location':
           setLocation(value);
           if (origStorageAreas) {
-            setCurrentStorageAreas(origStorageAreas.filter((area) => area.locId === value || value === ''));
+            setCurrentStorageAreas(origStorageAreas.filter((area) => (area.locId === value || value === '') && (area.type === (storageType as StorageType) || !storageType)));
           }
           break;
         case 'storageType':
           setStorageType(value);
           if (origStorageAreas) {
-            setCurrentStorageAreas(origStorageAreas.filter((area) => area.type === (value as StorageType) || value === ''));
+            setCurrentStorageAreas(origStorageAreas.filter((area) => (area.locId === location || location === '') && (area.type === (value as StorageType) || !value)));
           }
           break;
         case 'storageArea':
@@ -68,13 +71,13 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
           setProductCategory(value);
           if (origProducts) {
             setCurrentProducts(origProducts.filter((prod) => prod.category === value || value === ''));
-          }                               
+          }
           break;
         case 'product':
           setProduct(value);
           break;
         default:
-          break;    
+          break;
       }
       if (onFilterChange) {
         onFilterChange(
@@ -91,18 +94,87 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
   };
 
   const onFormSubmit = () => {
-    if (onFilterChange) {
-      onFilterChange(
-        location,
-        storageType,
-        storageArea,
-        productCategory,
-        product,
-      );
+    try {
+      setIsDisabled(true);
+      if (onFilterChange) {
+        onFilterChange(
+          location,
+          storageType,
+          storageArea,
+          productCategory,
+          product,
+        );
+      }
+    } finally {
+      setIsDisabled(false);
     }
   };
 
-  const onFormReset = () => {
+  useEffect(() => {
+    const addError = (message: string) => {
+      if (error) {
+        setError(`${error}<br />${message}`);
+        return;
+      }
+      setError(message);
+    };
+
+    const resetError = () => {
+      setError(null);
+    };
+
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        resetError();
+        try {
+          const locationsRes = await fetch('/api/location', { cache: 'no-store' });
+          if (!locationsRes.ok) {
+            throw new Error(locationsRes.status.toString());
+          }
+          const locData = await locationsRes.json();
+          setOriginalLocations(locData);
+        } catch (err) {
+          if (process.env.NODE_ENV === 'development') {
+            const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+            addError(`Failed to load locations: ${errorMessage}`);
+          }
+          setOriginalLocations(undefined);
+        }
+        try {
+          const storagesRes = await fetch('/api/storage', { cache: 'no-store' });
+          if (!storagesRes.ok) {
+            throw new Error(storagesRes.status.toString());
+          }
+          const storData = await storagesRes.json();
+          setOriginalStorageAreas(storData);
+        } catch (err) {
+          if (process.env.NODE_ENV === 'development') {
+            const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+            addError(`Failed to load storage areas: ${errorMessage}`);
+          }
+          setOriginalStorageAreas(undefined);
+        }
+        try {
+          const productRes = await fetch('/api/product', { cache: 'no-store' });
+          if (!productRes.ok) {
+            throw new Error(productRes.status.toString());
+          }
+          const prodData = await productRes.json();
+          setOriginalProducts(prodData);
+        } catch (err) {
+          if (process.env.NODE_ENV === 'development') {
+            const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+            addError(`Failed to load products: ${errorMessage}`);
+          }
+          setOriginalProducts(undefined);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+
     setLocation('');
     setCurrentLocations(origLocations);
     setStorageType('');
@@ -111,57 +183,6 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
     setProductCategory('');
     setProduct('');
     setCurrentProducts(origProducts);
-  };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const [storagesRes, locationsRes, productRes] = await Promise.all([
-          fetch('/api/storage', { cache: 'no-store' }),
-          fetch('/api/location', { cache: 'no-store' }),
-          fetch('/api/product', { cache: 'no-store' }),
-        ]);
-        if (!locationsRes.ok) {
-          throw new Error(locationsRes.status.toString());
-        }
-        const locData = await locationsRes.json();
-        setOriginalLocations(locData);
-        if (!storagesRes.ok) {
-          throw new Error(storagesRes.status.toString());
-        }
-        const storData = await storagesRes.json();
-        setOriginalStorageAreas(storData);
-        if (!productRes.ok) {
-          throw new Error(productRes.status.toString());
-        }
-        const prodData = await productRes.json();
-        setOriginalProducts(prodData);
-
-        setError(null);
-      } catch (err) {
-        if (process.env.NODE_ENV === 'development') {
-          const errorMessage = err instanceof Error ? err.message : 'Unknown error';
-          setError(` Failed to load locations, storage areas and products: ${errorMessage}`);
-        } else {
-          setError(null);
-        }
-        setLocation('');
-        setOriginalLocations(undefined);
-        setCurrentLocations(undefined);
-        setStorageType('');
-        setStorageArea('');
-        setOriginalStorageAreas(undefined);
-        setCurrentStorageAreas(undefined);
-        setProductCategory('');
-        setProduct('');
-        setOriginalProducts(undefined);
-        setCurrentProducts(undefined);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
   }, []);
 
   if (loading) {
@@ -169,64 +190,63 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
   }
 
   return (
-    <Container className="report-filter">
-      <h1>{title}</h1>
-      {error && <p className="text-danger">{error}</p>}
+    <>
+      <h1 className='report-filter-title'>{title}</h1>
+      {error && <p className="text-danger report-filter-error">{error}</p>}
       <FormProvider {...methods}>
-        <Row className="report-filter-location-row">
-          <Col className="report-filter-location-col">
-            <LocationFilter
-              label="Location"
-              disabled={isDisabled}
-              locations={currLocations}
-              onChange={onChange}
-            />
-          </Col>
-        </Row>
-        <Row className="report-filter-storage-row">
-          <Col className="report-filter-storage-type-col">
-            <StorageTypeFilter
-              label="Storage Type"
-              disabled={isDisabled}
-              onChange={onChange}
-            />
-          </Col>
-          <Col className="report-filter-storage-area-col">
-            <StorageAreaFilter
-              label="Storage Area"
-              disabled={isDisabled}
-              storageAreas={currStorageAreas}
-              onChange={onChange}
-            />
-          </Col>
-        </Row>
-        <Row className='report-filter-product-row'>
-          <Col className='report-filter-product-category-col'>
-            <ProductCategoryFilter
-              label="Category"
-              disabled={isDisabled}
-              onChange={onChange}
-            />
-          </Col>
-          <Col className='report-filter-product-col'>
-            <ProductFilter
-              label="Product"
-              disabled={isDisabled}
-              products={currProducts}
-              onChange={onChange}
-            />
-          </Col>
-        </Row>
-        <Row className="report-filter-buttons-row">
-          <Col className="report-filter-search-button-col">
-            <Button type="submit" onClick={methods.handleSubmit(onFormSubmit)} disabled={isDisabled}>Search</Button>
-          </Col>
-          <Col className="report-filter-reset-button-col">
-            <Button type="reset" onClick={onFormReset} disabled={isDisabled}>Reset</Button>
-          </Col>
-        </Row>
+        <Container className="report-filter-container">
+          <Row className="report-filter-location-row">
+            <Col className="report-filter-location-col">
+              <LocationFilter
+                label="Location"
+                disabled={isDisabled}
+                locations={currLocations}
+                onChange={onChange}
+              />
+            </Col>
+          </Row>
+          <Row className="report-filter-storage-row">
+            <Col className="report-filter-storage-type-col">
+              <StorageTypeFilter
+                label="Storage Type"
+                disabled={isDisabled}
+                onChange={onChange}
+              />
+            </Col>
+            <Col className="report-filter-storage-area-col">
+              <StorageAreaFilter
+                label="Storage Area"
+                disabled={isDisabled}
+                storageAreas={currStorageAreas}
+                onChange={onChange}
+              />
+            </Col>
+          </Row>
+          <Row className='report-filter-product-row'>
+            <Col className='report-filter-product-category-col'>
+              <ProductCategoryFilter
+                label="Category"
+                disabled={isDisabled}
+                onChange={onChange}
+              />
+            </Col>
+            <Col className='report-filter-product-col'>
+              <ProductFilter
+                label="Product"
+                disabled={isDisabled}
+                products={currProducts}
+                onChange={onChange}
+              />
+            </Col>
+          </Row>
+          <Row className="report-filter-buttons-row">
+            <Col className="report-filter-search-button-col">
+              <Button type="submit" onClick={methods.handleSubmit(onFormSubmit)} disabled={isDisabled}>Search</Button>
+            </Col>
+          </Row>
+        </Container>
       </FormProvider>
-    </Container>
+    </>
   );
 };
 

@@ -8,15 +8,7 @@ const ExpiredReport = () => (
   <Container>
     <Row>
       <Col>
-        <ReportFilter title="Expired" onFilterChange={(
-          location,
-          storageType,
-          storageArea,
-          productCategory,
-          product,
-        ) => {
-          // Handle filter changes here
-        }} />
+        <ReportFilter title="Expired" />
       </Col>
     </Row>
     <Row>
