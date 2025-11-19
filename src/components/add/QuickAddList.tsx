@@ -20,7 +20,7 @@ type QuickItem = {
 const QUICK_ITEMS: QuickItem[] = [
   {
     name: 'Milk',
-    category: 'dairy',
+    category: 'Dairy',
     days: 7,
     emoji: '🥛',
     className: [styles.quickRow, styles.qBlue].join(' '),
@@ -28,7 +28,7 @@ const QUICK_ITEMS: QuickItem[] = [
   },
   {
     name: 'Bread',
-    category: 'pantry',
+    category: 'Pantry',
     days: 5,
     emoji: '🍞',
     className: [styles.quickRow, styles.qYellow].join(' '),
@@ -36,7 +36,7 @@ const QUICK_ITEMS: QuickItem[] = [
   },
   {
     name: 'Eggs',
-    category: 'dairy',
+    category: 'Dairy',
     days: 14,
     emoji: '🥚',
     className: [styles.quickRow, styles.qOrange].join(' '),
@@ -44,7 +44,7 @@ const QUICK_ITEMS: QuickItem[] = [
   },
   {
     name: 'Apples',
-    category: 'fruits',
+    category: 'Fruits',
     days: 10,
     emoji: '🍎',
     className: [styles.quickRow, styles.qGreen].join(' '),

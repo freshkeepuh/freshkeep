@@ -1,28 +1,66 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import styles from './add.module.css';
 
 type Props = {
   quantity: number;
-  unit: string;
+  unit: string | null;
   onQuantity: (n: number) => void;
   onUnit: (u: string) => void;
 };
 
-const UNITS = [
-  { id: 'pieces', label: 'Pieces' },
-  { id: 'kg', label: 'Kilograms' },
-  { id: 'lbs', label: 'Pounds' },
-  { id: 'liters', label: 'Liters' },
-  { id: 'bottles', label: 'Bottles' },
-  { id: 'cans', label: 'Cans' },
-  { id: 'boxes', label: 'Boxes' },
-];
+type UnitOption = {
+  id: string;
+  name: string;
+  abbr: string;
+};
 
 export default function QuantityUnit({
-  quantity, unit, onQuantity, onUnit,
+  quantity,
+  unit,
+  onQuantity,
+  onUnit,
 }: Props) {
+  const [units, setUnits] = useState<UnitOption[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadUnits = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const res = await fetch('/api/unit');
+        if (!res.ok) {
+          throw new Error('Failed to load units');
+        }
+
+        const raw = await res.json();
+
+        const data: UnitOption[] = raw.map((u: any) => ({
+          id: u.id,
+          name: u.name,
+          abbr: u.abbr,
+        }));
+
+        setUnits(data);
+
+        if (!unit && data.length > 0) {
+          onUnit(data[0].id);
+        }
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : 'Failed to load units';
+        setError(message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    loadUnits();
+  }, []);
+
   const dec = useCallback(
     () => onQuantity(Math.max(1, quantity - 1)),
     [onQuantity, quantity],
@@ -83,15 +121,25 @@ export default function QuantityUnit({
         <select
           aria-labelledby="unit-label"
           className={styles.select}
-          value={unit}
+          value={unit ?? ''}
           onChange={(e) => onUnit(e.currentTarget.value)}
+          disabled={loading || units.length === 0}
         >
-          {UNITS.map((u) => (
+          {loading && <option value="">Loading units…</option>}
+          {!loading && units.length === 0 && (
+            <option value="">No units available</option>
+          )}
+          {!loading && units.length > 0 && units.map((u) => (
             <option key={u.id} value={u.id}>
-              {u.label}
+              {`${u.name} (${u.abbr})`}
             </option>
           ))}
         </select>
+        {error && (
+          <p style={{ color: 'red', marginTop: 4 }}>
+            {error}
+          </p>
+        )}
       </div>
     </div>
   );

@@ -21,11 +21,20 @@ export default function StorageSelector({ units, selected, onSelect }: Props) {
 
           let activeClass = '';
           if (isSelected) {
-            activeClass = s.type === 'fridge' ? styles.storageActiveFridge : styles.storageActivePantry;
+            if (s.type === 'fridge' || s.type === 'freezer') {
+              activeClass = styles.storageActiveFridge;
+            } else if (s.type === 'pantry' || s.type === 'spice-rack') {
+              activeClass = styles.storageActivePantry;
+            } else {
+              activeClass = '';
+            }
           }
 
-          const emoji = s.type === 'fridge' ? '❄️' : '🏠';
-          const temperature = s.type === 'fridge' ? s.temperature : undefined;
+          let emoji = '📦';
+          if (s.type === 'fridge') emoji = '❄️';
+          else if (s.type === 'freezer') emoji = '🧊';
+          else if (s.type === 'pantry') emoji = '🏠';
+          else if (s.type === 'spice-rack') emoji = '🧂';
 
           return (
             <button
@@ -37,11 +46,17 @@ export default function StorageSelector({ units, selected, onSelect }: Props) {
             >
               <div className={styles.storageEmoji}>{emoji}</div>
               <div className={styles.storageName}>{s.name}</div>
+
+              {s.locationName && (
+                <p className={styles.storageMeta}>
+                  <span>{s.locationName}</span>
+                </p>
+              )}
+
               <p className={styles.storageMeta}>
                 {s.items}
                 <span> items</span>
               </p>
-              {temperature ? <p className={styles.storageTemp}>{temperature}</p> : null}
             </button>
           );
         })}
