@@ -13,11 +13,11 @@ interface CountryFilterProps {
 }
 
 /**
- * StorageTypeFilter component.
+ * CountryFilter component.
  *
- * Note: The default value for the storageType field should be set via useForm initialization,
+ * Note: The default value for the country field should be set via useForm initialization,
  * not via a prop or defaultValue on the select element. Example:
- *   useForm({ defaultValues: { storageType: StorageType.Freezer } })
+ *   useForm({ defaultValues: { country: Country.Freezer } })
  */
 const CountryFilter: React.FC<CountryFilterProps> = (
   {
@@ -37,15 +37,15 @@ const CountryFilter: React.FC<CountryFilterProps> = (
   } = context;
   return (
     <>
-      {label && <Form.Label htmlFor="storageTypeFilter">{label}</Form.Label>}
+      {label && <Form.Label htmlFor="countryFilter">{label}</Form.Label>}
       <Form.Select
-        id="storageTypeFilter"
+        id="countryFilter"
         size="lg"
-        aria-label="Storage Type Filter"
-        {...register('storageType')}
+        aria-label="Country Filter"
+        {...register('country')}
         disabled={isDisabled}
         onChange={onChange}
-        isInvalid={!!errors.storageType}
+        isInvalid={!!errors.country}
       >
         <option key="all" value="">All</option>
         {
@@ -60,7 +60,7 @@ const CountryFilter: React.FC<CountryFilterProps> = (
         }
       </Form.Select>
       <Form.Control.Feedback type="invalid">
-        {errors.storageType ? errors.storageType.message?.toString() : null}
+        {errors.country ? errors.country.message?.toString() : null}
       </Form.Control.Feedback>
     </>
   );
