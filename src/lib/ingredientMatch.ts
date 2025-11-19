@@ -23,15 +23,24 @@ export function splitIngredientsByStock(
 ) {
   const safeIngredients = Array.isArray(ingredients) ? ingredients : [];
 
+  // Pre-normalize product names
+  const normalizedProducts = productNames.map(norm);
+
   // Ingredients we have in stock
-  const inStock = safeIngredients.filter(
-    (ing) => productNames.some((prodName) => ingredientMatchesProduct(ing, prodName)),
-  );
+  const inStock = safeIngredients.filter((ing) => {
+    const normalizedIng = norm(ing);
+    return normalizedProducts.some(
+      (prod) => normalizedIng.includes(prod) || prod.includes(normalizedIng),
+    );
+  });
 
   // Ingredients we are missing
-  const missing = safeIngredients.filter(
-    (ing) => !productNames.some((prodName) => ingredientMatchesProduct(ing, prodName)),
-  );
+  const missing = safeIngredients.filter((ing) => {
+    const normalizedIng = norm(ing);
+    return !normalizedProducts.some(
+      (prod) => normalizedIng.includes(prod) || prod.includes(normalizedIng),
+    );
+  });
 
   return {
     inStock,

@@ -6,23 +6,15 @@ import Link from 'next/link';
 import styles from '@/app/recipes/page.module.css';
 import slugify from '@/lib/slug';
 import FavoriteHeart from '@/components/FavoriteHeart';
+import { splitIngredientsByStock } from '@/lib/ingredientMatch';
 
 export const dynamic = 'force-dynamic';
 
-// Helpers to match ingredient text to product names
-const norm = (s: string) => s.toLowerCase().trim();
-
-const ingredientMatchesProduct = (ingredient: string, productName: string) => {
-  const ing = norm(ingredient);
-  const prod = norm(productName);
-  return ing.includes(prod) || prod.includes(ing);
-};
-
 export default async function RecipeViewPage(props: any) {
   const { slug: routeSlug } = await Promise.resolve(props?.params);
-  const searchParams = await Promise.resolve(props?.searchParams ?? {});
-  const selectedLocationId = typeof searchParams.locationId === 'string' && searchParams.locationId.length > 0
-    ? searchParams.locationId
+  const rawSearchParams = await Promise.resolve(props?.searchParams ?? {});
+  const selectedLocationId = typeof rawSearchParams.locationId === 'string' && rawSearchParams.locationId.length > 0
+    ? rawSearchParams.locationId
     : '';
 
   // Normal lookup by slug
@@ -75,13 +67,7 @@ export default async function RecipeViewPage(props: any) {
     .map((inst) => inst.product?.name)
     .filter((name): name is string => !!name);
 
-  // Ingredients that match something in stock (for this location)
-  const inStock = ingredients.filter((ing) => haveNames.some((prodName) => ingredientMatchesProduct(ing, prodName)));
-
-  // Ingredients that do NOT match anything in stock (for this location)
-  const missing = ingredients.filter(
-    (ing) => !haveNames.some((prodName) => ingredientMatchesProduct(ing, prodName)),
-  );
+  const { inStock, missing } = splitIngredientsByStock(ingredients, haveNames);
 
   const difficultyMeta = {
     EASY: { label: 'Easy', icon: '⭐️' },
