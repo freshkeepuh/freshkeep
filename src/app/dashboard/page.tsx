@@ -204,7 +204,7 @@ const DashboardPage = () => {
         show={showModal}
         onClose={() => setShowModal(false)}
         onAdd={handleAddStorage}
-        locations={locations.map(l => ({ id: l.id, name: l.name }))}
+        locations={locations}
       />
     </Container>
   );
