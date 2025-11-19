@@ -9,6 +9,7 @@ export interface StorageType {
   id: string;
   locId?: string;
   name: string;
+  location?: string;
   type: 'Fridge' | 'Freezer' | 'Pantry' | 'Spice Rack' | 'Other';
   itemCount?: number;
 }
@@ -68,6 +69,7 @@ export default function StorageList({ storages, locationsById = {} }: StorageLis
                     <Card.Title className={styles.storageTitle}>{storage.name}</Card.Title>
                     <Card.Text>
                       {storage.itemCount || 0}
+                      {' '}
                       items
                     </Card.Text>
                   </Card.Body>
