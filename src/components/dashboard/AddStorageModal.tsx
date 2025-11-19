@@ -8,19 +8,22 @@ export interface NewStorageData {
   name: string;
   type: 'Fridge' | 'Freezer' | 'Pantry' | 'Spice Rack' | 'Other';
   itemCount: number | string;
+  locId?: string;
 }
 
 interface AddStorageModalProps {
   show: boolean;
   onClose: () => void;
   onAdd: (storage: NewStorageData) => void;
+  locations: { id: string; name: string }[]; // narrow Location type as needed
 }
 
-export default function AddStorageModal({ show, onClose, onAdd }: AddStorageModalProps) {
+export default function AddStorageModal({ show, onClose, onAdd, locations }: AddStorageModalProps) {
   const [formData, setFormData] = useState<NewStorageData>({
     name: '',
     type: '' as any,
     itemCount: '' as any,
+    locId: '',
   });
 
   const [errors, setErrors] = useState<{ [key in keyof NewStorageData]?: boolean }>({});
@@ -54,11 +57,12 @@ export default function AddStorageModal({ show, onClose, onAdd }: AddStorageModa
       name: formData.name.trim(),
       type: formData.type,
       itemCount: itemCountNumber,
+      locId: formData.locId || undefined,
     };
 
     onAdd(submissionData);
 
-    setFormData({ name: '', type: 'Fridge', itemCount: '' });
+    setFormData({ name: '', type: 'Fridge', itemCount: '', locId: '' });
     onClose();
   };
 
@@ -93,6 +97,18 @@ export default function AddStorageModal({ show, onClose, onAdd }: AddStorageModa
               <option value="Other">Other</option>
             </Form.Select>
             <Form.Control.Feedback type="invalid">Please select a storage type.</Form.Control.Feedback>
+          </Form.Group>
+
+          <Form.Group controlId="storageLocation" className="mb-3">
+            <Form.Label>Location</Form.Label>
+            <Form.Select name="locId" value={formData.locId} onChange={handleChange}>
+              <option value="" disabled hidden>Select location</option>
+              {locations.map((loc) => (
+                <option key={loc.id} value={loc.id}>
+                  {loc.name}
+                </option>
+              ))}
+            </Form.Select>
           </Form.Group>
 
           <Form.Group>

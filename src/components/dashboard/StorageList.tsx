@@ -9,6 +9,7 @@ export interface StorageType {
   id: string;
   locId?: string;
   name: string;
+  location?: string;
   type: 'Fridge' | 'Freezer' | 'Pantry' | 'Spice Rack' | 'Other';
   itemCount?: number;
 }

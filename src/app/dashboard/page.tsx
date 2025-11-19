@@ -67,7 +67,7 @@ const DashboardPage = () => {
         body: JSON.stringify({
           name: newStorage.name,
           type: newStorage.type,
-          locId: null, // Default to no location
+          locId: newStorage.locId || null, // Default to no location
         }),
       });
 
@@ -203,6 +203,7 @@ const DashboardPage = () => {
         show={showModal}
         onClose={() => setShowModal(false)}
         onAdd={handleAddStorage}
+        locations={locations}
       />
     </Container>
   );
