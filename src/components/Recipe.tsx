@@ -10,7 +10,16 @@ import { Recipe } from '@/types/recipe';
 import FavoriteHeart from './FavoriteHeart';
 
 // Props passed from server component
-type Props = { initialRecipes: Recipe[] };
+type LocationOption = {
+  id: string;
+  name: string;
+};
+
+type Props = {
+  initialRecipes: Recipe[];
+  locations?: LocationOption[];
+  selectedLocationId?: string;
+};
 
 // Filter option types
 type MaxTimeFilter = '< 15 min' | '< 30 min' | '< 45 min' | '< 60 min' | 'Any';
@@ -35,7 +44,11 @@ const DIET_EMOJI: Record<DietFilter, string> = {
 const getDifficultyEmoji = (d: DifficultyFilter) => DIFFICULTY_EMOJI[d];
 const getDietEmoji = (d: DietFilter) => DIET_EMOJI[d];
 
-export default function RecipesPage({ initialRecipes }: Props) {
+export default function RecipesPage({
+  initialRecipes,
+  locations = [],
+  selectedLocationId = '',
+}: Props) {
   // Recipes loaded from the database
   const [recipes] = useState<Recipe[]>(initialRecipes);
 
@@ -84,64 +97,108 @@ export default function RecipesPage({ initialRecipes }: Props) {
     });
   }, [recipes, committedQuery, maxTime, difficulty, diet, ingredients]);
 
+  // Keep location in View Recipe link
+  const buildRecipeHref = (slug: string) => {
+    const base = `/recipes/${encodeURIComponent(slug)}`;
+    if (!selectedLocationId) return base;
+    const params = new URLSearchParams({ locationId: selectedLocationId });
+    return `${base}?${params.toString()}`;
+  };
+
   // Render layout, filters, and card list
   return (
     <div className={styles.rpPage}>
       <main className={styles.rpMain}>
         <div className={styles.rpMainInner}>
-          {/* Filter/Search */}
+          {/* Location + Filters in one card */}
           <section className={styles.rpCard}>
+            {/* Location selector */}
+            {locations.length > 0 && (
+            <div className={styles.rpBlock} style={{ marginBottom: 16 }}>
+              <h2 className={styles.rpH3}>🏠 Location</h2>
+
+              <form
+                method="get"
+                className={styles.rpRow}
+                style={{ alignItems: 'center', gap: 8 }}
+              >
+                <select
+                  name="locationId"
+                  defaultValue={selectedLocationId}
+                  className={styles.rpSelect}
+                  aria-label="Location"
+                  style={{ flex: 1 }}
+                >
+                  <option value="">All locations</option>
+                  {locations.map((loc) => (
+                    <option key={loc.id} value={loc.id}>
+                      {loc.name}
+                    </option>
+                  ))}
+                </select>
+
+                <button type="submit" className={styles.rpBtnDark}>
+                  Apply
+                </button>
+              </form>
+            </div>
+            )}
             {/* Ingredients input */}
             <div className={styles.rpBlock}>
-              <h2 className={styles.rpH3}>Your Ingredients</h2>
+              <h2 className={styles.rpH3}>🍅 Your Ingredients</h2>
               <div className={styles.rpRow}>
-                <div className={styles.rpSearchWrap}>
-                  <input
-                    value={currentIngredient}
-                    onChange={(e) => setCurrentIngredient(e.target.value)}
-                    onKeyDown={handleIngredientKeyDown}
-                    placeholder="example: tomato, beef"
-                    className={styles.rpInputSearch}
-                  />
-                  <span className={styles.rpSearchIcon}>🍅</span>
-                </div>
-                <button type="button" onClick={handleAddIngredient} className={styles.rpBtnDark}>
+                <input
+                  value={currentIngredient}
+                  onChange={(e) => setCurrentIngredient(e.target.value)}
+                  onKeyDown={handleIngredientKeyDown}
+                  placeholder="example: tomato, beef"
+                  className={styles.rpInputSearch}
+                  style={{ paddingLeft: '1rem', flex: 1, width: 'auto' }}
+                />
+                <button
+                  type="button"
+                  onClick={handleAddIngredient}
+                  className={styles.rpBtnDark}
+                >
                   Add
                 </button>
               </div>
               {ingredients.length > 0 && (
-                <div className={styles.rpChips}>
-                  {ingredients.map((ing) => (
-                    <span key={ing.toLowerCase()} className={styles.rpChip}>
-                      {ing}
-                      <button
-                        type="button"
-                        className={styles.rpChipX}
-                        onClick={() => handleRemoveIngredient(ing)}
-                        aria-label={`Remove ${ing}`}
-                      >
-                        ×
-                      </button>
-                    </span>
-                  ))}
-                </div>
+              <div className={styles.rpChips}>
+                {ingredients.map((ing) => (
+                  <span key={ing.toLowerCase()} className={styles.rpChip}>
+                    {ing}
+                    <button
+                      type="button"
+                      className={styles.rpChipX}
+                      onClick={() => handleRemoveIngredient(ing)}
+                      aria-label={`Remove ${ing}`}
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
+              </div>
               )}
             </div>
+
             {/* Search input */}
             <div className={styles.rpBlock}>
-              <h3 className={styles.rpH3}>Search Recipes</h3>
+              <h3 className={styles.rpH3}>🔍 Search Recipes</h3>
               <div className={styles.rpRow}>
-                <div className={styles.rpSearchWrap}>
-                  <input
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onKeyDown={handleSearchKeyDown}
-                    placeholder="example: soup, pasta"
-                    className={styles.rpInputSearch}
-                  />
-                  <span className={styles.rpSearchIcon}>🔍</span>
-                </div>
-                <button type="button" onClick={handleSearch} className={styles.rpBtnDark}>
+                <input
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={handleSearchKeyDown}
+                  placeholder="example: soup, pasta"
+                  className={styles.rpInputSearch}
+                  style={{ paddingLeft: '1rem', flex: 1, width: 'auto' }}
+                />
+                <button
+                  type="button"
+                  onClick={handleSearch}
+                  className={styles.rpBtnDark}
+                >
                   Search
                 </button>
               </div>
@@ -200,6 +257,7 @@ export default function RecipesPage({ initialRecipes }: Props) {
               </div>
             </div>
           </section>
+
           {/* Results */}
           <p className={styles.rpCount}>
             Showing
@@ -208,11 +266,15 @@ export default function RecipesPage({ initialRecipes }: Props) {
             {' '}
             results
           </p>
+
           {/* Recipe cards */}
           <section className={styles.rpCards}>
             {filtered.map((r) => (
               <article key={r.id} className={styles.rpCardItem}>
-                <div className={styles.rpCardMedia} style={{ position: 'relative', height: 180 }}>
+                <div
+                  className={styles.rpCardMedia}
+                  style={{ position: 'relative', height: 180 }}
+                >
                   {r.image ? (
                     <Image
                       src={r.image}
@@ -258,19 +320,36 @@ export default function RecipesPage({ initialRecipes }: Props) {
 
                   {/* View Recipe button */}
                   <Link
-                    href={`/recipes/${encodeURIComponent(r.slug || slugify(r.title))}`}
+                    href={buildRecipeHref(r.slug || slugify(r.title))}
                     className={styles.rpBtnLight}
                   >
                     View Recipe
                   </Link>
                 </div>
-                {/* Static Have / Missing summary */}
-                <div className={styles.rpMatchBar}>
-                  <span className={styles.rpMatchHave}>Have: 3/12</span>
-                  <span className={styles.rpMatchMissing}>Missing: 9/12</span>
-                </div>
+
+                {/* Match bar: number of ingredients we have / are missing */}
+                {typeof r.haveCount === 'number'
+                  && typeof r.totalIngredients === 'number' && (
+                    <div className={styles.rpMatchBar}>
+                      <span className={styles.rpMatchHave}>
+                        Have:
+                        {' '}
+                        {r.haveCount}
+                        /
+                        {r.totalIngredients}
+                      </span>
+                      <span className={styles.rpMatchMissing}>
+                        Missing:
+                        {' '}
+                        {r.totalIngredients - r.haveCount}
+                        /
+                        {r.totalIngredients}
+                      </span>
+                    </div>
+                )}
               </article>
             ))}
+
             {/* Empty state */}
             {filtered.length === 0 && (
               <div className={styles.rpEmpty}><p>No recipes match your filters.</p></div>
