@@ -27,7 +27,7 @@ const DashboardPage = () => {
       try {
         const [storagesRes, locationsRes] = await Promise.all([
           fetch('/api/storages', { cache: 'no-store' }),
-          fetch('/api/locations', { cache: 'no-store' }),
+          fetch('/api/location', { cache: 'no-store' }),
         ]);
         if (storagesRes.ok) {
           const data: StorageType[] = await storagesRes.json();
