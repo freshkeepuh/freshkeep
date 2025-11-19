@@ -74,7 +74,7 @@ export default function AddStorageModal({ show, onClose, onAdd, locations }: Add
       <Modal.Body>
         <Form>
           <Form.Group className="mb-3">
-            <RequiredLabel>Storage Name</RequiredLabel>
+            <RequiredLabel htmlFor="name">Storage Name</RequiredLabel>
             <Form.Control
               name="name"
               type="text"
@@ -87,7 +87,7 @@ export default function AddStorageModal({ show, onClose, onAdd, locations }: Add
           </Form.Group>
 
           <Form.Group className="mb-3">
-            <RequiredLabel>Storage Type</RequiredLabel>
+            <RequiredLabel htmlFor="type">Storage Type</RequiredLabel>
             <Form.Select name="type" value={formData.type} onChange={handleChange} isInvalid={errors.type}>
               <option value="" disabled hidden>Select type</option>
               <option value="Fridge">Fridge</option>
