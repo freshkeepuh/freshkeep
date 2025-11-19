@@ -10,7 +10,6 @@ import StorageList, { StorageType } from '@/components/dashboard/StorageList';
 import AddStorageModal, { NewStorageData } from '@/components/dashboard/AddStorageModal';
 import DashboardTileButton from '@/components/dashboard/DashboardTileButton';
 import styles from '../../styles/dashboard.module.css';
-// import defaultStorageAreas from '../../../config/settings.development.json';
 
 const DashboardPage = () => {
   const router = useRouter();
