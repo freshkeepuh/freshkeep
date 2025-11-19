@@ -128,15 +128,7 @@ const LocationsPage = () => {
         key={l.id}
         id={l.id}
         name={l.name}
-        address={l.address1} /*
-        address2={l.address2 ?? null}
-        city={l.city}
-        state={l.state}
-        zipcode={l.zipcode}
-        country={l.country as Country} */
-        /* picture={l.picture ?? null}
-        createdAt={l.createdAt}
-        updatedAt={l.updatedAt} */
+        address={l.address1}
         onEdit={handleEditLocation}
         onDelete={handleDeleteLocation}
         selected={l.id === selectedId}
