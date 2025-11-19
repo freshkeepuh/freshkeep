@@ -101,7 +101,6 @@ async function seedUsers(): Promise<Array<User>> {
     const role = (account.role as Role) || Role.USER;
 
     // preserve user-edited settings on reseed
-    // eslint-disable-next-line no-await-in-loop
     const existing = await prisma.user.findUnique({
       where: { email: account.email },
     });
@@ -113,7 +112,6 @@ async function seedUsers(): Promise<Array<User>> {
         ...(account.settings ?? {}),
       };
 
-      // eslint-disable-next-line no-await-in-loop
       const created = await prisma.user.create({
         data: {
           email: account.email,
@@ -134,7 +132,6 @@ async function seedUsers(): Promise<Array<User>> {
         ...prevSettings,
       };
 
-      // eslint-disable-next-line no-await-in-loop
       const updated = await prisma.user.update({
         where: { email: account.email },
         data: {
@@ -160,7 +157,6 @@ async function seedStores(): Promise<Array<Store>> {
   // Wait for all Stores to complete
   for (const defaultStore of config.defaultStores) {
     // Upsert the Store to avoid duplicates
-    // eslint-disable-next-line no-await-in-loop
     const store = await prisma.store.upsert({
       where: { name: defaultStore.name },
       update: {},
@@ -196,7 +192,6 @@ async function seedLocations(): Promise<Array<Location>> {
     // Get the Country
     const country = (defaultLocation.country as Country) || Country.USA;
     // Upsert the Location to avoid duplicates
-    // eslint-disable-next-line no-await-in-loop
     const location = await prisma.location.upsert({
       where: { name: defaultLocation.name },
       update: {},
@@ -235,7 +230,6 @@ async function seedStorageAreas(locations: Array<Location>): Promise<Array<Stora
     // Get the StorageArea Type
     const storageType = (defaultStorageArea.type as StorageType) || StorageType.Pantry;
     // Upsert the StorageArea to avoid duplicates
-    // eslint-disable-next-line no-await-in-loop
     const storageArea = await prisma.storageArea.upsert({
       where: { name: defaultStorageArea.name },
       update: {},
@@ -265,7 +259,6 @@ async function seedUnits(): Promise<Array<Unit>> {
   // First, create all base units
   for (const defaultUnit of config.defaultUnits.filter((unit) => unit.name === unit.baseName)) {
     // Upsert base unit to avoid duplicates
-    // eslint-disable-next-line no-await-in-loop
     const unit = await prisma.unit.upsert({
       where: { name: defaultUnit.name },
       update: {},
@@ -279,7 +272,6 @@ async function seedUnits(): Promise<Array<Unit>> {
     // After creation, set the baseId to its own id for self reference
     unit.baseId = unit.id;
     // Update the unit with the new baseId
-    // eslint-disable-next-line no-await-in-loop
     await prisma.unit.update({
       where: { id: unit.id },
       data: { baseId: unit.id },
@@ -293,7 +285,6 @@ async function seedUnits(): Promise<Array<Unit>> {
     // Find the parent unit to establish the relationship
     const parentUnit = findByName(units, defaultUnit.baseName);
     // Upsert derived unit to avoid duplicates
-    // eslint-disable-next-line no-await-in-loop
     const unit = await prisma.unit.upsert({
       where: { name: defaultUnit.name },
       update: {},
@@ -331,14 +322,12 @@ async function seedProducts(units: Array<Unit>, stores: Array<Store>): Promise<A
     const unit = findByName(units, defaultProduct.unitName);
     // Find the store to associate with the product
     const store = findByName(stores, defaultProduct.storeName);
-    // Set the category, defaulting to Other if not specified
-    // const category = (defaultProduct.category as ProductCategory) || ProductCategory.Other;
-    // Upsert product to avoid duplicates
-    // eslint-disable-next-line no-await-in-loop
-    const product = await prisma.product.upsert({
-      where: { name: defaultProduct.name },
-      update: {},
-      create: {
+
+    const category =
+      (defaultProduct.category as ProductCategory) || ProductCategory.Other;
+
+    const created = await prisma.product.create({
+      data: {
         name: defaultProduct.name,
         category,
         unitId: unit.id,
@@ -387,7 +376,6 @@ async function seedProductInstances(
     // Get the Unit
     const unit = findByName(units, defaultItem.unitName);
     // Create the Item
-    // eslint-disable-next-line no-await-in-loop
     instance = await prisma.productInstance.create({
       data: {
         locId: location.id,
@@ -411,7 +399,6 @@ const seedShoppingList = async (stores: Array<Store>): Promise<Array<ShoppingLis
   for (const defaultList of config.defaultShoppingLists) {
     const store = findByName(stores, defaultList.storeName);
     // Upsert the Shopping List to avoid duplicates
-    // eslint-disable-next-line no-await-in-loop
     const shoppingList = await prisma.shoppingList.upsert({
       where: { name: defaultList.name },
       update: {},
@@ -452,7 +439,6 @@ const seedShoppingListItems = async (
     // Find the Unit to associate with the item
     const unit = findByName(units, defaultItem.unitName);
     // Create the Shopping List Item
-    // eslint-disable-next-line no-await-in-loop
     const item = await prisma.shoppingListItem.upsert({
       where: {
         listId_prodId_unitId: {
@@ -509,7 +495,6 @@ async function seedRecipes(): Promise<void> {
   const recipes: SeedRecipe[] = defaultRecipes;
   for (const r of recipes) {
     const slug = slugify(r.title);
-    // eslint-disable-next-line no-await-in-loop
     await prisma.recipe.upsert({
       where: { slug },
       // update if exists
