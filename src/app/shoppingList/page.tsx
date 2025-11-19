@@ -170,16 +170,30 @@ const ShoppingListPage = () => {
       </div>
 
       {showFilters && (
-        <div className="bg-light border rounded p-3 mb-3" style={{ maxWidth: '800px', margin: '0 auto 1rem auto' }}>
-          <div className="d-flex justify-content-between align-items-center mb-2">
-            <h6 className="mb-0">Filters</h6>
-            <Button variant="link" size="sm" className="text-decoration-none p-0" onClick={clearAllFilters}>
+        <div
+          className="border rounded shadow-sm p-4 mb-4"
+          style={{ maxWidth: '800px',
+            margin: '0 auto 1rem auto',
+            background: '#F4FAF4',
+            borderColor: '#D8E8D8',
+            borderRadius: '12px' }}
+        >
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h4 className="mb-0">Filters</h4>
+            <Button
+              variant="link"
+              size="sm"
+              className="p-0"
+              style={{ color: '#3b633bff',
+                textDecoration: 'underline' }}
+              onClick={clearAllFilters}
+            >
               Clear All
             </Button>
           </div>
-          <Row className="g-3">
-            <Col md={4}>
-              <div className="mb-1" style={{ fontSize: '13px', fontWeight: '600', color: '#495057' }}>
+          <Row className="g-4">
+            <Col md={4} className="d-flex flex-column ps-3">
+              <div className="mb-2" style={{ fontSize: '18px', fontWeight: '640', color: '#3B593B' }}>
                 Store
               </div>
               {uniqueStores.map((store) => (
@@ -191,12 +205,13 @@ const ShoppingListPage = () => {
                   checked={selectedStores.includes(store)}
                   onChange={() => toggleFilter(store, selectedStores, setSelectedStores)}
                   className="mb-1"
-                  style={{ fontSize: '14px' }}
+                  style={{ fontSize: '16px' }}
                 />
               ))}
             </Col>
+
             <Col md={4}>
-              <div className="mb-1" style={{ fontSize: '13px', fontWeight: '600', color: '#495057' }}>
+              <div className="mb-2" style={{ fontSize: '18px', fontWeight: '640', color: '#3B593B' }}>
                 Storage Type
               </div>
               {uniqueStorageTypes.map((storage) => (
@@ -208,12 +223,13 @@ const ShoppingListPage = () => {
                   checked={selectedStorageTypes.includes(storage)}
                   onChange={() => toggleFilter(storage, selectedStorageTypes, setSelectedStorageTypes)}
                   className="mb-1"
-                  style={{ fontSize: '14px' }}
+                  style={{ fontSize: '16px' }}
                 />
               ))}
             </Col>
+
             <Col md={4}>
-              <div className="mb-1" style={{ fontSize: '13px', fontWeight: '600', color: '#495057' }}>
+              <div className="mb-2" style={{ fontSize: '18px', fontWeight: '640', color: '#3B593B' }}>
                 Type
               </div>
               {uniqueTypes.map((type) => (
@@ -225,7 +241,7 @@ const ShoppingListPage = () => {
                   checked={selectedTypes.includes(type)}
                   onChange={() => toggleFilter(type, selectedTypes, setSelectedTypes)}
                   className="mb-1"
-                  style={{ fontSize: '14px' }}
+                  style={{ fontSize: '16px' }}
                 />
               ))}
             </Col>

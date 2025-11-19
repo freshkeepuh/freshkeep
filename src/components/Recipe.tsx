@@ -248,7 +248,13 @@ export default function RecipesPage({ initialRecipes }: Props) {
               <article key={r.id} className={styles.rpCardItem}>
                 <div className={styles.rpCardMedia} style={{ position: 'relative', height: 180 }}>
                   {r.image ? (
-                    <Image src={r.image} alt={r.title} fill style={{ objectFit: 'cover' }} />
+                    <Image
+                      src={r.image}
+                      alt={r.title}
+                      fill
+                      sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 100vw"
+                      style={{ objectFit: 'cover' }}
+                    />
                   ) : (
                     <div className={styles.rpNoImg}>No image</div>
                   )}
@@ -283,6 +289,7 @@ export default function RecipesPage({ initialRecipes }: Props) {
                     <p className={styles.rpH3}>Ingredients:</p>
                     <p className={styles.rpText}>{r.ingredients.join(', ')}</p>
                   </div>
+
                   {/* View Recipe button */}
                   <Link
                     href={`/recipes/${encodeURIComponent(r.slug || slugify(r.title))}`}
@@ -290,6 +297,11 @@ export default function RecipesPage({ initialRecipes }: Props) {
                   >
                     View Recipe
                   </Link>
+                </div>
+                {/* Static Have / Missing summary */}
+                <div className={styles.rpMatchBar}>
+                  <span className={styles.rpMatchHave}>Have: 3/12</span>
+                  <span className={styles.rpMatchMissing}>Missing: 9/12</span>
                 </div>
               </article>
             ))}
