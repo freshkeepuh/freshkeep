@@ -101,7 +101,7 @@ export default function AddStorageModal({ show, onClose, onAdd, locations }: Add
 
           <Form.Group controlId="storageLocation" className="mb-3">
             <Form.Label>Location</Form.Label>
-            <Form.Select name="locId" value={formData.locId} onChange={handleChange} isInvalid={errors.locId}>
+            <Form.Select name="locId" value={formData.locId} onChange={handleChange}>
               <option value="" disabled hidden>Select location</option>
               {locations.map((loc) => (
                 <option key={loc.id} value={loc.id}>
