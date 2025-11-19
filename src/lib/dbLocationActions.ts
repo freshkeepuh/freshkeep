@@ -49,7 +49,6 @@ export async function readLocations() {
   const locations = await prisma.location.findMany(
     {
       select: locationSelect,
-      orderBy: { name: 'asc' },
     },
   );
   return locations;
