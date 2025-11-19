@@ -312,21 +312,24 @@ async function seedUnits(): Promise<Array<Unit>> {
  */
 async function seedProducts(units: Array<Unit>, stores: Array<Store>): Promise<Array<Product>> {
   const products: Array<Product> = [];
-  // Wait for all Products to complete
+
+  // Optional: if you DON'T want products to accumulate on repeated seeds in dev,
+  // uncomment the next line. In CI the DB is fresh anyway.
+  // await prisma.product.deleteMany({});
+
   for (const defaultProduct of config.defaultProducts) {
     // Find the unit to associate with the product
     const unit = findByName(units, defaultProduct.unitName);
     // Find the store to associate with the product
     const store = findByName(stores, defaultProduct.storeName);
-    // Set the category, defaulting to Other if not specified
-    // const category = (defaultProduct.category as ProductCategory) || ProductCategory.Other;
-    // Upsert product to avoid duplicates
-    const product = await prisma.product.upsert({
-      where: { name: defaultProduct.name },
-      update: {},
-      create: {
+
+    const category =
+      (defaultProduct.category as ProductCategory) || ProductCategory.Other;
+
+    const created = await prisma.product.create({
+      data: {
         name: defaultProduct.name,
-        category: ProductCategory.Other,
+        category,
         unitId: unit.id,
         stores: {
           connect: [{ id: store.id }],
@@ -336,12 +339,13 @@ async function seedProducts(units: Array<Unit>, stores: Array<Store>): Promise<A
         picture: defaultProduct.picture || undefined,
       },
     });
-    // Add the product to the array
-    products.push(product);
+
+    products.push(created);
   }
-  // Return the array of products
+
   return products;
 }
+
 
 /**
  * Seed items into the database
