@@ -68,6 +68,7 @@ export default function StorageList({ storages, locationsById = {} }: StorageLis
                     <Card.Title className={styles.storageTitle}>{storage.name}</Card.Title>
                     <Card.Text>
                       {storage.itemCount || 0}
+                      {' '}
                       items
                     </Card.Text>
                   </Card.Body>
