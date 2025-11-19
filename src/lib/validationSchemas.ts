@@ -37,7 +37,7 @@ export const signInValidation = Yup.object().shape({
     .required('Password is required')
     .min(6, 'Password must be at least 6 characters')
     .max(20, 'Password must not exceed 20 characters'),
-}); // Prisma enum for container types
+});
 
 export const AddStorageSchema = Yup.object({
   location: Yup.string().required(),
