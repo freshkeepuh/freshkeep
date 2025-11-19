@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-one-expression-per-line */
+
 'use client';
 
 import { useState } from 'react';
@@ -75,45 +77,44 @@ const ShoppingListModal = ({ show, onHide, listTitle, items }: ShoppingListModal
 
         <div className="card mx-3 mb-3">
           <div className="card-body p-0">
-            <div style={{ maxHeight: '60vh', overflowY: 'auto' }}>
-              <div
-                className="bg-success bg-opacity-10 border-bottom border-success border-2 py-2 px-3"
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: '40px 80px 1fr 100px 100px 100px 90px',
-                  gap: '12px',
-                  fontWeight: '600',
-                  fontSize: '11px',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.5px',
-                  color: '#198754',
-                  position: 'sticky',
-                  top: 0,
-                  zIndex: 10,
-                  backgroundColor: 'rgba(209, 231, 221, 0.95)',
-                }}
-              >
-                <div className="d-flex align-items-center">
-                  <Form.Check
-                    type="checkbox"
-                    checked={allSelected}
-                    ref={(input) => {
-                      if (input) {
-                        // eslint-disable-next-line no-param-reassign
-                        input.indeterminate = someSelected;
-                      }
-                    }}
-                    onChange={(e) => handleSelectAll(e.target.checked)}
-                  />
-                </div>
-                <div>Image</div>
-                <div>Item Name</div>
-                <div>Type</div>
-                <div>Storage</div>
-                <div>Store</div>
-                <div className="text-center">Actions</div>
+            <div
+              className="bg-success bg-opacity-10 border-bottom border-success border-2 py-2"
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '40px 80px 1fr 100px 100px 100px 90px',
+                gap: '12px',
+                paddingLeft: '1.5rem',
+                paddingRight: '1.5rem',
+                fontWeight: '600',
+                fontSize: '11px',
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px',
+                color: '#198754',
+                backgroundColor: 'rgba(209, 231, 221, 0.95)',
+              }}
+            >
+              <div className="d-flex align-items-center">
+                <Form.Check
+                  type="checkbox"
+                  checked={allSelected}
+                  ref={(input) => {
+                    if (input) {
+                      // eslint-disable-next-line no-param-reassign
+                      input.indeterminate = someSelected;
+                    }
+                  }}
+                  onChange={(e) => handleSelectAll(e.target.checked)}
+                />
               </div>
+              <div>Image</div>
+              <div>Item Name</div>
+              <div>Type</div>
+              <div>Storage</div>
+              <div>Store</div>
+              <div className="text-center">Actions</div>
+            </div>
 
+            <div style={{ height: '45vh', overflowY: 'auto' }}>
               <div className="px-3 py-2">
                 {filteredItems.length > 0 ? (
                   filteredItems.map((item) => (
