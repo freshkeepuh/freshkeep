@@ -8,8 +8,16 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Badge from 'react-bootstrap/Badge';
 import Image from 'react-bootstrap/Image';
+import ShoppingListCard from '@/components/ShoppingListCard';
+import ShoppingListModal from '@/components/ShoppingListModal';
 
 const ShoppingListPage = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [selectedList, setSelectedList] = useState<{
+    title: string;
+    items: typeof samplegroceryItems;
+  } | null>(null);
+
   const samplegroceryItems = useMemo(
     () => [
       {
@@ -99,13 +107,14 @@ const ShoppingListPage = () => {
   );
 
   const filteredItems = useMemo(
-    () => samplegroceryItems.filter((item) => {
-      const matchesSearch = item.groceryItemTitle.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesStore = selectedStores.length === 0 || selectedStores.includes(item.store);
-      const matchesStorage = selectedStorageTypes.length === 0 || selectedStorageTypes.includes(item.storageType);
-      const matchesType = selectedTypes.length === 0 || selectedTypes.includes(item.groceryItemType);
-      return matchesSearch && matchesStore && matchesStorage && matchesType;
-    }),
+    () =>
+      samplegroceryItems.filter((item) => {
+        const matchesSearch = item.groceryItemTitle.toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesStore = selectedStores.length === 0 || selectedStores.includes(item.store);
+        const matchesStorage = selectedStorageTypes.length === 0 || selectedStorageTypes.includes(item.storageType);
+        const matchesType = selectedTypes.length === 0 || selectedTypes.includes(item.groceryItemType);
+        return matchesSearch && matchesStore && matchesStorage && matchesType;
+      }),
     [searchTerm, selectedStores, selectedStorageTypes, selectedTypes, samplegroceryItems],
   );
 
@@ -133,6 +142,42 @@ const ShoppingListPage = () => {
   };
 
   const activeFiltersCount = selectedStores.length + selectedStorageTypes.length + selectedTypes.length;
+
+  // Test data for shopping list cards
+  const shoppingLists = [
+    {
+      id: 1,
+      title: 'Weekly Groceries',
+      items: ['Bananas', 'Greek Yogurt', 'Whole Wheat Bread', 'Chicken Breasts', 'Olive Oil'],
+      fullItems: samplegroceryItems.slice(0, 5),
+    },
+    {
+      id: 2,
+      title: 'Party Supplies',
+      items: ['Chips', 'Soda', 'Paper Plates', 'Napkins', 'Ice Cream'],
+      fullItems: samplegroceryItems.slice(0, 5),
+    },
+    {
+      id: 3,
+      title: 'Breakfast Essentials',
+      items: ['Eggs', 'Bacon', 'Orange Juice', 'Cereal', 'Milk'],
+      fullItems: samplegroceryItems.slice(0, 5),
+    },
+    {
+      id: 4,
+      title: 'Meal Prep',
+      items: ['Rice', 'Beans', 'Ground Beef', 'Tomatoes', 'Onions', 'Bell Peppers'],
+      fullItems: samplegroceryItems.slice(0, 6),
+    },
+  ];
+
+  const handleEditList = (list: (typeof shoppingLists)[0]) => {
+    setSelectedList({
+      title: list.title,
+      items: list.fullItems,
+    });
+    setShowModal(true);
+  };
 
   return (
     <Container fluid className="p-5">
@@ -172,11 +217,13 @@ const ShoppingListPage = () => {
       {showFilters && (
         <div
           className="border rounded shadow-sm p-4 mb-4"
-          style={{ maxWidth: '800px',
+          style={{
+            maxWidth: '800px',
             margin: '0 auto 1rem auto',
             background: '#F4FAF4',
             borderColor: '#D8E8D8',
-            borderRadius: '12px' }}
+            borderRadius: '12px',
+          }}
         >
           <div className="d-flex justify-content-between align-items-center mb-3">
             <h4 className="mb-0">Filters</h4>
@@ -184,8 +231,7 @@ const ShoppingListPage = () => {
               variant="link"
               size="sm"
               className="p-0"
-              style={{ color: '#3b633bff',
-                textDecoration: 'underline' }}
+              style={{ color: '#3b633bff', textDecoration: 'underline' }}
               onClick={clearAllFilters}
             >
               Clear All
@@ -250,19 +296,7 @@ const ShoppingListPage = () => {
       )}
 
       <div className="mb-3 text-muted" style={{ fontSize: '14px' }}>
-        Showing
-        {' '}
-        {' '}
-        {filteredItems.length}
-        {' '}
-        {' '}
-        of
-        {' '}
-        {' '}
-        {samplegroceryItems.length}
-        {' '}
-        {' '}
-        items
+        Showing {filteredItems.length} of {samplegroceryItems.length} items
       </div>
 
       <div
@@ -364,6 +398,26 @@ const ShoppingListPage = () => {
           </div>
         )}
       </div>
+
+      {/* Shopping List Cards */}
+      <h2 className="mb-4">My Shopping Lists</h2>
+      <Row className="mb-5">
+        {shoppingLists.map((list) => (
+          <Col key={list.id} lg={3} md={6} sm={12} className="mb-4">
+            <ShoppingListCard listTitle={list.title} items={list.items} onEdit={() => handleEditList(list)} />
+          </Col>
+        ))}
+      </Row>
+
+      {/* Shopping List Modal */}
+      {selectedList && (
+        <ShoppingListModal
+          show={showModal}
+          onHide={() => setShowModal(false)}
+          listTitle={selectedList.title}
+          items={selectedList.items}
+        />
+      )}
     </Container>
   );
 };
