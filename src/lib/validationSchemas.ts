@@ -77,7 +77,7 @@ export const EditStorageSchema = Yup.object({
     unitId: Yup.string().required(),
     quantity: Yup.number().positive().required(),
     expiresAt: Yup.date().nullable(),
-  })),
+  })).nullable(),
 });
 
 export const AddLocationSchema = Yup.object({
