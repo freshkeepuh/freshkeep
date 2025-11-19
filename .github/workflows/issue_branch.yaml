@@ -17,6 +17,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Create Issue Branch
-        uses: robvanderleek/create-issue-branch@main
+        uses: robvanderleek/create-issue-branch@v1.9.0
         env:
           GITHUB_TOKEN: ${{ secrets.FRESHKEEPUH }}

@@ -281,7 +281,6 @@
 .rpFavBtn:hover {
   transform: translateY(-1px);
   box-shadow: 0 6px 16px rgba(0,0,0,.2);
-
 }
 /* Placement in recipe list */
 .rpFavOnCard { position: absolute; top: 10px; right: 10px; z-index: 2; }
@@ -311,35 +310,4 @@
   padding: 6px 8px;
   border-radius: 6px;
   z-index: 20;
-}
-/* Match Bar */
-.rpMatchBar {
-  margin: 8px auto 20px;
-  padding: 6px 50px;
-  border-radius: 999px;
-  background: #ffffff;
-  border: 2px solid #d1f4dd;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-}
-
-/* Ingredients in Stock */
-.rpMatchHave {
-  color: #16a34a;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-/* Ingredients Missing */
-.rpMatchMissing {
-  color: #dc2626;
-  display: flex;
-  align-items: center;
-  gap: 6px;
 }
