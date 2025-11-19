@@ -59,8 +59,8 @@ export async function createCatalogItem({
       finalUnitId = defaultUnit.id;
     }
 
-    // Check if product already exists
-    const existingProduct = await tx.product.findUnique({
+    // Check if product already exists (name is NOT unique anymore)
+    const existingProduct = await tx.product.findFirst({
       where: { name },
     });
 
@@ -167,6 +167,7 @@ export async function createCatalogItem({
 
   return result;
 }
+
 /**
  * Adds an existing product to a user's catalog
  * @param userId - The user's ID
