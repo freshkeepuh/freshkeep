@@ -28,7 +28,7 @@ const DashboardPage = () => {
       try {
         const [storagesRes, locationsRes] = await Promise.all([
           fetch('/api/storages', { cache: 'no-store' }),
-          fetch('/api/locations', { cache: 'no-store' }),
+          fetch('/api/location', { cache: 'no-store' }),
         ]);
         if (storagesRes.ok) {
           const data: StorageType[] = await storagesRes.json();
@@ -68,7 +68,7 @@ const DashboardPage = () => {
         body: JSON.stringify({
           name: newStorage.name,
           type: newStorage.type,
-          locId: null, // Default to no location
+          locId: newStorage.locId || null, // Default to no location
         }),
       });
 
@@ -204,6 +204,7 @@ const DashboardPage = () => {
         show={showModal}
         onClose={() => setShowModal(false)}
         onAdd={handleAddStorage}
+        locations={locations.map(l => ({ id: l.id, name: l.name }))}
       />
     </Container>
   );

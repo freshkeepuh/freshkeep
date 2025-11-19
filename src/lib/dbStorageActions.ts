@@ -20,18 +20,24 @@ import {
  * @returns The created storage.
  */
 export async function createStorage(data: {
-  locId: string,
+  locId?: string | undefined,
   name: string,
   type: string,
-  picture: string | undefined,
+  picture?: string | undefined,
 }) {
+  const createData: any = {
+    name: data.name,
+    type: data.type as StorageType,
+    picture: data.picture,
+  };
+
+  if (data.locId) {
+    createData.location = { connect: { id: data.locId } };
+  } else {
+    // throw new Error('Location is required to create a storage area');
+  }
   const newStorage = await prisma.storageArea.create({
-    data: {
-      locId: data.locId,
-      name: data.name,
-      type: data.type as StorageType,
-      picture: data.picture,
-    },
+    data: createData,
     select: {
       locId: true,
       ...storageSelect,
