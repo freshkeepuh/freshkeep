@@ -10,9 +10,9 @@
     "build": "prisma migrate deploy && prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "npm run test-unit && npm run test:e2e",
+    "test": "npm run test-unit && npm run test-e2e",
     "test-unit": "jest",
-    "test:e2e": "npx playwright test",
+    "test-e2e": "npx playwright test",
     "prcheck": "next lint && next build && npx playwright test"
   },
   "dependencies": {
