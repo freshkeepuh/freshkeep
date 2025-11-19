@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Container, Form, Row } from 'react-bootstrap';
-import { Search } from 'react-bootstrap-icons';
+import { Button, Col, Container, Row } from 'react-bootstrap';
+import { FormProvider, useForm } from 'react-hook-form';
 import { Location, Product, ProductCategory, StorageArea, StorageType } from '@prisma/client';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import LocationFilter from '@/components/LocationFilter';
@@ -8,7 +8,6 @@ import StorageTypeFilter from '@/components/StorageTypeFilter';
 import StorageAreaFilter from './StorageAreaFilter';
 import ProductFilter from './ProductFilter';
 import ProductCategoryFilter from './ProductCategoryFilter';
-import { FormProvider, useForm } from 'react-hook-form';
 
 interface ReportFilterProps {
   title: string;
