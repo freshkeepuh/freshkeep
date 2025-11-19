@@ -15,11 +15,11 @@ interface ProductCategoryDropDownProps {
 }
 
 /**
- * StorageTypeDropDown component.
+ * ProductCategoryDropDown component.
  *
- * Note: The default value for the storageType field should be set via useForm initialization,
+ * Note: The default value for the productCategory field should be set via useForm initialization,
  * not via a prop or defaultValue on the select element. Example:
- *   useForm({ defaultValues: { storageType: StorageType.Freezer } })
+ *   useForm({ defaultValues: { productCategory: ProductCategory.Food } })
  */
 const ProductCategoryDropDown: React.FC<ProductCategoryDropDownProps> = (
   {
