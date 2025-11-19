@@ -1,3 +1,5 @@
+/* eslint-disable function-paren-newline */
+/* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable react/jsx-one-expression-per-line */
 
 'use client';
@@ -58,42 +60,19 @@ const getCategoryDisplayName = (category: ProductCategory): string => {
   return displayNames[category];
 };
 
-const getCategorySearchContext = (category: ProductCategory | ''): string => {
-  if (!category) return 'grocery food product';
-
-  const contextMap: Record<ProductCategory, string> = {
-    [ProductCategory.Fruits]: 'fresh fruit produce',
-    [ProductCategory.Vegetables]: 'fresh vegetable produce',
-    [ProductCategory.CannedGoods]: 'canned food product',
-    [ProductCategory.Dairy]: 'dairy product milk cheese',
-    [ProductCategory.Meat]: 'meat protein butcher',
-    [ProductCategory.FishSeafood]: 'fish seafood fresh',
-    [ProductCategory.Deli]: 'deli meat cheese',
-    [ProductCategory.Condiments]: 'condiment sauce grocery',
-    [ProductCategory.Spices]: 'spice seasoning jar',
-    [ProductCategory.Snacks]: 'snack food packaged',
-    [ProductCategory.Bakery]: 'bakery bread fresh',
-    [ProductCategory.Beverages]: 'beverage drink bottle',
-    [ProductCategory.Pasta]: 'pasta noodles packaged',
-    [ProductCategory.Grains]: 'grain rice packaged',
-    [ProductCategory.Cereal]: 'cereal breakfast box',
-    [ProductCategory.Baking]: 'baking ingredient grocery',
-    [ProductCategory.FrozenFoods]: 'frozen food product',
-    [ProductCategory.Other]: 'grocery food product',
-  };
-
-  return contextMap[category];
-};
-
 const storageOptions = ['Pantry', 'Refrigerator', 'Freezer', 'Counter', 'Cabinet', 'Other'];
 
 const CreateCatalogItemForm = () => {
   const { data: session } = useSession();
   const router = useRouter();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    name: string;
+    storeName: string;
+    category: ProductCategory | '';
+  }>({
     name: '',
     storeName: '',
-    category: '' as ProductCategory | '',
+    category: '',
   });
 
   const [loading, setLoading] = useState(false);
@@ -109,7 +88,24 @@ const CreateCatalogItemForm = () => {
   const [searchResults, setSearchResults] = useState<GoogleImageResult[]>([]);
   const [searching, setSearching] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
-  const [searchAttempt, setSearchAttempt] = useState(0);
+  const [searchOffset, setSearchOffset] = useState(1);
+
+  const [categorySearch, setCategorySearch] = useState('');
+
+  const sortedCategories = Object.values(ProductCategory).sort((a, b) =>
+    getCategoryDisplayName(a).localeCompare(getCategoryDisplayName(b)),
+  );
+
+  const filteredCategories = sortedCategories.filter((category) => {
+    const displayName = getCategoryDisplayName(category).toLowerCase();
+    const searchTerm = categorySearch.toLowerCase().trim();
+
+    if (!searchTerm) return true;
+
+    const searchWords = searchTerm.split(/\s+/);
+
+    return searchWords.every((word) => displayName.includes(word));
+  });
 
   const handleChange = (e: React.ChangeEvent<any>) => {
     const { name, value } = e.target;
@@ -131,34 +127,23 @@ const CreateCatalogItemForm = () => {
     }
   };
 
-  const buildEnhancedQuery = (query: string, attempt: number = 0): string => {
-    const categoryContext = getCategorySearchContext(formData.category);
-
-    const exclusions = `-logo-icon -tech -electronics -company -corporation -brand 
-      -iphone -ipad -macbook -laptop -computer -app -software`;
-
-    const strategies = [
-      `"${query}" ${categoryContext} ${exclusions}`,
-
-      `${query} fresh grocery supermarket ${exclusions}`,
-
-      `${query} walmart target costco product ${exclusions}`,
-
-      `${query} packaged product food item ${exclusions}`,
-    ];
-
-    return strategies[attempt % strategies.length];
+  const buildEnhancedQuery = (query: string): string => {
+    const storeName = formData.storeName.trim();
+    return storeName ? `${query} ${storeName}` : `${query} original regular`;
   };
 
-  const searchGoogleImages = async (query: string, attemptOverride?: number) => {
+  const searchGoogleImages = async (query: string) => {
     if (!query.trim()) return;
 
     setSearching(true);
     setSearchError(null);
 
     try {
-      const currentAttempt = attemptOverride !== undefined ? attemptOverride : searchAttempt;
-      const enhancedQuery = buildEnhancedQuery(query, currentAttempt);
+      if (searchOffset > 90) {
+        setSearchOffset(1);
+      }
+
+      const enhancedQuery = buildEnhancedQuery(query);
 
       const params = new URLSearchParams({
         key: GOOGLE_API_KEY ?? '',
@@ -166,34 +151,31 @@ const CreateCatalogItemForm = () => {
         q: enhancedQuery,
         searchType: 'image',
         num: '10',
-        imgSize: 'medium',
         safe: 'active',
-        imgType: 'photo',
-        imgColorType: 'color',
-        fileType: 'jpg,png',
+        start: searchOffset.toString(),
       });
 
       const apiUrl = `https://www.googleapis.com/customsearch/v1?${params.toString()}`;
 
-      console.log('Search attempt:', currentAttempt);
-      console.log('Enhanced query:', enhancedQuery);
+      console.log('Search query:', enhancedQuery);
 
       const response = await fetch(apiUrl);
+      const data = await response.json();
 
       if (!response.ok) {
-        const errorData = await response.json();
-        console.error('API Error:', errorData);
+        console.error('API Error:', data);
 
         if (response.status === 403) {
           throw new Error('API key issue. Please check your Google API key configuration.');
         } else if (response.status === 429) {
-          throw new Error('Too many requests. Please try again later.');
+          throw new Error('Too many requests. Please try again in a few minutes.');
+        } else if (data.error?.message?.includes('index')) {
+          setSearchOffset(1);
+          throw new Error('Reached end of results. Starting from beginning...');
         } else {
-          throw new Error(errorData.error?.message || 'Search failed');
+          throw new Error(data.error?.message || 'Search failed');
         }
       }
-
-      const data = await response.json();
 
       if (!data.items || data.items.length === 0) {
         setSearchError(
@@ -215,14 +197,16 @@ const CreateCatalogItemForm = () => {
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setSearchAttempt(0);
-    searchGoogleImages(searchQuery, 0);
+    setSearchOffset(1);
+    searchGoogleImages(searchQuery);
   };
 
   const handleTryDifferentResults = () => {
-    const nextAttempt = searchAttempt + 1;
-    setSearchAttempt(nextAttempt);
-    searchGoogleImages(searchQuery, nextAttempt);
+    setSearchOffset((prev) => {
+      const next = prev + 10;
+      return next > 90 ? 1 : next;
+    });
+    searchGoogleImages(searchQuery);
   };
 
   const handleImageClick = (imageUrl: string) => {
@@ -325,7 +309,6 @@ const CreateCatalogItemForm = () => {
     try {
       let finalImageUrl: string | null = null;
 
-      // Priority: Selected Google image URL > Uploaded file
       if (selectedImageUrl) {
         finalImageUrl = selectedImageUrl;
         console.log('Using Google image URL:', selectedImageUrl);
@@ -384,7 +367,6 @@ const CreateCatalogItemForm = () => {
     x="50%" y="50%" text-anchor="middle" dy=".3em">No Image</text></svg>`;
 
   const PLACEHOLDER_SVG_DATA_URL = `data:image/svg+xml,${encodeURIComponent(PLACEHOLDER_SVG)}`;
-
   return (
     <div className="create-catalog-page" style={{ backgroundColor: '#f0f8f0', minHeight: '100vh', padding: '2rem 0' }}>
       <Container>
@@ -452,7 +434,7 @@ const CreateCatalogItemForm = () => {
                           name="name"
                           value={formData.name}
                           onChange={handleChange}
-                          placeholder="e.g., Organic Bananas"
+                          placeholder="e.g., Olive Oil"
                           required
                           disabled={loading}
                           size="lg"
@@ -500,18 +482,46 @@ const CreateCatalogItemForm = () => {
                             className="w-100"
                             style={{
                               maxHeight: '300px',
-                              overflowY: 'auto',
                             }}
                           >
-                            {Object.values(ProductCategory).map((category) => (
-                              <Dropdown.Item
-                                key={category}
-                                onClick={() => setFormData((prev) => ({ ...prev, category }))}
-                                active={formData.category === category}
-                              >
-                                {getCategoryDisplayName(category)}
-                              </Dropdown.Item>
-                            ))}
+                            <div
+                              className="px-2 pb-2"
+                              style={{
+                                position: 'sticky',
+                                top: 0,
+                                backgroundColor: 'white',
+                                zIndex: 1,
+                                paddingTop: '0.5rem',
+                              }}
+                            >
+                              <Form.Control
+                                type="text"
+                                placeholder="Search categories..."
+                                value={categorySearch}
+                                onChange={(e) => setCategorySearch(e.target.value)}
+                                onClick={(e) => e.stopPropagation()}
+                                autoFocus
+                              />
+                            </div>
+                            <div
+                              style={{
+                                maxHeight: '240px',
+                                overflowY: 'auto',
+                              }}
+                            >
+                              {filteredCategories.map((category) => (
+                                <Dropdown.Item
+                                  key={category}
+                                  onClick={() => {
+                                    setFormData((prev) => ({ ...prev, category }));
+                                    setCategorySearch('');
+                                  }}
+                                  active={formData.category === category}
+                                >
+                                  {getCategoryDisplayName(category)}
+                                </Dropdown.Item>
+                              ))}
+                            </div>
                           </Dropdown.Menu>
                         </Dropdown>
                         <input type="hidden" name="category" value={formData.category} required />
@@ -656,16 +666,17 @@ const CreateCatalogItemForm = () => {
 
           <Row>
             <Col>
-              <div className="d-flex justify-content-between">
+              <div className="d-flex justify-content-end gap-2">
                 <Button
                   variant="outline-secondary"
                   size="lg"
                   disabled={loading}
                   onClick={() => router.push('/catalog')}
+                  className="px-4"
                 >
                   Cancel
                 </Button>
-                <Button variant="success" type="submit" size="lg" disabled={loading} className="px-5">
+                <Button variant="success" type="submit" size="lg" disabled={loading} className="px-4">
                   {loading ? 'Creating...' : 'Create Item'}
                 </Button>
               </div>
@@ -738,9 +749,9 @@ const CreateCatalogItemForm = () => {
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <Alert variant="success" className="mb-0 flex-grow-1 me-2">
                   <strong>Click any image to select it</strong>
-                  <span> Found </span>
+                  <span> • Found </span>
                   {searchResults.length}
-                  <span> results.</span>
+                  <span> results</span>
                 </Alert>
                 <Button variant="outline-success" onClick={handleTryDifferentResults} disabled={searching}>
                   🔄 Try Different Results
