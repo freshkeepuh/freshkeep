@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import ReportFilter from '@/components/ReportFilter';
 
@@ -7,7 +8,15 @@ const ExpiredReport = () => (
   <Container>
     <Row>
       <Col>
-        <ReportFilter title="Expired" onSearch={() => {}} />
+        <ReportFilter title="Expired" onFilterChange={(
+          location,
+          storageType,
+          storageArea,
+          productCategory,
+          product,
+        ) => {
+          // Handle filter changes here
+        }} />
       </Col>
     </Row>
     <Row>
