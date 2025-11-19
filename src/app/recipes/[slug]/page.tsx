@@ -6,11 +6,16 @@ import Link from 'next/link';
 import styles from '@/app/recipes/page.module.css';
 import slugify from '@/lib/slug';
 import FavoriteHeart from '@/components/FavoriteHeart';
+import { splitIngredientsByStock } from '@/lib/ingredientMatch';
 
 export const dynamic = 'force-dynamic';
 
 export default async function RecipeViewPage(props: any) {
   const { slug: routeSlug } = await Promise.resolve(props?.params);
+  const rawSearchParams = await Promise.resolve(props?.searchParams ?? {});
+  const selectedLocationId = typeof rawSearchParams.locationId === 'string' && rawSearchParams.locationId.length > 0
+    ? rawSearchParams.locationId
+    : '';
 
   // Normal lookup by slug
   let recipe = await prisma.recipe.findUnique({
@@ -44,9 +49,25 @@ export default async function RecipeViewPage(props: any) {
     ? (recipe.instructions as any)
     : [];
 
-  // Temporary: Put first 4 = "In Stock", rest = "Missing"
-  const inStock = ingredients.slice(0, 4);
-  const missing = ingredients.slice(4);
+  // Load all locations for the dropdown (no user filter for now)
+  const locations = await prisma.location.findMany({
+    orderBy: { name: 'asc' },
+  });
+
+  // Load items we have
+  const instances = await prisma.productInstance.findMany({
+    where: {
+      quantity: { gt: 0 },
+      ...(selectedLocationId ? { locId: selectedLocationId } : {}),
+    },
+    include: { product: true },
+  });
+
+  const haveNames = instances
+    .map((inst) => inst.product?.name)
+    .filter((name): name is string => !!name);
+
+  const { inStock, missing } = splitIngredientsByStock(ingredients, haveNames);
 
   const difficultyMeta = {
     EASY: { label: 'Easy', icon: '⭐️' },
@@ -62,8 +83,8 @@ export default async function RecipeViewPage(props: any) {
     PESCETARIAN: { label: 'Pescetarian', icon: '🐟' },
   } as const;
 
-  const { label: difficultyLabel, icon: difficultyIcon } = difficultyMeta[recipe.difficulty as keyof typeof
-    difficultyMeta] ?? difficultyMeta.ANY;
+  const { label: difficultyLabel,
+    icon: difficultyIcon } = difficultyMeta[recipe.difficulty as keyof typeof difficultyMeta] ?? difficultyMeta.ANY;
 
   const { label: dietLabel, icon: dietIcon } = dietMeta[recipe.diet as keyof typeof dietMeta] ?? dietMeta.ANY;
 
@@ -97,11 +118,14 @@ export default async function RecipeViewPage(props: any) {
                       priority
                     />
                   ) : (
-                    <div style={{ position: 'absolute',
-                      inset: 0,
-                      display: 'grid',
-                      placeItems: 'center',
-                      background: '#f3f4f6' }}
+                    <div
+                      style={{
+                        position: 'absolute',
+                        inset: 0,
+                        display: 'grid',
+                        placeItems: 'center',
+                        background: '#f3f4f6',
+                      }}
                     >
                       No image
                     </div>
@@ -115,6 +139,35 @@ export default async function RecipeViewPage(props: any) {
                   <span style={{ fontSize: 25 }}>🥘</span>
                   <h2 className={styles.rpH1}>Ingredients</h2>
                 </div>
+
+                {/* Location selector */}
+                {locations.length > 0 && (
+                <form
+                  method="get"
+                  style={{ marginBottom: 16, display: 'flex', gap: 8, alignItems: 'center' }}
+                >
+                  <div className={styles.rpH4} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span>Location</span>
+                    <select
+                      name="locationId"
+                      defaultValue={selectedLocationId}
+                      className={styles.rpSelect}
+                      aria-label="Location"
+                    >
+                      <option value="">All locations</option>
+                      {locations.map((loc) => (
+                        <option key={loc.id} value={loc.id}>
+                          {loc.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <button type="submit" className={styles.rpBtnDark}>
+                    Apply
+                  </button>
+                </form>
+                )}
 
                 {/* In Stock section */}
                 <div className={styles.rpBlock}>
@@ -137,6 +190,9 @@ export default async function RecipeViewPage(props: any) {
                         </div>
                       );
                     })}
+                    {inStock.length === 0 && (
+                      <p className={styles.rpText}>No ingredients in stock at this location.</p>
+                    )}
                   </div>
                 </div>
 
@@ -161,6 +217,9 @@ export default async function RecipeViewPage(props: any) {
                         </div>
                       );
                     })}
+                    {missing.length === 0 && (
+                      <p className={styles.rpText}>Nothing missing for this location 🎉</p>
+                    )}
                   </div>
                 </div>
 
@@ -220,7 +279,6 @@ export default async function RecipeViewPage(props: any) {
                 {/* Instruction Steps */}
                 <ol className={styles.rpSteps}>
                   {(() => {
-                    // Build a stable key from the step text + occurrence count (no array index) to satisfy eslint rule
                     const seen = new Map<string, number>();
                     return instructions.map((step, idx) => {
                       const slug = step.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');

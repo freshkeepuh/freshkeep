@@ -11,7 +11,7 @@ import {
   productInstanceSelect,
   productSelect,
   productsSelect,
-  storagesSelect,
+  storageAreasSelect,
   unitsSelect,
 } from '@/lib/dbActionTypes';
 
@@ -76,7 +76,7 @@ export async function createProductInstance(data: {
         ...locationsSelect,
       },
       storage: {
-        ...storagesSelect,
+        ...storageAreasSelect,
       },
       product: {
         ...productsSelect,
@@ -97,15 +97,7 @@ export async function createProductInstance(data: {
 export async function readProducts() {
   const products = await prisma.product.findMany(
     {
-      select: {
-        instances: {
-          ...unitsSelect,
-          ...productInstanceSelect,
-        },
-        ...unitsSelect,
-        ...productSelect,
-      },
-      orderBy: { category: 'asc', name: 'asc' },
+      select: productSelect,
     },
   );
   return products;
@@ -123,7 +115,7 @@ export async function readProductInstances() {
           ...locationsSelect,
         },
         storage: {
-          ...storagesSelect,
+          ...storageAreasSelect,
         },
         product: {
           ...productsSelect,
@@ -173,7 +165,7 @@ export async function readProductInstance(id: string | null | undefined) {
         ...locationsSelect,
       },
       storage: {
-        ...storagesSelect,
+        ...storageAreasSelect,
       },
       product: {
         ...productsSelect,
