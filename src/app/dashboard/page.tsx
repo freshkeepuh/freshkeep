@@ -26,8 +26,8 @@ const DashboardPage = () => {
     const load = async () => {
       try {
         const [storagesRes, locationsRes] = await Promise.all([
-          fetch('/api/storages', { cache: 'no-store' }),
-          fetch('/api/locations', { cache: 'no-store' }),
+          fetch('/api/storage', { cache: 'no-store' }),
+          fetch('/api/location', { cache: 'no-store' }),
         ]);
         if (storagesRes.ok) {
           const data: StorageType[] = await storagesRes.json();
@@ -61,7 +61,7 @@ const DashboardPage = () => {
 
   const handleAddStorage = async (newStorage: NewStorageData) => {
     try {
-      const response = await fetch('/api/storages', {
+      const response = await fetch('/api/storage', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -106,7 +106,7 @@ const DashboardPage = () => {
               items
             </span>
             {' '}
-            across your storage units.
+            across your storage areas.
             {' '}
             <span className={styles.orangeText}>
               {expiringSoon}
@@ -156,7 +156,7 @@ const DashboardPage = () => {
           <Card className={`${styles.storageSection} mt-4`}>
             <Card.Body>
               <div className={styles.storageHeader}>
-                <h2>Your Storage Units</h2>
+                <h2>Your Storage Areas</h2>
                 <Button
                   aria-label="Add Storage"
                   className={`ms-2 ${styles.btnGreen} ${styles.roundBtn}`}
@@ -165,7 +165,7 @@ const DashboardPage = () => {
                   +
                 </Button>
               </div>
-              {/* Storage Units */}
+              {/* Storage Areas */}
               <StorageList storages={storages} locationsById={locationsById} />
             </Card.Body>
           </Card>

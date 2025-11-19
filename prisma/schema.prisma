@@ -111,6 +111,7 @@ enum StorageType {
   Freezer
   Pantry
   SpiceRack
+  Other
 }
 
 /**

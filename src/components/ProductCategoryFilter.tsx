@@ -5,34 +5,31 @@ import { Form } from 'react-bootstrap';
 import { useFormContext } from 'react-hook-form';
 import { ProductCategory } from '@prisma/client'; // Update the path as needed
 import { getProductCategoryDisplayName } from '@/lib/dbEnums';
-import RequiredLabel from '@/components/RequiredLabel';
 
-interface ProductCategoryDropDownProps {
+interface ProductCategoryFilterProps {
   label?: string;
   disabled?: boolean;
-  required?: boolean;
   onChange?: React.ChangeEventHandler<HTMLSelectElement>;
 }
 
 /**
- * ProductCategoryDropDown component.
+ * ProductCategoryFilter component.
  *
  * Note: The default value for the productCategory field should be set via useForm initialization,
  * not via a prop or defaultValue on the select element. Example:
- *   useForm({ defaultValues: { productCategory: ProductCategory.Food } })
+ *   useForm({ defaultValues: { productCategory: ProductCategory.Freezer } })
  */
-const ProductCategoryDropDown: React.FC<ProductCategoryDropDownProps> = (
+const ProductCategoryFilter: React.FC<ProductCategoryFilterProps> = (
   {
-    label = 'Product Category',
+    label = 'Storage Type',
     disabled = false,
-    required = false,
     onChange = () => { /* no-op */ },
   },
 ) => {
   const [isDisabled] = React.useState(disabled);
   const context = useFormContext();
   if (!context) {
-    throw new Error('ProductCategoryDropDown must be used within a FormProvider');
+    throw new Error('ProductCategoryFilter must be used within a FormProvider');
   }
   const {
     register,
@@ -40,18 +37,17 @@ const ProductCategoryDropDown: React.FC<ProductCategoryDropDownProps> = (
   } = context;
   return (
     <>
-      {(label && !required) && <Form.Label htmlFor="productCategory">{label}</Form.Label>}
-      {(label && required) && <RequiredLabel htmlFor="productCategory">{label}</RequiredLabel>}
+      {label && <Form.Label htmlFor="productCategoryFilter">{label}</Form.Label>}
       <Form.Select
-        id="productCategory"
+        id="productCategoryFilter"
         size="lg"
-        aria-label="Product Category Dropdown"
+        aria-label="Product Category Filter"
         {...register('productCategory')}
         disabled={isDisabled}
-        required={required}
-        isInvalid={!!errors.productCategory}
         onChange={onChange}
+        isInvalid={!!errors.productCategory}
       >
+        <option key="all" value="">All</option>
         {
           Object.values(ProductCategory)
             .filter((productCategory) => typeof productCategory === 'string')
@@ -70,4 +66,4 @@ const ProductCategoryDropDown: React.FC<ProductCategoryDropDownProps> = (
   );
 };
 
-export default ProductCategoryDropDown;
+export default ProductCategoryFilter;
