@@ -46,6 +46,7 @@ export default function QuantityUnit({
 
         setUnits(data);
 
+        // If no unit is selected yet, default to the first loaded unit
         if (!unit && data.length > 0) {
           onUnit(data[0].id);
         }
@@ -57,14 +58,14 @@ export default function QuantityUnit({
       }
     };
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     loadUnits();
-  }, []);
+  }, [unit, onUnit]); // ✅ include all referenced values
 
   const dec = useCallback(
     () => onQuantity(Math.max(1, quantity - 1)),
     [onQuantity, quantity],
   );
+
   const inc = useCallback(
     () => onQuantity(quantity + 1),
     [onQuantity, quantity],
