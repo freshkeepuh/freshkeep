@@ -1,0 +1,3 @@
+.modal80w :global(.modal-dialog) {
+  max-width: 80%;
+}
