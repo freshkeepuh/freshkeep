@@ -61,7 +61,11 @@ export async function createCatalogItem({
 
     // Check if product already exists (name is NOT unique anymore)
     const existingProduct = await tx.product.findFirst({
-      where: { name },
+      where: {
+        name,
+        category,
+        unitId: finalUnitId,
+      },
     });
 
     let catalogItem;
