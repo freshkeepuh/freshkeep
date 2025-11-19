@@ -484,7 +484,7 @@ type SeedRecipe = {
   difficulty: 'EASY' | 'NORMAL' | 'HARD';
   diet: 'ANY' | 'VEGAN' | 'VEGETARIAN' | 'PESCETARIAN';
   ingredients: string[];
-  instructions?: { step: number; text: string }[];
+  instructions?: string[];
   image?: string | null;
 };
 
