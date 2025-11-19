@@ -41,7 +41,7 @@ const ProductCategoryFilter: React.FC<ProductCategoryFilterProps> = (
       <Form.Select
         id="productCategoryFilter"
         size="lg"
-        aria-label="Storage Type Filter"
+        aria-label="Product Category Filter"
         {...register('productCategory')}
         disabled={isDisabled}
         onChange={onChange}
