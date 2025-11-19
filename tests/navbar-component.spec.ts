@@ -32,6 +32,6 @@ test('test access to navigation bar (signed in)', async ({ getUserPage }) => {
   await expect(page).toHaveURL(`${BASE_URL}/`);
 
   // Check that the user's email is visible in the navbar
-  // const accountLink = await page.getByTestId('navbar-dropdown-account');
-  // await expect(accountLink).toBeVisible();
+  const accountLink = await page.getByTestId('navbar-dropdown-account');
+  await expect(accountLink).toBeVisible({ timeout: 15000 });
 });
