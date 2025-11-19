@@ -5,33 +5,31 @@ import { Form } from 'react-bootstrap';
 import { useFormContext } from 'react-hook-form';
 import { Country } from '@prisma/client'; // Update the path as needed
 import { getCountryDisplayName } from '@/lib/dbEnums';
-import RequiredLabel from './RequiredLabel';
 
-interface CountryDropDownProps {
+interface CountryFilterProps {
   label?: string;
   disabled?: boolean;
-  required?: boolean;
   onChange?: React.ChangeEventHandler<HTMLSelectElement>;
 }
 
 /**
- * CountryDropDown component.
+ * CountryFilter component.
  *
  * Note: The default value for the country field should be set via useForm initialization,
  * not via a prop or defaultValue on the select element. Example:
- *   useForm({ defaultValues: { country: Country.USA } })
+ *   useForm({ defaultValues: { country: Country.Freezer } })
  */
-const CountryDropDown: React.FC<CountryDropDownProps> = (
+const CountryFilter: React.FC<CountryFilterProps> = (
   {
     label = 'Country',
     disabled = false,
-    required = false,
     onChange = () => { /* no-op */ },
   },
 ) => {
+  const [isDisabled] = React.useState(disabled);
   const context = useFormContext();
   if (!context) {
-    throw new Error('CountryDropDown must be used within a FormProvider');
+    throw new Error('CountryFilter must be used within a FormProvider');
   }
   const {
     register,
@@ -39,18 +37,17 @@ const CountryDropDown: React.FC<CountryDropDownProps> = (
   } = context;
   return (
     <>
-      {(label && !required) && <Form.Label htmlFor="country">{label}</Form.Label>}
-      {(label && required) && <RequiredLabel htmlFor="country">{label}</RequiredLabel>}
+      {label && <Form.Label htmlFor="countryFilter">{label}</Form.Label>}
       <Form.Select
-        id="country"
+        id="countryFilter"
         size="lg"
-        aria-label="Country"
+        aria-label="Country Filter"
         {...register('country')}
-        disabled={disabled}
-        required={required}
-        isInvalid={!!errors.country}
+        disabled={isDisabled}
         onChange={onChange}
+        isInvalid={!!errors.country}
       >
+        <option key="all" value="">All</option>
         {
           Object.values(Country)
             .filter((country) => typeof country === 'string')
@@ -69,4 +66,4 @@ const CountryDropDown: React.FC<CountryDropDownProps> = (
   );
 };
 
-export default CountryDropDown;
+export default CountryFilter;

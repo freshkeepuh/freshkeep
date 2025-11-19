@@ -81,7 +81,7 @@ export default function AddPage() {
     <main className={styles.max} style={{ paddingTop: 24, paddingBottom: 32 }}>
       <div style={{ marginBottom: 24 }}>
         <h2 className={styles.h1}>Add New Product 📦</h2>
-        <p className={styles.p}>Add items to your storage units and track their freshness</p>
+        <p className={styles.p}>Add items to your storage areas and track their freshness</p>
       </div>
 
       <div className={styles.grid}>
