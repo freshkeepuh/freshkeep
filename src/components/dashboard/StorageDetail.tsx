@@ -116,6 +116,7 @@ export default function StorageDetail({ storage }: StorageDetailProps) {
               <Col xs="auto" className="text-end">
                 <Badge bg="light" text="dark" className="me-2">
                   {itemCount}
+                  {' '}
                   items
                 </Badge>
               </Col>
