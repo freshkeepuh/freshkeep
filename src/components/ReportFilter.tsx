@@ -43,7 +43,7 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
       productCategory: '',
       product: '',
     },
-    mode: "all",
+    mode: 'all',
   });
 
   const onChange: React.ChangeEventHandler<HTMLSelectElement> = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -54,13 +54,15 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
         case 'location':
           setLocation(value);
           if (origStorageAreas) {
-            setCurrentStorageAreas(origStorageAreas.filter((area) => (area.locId === value || value === '') && (area.type === (storageType as StorageType) || !storageType)));
+            setCurrentStorageAreas(origStorageAreas.filter((area) => (area.locId === value || value === '')
+              && (area.type === (storageType as StorageType) || !storageType)));
           }
           break;
         case 'storageType':
           setStorageType(value);
           if (origStorageAreas) {
-            setCurrentStorageAreas(origStorageAreas.filter((area) => (area.locId === location || location === '') && (area.type === (value as StorageType) || !value)));
+            setCurrentStorageAreas(origStorageAreas.filter((area) => (area.locId === location || location === '')
+              && (area.type === (value as StorageType) || !value)));
           }
           break;
         case 'storageArea':
@@ -69,7 +71,7 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
         case 'productCategory':
           setProductCategory(value);
           if (origProducts) {
-            setCurrentProducts(origProducts.filter((prod) => prod.category === value || value === ''));
+            setCurrentProducts(origProducts.filter((prod) => prod.category === (value as ProductCategory) || !value));
           }
           break;
         case 'product':
@@ -182,7 +184,7 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
     setProductCategory('');
     setProduct('');
     setCurrentProducts(origProducts);
-  }, []);
+  }, [error, origLocations, origStorageAreas, origProducts]);
 
   if (loading) {
     return <LoadingSpinner />;
@@ -190,7 +192,7 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
 
   return (
     <>
-      <h1 className='report-filter-title'>{title}</h1>
+      <h1 className="report-filter-title">{title}</h1>
       {error && <p className="text-danger report-filter-error">{error}</p>}
       <FormProvider {...methods}>
         <Container className="report-filter-container">
@@ -221,15 +223,15 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
               />
             </Col>
           </Row>
-          <Row className='report-filter-product-row'>
-            <Col className='report-filter-product-category-col'>
+          <Row className="report-filter-product-row">
+            <Col className="report-filter-product-category-col">
               <ProductCategoryFilter
                 label="Category"
                 disabled={isDisabled}
                 onChange={onChange}
               />
             </Col>
-            <Col className='report-filter-product-col'>
+            <Col className="report-filter-product-col">
               <ProductFilter
                 label="Product"
                 disabled={isDisabled}
