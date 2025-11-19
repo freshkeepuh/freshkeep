@@ -1,4 +1,4 @@
-import { Recipe } from '@/components/Recipe';
+import { Recipe } from '@/types/recipe';
 
 export type Filters = {
   searchQuery: string;

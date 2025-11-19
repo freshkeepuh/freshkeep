@@ -6,19 +6,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import slugify from '@/lib/slug';
 import { filterRecipes } from '@/utils/filterRecipes';
+import { Recipe } from '@/types/recipe';
 import FavoriteHeart from './FavoriteHeart';
-
-// Strict UI type
-export interface Recipe {
-  id: string;
-  slug: string;
-  title: string;
-  cookTime: number;
-  difficulty: 'Easy' | 'Normal' | 'Hard' | 'Any';
-  diet: 'Vegan' | 'Vegetarian' | 'Pescetarian' | 'Any';
-  ingredients: string[];
-  image?: string;
-}
 
 // Props passed from server component
 type Props = { initialRecipes: Recipe[] };
