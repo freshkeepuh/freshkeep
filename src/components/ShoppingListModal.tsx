@@ -97,7 +97,7 @@ const ShoppingListModal = ({ show, onHide, listTitle, items }: ShoppingListModal
                 <Form.Check
                   type="checkbox"
                   checked={allSelected}
-                  ref={(input) => {
+                  ref={(input: HTMLInputElement | null) => {
                     if (input) {
                       // eslint-disable-next-line no-param-reassign
                       input.indeterminate = someSelected;
