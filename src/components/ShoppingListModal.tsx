@@ -104,6 +104,7 @@ const ShoppingListModal = ({ show, onHide, listTitle, items }: ShoppingListModal
                     }
                   }}
                   onChange={(e) => handleSelectAll(e.target.checked)}
+                  aria-label="Select all items"
                 />
               </div>
               <div>Image</div>
