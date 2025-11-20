@@ -6,7 +6,6 @@ const TIPS: string[] = [
   'Check expiry dates on packaging for accuracy',
   'Store similar items together for better organization',
   'Use “First In, First Out” principle for freshness',
-  'Set reminders for items expiring soon',
 ];
 
 export default function TipsPanel() {
