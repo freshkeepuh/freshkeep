@@ -192,7 +192,7 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
     setStorageArea('');
     setProductCategory('');
     setProduct('');
-  }, [error]);
+  }, []);
 
   if (loading) {
     return <LoadingSpinner />;
