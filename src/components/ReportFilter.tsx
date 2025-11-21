@@ -62,22 +62,24 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
         case 'location':
           setLocation(value);
           if (origStorageAreas) {
-            setCurrentStorageAreas(origStorageAreas.filter((area) => (area.locId === value || value === '')
-              && (area.type === (nextStorageType as StorageType) || !nextStorageType)));
-          }
-          if (!(nextStorageArea && currStorageAreas?.some((area) => area.id === nextStorageArea))) {
-            setStorageArea('');
+            const filteredStorageAreas = origStorageAreas.filter((area) => (area.locId === value || value === '')
+              && (area.type === (nextStorageType as StorageType) || !nextStorageType));
+            setCurrentStorageAreas(filteredStorageAreas);
+            if (!(nextStorageArea && filteredStorageAreas.some((area) => area.id === nextStorageArea))) {
+              setStorageArea('');
+            }
           }
           break;
         case 'storageType':
           setStorageType(value);
           if (origStorageAreas) {
-            setCurrentStorageAreas(origStorageAreas.filter((area) => (area.locId === nextLocation
+            const filteredStorageAreas = origStorageAreas.filter((area) => (area.locId === nextLocation
               || nextLocation === '')
-              && (area.type === (value as StorageType) || !value)));
-          }
-          if (!(nextStorageArea && currStorageAreas?.some((area) => area.id === nextStorageArea))) {
-            setStorageArea('');
+              && (area.type === (value as StorageType) || !value));
+            setCurrentStorageAreas(filteredStorageAreas);
+            if (!(nextStorageArea && filteredStorageAreas.some((area) => area.id === nextStorageArea))) {
+              setStorageArea('');
+            }
           }
           break;
         case 'storageArea':
@@ -86,7 +88,9 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
         case 'productCategory':
           setProductCategory(value);
           if (origProducts) {
-            const filteredProducts = origProducts.filter((prod) => prod.category === (value as ProductCategory) || !value);
+            const filteredProducts = origProducts.filter(
+              (prod) => prod.category === (value as ProductCategory) || !value,
+            );
             setCurrentProducts(filteredProducts);
             if (!(nextProduct && filteredProducts.some((prod) => prod.id === nextProduct))) {
               setProduct('');
