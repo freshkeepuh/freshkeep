@@ -25,7 +25,7 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
   const [loading, setLoading] = useState(false);
   const [location, setLocation] = useState<string | null>(null);
   const [currLocations, setCurrentLocations] = useState<Location[] | undefined>(undefined);
-  const [, setOriginalLocations] = useState<Location[] | undefined>(undefined);
+
   const [storageType, setStorageType] = useState<string | null>(null);
   const [storageArea, setStorageArea] = useState<string | null>(null);
   const [currStorageAreas, setCurrentStorageAreas] = useState<StorageArea[] | undefined>(undefined);
@@ -92,9 +92,12 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
               (prod) => prod.category === (value as ProductCategory) || !value,
             );
             setCurrentProducts(filteredProducts);
-            if (!(nextProduct && filteredProducts.some((prod) => prod.id === nextProduct))) {
+            let resetProduct = nextProduct;
+            if (!(resetProduct && filteredProducts.some((prod) => prod.id === resetProduct))) {
+              resetProduct = '';
               setProduct('');
             }
+            nextProduct = resetProduct;
           }
           break;
         case 'product':
@@ -188,7 +191,7 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
     setStorageArea('');
     setProductCategory('');
     setProduct('');
-  }, [error]);
+  }, []);
 
   if (loading) {
     return <LoadingSpinner />;
