@@ -50,19 +50,33 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
     try {
       setIsDisabled(true);
       const { name, value } = event.target;
+
+      // compute next values so we don't rely on stale state when calling onFilterChange
+      const nextLocation = name === 'location' ? value : (location ?? '');
+      const nextStorageType = name === 'storageType' ? value : (storageType ?? '');
+      const nextStorageArea = name === 'storageArea' ? value : (storageArea ?? '');
+      const nextProductCategory = name === 'productCategory' ? value : (productCategory ?? '');
+      const nextProduct = name === 'product' ? value : (product ?? '');
+
       switch (name) {
         case 'location':
           setLocation(value);
           if (origStorageAreas) {
             setCurrentStorageAreas(origStorageAreas.filter((area) => (area.locId === value || value === '')
-              && (area.type === (storageType as StorageType) || !storageType)));
+              && (area.type === (nextStorageType as StorageType) || !nextStorageType)));
+          }
+          if (!(nextStorageArea && currStorageAreas?.some((area) => area.id === nextStorageArea))) {
+            setStorageArea('');
           }
           break;
         case 'storageType':
           setStorageType(value);
           if (origStorageAreas) {
-            setCurrentStorageAreas(origStorageAreas.filter((area) => (area.locId === location || location === '')
+            setCurrentStorageAreas(origStorageAreas.filter((area) => (area.locId === nextLocation || nextLocation === '')
               && (area.type === (value as StorageType) || !value)));
+          }
+          if (!(nextStorageArea && currStorageAreas?.some((area) => area.id === nextStorageArea))) {
+            setStorageArea('');
           }
           break;
         case 'storageArea':
@@ -73,6 +87,9 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
           if (origProducts) {
             setCurrentProducts(origProducts.filter((prod) => prod.category === (value as ProductCategory) || !value));
           }
+          if (!(nextProduct && currProducts?.some((prod) => prod.id === nextProduct))) {
+            setProduct('');
+          }
           break;
         case 'product':
           setProduct(value);
@@ -80,13 +97,14 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
         default:
           break;
       }
+
       if (onFilterChange) {
         onFilterChange(
-          location,
-          storageType,
-          storageArea,
-          productCategory,
-          product,
+          nextLocation || null,
+          nextStorageType || null,
+          nextStorageArea || null,
+          nextProductCategory || null,
+          nextProduct || null,
         );
       }
     } finally {
@@ -94,36 +112,19 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
     }
   };
 
-  const onFormSubmit = () => {
-    try {
-      setIsDisabled(true);
-      if (onFilterChange) {
-        onFilterChange(
-          location,
-          storageType,
-          storageArea,
-          productCategory,
-          product,
-        );
-      }
-    } finally {
-      setIsDisabled(false);
+  const addError = (message: string) => {
+    if (error) {
+      setError(`${error}<br />${message}`);
+      return;
     }
+    setError(message);
+  };
+
+  const resetError = () => {
+    setError(null);
   };
 
   useEffect(() => {
-    const addError = (message: string) => {
-      if (error) {
-        setError(`${error}<br />${message}`);
-        return;
-      }
-      setError(message);
-    };
-
-    const resetError = () => {
-      setError(null);
-    };
-
     const fetchData = async () => {
       try {
         setLoading(true);
@@ -135,12 +136,12 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
           }
           const locData = await locationsRes.json();
           setOriginalLocations(locData);
+          setCurrentLocations(locData);
         } catch (err) {
           if (process.env.NODE_ENV === 'development') {
             const errorMessage = err instanceof Error ? err.message : 'Unknown error';
             addError(`Failed to load locations: ${errorMessage}`);
           }
-          setOriginalLocations(undefined);
         }
         try {
           const storagesRes = await fetch('/api/storage', { cache: 'no-store' });
@@ -149,12 +150,12 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
           }
           const storData = await storagesRes.json();
           setOriginalStorageAreas(storData);
+          setCurrentStorageAreas(storData);
         } catch (err) {
           if (process.env.NODE_ENV === 'development') {
             const errorMessage = err instanceof Error ? err.message : 'Unknown error';
             addError(`Failed to load storage areas: ${errorMessage}`);
           }
-          setOriginalStorageAreas(undefined);
         }
         try {
           const productRes = await fetch('/api/product', { cache: 'no-store' });
@@ -163,12 +164,12 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
           }
           const prodData = await productRes.json();
           setOriginalProducts(prodData);
+          setCurrentProducts(prodData);
         } catch (err) {
           if (process.env.NODE_ENV === 'development') {
             const errorMessage = err instanceof Error ? err.message : 'Unknown error';
             addError(`Failed to load products: ${errorMessage}`);
           }
-          setOriginalProducts(undefined);
         }
       } finally {
         setLoading(false);
@@ -176,15 +177,14 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
     };
     fetchData();
 
+    // initialize simple scalar filter values once on mount
     setLocation('');
-    setCurrentLocations(origLocations);
     setStorageType('');
     setStorageArea('');
-    setCurrentStorageAreas(origStorageAreas);
     setProductCategory('');
     setProduct('');
-    setCurrentProducts(origProducts);
-  }, [error, origLocations, origStorageAreas, origProducts]);
+
+  }, []);
 
   if (loading) {
     return <LoadingSpinner />;
@@ -238,11 +238,6 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
                 products={currProducts}
                 onChange={onChange}
               />
-            </Col>
-          </Row>
-          <Row className="report-filter-buttons-row">
-            <Col className="report-filter-search-button-col">
-              <Button type="submit" onClick={methods.handleSubmit(onFormSubmit)} disabled={isDisabled}>Search</Button>
             </Col>
           </Row>
         </Container>
