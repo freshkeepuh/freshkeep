@@ -1,4 +1,3 @@
-import { TIMEOUT } from 'dns';
 import { test, expect, BASE_URL } from './auth-utils';
 
 test.slow();
