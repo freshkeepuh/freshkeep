@@ -54,9 +54,9 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
       // compute next values so we don't rely on stale state when calling onFilterChange
       const nextLocation = name === 'location' ? value : (location ?? '');
       const nextStorageType = name === 'storageType' ? value : (storageType ?? '');
-      const nextStorageArea = name === 'storageArea' ? value : (storageArea ?? '');
+      let nextStorageArea = name === 'storageArea' ? value : (storageArea ?? '');
       const nextProductCategory = name === 'productCategory' ? value : (productCategory ?? '');
-      const nextProduct = name === 'product' ? value : (product ?? '');
+      let nextProduct = name === 'product' ? value : (product ?? '');
 
       switch (name) {
         case 'location':
@@ -66,6 +66,7 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
               && (area.type === (nextStorageType as StorageType) || !nextStorageType));
             setCurrentStorageAreas(filteredStorageAreas);
             if (!(nextStorageArea && filteredStorageAreas.some((area) => area.id === nextStorageArea))) {
+              nextStorageArea = '';
               setStorageArea('');
             }
           }
@@ -78,6 +79,7 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
               && (area.type === (value as StorageType) || !value));
             setCurrentStorageAreas(filteredStorageAreas);
             if (!(nextStorageArea && filteredStorageAreas.some((area) => area.id === nextStorageArea))) {
+              nextStorageArea = '';
               setStorageArea('');
             }
           }
