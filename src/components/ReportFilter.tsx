@@ -146,7 +146,6 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
             throw new Error(locationsRes.status.toString());
           }
           const locData = await locationsRes.json();
-          setOriginalLocations(locData);
           setCurrentLocations(locData);
         } catch (err) {
           if (process.env.NODE_ENV === 'development') {
