@@ -94,7 +94,7 @@ const NavBar: React.FC = () => {
                 >
                   Recipes
                 </Nav.Link>
-                {session?.user?.role == Role.ADMIN && (
+                {session?.user?.role === Role.ADMIN && (
                   <Nav.Link
                     data-testid="navbar-link-users"
                     as={Link}
