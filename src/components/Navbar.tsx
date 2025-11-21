@@ -53,8 +53,7 @@ const NavBar: React.FC = () => {
                   data-testid="navbar-link-locations"
                   as={Link}
                   href="/locations"
-                  active={isActive('/locations')}
-                  style={{ color: 'white' }}
+                  active={isActive('/location')}
                 >
                   Locations
                 </Nav.Link>
@@ -62,8 +61,7 @@ const NavBar: React.FC = () => {
                   data-testid="navbar-link-catalog"
                   as={Link}
                   href="/catalog"
-                  active={isActive('/shop')}
-                  style={{ color: 'white' }}
+                  active={isActive('/catalog')}
                 >
                   Catalog
                 </Nav.Link>
@@ -72,7 +70,6 @@ const NavBar: React.FC = () => {
                   as={Link}
                   href="/shoppingList"
                   active={isActive('/shoppingList')}
-                  style={{ color: 'white' }}
                 >
                   Shopping List
                 </Nav.Link>
@@ -80,8 +77,7 @@ const NavBar: React.FC = () => {
                   data-testid="navbar-link-stores"
                   as={Link}
                   href="/stores"
-                  active={isActive('/stores')}
-                  style={{ color: 'white' }}
+                  active={isActive('/store')}
                 >
                   Stores
                 </Nav.Link>
@@ -89,8 +85,7 @@ const NavBar: React.FC = () => {
                   data-testid="navbar-link-recipes"
                   as={Link}
                   href="/recipes"
-                  active={isActive('/recipes')}
-                  style={{ color: 'white' }}
+                  active={isActive('/recipe')}
                 >
                   Recipes
                 </Nav.Link>
@@ -100,7 +95,6 @@ const NavBar: React.FC = () => {
                     as={Link}
                     href="/users"
                     active={isActive('/users')}
-                    style={{ color: 'white' }}
                   >
                     Users
                   </Nav.Link>
@@ -110,11 +104,12 @@ const NavBar: React.FC = () => {
                   title="Reports"
                   id="navbar-dropdown-reports"
                   align="end"
-                  style={{ color: 'white' }}
+                  active={isActive('/report')}
                 >
                   <NavDropdown.Item
                     data-testid="navbar-link-report-inventory"
                     as={Link}
+                    active={isActive('/report/inventory')}
                     href="/report/inventory"
                   >
                     Inventory
@@ -122,6 +117,7 @@ const NavBar: React.FC = () => {
                   <NavDropdown.Item
                     data-testid="navbar-link-report-expired"
                     as={Link}
+                    active={isActive('/report/expired')}
                     href="/report/expired"
                   >
                     Expired
@@ -129,6 +125,7 @@ const NavBar: React.FC = () => {
                   <NavDropdown.Item
                     data-testid="navbar-link-report-expiring"
                     as={Link}
+                    active={isActive('/report/expiring')}
                     href="/report/expiring"
                   >
                     Expiring
@@ -136,6 +133,7 @@ const NavBar: React.FC = () => {
                   <NavDropdown.Item
                     data-testid="navbar-link-report-restock"
                     as={Link}
+                    active={isActive('/report/restock')}
                     href="/report/restock"
                   >
                     Restock
