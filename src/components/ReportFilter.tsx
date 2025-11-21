@@ -86,10 +86,11 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
         case 'productCategory':
           setProductCategory(value);
           if (origProducts) {
-            setCurrentProducts(origProducts.filter((prod) => prod.category === (value as ProductCategory) || !value));
-          }
-          if (!(nextProduct && currProducts?.some((prod) => prod.id === nextProduct))) {
-            setProduct('');
+            const filteredProducts = origProducts.filter((prod) => prod.category === (value as ProductCategory) || !value);
+            setCurrentProducts(filteredProducts);
+            if (!(nextProduct && filteredProducts.some((prod) => prod.id === nextProduct))) {
+              setProduct('');
+            }
           }
           break;
         case 'product':
