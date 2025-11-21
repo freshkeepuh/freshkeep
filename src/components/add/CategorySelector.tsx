@@ -9,12 +9,12 @@ type Props = {
 };
 
 const CATS: Array<{ id: Category; emoji: string; label: string }> = [
-  { id: 'dairy', emoji: '🥛', label: 'Dairy' },
-  { id: 'fruits', emoji: '🍎', label: 'Fruits' },
-  { id: 'vegetables', emoji: '🥕', label: 'Veggies' },
-  { id: 'meat', emoji: '🥩', label: 'Meat' },
-  { id: 'pantry', emoji: '🍞', label: 'Pantry' },
-  { id: 'other', emoji: '📦', label: 'Other' },
+  { id: 'Dairy', emoji: '🥛', label: 'Dairy' },
+  { id: 'Fruits', emoji: '🍎', label: 'Fruits' },
+  { id: 'Vegetables', emoji: '🥕', label: 'Veggies' },
+  { id: 'Meat', emoji: '🥩', label: 'Meat' },
+  { id: 'Pantry', emoji: '🍞', label: 'Pantry' },
+  { id: 'Other', emoji: '📦', label: 'Other' },
 ];
 
 export default function CategorySelector({ selected, onSelect }: Props) {

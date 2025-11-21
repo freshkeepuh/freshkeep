@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { Country } from '@prisma/client';
+import { StorageType, Country } from '@prisma/client';
 import { checkUser } from './dbUserActions';
 
 export const forgotPasswordValidation = Yup.object().shape({
@@ -37,6 +37,73 @@ export const signInValidation = Yup.object().shape({
     .required('Password is required')
     .min(6, 'Password must be at least 6 characters')
     .max(20, 'Password must not exceed 20 characters'),
+});
+
+export const AddStorageSchema = Yup.object({
+  locId: Yup.string().required(),
+  name: Yup.string().required(),
+  type: Yup.mixed<StorageType>()
+    .oneOf(Object.values(StorageType))
+    .required(),
+  picture: Yup.string().url('Must be a valid URL').nullable(),
+  instances: Yup.array().of(Yup.object().shape({
+    picture: Yup.string().url('Must be a valid URL').nullable(),
+    id: Yup.string().required(),
+    locId: Yup.string().required(),
+    storId: Yup.string().required(),
+    prodId: Yup.string().required(),
+    grocId: Yup.string().required(),
+    unitId: Yup.string().required(),
+    quantity: Yup.number().positive().required(),
+    expiresAt: Yup.date().nullable(),
+  })).nullable(),
+});
+
+export const EditStorageSchema = Yup.object({
+  id: Yup.string().required(),
+  locId: Yup.string().required(),
+  name: Yup.string().required(),
+  type: Yup.mixed<StorageType>()
+    .oneOf(Object.values(StorageType))
+    .required(),
+  picture: Yup.string().url('Must be a valid URL').nullable(),
+  instances: Yup.array().of(Yup.object().shape({
+    picture: Yup.string().url('Must be a valid URL').nullable(),
+    id: Yup.string().required(),
+    locId: Yup.string().required(),
+    storId: Yup.string().required(),
+    prodId: Yup.string().required(),
+    grocId: Yup.string().required(),
+    unitId: Yup.string().required(),
+    quantity: Yup.number().positive().required(),
+    expiresAt: Yup.date().nullable(),
+  })).nullable(),
+});
+
+export const AddLocationSchema = Yup.object({
+  id: Yup.string().required('ID is required'),
+  name: Yup.string().required('Name is required'),
+  address1: Yup.string().required('Address is required'),
+  address2: Yup.string().nullable(),
+  city: Yup.string().required('City is required'),
+  state: Yup.string().required('State is required'),
+  zip: Yup.string().required('Zip code is required'),
+  country: Yup.mixed<Country>().oneOf(Object.values(Country)).required('Country is required'),
+  picture: Yup.string().url('Must be a valid URL').nullable(),
+  storageAreas: Yup.array().of(Yup.mixed<StorageType>().oneOf(Object.values(StorageType))),
+  instances: Yup.array().of(Yup.object({
+    picture: Yup.string().url('Must be a valid URL').nullable(),
+    id: Yup.string().required(),
+    locId: Yup.string().required(),
+    prodId: Yup.string().required(),
+    storId: Yup.string().required(),
+    grocId: Yup.string().required(),
+    unitId: Yup.string().required(),
+    quantity: Yup.number().positive().required(),
+    expiresAt: Yup.date().nullable(),
+  })),
+  createdAt: Yup.date().required(),
+  updatedAt: Yup.date().required(),
 });
 
 /**

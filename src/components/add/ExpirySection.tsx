@@ -25,7 +25,7 @@ export default function ExpirySection({ expiresAt, setExpiresAt, picture, setPic
     <Row className="g-3">
       <Col md={6}>
         <Form.Group controlId="expiresAt">
-          <Form.Label>Best by (optional)</Form.Label>
+          <Form.Label>Best by</Form.Label>
           <Form.Control type="date" value={expiresAt ?? ''} onChange={onDate} />
         </Form.Group>
       </Col>
