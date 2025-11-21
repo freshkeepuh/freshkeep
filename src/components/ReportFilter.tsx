@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Container, Row } from 'react-bootstrap';
+import { Col, Container, Row } from 'react-bootstrap';
 import { FormProvider, useForm } from 'react-hook-form';
 import { Location, Product, ProductCategory, StorageArea, StorageType } from '@prisma/client';
 import LoadingSpinner from '@/components/LoadingSpinner';
@@ -25,7 +25,7 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
   const [loading, setLoading] = useState(false);
   const [location, setLocation] = useState<string | null>(null);
   const [currLocations, setCurrentLocations] = useState<Location[] | undefined>(undefined);
-  const [origLocations, setOriginalLocations] = useState<Location[] | undefined>(undefined);
+  const [, setOriginalLocations] = useState<Location[] | undefined>(undefined);
   const [storageType, setStorageType] = useState<string | null>(null);
   const [storageArea, setStorageArea] = useState<string | null>(null);
   const [currStorageAreas, setCurrentStorageAreas] = useState<StorageArea[] | undefined>(undefined);
@@ -72,7 +72,8 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
         case 'storageType':
           setStorageType(value);
           if (origStorageAreas) {
-            setCurrentStorageAreas(origStorageAreas.filter((area) => (area.locId === nextLocation || nextLocation === '')
+            setCurrentStorageAreas(origStorageAreas.filter((area) => (area.locId === nextLocation
+              || nextLocation === '')
               && (area.type === (value as StorageType) || !value)));
           }
           if (!(nextStorageArea && currStorageAreas?.some((area) => area.id === nextStorageArea))) {
@@ -112,19 +113,19 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
     }
   };
 
-  const addError = (message: string) => {
-    if (error) {
-      setError(`${error}<br />${message}`);
-      return;
-    }
-    setError(message);
-  };
-
-  const resetError = () => {
-    setError(null);
-  };
-
   useEffect(() => {
+    const addError = (message: string) => {
+      if (error) {
+        setError(`${error}<br />${message}`);
+        return;
+      }
+      setError(message);
+    };
+
+    const resetError = () => {
+      setError(null);
+    };
+
     const fetchData = async () => {
       try {
         setLoading(true);
@@ -176,15 +177,13 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
       }
     };
     fetchData();
-
     // initialize simple scalar filter values once on mount
     setLocation('');
     setStorageType('');
     setStorageArea('');
     setProductCategory('');
     setProduct('');
-
-  }, []);
+  }, [error]);
 
   if (loading) {
     return <LoadingSpinner />;
