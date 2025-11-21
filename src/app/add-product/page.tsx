@@ -78,7 +78,7 @@ export default function AddPage() {
         setStoragesError(null);
 
         const [storagesRes, locationsRes] = await Promise.all([
-          fetch('/api/storages', { cache: 'no-store' }),
+          fetch('/api/storage', { cache: 'no-store' }),
           fetch('/api/location', { cache: 'no-store' }),
         ]);
 
