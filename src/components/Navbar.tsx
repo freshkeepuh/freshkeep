@@ -5,6 +5,7 @@ import { useSession, signOut } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import { Container, Nav, Navbar, NavDropdown, Offcanvas } from 'react-bootstrap';
 import { BoxArrowRight, Lock, Gear } from 'react-bootstrap-icons';
+import { Role } from '@prisma/client';
 
 const NavBar: React.FC = () => {
   const { data: session } = useSession();
@@ -93,6 +94,53 @@ const NavBar: React.FC = () => {
                 >
                   Recipes
                 </Nav.Link>
+                {session?.user?.role == Role.ADMIN && (
+                  <Nav.Link
+                    data-testid="navbar-link-users"
+                    as={Link}
+                    href="/users"
+                    active={isActive('/users')}
+                    style={{ color: 'white' }}
+                  >
+                    Users
+                  </Nav.Link>
+                )}
+                <NavDropdown
+                  data-testid="navbar-dropdown-reports"
+                  title="Reports"
+                  id="navbar-dropdown-reports"
+                  align="end"
+                  style={{ color: 'white' }}
+                >
+                  <NavDropdown.Item
+                    data-testid="navbar-link-report-inventory"
+                    as={Link}
+                    href="/report/inventory"
+                  >
+                    Inventory
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    data-testid="navbar-link-report-expired"
+                    as={Link}
+                    href="/report/expired"
+                  >
+                    Expired
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    data-testid="navbar-link-report-expiring"
+                    as={Link}
+                    href="/report/expiring"
+                  >
+                    Expiring
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    data-testid="navbar-link-report-restock"
+                    as={Link}
+                    href="/report/restock"
+                  >
+                    Restock
+                  </NavDropdown.Item>
+                </NavDropdown>
               </Nav>
 
               {/* Account dropdown */}
