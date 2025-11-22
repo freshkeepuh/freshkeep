@@ -153,12 +153,12 @@ async function authenticateWithUI(
       await page.goto(BASE_URL);
       await page.waitForLoadState('networkidle');
       // Check if we're authenticated by looking for a sign-out option or user email
-      const isAuthenticated = await Promise.race([
+      const authCheck = await Promise.race([
         page.getByTestId('navbar-dropdown-account').isVisible().then((visible) => ({ success: visible })),
         // eslint-disable-next-line no-promise-executor-return
-        new Promise<boolean>((resolve) => setTimeout(() => resolve(false), 3000)),
+        new Promise<{ success: boolean }>((resolve) => setTimeout(() => resolve({ success: false }), 3000)),
       ]);
-      if (isAuthenticated) {
+      if (authCheck.success) {
         console.log(`✓ Restored session for ${email}`);
         return;
       }
@@ -192,9 +192,10 @@ async function authenticateWithUI(
     }
 
     // Wait for navigation to complete
+    await page.waitForURL(`${BASE_URL}/`, { timeout: 10000 });
     await page.waitForLoadState('networkidle');
 
-    // Verify authentication was successful
+    /*  // Verify authentication was successful
     await expect(async () => {
       const authState = await Promise.race([
         page.getByTestId('navbar-dropdown-account').isVisible().then((visible) => ({ success: visible })),
@@ -204,10 +205,15 @@ async function authenticateWithUI(
 
       expect(authState.success).toBeTruthy();
     }).toPass({ timeout: 10000 });
+    */
+
+    // Verify authentication was successful by checking for authenticated user elements
+    await expect(page.getByTestId('navbar-dropdown-account')).toBeVisible();
 
     // Save session for future tests
     const cookies = await page.context().cookies();
     fs.writeFileSync(sessionPath, JSON.stringify({ cookies }));
+    console.log(`✓ Successfully authenticated ${email}`);
   } catch (error) {
     throw new Error('Authentication failed', { cause: error });
   }
