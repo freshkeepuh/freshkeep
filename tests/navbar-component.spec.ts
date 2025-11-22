@@ -27,6 +27,7 @@ test('test access to navigation bar (signed in)', async ({ getUserPage }) => {
   // Check that the FreshKeep Link is visible and works
   const freshKeepLink = await page.getByTestId('navbar-brand');
   await expect(freshKeepLink).toBeVisible();
+
   await freshKeepLink.click();
   await page.waitForLoadState();
   await expect(page).toHaveURL(`${BASE_URL}/`);
