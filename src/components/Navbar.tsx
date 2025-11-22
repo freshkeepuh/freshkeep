@@ -53,7 +53,7 @@ const NavBar: React.FC = () => {
                   data-testid="navbar-link-locations"
                   as={Link}
                   href="/locations"
-                  active={isActive('/location')}
+                  active={isActive('/locations')}
                 >
                   Locations
                 </Nav.Link>
