@@ -126,7 +126,7 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
   useEffect(() => {
     const addError = (message: string) => {
       if (error) {
-        setError(`${error}<br />${message}`);
+        setError(`${error}\n${message}`);
         return;
       }
       setError(message);

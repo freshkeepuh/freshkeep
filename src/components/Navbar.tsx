@@ -5,6 +5,7 @@ import { useSession, signOut } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import { Container, Nav, Navbar, NavDropdown, Offcanvas } from 'react-bootstrap';
 import { BoxArrowRight, Lock, Gear } from 'react-bootstrap-icons';
+import { Role } from '@prisma/client';
 
 const NavBar: React.FC = () => {
   const { data: session } = useSession();
@@ -53,7 +54,6 @@ const NavBar: React.FC = () => {
                   as={Link}
                   href="/locations"
                   active={isActive('/locations')}
-                  style={{ color: 'white' }}
                 >
                   Locations
                 </Nav.Link>
@@ -61,8 +61,7 @@ const NavBar: React.FC = () => {
                   data-testid="navbar-link-catalog"
                   as={Link}
                   href="/catalog"
-                  active={isActive('/shop')}
-                  style={{ color: 'white' }}
+                  active={isActive('/catalog')}
                 >
                   Catalog
                 </Nav.Link>
@@ -71,7 +70,6 @@ const NavBar: React.FC = () => {
                   as={Link}
                   href="/shoppingList"
                   active={isActive('/shoppingList')}
-                  style={{ color: 'white' }}
                 >
                   Shopping List
                 </Nav.Link>
@@ -80,7 +78,6 @@ const NavBar: React.FC = () => {
                   as={Link}
                   href="/stores"
                   active={isActive('/stores')}
-                  style={{ color: 'white' }}
                 >
                   Stores
                 </Nav.Link>
@@ -89,10 +86,59 @@ const NavBar: React.FC = () => {
                   as={Link}
                   href="/recipes"
                   active={isActive('/recipes')}
-                  style={{ color: 'white' }}
                 >
                   Recipes
                 </Nav.Link>
+                {session?.user?.role === Role.ADMIN && (
+                  <Nav.Link
+                    data-testid="navbar-link-users"
+                    as={Link}
+                    href="/users"
+                    active={isActive('/users')}
+                  >
+                    Users
+                  </Nav.Link>
+                )}
+                <NavDropdown
+                  data-testid="navbar-dropdown-reports"
+                  title="Reports"
+                  id="navbar-dropdown-reports"
+                  align="end"
+                  active={isActive('/report')}
+                >
+                  <NavDropdown.Item
+                    data-testid="navbar-link-report-inventory"
+                    as={Link}
+                    active={isActive('/report/inventory')}
+                    href="/report/inventory"
+                  >
+                    Inventory
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    data-testid="navbar-link-report-expired"
+                    as={Link}
+                    active={isActive('/report/expired')}
+                    href="/report/expired"
+                  >
+                    Expired
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    data-testid="navbar-link-report-expiring"
+                    as={Link}
+                    active={isActive('/report/expiring')}
+                    href="/report/expiring"
+                  >
+                    Expiring
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    data-testid="navbar-link-report-restock"
+                    as={Link}
+                    active={isActive('/report/restock')}
+                    href="/report/restock"
+                  >
+                    Restock
+                  </NavDropdown.Item>
+                </NavDropdown>
               </Nav>
 
               {/* Account dropdown */}
