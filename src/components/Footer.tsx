@@ -1,7 +1,6 @@
 import { Col, Container, Row } from 'react-bootstrap';
 import Link from 'next/link';
 
-
 /** The Footer appears at the bottom of every page. Rendered by the App Layout component. */
 const Footer = () => (
   <footer className="bg-success text-white py-2">
@@ -10,7 +9,9 @@ const Footer = () => (
     >
       <Row>
         <Col className="d-flex justify-content-start align-items-center opacity-75 fw-semibold">
-          Copyright &copy; {new Date().getFullYear()} FreshKeep UH. All rights reserved.
+          Copyright &copy;
+          {new Date().getFullYear()}
+          FreshKeep UH. All rights reserved.
         </Col>
         <Col className="d-flex justify-content-center align-items-center">
           <strong>FreshKeep UH</strong>
