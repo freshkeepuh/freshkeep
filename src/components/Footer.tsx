@@ -8,17 +8,17 @@ const Footer = () => (
       className="d-flex flex-column gap-2"
     >
       <Row>
-        <Col className="d-flex justify-content-start align-items-center opacity-75 fw-semibold">
+        <Col xs={12} md={4} className="d-flex justify-content-start align-items-center opacity-75 fw-semibold">
           Copyright &copy;
           {new Date().getFullYear()}
           FreshKeep UH. All rights reserved.
         </Col>
-        <Col className="d-flex justify-content-center align-items-center">
+        <Col xs={12} md={4} className="d-flex justify-content-center align-items-center">
           <strong>FreshKeep UH</strong>
           <span className="opacity-50 mx-2">|</span>
           <small className="opacity-75">Where Organizing Meets Fresh</small>
         </Col>
-        <Col className="d-flex justify-content-end align-items-center opacity-75 fw-semibold">
+        <Col xs={12} md={4} className="d-flex justify-content-end align-items-center opacity-75 fw-semibold">
           <Link
             href="https://docs.freshkeepuh.live"
             target="_blank"
