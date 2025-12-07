@@ -159,7 +159,7 @@ async function authenticateWithUI(
   sessionName: string,
 ): Promise<void> {
   const sessionPath = path.join(SESSION_STORAGE_PATH, `${sessionName}.json`);
-
+  const AUTH_CHECK_TIMEOUT = 3000;
   // Try to restore session from storage if available
   if (fs.existsSync(sessionPath)) {
     try {
@@ -174,8 +174,11 @@ async function authenticateWithUI(
           .getByTestId('navbar-dropdown-account')
           .isVisible()
           .then((visible) => ({ success: visible })),
-        // eslint-disable-next-line no-promise-executor-return
-        new Promise<{ success: boolean }>((resolve) => setTimeout(() => resolve({ success: false }), 3000)),
+        new Promise<{ success: boolean }>((resolve) => {
+          setTimeout(() => {
+            resolve({ success: false });
+          }, AUTH_CHECK_TIMEOUT);
+        }),
       ]);
       if (authCheck.success) {
         console.log(`✓ Restored session for ${email}`);
@@ -249,7 +252,7 @@ export const test = base.extend<AuthFixtures>({
       return page;
     };
 
-    await use(createUserPage);
+    await useFixture(createUserPage);
   },
 });
 
