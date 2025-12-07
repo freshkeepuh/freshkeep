@@ -7,7 +7,10 @@ export const norm = (s: string) => s.toLowerCase().trim();
 /**
  * Returns true if an ingredient name loosely matches a product name.
  */
-export const ingredientMatchesProduct = (ingredient: string, productName: string) => {
+export const ingredientMatchesProduct = (
+  ingredient: string,
+  productName: string,
+) => {
   const ing = norm(ingredient);
   const prod = norm(productName);
   return ing.includes(prod) || prod.includes(ing);

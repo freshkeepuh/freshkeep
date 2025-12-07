@@ -11,12 +11,21 @@ interface LocationCardProps {
   address: string;
   onEdit: (id: string, name: string, address: string) => void;
   onDelete: (id: string) => Promise<void> | void;
-  selected?: boolean;
-  onSelect?: (id: string) => void;
-  className?: string;
+  selected: boolean;
+  onSelect: (id: string) => void;
+  className: string;
 }
 
-const LocationCard = ({ id, name, address, onEdit, onDelete, selected, onSelect, className }: LocationCardProps) => {
+function LocationCard({
+  id,
+  name,
+  address,
+  onEdit,
+  onDelete,
+  selected,
+  onSelect,
+  className,
+}: LocationCardProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState(name);
   const [editAddress, setEditAddress] = useState(address);
@@ -131,7 +140,10 @@ const LocationCard = ({ id, name, address, onEdit, onDelete, selected, onSelect,
               size="sm"
               className={styles.iconBtn}
               aria-label={`Edit ${name}`}
-              onClick={(e) => { e.stopPropagation(); handleEditClick(); }}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleEditClick();
+              }}
               disabled={deleting}
             >
               <Pencil />
@@ -164,6 +176,6 @@ const LocationCard = ({ id, name, address, onEdit, onDelete, selected, onSelect,
       </li>
     </>
   );
-};
+}
 
 export default LocationCard;

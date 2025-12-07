@@ -12,7 +12,14 @@ export default function TipsPanel() {
   return (
     <section className={styles.panel}>
       <h3 className={styles.panelTitle}>💡 Smart Tips</h3>
-      <ul style={{ margin: 0, paddingLeft: 18, color: '#6b7280', lineHeight: 1.6 }}>
+      <ul
+        style={{
+          margin: 0,
+          paddingLeft: 18,
+          color: '#6b7280',
+          lineHeight: 1.6,
+        }}
+      >
         {TIPS.map((t) => (
           <li key={t}>{t}</li>
         ))}

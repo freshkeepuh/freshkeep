@@ -8,5 +8,7 @@ test('test locations page', async ({ page }) => {
   await expect(page.getByText('Your Locations')).toBeVisible();
 
   // Check search bar
-  await expect(page.getByPlaceholder('Search for a location or address...')).toBeVisible();
+  await expect(
+    page.getByPlaceholder('Search for a location or address...'),
+  ).toBeVisible();
 });

@@ -6,9 +6,7 @@
 
 import { Country } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
-import {
-  locationSelect,
-} from './dbActionTypes';
+import { locationSelect } from './dbActionTypes';
 
 /**
  * Create a new location.
@@ -16,14 +14,14 @@ import {
  * @returns The created location.
  */
 export async function createLocation(data: {
-  name: string,
-  address1: string,
-  address2: string | undefined,
-  city: string,
-  state: string,
-  zipcode: string,
-  country: string,
-  picture: string | undefined,
+  name: string;
+  address1: string;
+  address2: string | undefined;
+  city: string;
+  state: string;
+  zipcode: string;
+  country: string;
+  picture: string | undefined;
 }) {
   const newLocation = await prisma.location.create({
     data: {
@@ -46,11 +44,9 @@ export async function createLocation(data: {
  * @returns All locations.
  */
 export async function readLocations() {
-  const locations = await prisma.location.findMany(
-    {
-      select: locationSelect,
-    },
-  );
+  const locations = await prisma.location.findMany({
+    select: locationSelect,
+  });
   return locations;
 }
 
@@ -74,16 +70,19 @@ export async function readLocation(id: string | null | undefined) {
  * @param data The new data for the location.
  * @returns The updated location if found, otherwise null.
  */
-export async function updateLocation(id: string, data: {
-  name: string,
-  address1: string,
-  address2: string | undefined,
-  city: string,
-  state: string,
-  zipcode: string,
-  country: string,
-  picture: string | undefined,
-}) {
+export async function updateLocation(
+  id: string,
+  data: {
+    name: string;
+    address1: string;
+    address2: string | undefined;
+    city: string;
+    state: string;
+    zipcode: string;
+    country: string;
+    picture: string | undefined;
+  },
+) {
   const updatedLocation = await prisma.location.update({
     where: { id },
     data: {

@@ -8,9 +8,8 @@ import { PrismaClient } from '@prisma/client';
 
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
-// eslint-disable-next-line import/prefer-default-export, operator-linebreak
+// eslint-disable-next-line import-x/prefer-default-export
 export const prisma =
-  // eslint-disable-next-line operator-linebreak
   globalForPrisma.prisma ||
   new PrismaClient({
     log: ['query'], // CAM: is this the right level of logging?

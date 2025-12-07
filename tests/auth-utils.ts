@@ -3,8 +3,12 @@ import fs from 'fs';
 import path from 'path';
 
 // Base configuration
-export const BASE_URL = process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:3000';
-export const SESSION_STORAGE_PATH = path.join(__dirname, 'playwright-auth-sessions');
+export const BASE_URL =
+  process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:3000';
+export const SESSION_STORAGE_PATH = path.join(
+  __dirname,
+  'playwright-auth-sessions',
+);
 
 // Ensure session directory exists
 if (!fs.existsSync(SESSION_STORAGE_PATH)) {
@@ -21,9 +25,9 @@ interface AuthFixtures {
  * @param page The Page on which the fields are to be filled
  * @param fields The Fields to fill with values
  */
-export async function fillFormWithRetry(
+async function fillFormWithRetry(
   page: Page,
-  fields: Array<{ selector: string; value: string }>,
+  fields: { selector: string; value: string }[],
 ): Promise<void> {
   for (const field of fields) {
     let attempts = 0;
@@ -38,9 +42,11 @@ export async function fillFormWithRetry(
         await element.evaluate((el) => el.blur()); // Trigger blur event
         break;
       } catch (error) {
-        attempts++;
+        attempts += 1;
         if (attempts >= maxAttempts) {
-          throw new Error(`Failed to fill field ${field.selector} after ${maxAttempts} attempts`);
+          throw new Error(
+            `Failed to fill field ${field.selector} after ${maxAttempts} attempts`,
+          );
         }
         if (page.isClosed()) {
           throw new Error('Page is closed, cannot fill form fields');
@@ -51,6 +57,8 @@ export async function fillFormWithRetry(
   }
 }
 
+export default fillFormWithRetry;
+
 /**
  * Helper to empty form fields with retry logic
  * @param page The Page on which the fields are to be emptied
@@ -58,7 +66,7 @@ export async function fillFormWithRetry(
  */
 export async function emptyFormWithRetry(
   page: Page,
-  fields: Array<{ selector: string }>,
+  fields: { selector: string }[],
 ): Promise<void> {
   for (const field of fields) {
     let attempts = 0;
@@ -72,9 +80,11 @@ export async function emptyFormWithRetry(
         await element.evaluate((el) => el.blur()); // Trigger blur event
         break;
       } catch (error) {
-        attempts++;
+        attempts += 1;
         if (attempts >= maxAttempts) {
-          throw new Error(`Failed to clear field ${field.selector} after ${maxAttempts} attempts`);
+          throw new Error(
+            `Failed to clear field ${field.selector} after ${maxAttempts} attempts`,
+          );
         }
         await page.waitForTimeout(500);
       }
@@ -89,12 +99,11 @@ export async function emptyFormWithRetry(
  */
 export async function checkFormEmpty(
   page: Page,
-  fields: Array<{ selector: string }>
+  fields: { selector: string }[],
 ): Promise<void> {
-  for (const field of fields) {
-    const element = page.locator(field.selector);
-    await expect(element).toBeEmpty();
-  }
+  await Promise.all(
+    fields.map((field) => expect(page.locator(field.selector)).toBeEmpty()),
+  );
 }
 
 /**
@@ -106,12 +115,20 @@ export async function expectSignedInOrRedirected({
   page,
   url,
   timeout = 20000,
-}: { page: Page; url: string; timeout?: number }): Promise<void> {
+}: {
+  page: Page;
+  url: string;
+  timeout?: number;
+}): Promise<void> {
   try {
     // Primary: check for session cookie
     await page.waitForLoadState();
     const cookies = await page.context().cookies();
-    const hasSessionCookie = cookies.some((cookie) => cookie.name === 'next-auth.session-token' || cookie.name === '__Secure-next-auth.session-token');
+    const hasSessionCookie = cookies.some(
+      (cookie) =>
+        cookie.name === 'next-auth.session-token' ||
+        cookie.name === '__Secure-next-auth.session-token',
+    );
 
     if (hasSessionCookie) {
       console.log('✓ Session cookie found, user is signed in');
@@ -126,7 +143,6 @@ export async function expectSignedInOrRedirected({
     if (redirected) {
       await expect(page).toHaveURL(url);
       console.log(`✓ Redirected to ${url}, user is signed in`);
-      return;
     }
   } catch (err: Error | any) {
     throw new Error(`× User is not signed in or redirected: ${err}`);
@@ -154,7 +170,10 @@ async function authenticateWithUI(
       await page.waitForLoadState('networkidle');
       // Check if we're authenticated by looking for a sign-out option or user email
       const authCheck = await Promise.race([
-        page.getByTestId('navbar-dropdown-account').isVisible().then((visible) => ({ success: visible })),
+        page
+          .getByTestId('navbar-dropdown-account')
+          .isVisible()
+          .then((visible) => ({ success: visible })),
         // eslint-disable-next-line no-promise-executor-return
         new Promise<{ success: boolean }>((resolve) => setTimeout(() => resolve({ success: false }), 3000)),
       ]);
@@ -184,7 +203,7 @@ async function authenticateWithUI(
 
     // Click submit button and wait for navigation
     const submitButton = page.getByRole('button', { name: /sign[ -]?in/i });
-    if (!await submitButton.isVisible({ timeout: 1000 })) {
+    if (!(await submitButton.isVisible({ timeout: 1000 }))) {
       // Try alternative selector if the first one doesn't work
       await page.getByRole('button', { name: /log[ -]?in/i }).click();
     } else {

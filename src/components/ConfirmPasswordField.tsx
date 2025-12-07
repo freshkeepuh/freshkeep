@@ -14,7 +14,11 @@ export interface ConfirmPasswordFieldProps {
   placeholder?: string;
 }
 
-const ConfirmPasswordField = ({ register, errors, placeholder }: ConfirmPasswordFieldProps) => (
+const ConfirmPasswordField = ({
+  register,
+  errors,
+  placeholder,
+}: ConfirmPasswordFieldProps) => (
   <>
     <Form.Control
       id="confirmPassword"

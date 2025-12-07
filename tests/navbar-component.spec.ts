@@ -4,7 +4,7 @@ test.slow();
 test.use({ viewport: { width: 1280, height: 800 } });
 test('test access to navigation bar (not signed in)', async ({ page }) => {
   // Navigate to the home page
-  await page.goto(`${BASE_URL}`);
+  await page.goto(BASE_URL);
   await page.waitForLoadState('networkidle');
 
   // Check that the FreshKeep Link is visible and works
