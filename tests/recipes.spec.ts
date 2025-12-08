@@ -106,6 +106,6 @@ test.describe('Recipes (no code changes)', () => {
   test('Bad slug shows NotFound page', async ({ page }) => {
     // A nonexistent recipe URL should render the NotFound message
     await page.goto(`${BASE_URL}/recipes/__does-not-exist__`);
-    await expect(page.getByText('Recipe not found')).toBeVisible();
+    await expect(page.getByText('Oops… this recipe is missing!')).toBeVisible();
   });
 });

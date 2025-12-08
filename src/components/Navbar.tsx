@@ -86,6 +86,15 @@ function NavBar(): React.JSX.Element {
                 >
                   Shopping List
                 </Nav.Link>
+
+                <Nav.Link
+                  data-testid="navbar-link-add-product"
+                  as={Link}
+                  href="/add-product"
+                  active={isActive('/add-product')}
+                >
+                  Add Product
+                </Nav.Link>
                 <Nav.Link
                   data-testid="navbar-link-stores"
                   as={Link}
