@@ -90,6 +90,7 @@ function SignInPage() {
                     }
                     errors={errors}
                     data-testid="sign-in-form-password-field"
+                    placeholder=""
                   />
                 </Form.Group>
 

@@ -10,7 +10,6 @@ export default function NotFound() {
     >
       <div className={styles.rpMain}>
         <div className={styles.rpMainInner}>
-
           {/* Back Button */}
           <Link href="/recipes" className={styles.rpBackBtn}>
             <span className={styles.rpBackIcon} aria-hidden>
@@ -22,22 +21,20 @@ export default function NotFound() {
           {/* Card */}
           <div className={styles.rpCard}>
             <div className={styles.rpBlock}>
-              <h1 className={styles.rpH2}>
-                Oops… this recipe is missing!
-              </h1>
+              <h1 className={styles.rpH2}>Oops… this recipe is missing!</h1>
               <p className={styles.rpMedium}>
-                We couldn&apos;t find this recipe. It might have been moved, renamed,
-                or the link may be a little off.
+                We couldn&apos;t find this recipe. It might have been moved,
+                renamed, or the link may be a little off.
               </p>
             </div>
 
             <div className={styles.rpBlock}>
               <p className={styles.rpMedium}>
-                Don&apos;t worry! You can browse all recipes or search for something new! 🧑‍🍳✨
+                Don&apos;t worry! You can browse all recipes or search for
+                something new! 🧑‍🍳✨
               </p>
             </div>
           </div>
-
         </div>
       </div>
     </main>

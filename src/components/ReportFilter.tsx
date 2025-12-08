@@ -26,7 +26,7 @@ interface ReportFilterProps {
   ) => void;
 }
 
-function ReportFilter({ title, onFilterChange }: ReportFilterProps) {
+function ReportFilter({ title, onFilterChange = () => {} }: ReportFilterProps) {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [location, setLocation] = useState<string | null>(null);
@@ -258,7 +258,7 @@ function ReportFilter({ title, onFilterChange }: ReportFilterProps) {
               <LocationFilter
                 label="Location"
                 disabled={isDisabled}
-                locations={currLocations}
+                locations={currLocations ?? []}
                 onChange={onChange}
               />
             </Col>
@@ -292,7 +292,7 @@ function ReportFilter({ title, onFilterChange }: ReportFilterProps) {
               <ProductFilter
                 label="Product"
                 disabled={isDisabled}
-                products={currProducts}
+                products={currProducts ?? []}
                 onChange={onChange}
               />
             </Col>

@@ -100,6 +100,7 @@ function SignUpPage() {
                     }
                     errors={errors}
                     data-testid="sign-up-form-password-field"
+                    placeholder=""
                   />
                 </Form.Group>
 

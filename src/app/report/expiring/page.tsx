@@ -8,7 +8,7 @@ function ExpiringReport() {
     <Container>
       <Row>
         <Col>
-          <ReportFilter title="Expiring" />
+          <ReportFilter title="Expiring" onFilterChange={() => {}} />
         </Col>
       </Row>
       <Row>

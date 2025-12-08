@@ -8,7 +8,7 @@ function InventoryReport() {
     <Container>
       <Row>
         <Col>
-          <ReportFilter title="Inventory" />
+          <ReportFilter title="Inventory" onFilterChange={() => {}} />
         </Col>
       </Row>
       <Row>

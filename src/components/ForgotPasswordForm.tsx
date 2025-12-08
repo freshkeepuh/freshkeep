@@ -130,6 +130,8 @@ function ForgotPasswordForm() {
                       register={register}
                       errors={errors}
                       data-testid="forgot-password-email-field"
+                      placeholder=""
+                      disabled={false}
                     />
                   </Form.Group>
 

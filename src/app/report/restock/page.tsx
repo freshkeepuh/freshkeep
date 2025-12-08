@@ -8,10 +8,9 @@ function RestockReport() {
     <Container>
       <Row>
         <Col>
-          <ReportFilter title="Restock" />
+          <ReportFilter title="Restock" onFilterChange={() => {}} />
         </Col>
-      </Row>
-      <Row>
+
         <Col>{/* Restock report content goes here */}</Col>
       </Row>
     </Container>

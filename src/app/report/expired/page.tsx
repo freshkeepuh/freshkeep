@@ -9,7 +9,7 @@ function ExpiredReport() {
     <Container>
       <Row>
         <Col>
-          <ReportFilter title="Expired" />
+          <ReportFilter title="Expired" onFilterChange={() => {}} />
         </Col>
       </Row>
       <Row>
