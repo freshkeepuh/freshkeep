@@ -7,7 +7,7 @@ import { Store } from '@prisma/client';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import StoreCard from '@/components/StoreCard';
 
-const StoresForm = () => {
+function StoresForm() {
   const { data: session } = useSession();
   const [stores, setStores] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,7 +27,8 @@ const StoresForm = () => {
         setStores(data);
         setError(null);
       } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+        const errorMessage =
+          err instanceof Error ? err.message : 'Unknown error';
         setError(errorMessage);
         setStores([]);
       } finally {
@@ -67,14 +68,20 @@ const StoresForm = () => {
                     store={store}
                     onUpdate={async (updatedStore: Store) => {
                       try {
-                        setStores((prevStores) => prevStores.map((s) => (s.id === updatedStore.id ? updatedStore : s)));
+                        setStores((prevStores) =>
+                          prevStores.map((s) =>
+                            s.id === updatedStore.id ? updatedStore : s,
+                          ),
+                        );
                       } catch (err) {
                         console.error('Failed to update store:', err);
                       }
                     }}
                     onDelete={async (id) => {
                       try {
-                        setStores((prevStores) => prevStores.filter((s) => s.id !== id));
+                        setStores((prevStores) =>
+                          prevStores.filter((s) => s.id !== id),
+                        );
                       } catch (err) {
                         console.error('Failed to delete store:', err);
                       }
@@ -88,6 +95,6 @@ const StoresForm = () => {
       </Row>
     </Container>
   );
-};
+}
 
 export default StoresForm;

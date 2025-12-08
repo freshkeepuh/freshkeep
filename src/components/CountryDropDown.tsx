@@ -21,14 +21,12 @@ interface CountryDropDownProps {
  * not via a prop or defaultValue on the select element. Example:
  *   useForm({ defaultValues: { country: Country.USA } })
  */
-const CountryDropDown: React.FC<CountryDropDownProps> = (
-  {
-    label = 'Country',
-    disabled = false,
-    required = false,
-    onChange = () => { /* no-op */ },
-  },
-) => {
+function CountryDropDown({
+  label = 'Country',
+  disabled = false,
+  required = false,
+  onChange = () => {},
+}: CountryDropDownProps): React.JSX.Element {
   const context = useFormContext();
   if (!context) {
     throw new Error('CountryDropDown must be used within a FormProvider');

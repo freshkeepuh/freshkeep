@@ -4,18 +4,18 @@ import { useCallback } from 'react';
 import styles from './add.module.css';
 import type { Category } from './types';
 
-type Props = {
+interface Props {
   onQuickAdd: (name: string, category: Category, days: number) => void;
-};
+}
 
-type QuickItem = {
+interface QuickItem {
   name: string;
   category: Category;
   days: number;
   emoji: string;
   className: string;
   subtitle: string;
-};
+}
 
 const QUICK_ITEMS: QuickItem[] = [
   {
@@ -54,7 +54,8 @@ const QUICK_ITEMS: QuickItem[] = [
 
 export default function QuickAddList({ onQuickAdd }: Props) {
   const handleAdd = useCallback(
-    (name: string, category: Category, days: number) => () => onQuickAdd(name, category, days),
+    (name: string, category: Category, days: number) => () =>
+      onQuickAdd(name, category, days),
     [onQuickAdd],
   );
 
@@ -64,7 +65,13 @@ export default function QuickAddList({ onQuickAdd }: Props) {
 
       <ul
         aria-label="Quick add items"
-        style={{ display: 'grid', gap: 8, listStyle: 'none', padding: 0, margin: 0 }}
+        style={{
+          display: 'grid',
+          gap: 8,
+          listStyle: 'none',
+          padding: 0,
+          margin: 0,
+        }}
       >
         {QUICK_ITEMS.map((item) => (
           <li key={item.name}>

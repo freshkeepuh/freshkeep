@@ -19,6 +19,39 @@ if (!fs.existsSync(SESSION_STORAGE_PATH)) {
 interface AuthFixtures {
   getUserPage: (email: string, password: string) => Promise<Page>;
 }
+// Updated helpers to avoid `for...of` and `await` inside loops (ESLint rules)
+
+async function retryOperation(
+  operation: () => Promise<void>,
+  maxAttempts = 3,
+  delayMs = 500,
+  isRetryable = () => true,
+): Promise<void> {
+  const attempt = async (n: number): Promise<void> => {
+    try {
+      return await operation();
+    } catch (err) {
+      if (n >= maxAttempts || !isRetryable()) {
+        throw err;
+      }
+      await new Promise((res) => {
+        setTimeout(res, delayMs);
+      });
+      return attempt(n + 1);
+    }
+  };
+  return attempt(1);
+}
+
+async function processSequentially<T>(
+  items: T[],
+  handler: (item: T) => Promise<void>,
+): Promise<void> {
+  return items.reduce(
+    (prev, item) => prev.then(() => handler(item)),
+    Promise.resolve(),
+  );
+}
 
 /**
  * Helper to fill form fields with retry logic
@@ -29,32 +62,20 @@ async function fillFormWithRetry(
   page: Page,
   fields: { selector: string; value: string }[],
 ): Promise<void> {
-  for (const field of fields) {
-    let attempts = 0;
-    const maxAttempts = 3;
-
-    while (attempts < maxAttempts) {
-      try {
+  await processSequentially(fields, (field) =>
+    retryOperation(
+      async () => {
         const element = page.locator(field.selector);
         await element.waitFor({ state: 'visible', timeout: 2000 });
         await element.clear();
         await element.fill(field.value);
-        await element.evaluate((el) => el.blur()); // Trigger blur event
-        break;
-      } catch (error) {
-        attempts += 1;
-        if (attempts >= maxAttempts) {
-          throw new Error(
-            `Failed to fill field ${field.selector} after ${maxAttempts} attempts`,
-          );
-        }
-        if (page.isClosed()) {
-          throw new Error('Page is closed, cannot fill form fields');
-        }
-        await page.waitForTimeout(500);
-      }
-    }
-  }
+        await element.evaluate((el) => el.blur());
+      },
+      3,
+      500,
+      () => !page.isClosed(),
+    ),
+  );
 }
 
 export default fillFormWithRetry;
@@ -68,28 +89,19 @@ export async function emptyFormWithRetry(
   page: Page,
   fields: { selector: string }[],
 ): Promise<void> {
-  for (const field of fields) {
-    let attempts = 0;
-    const maxAttempts = 3;
-
-    while (attempts < maxAttempts) {
-      try {
+  await processSequentially(fields, (field) =>
+    retryOperation(
+      async () => {
         const element = page.locator(field.selector);
         await element.waitFor({ state: 'visible', timeout: 2000 });
         await element.clear();
-        await element.evaluate((el) => el.blur()); // Trigger blur event
-        break;
-      } catch (error) {
-        attempts += 1;
-        if (attempts >= maxAttempts) {
-          throw new Error(
-            `Failed to clear field ${field.selector} after ${maxAttempts} attempts`,
-          );
-        }
-        await page.waitForTimeout(500);
-      }
-    }
-  }
+        await element.evaluate((el) => el.blur());
+      },
+      3,
+      500,
+      () => !page.isClosed(),
+    ),
+  );
 }
 
 /**
@@ -243,7 +255,7 @@ async function authenticateWithUI(
 
 // Create custom test with authenticated fixtures
 export const test = base.extend<AuthFixtures>({
-  getUserPage: async ({ browser }, use) => {
+  getUserPage: async ({ browser }, Use) => {
     const createUserPage = async (email: string, password: string) => {
       const context = await browser.newContext();
       const page = await context.newPage();
@@ -252,7 +264,7 @@ export const test = base.extend<AuthFixtures>({
       return page;
     };
 
-    await useFixture(createUserPage);
+    await Use(createUserPage);
   },
 });
 

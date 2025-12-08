@@ -14,7 +14,10 @@ export async function GET(request: NextRequest, context: any) {
   try {
     const { id } = context.params;
     if (!id) {
-      return NextResponse.json({ error: 'Storage ID is required' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Storage ID is required' },
+        { status: 400 },
+      );
     }
 
     const storage = await readStorageArea(id);
@@ -39,7 +42,10 @@ export async function DELETE(request: NextRequest, context: any) {
   try {
     const { id } = context.params;
     if (!id) {
-      return NextResponse.json({ error: 'Storage ID is required' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Storage ID is required' },
+        { status: 400 },
+      );
     }
 
     await deleteStorageArea(id);

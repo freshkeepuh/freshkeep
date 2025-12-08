@@ -7,11 +7,12 @@ import { Country } from '@prisma/client'; // Update the path as needed
 import { getCountryDisplayName } from '@/lib/dbEnums';
 
 interface CountryFilterProps {
-  label?: string;
-  disabled?: boolean;
-  onChange?: React.ChangeEventHandler<HTMLSelectElement>;
+  label: string;
+  disabled: boolean;
+  onChange: React.ChangeEventHandler<HTMLSelectElement>;
 }
 
+// @ts-ignore
 /**
  * CountryFilter component.
  *
@@ -19,13 +20,11 @@ interface CountryFilterProps {
  * not via a prop or defaultValue on the select element. Example:
  *   useForm({ defaultValues: { country: Country.Freezer } })
  */
-const CountryFilter: React.FC<CountryFilterProps> = (
-  {
-    label = 'Country',
-    disabled = false,
-    onChange = () => { /* no-op */ },
-  },
-) => {
+function CountryFilter({
+  label = 'Country',
+  disabled = false,
+  onChange = () => {},
+}: CountryFilterProps): React.JSX.Element {
   const [isDisabled] = React.useState(disabled);
   const context = useFormContext();
   if (!context) {
@@ -47,23 +46,23 @@ const CountryFilter: React.FC<CountryFilterProps> = (
         onChange={onChange}
         isInvalid={!!errors.country}
       >
-        <option key="all" value="">All</option>
-        {
-          Object.values(Country)
-            .filter((country) => typeof country === 'string')
-            .sort()
-            .map((country) => (
-              <option key={country} value={country}>
-                {getCountryDisplayName(country as Country)}
-              </option>
-            ))
-        }
+        <option key="all" value="">
+          All
+        </option>
+        {Object.values(Country)
+          .filter((country) => typeof country === 'string')
+          .sort()
+          .map((country) => (
+            <option key={country} value={country}>
+              {getCountryDisplayName(country as Country)}
+            </option>
+          ))}
       </Form.Select>
       <Form.Control.Feedback type="invalid">
         {errors.country ? errors.country.message?.toString() : null}
       </Form.Control.Feedback>
     </>
   );
-};
+}
 
 export default CountryFilter;

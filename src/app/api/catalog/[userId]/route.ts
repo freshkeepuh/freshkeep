@@ -11,7 +11,10 @@ export async function GET(request: NextRequest, { params }: any) {
     console.log('API called with userId:', userId);
 
     if (!userId) {
-      return NextResponse.json({ error: 'User ID is required' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'User ID is required' },
+        { status: 400 },
+      );
     }
 
     const userCatalogItems = await prisma.catalog.findMany({
@@ -28,7 +31,10 @@ export async function GET(request: NextRequest, { params }: any) {
     const formattedItems = userCatalogItems.map((catalogItem) => ({
       id: catalogItem.id,
       name: catalogItem.catalogItem.name,
-      storeName: catalogItem.catalogItem.stores.length > 0 ? catalogItem.catalogItem.stores[0].name : 'Unknown Store',
+      storeName:
+        catalogItem.catalogItem.stores.length > 0
+          ? catalogItem.catalogItem.stores[0].name
+          : 'Unknown Store',
       stores: catalogItem.catalogItem.stores.map((store) => store.name),
       category: catalogItem.catalogItem.category,
       userId: catalogItem.userId,
@@ -41,7 +47,10 @@ export async function GET(request: NextRequest, { params }: any) {
     return NextResponse.json(formattedItems);
   } catch (error) {
     console.error('Error in catalog API:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 },
+    );
   } finally {
     await prisma.$disconnect();
   }

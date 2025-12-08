@@ -14,24 +14,29 @@ export interface ConfirmPasswordFieldProps {
   placeholder?: string;
 }
 
-const ConfirmPasswordField = ({
+function ConfirmPasswordField({
   register,
   errors,
   placeholder,
-}: ConfirmPasswordFieldProps) => (
-  <>
-    <Form.Control
-      id="confirmPassword"
-      type="password"
-      placeholder={placeholder || '🔒 Confirm Password'}
-      size="lg"
-      isInvalid={!!errors.confirmPassword}
-      {...register('confirmPassword')}
-    />
-    <Form.Control.Feedback type="invalid">
-      {errors.confirmPassword?.message}
-    </Form.Control.Feedback>
-  </>
-);
+}: ConfirmPasswordFieldProps): React.JSX.Element {
+  return (
+    <>
+      <Form.Control
+        id="confirmPassword"
+        type="password"
+        placeholder={placeholder || '🔒 Confirm Password'}
+        size="lg"
+        isInvalid={!!errors.confirmPassword}
+        {...register('confirmPassword')}
+      />
+      <Form.Control.Feedback type="invalid">
+        {errors.confirmPassword?.message}
+      </Form.Control.Feedback>
+    </>
+  );
+}
 
+ConfirmPasswordField.defaultProps = {
+  placeholder: 'Confirm Password',
+};
 export default ConfirmPasswordField;

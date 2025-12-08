@@ -3,18 +3,18 @@
 import { useCallback, useEffect, useState } from 'react';
 import styles from './add.module.css';
 
-type Props = {
+interface Props {
   quantity: number;
   unit: string | null;
   onQuantity: (n: number) => void;
   onUnit: (u: string) => void;
-};
+}
 
-type UnitOption = {
+interface UnitOption {
   id: string;
   name: string;
   abbr: string;
-};
+}
 
 export default function QuantityUnit({
   quantity,
@@ -51,7 +51,8 @@ export default function QuantityUnit({
           onUnit(data[0].id);
         }
       } catch (err: unknown) {
-        const message = err instanceof Error ? err.message : 'Failed to load units';
+        const message =
+          err instanceof Error ? err.message : 'Failed to load units';
         setError(message);
       } finally {
         setLoading(false);
@@ -130,17 +131,15 @@ export default function QuantityUnit({
           {!loading && units.length === 0 && (
             <option value="">No units available</option>
           )}
-          {!loading && units.length > 0 && units.map((u) => (
-            <option key={u.id} value={u.id}>
-              {`${u.name} (${u.abbr})`}
-            </option>
-          ))}
+          {!loading &&
+            units.length > 0 &&
+            units.map((u) => (
+              <option key={u.id} value={u.id}>
+                {`${u.name} (${u.abbr})`}
+              </option>
+            ))}
         </select>
-        {error && (
-          <p style={{ color: 'red', marginTop: 4 }}>
-            {error}
-          </p>
-        )}
+        {error && <p style={{ color: 'red', marginTop: 4 }}>{error}</p>}
       </div>
     </div>
   );

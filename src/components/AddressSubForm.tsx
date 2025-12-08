@@ -21,7 +21,7 @@ interface AddressSubFormProps {
   isEditing: boolean;
 }
 
-const AddressSubForm = ({ address, isEditing }: AddressSubFormProps) => {
+function AddressSubForm({ address, isEditing }: AddressSubFormProps) {
   const context = useFormContext();
   if (isEditing) {
     if (!context) {
@@ -114,11 +114,7 @@ const AddressSubForm = ({ address, isEditing }: AddressSubFormProps) => {
           </Row>
         </Container>
         <Form.Group>
-          <CountryDropDown
-            label="Country:"
-            required
-            onChange={() => { /* no-op */ }}
-          />
+          <CountryDropDown label="Country:" required onChange={() => {}} />
         </Form.Group>
       </>
     );
@@ -126,7 +122,9 @@ const AddressSubForm = ({ address, isEditing }: AddressSubFormProps) => {
 
   return (
     <>
-      <span className="fw-bold mb-3">{address.address1 || 'No Address Provided'}</span>
+      <span className="fw-bold mb-3">
+        {address.address1 || 'No Address Provided'}
+      </span>
       {address.address1 && (
         <>
           <br />
@@ -149,6 +147,6 @@ const AddressSubForm = ({ address, isEditing }: AddressSubFormProps) => {
       )}
     </>
   );
-};
+}
 
 export default AddressSubForm;
