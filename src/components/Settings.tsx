@@ -74,7 +74,6 @@ const applyTheme = (t: 'light' | 'dark') => {
 
 function Settings({ user }: Props) {
   const router = useRouter();
-
   const [theme, setTheme] = useState<'light' | 'dark'>(user.theme ?? 'light');
   const [firstName, setFirstName] = useState<string>(user.firstName ?? '');
   const [lastName, setLastName] = useState<string>(user.lastName ?? '');
