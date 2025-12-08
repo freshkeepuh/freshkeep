@@ -8,10 +8,10 @@ import { getProductCategoryDisplayName } from '@/lib/dbEnums';
 import RequiredLabel from '@/components/RequiredLabel';
 
 interface ProductCategoryDropDownProps {
-  label?: string;
-  disabled?: boolean;
-  required?: boolean;
-  onChange?: React.ChangeEventHandler<HTMLSelectElement>;
+  label: string;
+  disabled: boolean;
+  required: boolean;
+  onChange: React.ChangeEventHandler<HTMLSelectElement>;
 }
 
 /**
@@ -21,18 +21,18 @@ interface ProductCategoryDropDownProps {
  * not via a prop or defaultValue on the select element. Example:
  *   useForm({ defaultValues: { productCategory: ProductCategory.Food } })
  */
-const ProductCategoryDropDown: React.FC<ProductCategoryDropDownProps> = (
-  {
-    label = 'Product Category',
-    disabled = false,
-    required = false,
-    onChange = () => { /* no-op */ },
-  },
-) => {
+function ProductCategoryDropDown({
+  label = 'Product Category',
+  disabled = false,
+  required = false,
+  onChange = () => {},
+}: ProductCategoryDropDownProps): React.JSX.Element {
   const [isDisabled] = React.useState(disabled);
   const context = useFormContext();
   if (!context) {
-    throw new Error('ProductCategoryDropDown must be used within a FormProvider');
+    throw new Error(
+      'ProductCategoryDropDown must be used within a FormProvider',
+    );
   }
   const {
     register,
@@ -40,8 +40,12 @@ const ProductCategoryDropDown: React.FC<ProductCategoryDropDownProps> = (
   } = context;
   return (
     <>
-      {(label && !required) && <Form.Label htmlFor="productCategory">{label}</Form.Label>}
-      {(label && required) && <RequiredLabel htmlFor="productCategory">{label}</RequiredLabel>}
+      {label && !required && (
+        <Form.Label htmlFor="productCategory">{label}</Form.Label>
+      )}
+      {label && required && (
+        <RequiredLabel htmlFor="productCategory">{label}</RequiredLabel>
+      )}
       <Form.Select
         id="productCategory"
         size="lg"
@@ -52,22 +56,24 @@ const ProductCategoryDropDown: React.FC<ProductCategoryDropDownProps> = (
         isInvalid={!!errors.productCategory}
         onChange={onChange}
       >
-        {
-          Object.values(ProductCategory)
-            .filter((productCategory) => typeof productCategory === 'string')
-            .sort()
-            .map((productCategory) => (
-              <option key={productCategory} value={productCategory}>
-                {getProductCategoryDisplayName(productCategory as ProductCategory)}
-              </option>
-            ))
-        }
+        {Object.values(ProductCategory)
+          .filter((productCategory) => typeof productCategory === 'string')
+          .sort()
+          .map((productCategory) => (
+            <option key={productCategory} value={productCategory}>
+              {getProductCategoryDisplayName(
+                productCategory as ProductCategory,
+              )}
+            </option>
+          ))}
       </Form.Select>
       <Form.Control.Feedback type="invalid">
-        {errors.productCategory ? errors.productCategory.message?.toString() : null}
+        {errors.productCategory
+          ? errors.productCategory.message?.toString()
+          : null}
       </Form.Control.Feedback>
     </>
   );
-};
+}
 
 export default ProductCategoryDropDown;

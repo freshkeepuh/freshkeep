@@ -8,10 +8,10 @@ import { getCountryDisplayName } from '@/lib/dbEnums';
 import RequiredLabel from './RequiredLabel';
 
 interface CountryDropDownProps {
-  label?: string;
-  disabled?: boolean;
-  required?: boolean;
-  onChange?: React.ChangeEventHandler<HTMLSelectElement>;
+  label: string;
+  disabled: boolean;
+  required: boolean;
+  onChange: React.ChangeEventHandler<HTMLSelectElement>;
 }
 
 /**
@@ -37,8 +37,10 @@ function CountryDropDown({
   } = context;
   return (
     <>
-      {(label && !required) && <Form.Label htmlFor="country">{label}</Form.Label>}
-      {(label && required) && <RequiredLabel htmlFor="country">{label}</RequiredLabel>}
+      {label && !required && <Form.Label htmlFor="country">{label}</Form.Label>}
+      {label && required && (
+        <RequiredLabel htmlFor="country">{label}</RequiredLabel>
+      )}
       <Form.Select
         id="country"
         size="lg"
@@ -49,22 +51,20 @@ function CountryDropDown({
         isInvalid={!!errors.country}
         onChange={onChange}
       >
-        {
-          Object.values(Country)
-            .filter((country) => typeof country === 'string')
-            .sort()
-            .map((country) => (
-              <option key={country} value={country}>
-                {getCountryDisplayName(country as Country)}
-              </option>
-            ))
-        }
+        {Object.values(Country)
+          .filter((country) => typeof country === 'string')
+          .sort()
+          .map((country) => (
+            <option key={country} value={country}>
+              {getCountryDisplayName(country as Country)}
+            </option>
+          ))}
       </Form.Select>
       <Form.Control.Feedback type="invalid">
         {errors.country ? errors.country.message?.toString() : null}
       </Form.Control.Feedback>
     </>
   );
-};
+}
 
 export default CountryDropDown;

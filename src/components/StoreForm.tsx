@@ -9,7 +9,7 @@ import LoadingSpinner from '@/components/LoadingSpinner';
 import StoreCard from '@/components/StoreCard';
 import StoreShoppingLists from '@/components/StoreShoppingLists';
 
-const StoreForm = ({ params }: { params: { id: string } }) => {
+function StoreForm({ params }: { params: { id: string } }): React.JSX.Element {
   const { data: session } = useSession();
   const router = useRouter();
   const [store, setStore] = useState<any | undefined>(undefined);
@@ -30,7 +30,8 @@ const StoreForm = ({ params }: { params: { id: string } }) => {
         setError(null);
       } catch (err) {
         if (process.env.NODE_ENV === 'development') {
-          const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+          const errorMessage =
+            err instanceof Error ? err.message : 'Unknown error';
           setError(` Failed to load store: ${errorMessage}`);
         } else {
           setError(null);
@@ -67,7 +68,9 @@ const StoreForm = ({ params }: { params: { id: string } }) => {
                     body: JSON.stringify(updatedStore),
                   });
                   if (response.ok) {
-                    const response2 = await fetch(`/api/store/${updatedStore.id}`);
+                    const response2 = await fetch(
+                      `/api/store/${updatedStore.id}`,
+                    );
                     if (!response2.ok) {
                       setError('Failed to fetch updated store');
                       return;
@@ -103,6 +106,6 @@ const StoreForm = ({ params }: { params: { id: string } }) => {
       </Row>
     </Container>
   );
-};
+}
 
 export default StoreForm;

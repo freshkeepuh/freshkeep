@@ -35,7 +35,7 @@ interface UserData {
 }
 
 interface Props {
-  user?: UserData;
+  user: UserData;
 }
 
 const DEFAULT_UNITS: 'Imperial' | 'Metric' = 'Imperial';
@@ -83,8 +83,6 @@ const applyTheme = (t: 'light' | 'dark') => {
 };
 
 class Settings extends React.Component<Props> {
-  static defaultProps = { user: DEFAULT_USER };
-
   render() {
     const { user } = this.props;
     const router = useRouter();

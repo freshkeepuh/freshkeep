@@ -7,9 +7,9 @@ import { StorageType } from '@prisma/client'; // Update the path as needed
 import { getStorageTypeDisplayName } from '@/lib/dbEnums';
 
 interface StorageTypeFilterProps {
-  label?: string;
-  disabled?: boolean;
-  onChange?: React.ChangeEventHandler<HTMLSelectElement>;
+  label: string;
+  disabled: boolean;
+  onChange: React.ChangeEventHandler<HTMLSelectElement>;
 }
 
 /**
@@ -19,13 +19,13 @@ interface StorageTypeFilterProps {
  * not via a prop or defaultValue on the select element. Example:
  *   useForm({ defaultValues: { storageType: StorageType.Freezer } })
  */
-const StorageTypeFilter: React.FC<StorageTypeFilterProps> = (
-  {
-    label = 'Storage Type',
-    disabled = false,
-    onChange = () => { /* no-op */ },
+function StorageTypeFilter({
+  label = 'Storage Type',
+  disabled = false,
+  onChange = () => {
+    /* no-op */
   },
-) => {
+}: StorageTypeFilterProps) {
   const [isDisabled] = React.useState(disabled);
   const context = useFormContext();
   if (!context) {
@@ -47,23 +47,23 @@ const StorageTypeFilter: React.FC<StorageTypeFilterProps> = (
         onChange={onChange}
         isInvalid={!!errors.storageType}
       >
-        <option key="all" value="">All</option>
-        {
-          Object.values(StorageType)
-            .filter((storageType) => typeof storageType === 'string')
-            .sort()
-            .map((storageType) => (
-              <option key={storageType} value={storageType}>
-                {getStorageTypeDisplayName(storageType as StorageType)}
-              </option>
-            ))
-        }
+        <option key="all" value="">
+          All
+        </option>
+        {Object.values(StorageType)
+          .filter((storageType) => typeof storageType === 'string')
+          .sort()
+          .map((storageType) => (
+            <option key={storageType} value={storageType}>
+              {getStorageTypeDisplayName(storageType as StorageType)}
+            </option>
+          ))}
       </Form.Select>
       <Form.Control.Feedback type="invalid">
         {errors.storageType ? errors.storageType.message?.toString() : null}
       </Form.Control.Feedback>
     </>
   );
-};
+}
 
 export default StorageTypeFilter;
