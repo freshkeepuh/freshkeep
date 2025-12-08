@@ -8,10 +8,10 @@ import { getStorageTypeDisplayName } from '@/lib/dbEnums';
 import RequiredLabel from '@/components/RequiredLabel';
 
 interface StorageTypeDropDownProps {
-  label?: string;
-  disabled?: boolean;
-  required?: boolean;
-  onChange?: React.ChangeEventHandler<HTMLSelectElement>;
+  label: string;
+  disabled: boolean;
+  required: boolean;
+  onChange: React.ChangeEventHandler<HTMLSelectElement>;
 }
 
 /**
@@ -21,14 +21,14 @@ interface StorageTypeDropDownProps {
  * not via a prop or defaultValue on the select element. Example:
  *   useForm({ defaultValues: { storageType: StorageType.Freezer } })
  */
-const StorageTypeDropDown: React.FC<StorageTypeDropDownProps> = (
-  {
-    label = 'Storage Type',
-    disabled = false,
-    required = false,
-    onChange = () => { /* no-op */ },
+function StorageTypeDropDown({
+  label = 'Storage Type',
+  disabled = false,
+  required = false,
+  onChange = () => {
+    /* no-op */
   },
-) => {
+}: StorageTypeDropDownProps) {
   const [isDisabled] = React.useState(disabled);
   const context = useFormContext();
   if (!context) {
@@ -40,8 +40,12 @@ const StorageTypeDropDown: React.FC<StorageTypeDropDownProps> = (
   } = context;
   return (
     <>
-      {(label && !required) && <Form.Label htmlFor="storageType">{label}</Form.Label>}
-      {(label && required) && <RequiredLabel htmlFor="storageType">{label}</RequiredLabel>}
+      {label && !required && (
+        <Form.Label htmlFor="storageType">{label}</Form.Label>
+      )}
+      {label && required && (
+        <RequiredLabel htmlFor="storageType">{label}</RequiredLabel>
+      )}
       <Form.Select
         id="storageType"
         size="lg"
@@ -51,22 +55,20 @@ const StorageTypeDropDown: React.FC<StorageTypeDropDownProps> = (
         isInvalid={!!errors.storageType}
         onChange={onChange}
       >
-        {
-          Object.values(StorageType)
-            .filter((storageType) => typeof storageType === 'string')
-            .sort()
-            .map((storageType) => (
-              <option key={storageType} value={storageType}>
-                {getStorageTypeDisplayName(storageType as StorageType)}
-              </option>
-            ))
-        }
+        {Object.values(StorageType)
+          .filter((storageType) => typeof storageType === 'string')
+          .sort()
+          .map((storageType) => (
+            <option key={storageType} value={storageType}>
+              {getStorageTypeDisplayName(storageType as StorageType)}
+            </option>
+          ))}
       </Form.Select>
       <Form.Control.Feedback type="invalid">
         {errors.storageType ? errors.storageType.message?.toString() : null}
       </Form.Control.Feedback>
     </>
   );
-};
+}
 
 export default StorageTypeDropDown;

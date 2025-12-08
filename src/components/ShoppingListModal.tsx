@@ -27,15 +27,24 @@ interface ShoppingListModalProps {
   items: GroceryItem[];
 }
 
-const ShoppingListModal = ({ show, onHide, listTitle, items }: ShoppingListModalProps) => {
+function ShoppingListModal({
+  show,
+  onHide,
+  listTitle,
+  items,
+}: ShoppingListModalProps) {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
 
   const handleButtonClick = (itemTitle: string, inList: boolean) => {
-    console.log(`${inList ? 'Removing' : 'Adding'} ${itemTitle} ${inList ? 'from' : 'to'} list`);
+    console.log(
+      `${inList ? 'Removing' : 'Adding'} ${itemTitle} ${inList ? 'from' : 'to'} list`,
+    );
   };
 
-  const filteredItems = items.filter((item) => item.groceryItemTitle.toLowerCase().includes(searchTerm.toLowerCase()));
+  const filteredItems = items.filter((item) =>
+    item.groceryItemTitle.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
@@ -53,11 +62,19 @@ const ShoppingListModal = ({ show, onHide, listTitle, items }: ShoppingListModal
     }
   };
 
-  const allSelected = filteredItems.length > 0 && selectedItems.length === filteredItems.length;
-  const someSelected = selectedItems.length > 0 && selectedItems.length < filteredItems.length;
+  const allSelected =
+    filteredItems.length > 0 && selectedItems.length === filteredItems.length;
+  const someSelected =
+    selectedItems.length > 0 && selectedItems.length < filteredItems.length;
 
   return (
-    <Modal show={show} onHide={onHide} size="lg" centered dialogClassName={styles.modal80w}>
+    <Modal
+      show={show}
+      onHide={onHide}
+      size="lg"
+      centered
+      dialogClassName={styles.modal80w}
+    >
       <Modal.Header closeButton className="bg-success text-white">
         <Modal.Title>{listTitle}</Modal.Title>
       </Modal.Header>
@@ -124,7 +141,8 @@ const ShoppingListModal = ({ show, onHide, listTitle, items }: ShoppingListModal
                       className="bg-white border rounded mb-2 py-2 px-3"
                       style={{
                         display: 'grid',
-                        gridTemplateColumns: '40px 80px 1fr 100px 100px 100px 90px',
+                        gridTemplateColumns:
+                          '40px 80px 1fr 100px 100px 100px 90px',
                         gap: '12px',
                         alignItems: 'center',
                         transition: 'all 0.2s',
@@ -132,18 +150,22 @@ const ShoppingListModal = ({ show, onHide, listTitle, items }: ShoppingListModal
                       }}
                       onMouseEnter={(e) => {
                         e.currentTarget.style.backgroundColor = '#f8f9fa';
-                        e.currentTarget.style.boxShadow = '0 2px 8px rgba(25, 135, 84, 0.15)';
+                        e.currentTarget.style.boxShadow =
+                          '0 2px 8px rgba(25, 135, 84, 0.15)';
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.backgroundColor = 'white';
-                        e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.05)';
+                        e.currentTarget.style.boxShadow =
+                          '0 1px 3px rgba(0,0,0,0.05)';
                       }}
                     >
                       <div className="d-flex align-items-center">
                         <Form.Check
                           type="checkbox"
                           checked={selectedItems.includes(item.id)}
-                          onChange={(e) => handleSelectItem(item.id, e.target.checked)}
+                          onChange={(e) =>
+                            handleSelectItem(item.id, e.target.checked)
+                          }
                           aria-label={`Select ${item.groceryItemTitle}`}
                         />
                       </div>
@@ -163,25 +185,43 @@ const ShoppingListModal = ({ show, onHide, listTitle, items }: ShoppingListModal
                       </div>
 
                       <div>
-                        <div style={{ fontSize: '14px', fontWeight: '600', color: '#212529' }}>
+                        <div
+                          style={{
+                            fontSize: '14px',
+                            fontWeight: '600',
+                            color: '#212529',
+                          }}
+                        >
                           {item.groceryItemTitle}
                         </div>
                       </div>
 
                       <div>
-                        <Badge bg="success" className="px-2 py-1" style={{ fontSize: '11px' }}>
+                        <Badge
+                          bg="success"
+                          className="px-2 py-1"
+                          style={{ fontSize: '11px' }}
+                        >
                           {item.groceryItemType}
                         </Badge>
                       </div>
 
                       <div>
-                        <Badge bg="secondary" className="px-2 py-1" style={{ fontSize: '11px' }}>
+                        <Badge
+                          bg="secondary"
+                          className="px-2 py-1"
+                          style={{ fontSize: '11px' }}
+                        >
                           {item.storageType}
                         </Badge>
                       </div>
 
                       <div>
-                        <Badge bg="secondary" className="px-2 py-1" style={{ fontSize: '11px' }}>
+                        <Badge
+                          bg="secondary"
+                          className="px-2 py-1"
+                          style={{ fontSize: '11px' }}
+                        >
                           {item.store}
                         </Badge>
                       </div>
@@ -190,8 +230,17 @@ const ShoppingListModal = ({ show, onHide, listTitle, items }: ShoppingListModal
                         <Button
                           variant={item.inList ? 'outline-danger' : 'success'}
                           size="sm"
-                          onClick={() => handleButtonClick(item.groceryItemTitle, item.inList)}
-                          style={{ width: '80px', fontSize: '12px', padding: '4px 8px' }}
+                          onClick={() =>
+                            handleButtonClick(
+                              item.groceryItemTitle,
+                              item.inList,
+                            )
+                          }
+                          style={{
+                            width: '80px',
+                            fontSize: '12px',
+                            padding: '4px 8px',
+                          }}
                         >
                           {item.inList ? 'Remove' : 'Add'}
                         </Button>
@@ -215,6 +264,6 @@ const ShoppingListModal = ({ show, onHide, listTitle, items }: ShoppingListModal
       </Modal.Footer>
     </Modal>
   );
-};
+}
 
 export default ShoppingListModal;

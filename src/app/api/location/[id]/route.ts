@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import getResponseError from '@/lib/routeHelpers';
-import { deleteLocation, readLocation, updateLocation } from '@/lib/dbLocationActions';
+import {
+  deleteLocation,
+  readLocation,
+  updateLocation,
+} from '@/lib/dbLocationActions';
 
 export const runtime = 'nodejs';
 
@@ -14,13 +18,19 @@ export async function GET(request: NextRequest, context: any) {
   try {
     const { id } = context.params;
     if (!id) {
-      return NextResponse.json({ error: 'Location ID is required' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Location ID is required' },
+        { status: 400 },
+      );
     }
 
     const location = await readLocation(id);
 
     if (!location) {
-      return NextResponse.json({ error: 'Location not found' }, { status: 404 });
+      return NextResponse.json(
+        { error: 'Location not found' },
+        { status: 404 },
+      );
     }
 
     return NextResponse.json(location);
@@ -39,7 +49,10 @@ export async function DELETE(request: NextRequest, context: any) {
   try {
     const { id } = context.params;
     if (!id) {
-      return NextResponse.json({ error: 'Location ID is required' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Location ID is required' },
+        { status: 400 },
+      );
     }
 
     await deleteLocation(id);
@@ -57,13 +70,19 @@ export async function PUT(request: NextRequest, context: any) {
   try {
     const { id } = context.params;
     if (!id) {
-      return NextResponse.json({ error: 'Location ID is required' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Location ID is required' },
+        { status: 400 },
+      );
     }
 
     const body = await request.json();
     const current = await readLocation(id);
     if (!current) {
-      return NextResponse.json({ error: 'Location not found' }, { status: 404 });
+      return NextResponse.json(
+        { error: 'Location not found' },
+        { status: 404 },
+      );
     }
 
     const updated = await updateLocation(id, {

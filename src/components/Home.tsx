@@ -6,7 +6,7 @@ import LoadingSpinner from '@/components/LoadingSpinner';
 import Welcome from '@/components/Welcome';
 
 /** The Home page. */
-const Home = () => {
+function Home() {
   const { data: session, status } = useSession();
 
   if (status === 'loading') {
@@ -14,11 +14,9 @@ const Home = () => {
   }
 
   if (session) {
-    return (
-      <Dashboard />
-    );
+    return <Dashboard />;
   }
   return <Welcome />;
-};
+}
 
 export default Home;

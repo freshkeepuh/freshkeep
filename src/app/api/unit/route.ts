@@ -29,7 +29,10 @@ export async function POST(request: NextRequest) {
     const { name, abbr, baseId, factor } = await request.json();
 
     if (!name || !abbr || !baseId || factor === undefined) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Missing required fields' },
+        { status: 400 },
+      );
     }
 
     const newUnit = await createUnit({
@@ -52,16 +55,13 @@ export async function POST(request: NextRequest) {
  */
 export async function PUT(request: NextRequest) {
   try {
-    const {
-      id,
-      name,
-      abbr,
-      baseId,
-      factor,
-    } = await request.json();
+    const { id, name, abbr, baseId, factor } = await request.json();
 
     if (!id || !name || !abbr || !baseId || factor === undefined) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Missing required fields' },
+        { status: 400 },
+      );
     }
 
     const updatedUnit = await updateUnit(id, {

@@ -11,14 +11,16 @@ import ErrorPopUp from '@/components/ErrorPopUp';
 import LogoHeader from '@/components/LogoHeader';
 import WelcomeSection from '@/components/WelcomeSection';
 import { redirect } from 'next/navigation';
-import EmailAddressField, { IEmailAddressField } from '@/components/EmailAddressField';
+import EmailAddressField, {
+  IEmailAddressField,
+} from '@/components/EmailAddressField';
 import PasswordField, { IPasswordField } from '@/components/PasswordField';
 
 import styles from './SignInPage.module.css';
 
 type SignInForm = IEmailAddressField & IPasswordField;
 
-const SignInPage = () => {
+function SignInPage() {
   const {
     register,
     handleSubmit,
@@ -42,9 +44,7 @@ const SignInPage = () => {
   return (
     <main className={`${styles.authHero} ${styles.twoUp}`}>
       {/* LEFT SIDE (hero) */}
-      <section
-        className={`${styles.side} ${styles.left}`}
-      >
+      <section className={`${styles.side} ${styles.left}`}>
         <div className={styles.overlayDark} />
         <div className={styles.welcomeWrap}>
           <WelcomeSection
@@ -55,9 +55,7 @@ const SignInPage = () => {
       </section>
 
       {/* RIGHT SIDE (form) */}
-      <section
-        className={`${styles.side} ${styles.right}`}
-      >
+      <section className={`${styles.side} ${styles.right}`}>
         <div className={styles.overlayLight} />
         <div className={styles.cardWrap}>
           <Card className={`shadow rounded-4 ${styles.glassyCard}`}>
@@ -75,17 +73,24 @@ const SignInPage = () => {
               <Form method="post" onSubmit={handleSubmit(onSubmit)}>
                 <Form.Group className="mb-4">
                   <EmailAddressField
-                    register={register as unknown as UseFormRegister<IEmailAddressField>}
+                    register={
+                      register as unknown as UseFormRegister<IEmailAddressField>
+                    }
                     errors={errors}
                     data-testid="sign-in-form-email-field"
+                    placeholder=""
+                    disabled={false}
                   />
                 </Form.Group>
 
                 <Form.Group className="mb-4">
                   <PasswordField
-                    register={register as unknown as UseFormRegister<IPasswordField>}
+                    register={
+                      register as unknown as UseFormRegister<IPasswordField>
+                    }
                     errors={errors}
                     data-testid="sign-in-form-password-field"
+                    placeholder=""
                   />
                 </Form.Group>
 
@@ -132,6 +137,6 @@ const SignInPage = () => {
       </section>
     </main>
   );
-};
+}
 
 export default SignInPage;

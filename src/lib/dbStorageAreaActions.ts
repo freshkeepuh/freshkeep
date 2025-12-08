@@ -20,10 +20,10 @@ import {
  * @returns The created storage area.
  */
 export async function createStorageArea(data: {
-  locId: string,
-  name: string,
-  type: string,
-  picture: string | undefined,
+  locId: string;
+  name: string;
+  type: string;
+  picture: string | undefined;
 }) {
   const newStorageArea = await prisma.storageArea.create({
     data: {
@@ -89,12 +89,15 @@ export async function readStorageArea(id: string | null | undefined) {
  * @param data The new data for the storage area.
  * @returns The updated storage area if found, otherwise null.
  */
-export async function updateStorageArea(id: string, data: {
-  locId: string,
-  name: string,
-  type: string,
-  picture: string | undefined,
-}) {
+export async function updateStorageArea(
+  id: string,
+  data: {
+    locId: string;
+    name: string;
+    type: string;
+    picture: string | undefined;
+  },
+) {
   const updatedStorageArea = await prisma.storageArea.update({
     where: { id },
     data: {

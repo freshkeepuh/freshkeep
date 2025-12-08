@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import getResponseError from '@/lib/routeHelpers';
-import { deleteShoppingList, readShoppingList } from '@/lib/dbShoppingListActions';
+import {
+  deleteShoppingList,
+  readShoppingList,
+} from '@/lib/dbShoppingListActions';
 
 export const runtime = 'nodejs';
 
@@ -14,13 +17,19 @@ export async function GET(request: NextRequest, context: any) {
   try {
     const { id } = context.params;
     if (!id) {
-      return NextResponse.json({ error: 'ShoppingList ID is required' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'ShoppingList ID is required' },
+        { status: 400 },
+      );
     }
 
     const shoppingList = await readShoppingList(id);
 
     if (!shoppingList) {
-      return NextResponse.json({ error: 'ShoppingList not found' }, { status: 404 });
+      return NextResponse.json(
+        { error: 'ShoppingList not found' },
+        { status: 404 },
+      );
     }
 
     return NextResponse.json(shoppingList);
@@ -39,7 +48,10 @@ export async function DELETE(request: NextRequest, context: any) {
   try {
     const { id } = context.params;
     if (!id) {
-      return NextResponse.json({ error: 'ShoppingList ID is required' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'ShoppingList ID is required' },
+        { status: 400 },
+      );
     }
 
     await deleteShoppingList(id);

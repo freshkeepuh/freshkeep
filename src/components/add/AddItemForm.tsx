@@ -1,29 +1,44 @@
 'use client';
 
 import { useMemo, useState, useCallback } from 'react';
-import type { $Enums } from '@prisma/client';
+import { $Enums, ProductCategory } from '@prisma/client';
 import { Button, Card, Col, Form, Row } from 'react-bootstrap';
 import ProductInformation from './ProductInformation';
 import Expiration from './ExpirySection';
-import type { ContainerOption, GroceryOption, LocationOption, UnitOption, Mode } from './types';
+import type {
+  ContainerOption,
+  GroceryOption,
+  LocationOption,
+  UnitOption,
+  Mode,
+} from './types';
 
 type GroceryCategory = $Enums.ProductCategory;
 
-type Props = {
+interface Props {
   locations: LocationOption[];
   containers: ContainerOption[];
   units: UnitOption[];
   groceries: GroceryOption[];
-};
+}
 
-export default function AddItemForm({ locations, containers, units, groceries }: Props) {
+export default function AddItemForm({
+  locations,
+  containers,
+  units,
+  groceries,
+}: Props) {
   const [mode, setMode] = useState<Mode>('existing');
   const [locId, setLocId] = useState('');
   const [conId, setConId] = useState('');
   const [groceryItemId, setGroceryItemId] = useState<string | null>(null);
   const [newName, setNewName] = useState('');
-  const [newCategory, setNewCategory] = useState<GroceryCategory | undefined>(undefined);
-  const [newDefaultQty, setNewDefaultQty] = useState<number | undefined>(undefined);
+  const [newCategory, setNewCategory] = useState<GroceryCategory | undefined>(
+    undefined,
+  );
+  const [newDefaultQty, setNewDefaultQty] = useState<number | undefined>(
+    undefined,
+  );
   const [newUnitId, setNewUnitId] = useState<string | undefined>(undefined);
   const [unitId, setUnitId] = useState('');
   const [quantity, setQuantity] = useState<number>(1);
@@ -36,23 +51,35 @@ export default function AddItemForm({ locations, containers, units, groceries }:
     [containers, locId],
   );
 
-  const handleLocChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
-    setLocId(e.currentTarget.value);
-    setConId('');
-  }, []);
+  const handleLocChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setLocId(e.currentTarget.value);
+      setConId('');
+    },
+    [],
+  );
 
-  const handleConChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
-    setConId(e.currentTarget.value);
-  }, []);
+  const handleConChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setConId(e.currentTarget.value);
+    },
+    [],
+  );
 
-  const handleUnitChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
-    setUnitId(e.currentTarget.value);
-  }, []);
+  const handleUnitChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      setUnitId(e.currentTarget.value);
+    },
+    [],
+  );
 
-  const handleQtyChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = Number(e.currentTarget.value || 0);
-    setQuantity(val);
-  }, []);
+  const handleQtyChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const val = Number(e.currentTarget.value || 0);
+      setQuantity(val);
+    },
+    [],
+  );
 
   const handleSubmitMock = useCallback(
     (e: React.FormEvent) => {
@@ -127,7 +154,11 @@ export default function AddItemForm({ locations, containers, units, groceries }:
             <Col md={6}>
               <Form.Group controlId="conId">
                 <Form.Label>Container</Form.Label>
-                <Form.Select value={conId} onChange={handleConChange} disabled={!locId}>
+                <Form.Select
+                  value={conId}
+                  onChange={handleConChange}
+                  disabled={!locId}
+                >
                   <option value="">Select…</option>
                   {filteredContainers.map((c) => (
                     <option key={c.id} value={c.id}>
@@ -148,11 +179,11 @@ export default function AddItemForm({ locations, containers, units, groceries }:
               setGroceryItemId={setGroceryItemId}
               newName={newName}
               setNewName={setNewName}
-              newCategory={newCategory}
+              newCategory={newCategory ?? ProductCategory.Bakery}
               setNewCategory={setNewCategory}
-              newDefaultQty={newDefaultQty}
+              newDefaultQty={newDefaultQty ?? 1}
               setNewDefaultQty={setNewDefaultQty}
-              newUnitId={newUnitId}
+              newUnitId={newUnitId ?? ''}
               setNewUnitId={setNewUnitId}
               units={units}
               disabled={false}
@@ -199,7 +230,11 @@ export default function AddItemForm({ locations, containers, units, groceries }:
 
           <div className="mt-4 d-flex gap-2">
             <Button type="submit">Add Item (Mock)</Button>
-            <Button type="button" variant="outline-secondary" onClick={handleReset}>
+            <Button
+              type="button"
+              variant="outline-secondary"
+              onClick={handleReset}
+            >
               Reset
             </Button>
           </div>
@@ -208,7 +243,10 @@ export default function AddItemForm({ locations, containers, units, groceries }:
         {submittedPreview && (
           <div className="mt-4">
             <h6 className="mb-2 text-muted">Mock submission preview</h6>
-            <pre className="bg-light p-3 rounded" style={{ whiteSpace: 'pre-wrap' }}>
+            <pre
+              className="bg-light p-3 rounded"
+              style={{ whiteSpace: 'pre-wrap' }}
+            >
               {submittedPreview}
             </pre>
           </div>

@@ -5,7 +5,15 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/settings.css';
-import { Row, Col, Card, Button, Form, ButtonGroup, ToggleButton } from 'react-bootstrap';
+import {
+  Row,
+  Col,
+  Card,
+  Button,
+  Form,
+  ButtonGroup,
+  ToggleButton,
+} from 'react-bootstrap';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Modal from 'react-bootstrap/Modal';
 import {
@@ -16,7 +24,7 @@ import {
   Camera,
 } from 'react-bootstrap-icons';
 
-type UserData = {
+interface UserData {
   firstName?: string;
   lastName?: string;
   email?: string;
@@ -24,13 +32,14 @@ type UserData = {
   theme?: 'light' | 'dark';
   units?: 'Imperial' | 'Metric';
   country?: string;
-};
+}
 
-type Props = { user?: UserData };
+interface Props {
+  user?: UserData;
+}
 
 const DEFAULT_UNITS: 'Imperial' | 'Metric' = 'Imperial';
 const DEFAULT_COUNTRY = 'USA';
-
 const DEFAULT_USER: UserData = {
   firstName: '',
   lastName: '',
@@ -42,11 +51,23 @@ const DEFAULT_USER: UserData = {
 };
 
 const AVATAR_PLACEHOLDER_CLASS = [
-  'avatar-xl', 'rounded-circle', 'd-flex', 'align-items-center', 'justify-content-center', 'border', 'bg-surface',
+  'avatar-xl',
+  'rounded-circle',
+  'd-flex',
+  'align-items-center',
+  'justify-content-center',
+  'border',
+  'bg-surface',
 ].join(' ');
 
 const AVATAR_ROW_CLASS = [
-  'd-flex', 'flex-column', 'flex-sm-row', 'align-items-center', 'justify-content-center', 'gap-3', 'avatar-row',
+  'd-flex',
+  'flex-column',
+  'flex-sm-row',
+  'align-items-center',
+  'justify-content-center',
+  'gap-3',
+  'avatar-row',
   'w-100',
 ].join(' ');
 
@@ -60,22 +81,25 @@ const applyTheme = (t: 'light' | 'dark') => {
   if (typeof localStorage !== 'undefined') localStorage.setItem('fk-theme', t);
 };
 
-const Settings: React.FC<Props> = ({ user = DEFAULT_USER }) => {
+function Settings({ user = DEFAULT_USER }: Props) {
   const router = useRouter();
-
   const [theme, setTheme] = useState<'light' | 'dark'>(user.theme ?? 'light');
   const [firstName, setFirstName] = useState<string>(user.firstName ?? '');
   const [lastName, setLastName] = useState<string>(user.lastName ?? '');
   const [email, setEmail] = useState<string>(user.email ?? '');
-  const [units, setUnits] = useState<'Imperial' | 'Metric'>(user.units ?? DEFAULT_UNITS);
-  const [country, setCountry] = useState<string>(user.country ?? DEFAULT_COUNTRY);
+  const [units, setUnits] = useState<'Imperial' | 'Metric'>(
+    user.units ?? DEFAULT_UNITS,
+  );
+  const [country, setCountry] = useState<string>(
+    user.country ?? DEFAULT_COUNTRY,
+  );
   const [profilePicture] = useState<string | null>(user.profilePicture ?? null);
   const [confirmOpen, setConfirmOpen] = useState(false);
 
   const initials = useMemo(() => {
     const f = (firstName?.trim()?.[0] ?? '').toUpperCase();
     const l = (lastName?.trim()?.[0] ?? '').toUpperCase();
-    return (f + l) || 'U';
+    return f + l || 'U';
   }, [firstName, lastName]);
 
   useEffect(() => {
@@ -84,7 +108,8 @@ const Settings: React.FC<Props> = ({ user = DEFAULT_USER }) => {
     }
 
     const saved = localStorage.getItem('fk-theme') as 'light' | 'dark' | null;
-    const sysDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
+    const sysDark =
+      window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
     const initial = saved ?? (sysDark ? 'dark' : 'light');
 
     setTheme(initial);
@@ -104,9 +129,13 @@ const Settings: React.FC<Props> = ({ user = DEFAULT_USER }) => {
     };
   }, []);
 
-  useEffect(() => { applyTheme(theme); }, [theme]);
+  useEffect(() => {
+    applyTheme(theme);
+  }, [theme]);
 
-  const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => { e.preventDefault(); };
+  const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
+  };
 
   const displayName = `${firstName} ${lastName}`.trim() || 'User';
 
@@ -129,7 +158,9 @@ const Settings: React.FC<Props> = ({ user = DEFAULT_USER }) => {
                 </span>
                 <div>
                   <h3 className="h5 m-0 text-body">User Information</h3>
-                  <small className="text-body-secondary">Name, region & units</small>
+                  <small className="text-body-secondary">
+                    Name, region & units
+                  </small>
                 </div>
               </div>
             </Card.Header>
@@ -210,7 +241,11 @@ const Settings: React.FC<Props> = ({ user = DEFAULT_USER }) => {
                       <Form.Select
                         aria-label="Units"
                         value={units}
-                        onChange={(e) => setUnits(e.currentTarget.value as 'Imperial' | 'Metric')}
+                        onChange={(e) =>
+                          setUnits(
+                            e.currentTarget.value as 'Imperial' | 'Metric',
+                          )
+                        }
                       >
                         <option value="Imperial">Imperial</option>
                         <option value="Metric">Metric</option>
@@ -232,7 +267,11 @@ const Settings: React.FC<Props> = ({ user = DEFAULT_USER }) => {
                 </Row>
 
                 <div className="d-grid">
-                  <Button type="submit" variant="primary" className="btn-gradient btn-lg">
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    className="btn-gradient btn-lg"
+                  >
                     Update Profile
                   </Button>
                 </div>
@@ -250,7 +289,9 @@ const Settings: React.FC<Props> = ({ user = DEFAULT_USER }) => {
                 </span>
                 <div>
                   <h3 className="h5 m-0 text-body">Appearance</h3>
-                  <small className="text-body-secondary">Choose your theme</small>
+                  <small className="text-body-secondary">
+                    Choose your theme
+                  </small>
                 </div>
               </div>
             </Card.Header>
@@ -276,7 +317,9 @@ const Settings: React.FC<Props> = ({ user = DEFAULT_USER }) => {
                   <ToggleButton
                     id="theme-dark"
                     type="radio"
-                    variant={theme === 'dark' ? 'secondary' : 'outline-secondary'}
+                    variant={
+                      theme === 'dark' ? 'secondary' : 'outline-secondary'
+                    }
                     name="theme"
                     value="dark"
                     checked={theme === 'dark'}
@@ -348,6 +391,10 @@ const Settings: React.FC<Props> = ({ user = DEFAULT_USER }) => {
       </Modal>
     </>
   );
+}
+
+Settings.defaultProps = {
+  user: DEFAULT_USER,
 };
 
 export default Settings;

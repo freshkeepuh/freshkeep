@@ -139,7 +139,9 @@ export async function createCatalogItem({
         }
 
         if (!user) {
-          throw new Error(`User with ID ${userId} not found and cannot create catalog entry`);
+          throw new Error(
+            `User with ID ${userId} not found and cannot create catalog entry`,
+          );
         }
 
         // Use the actual user ID from database
@@ -247,7 +249,10 @@ export async function getUserCatalogItems(userId: string) {
  * @param userId - The user's ID
  * @param storeName - The store name to filter by
  */
-export async function getUserCatalogItemsByStore(userId: string, storeName: string) {
+export async function getUserCatalogItemsByStore(
+  userId: string,
+  storeName: string,
+) {
   const catalogItems = await prisma.catalog.findMany({
     where: {
       userId,

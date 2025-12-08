@@ -5,7 +5,10 @@ const LIST_URL = `${BASE_URL}/recipes`;
 
 /** Helper: parse "Showing X results" and return X as a number */
 async function getResultsCount(page: Page): Promise<number> {
-  const txt = await page.getByText(/^Showing\s+\d+\s+results$/).first().textContent();
+  const txt = await page
+    .getByText(/^Showing\s+\d+\s+results$/)
+    .first()
+    .textContent();
   const m = txt?.match(/\b(\d+)\b/);
   return m ? Number(m[1]) : 0;
 }
@@ -16,7 +19,9 @@ test.describe('Recipes (no code changes)', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(LIST_URL);
     await page.waitForLoadState('networkidle');
-    await expect(page.getByText(/^Showing\s+\d+\s+results$/).first()).toBeVisible();
+    await expect(
+      page.getByText(/^Showing\s+\d+\s+results$/).first(),
+    ).toBeVisible();
   });
 
   test('List loads and count matches number of cards', async ({ page }) => {
@@ -26,7 +31,9 @@ test.describe('Recipes (no code changes)', () => {
     await expect(cards).toHaveCount(expected);
   });
 
-  test('Search filters by title/ingredient (e.g., "pasta")', async ({ page }) => {
+  test('Search filters by title/ingredient (e.g., "pasta")', async ({
+    page,
+  }) => {
     // Search input uses placeholder "example: soup, pasta"
     await page.getByPlaceholder('example: soup, pasta').fill('pasta');
     // "Search" button has visible text "Search"
@@ -38,7 +45,9 @@ test.describe('Recipes (no code changes)', () => {
 
     // If nothing matches, we show an empty state
     if (expected === 0) {
-      await expect(page.getByText('No recipes match your filters.')).toBeVisible();
+      await expect(
+        page.getByText('No recipes match your filters.'),
+      ).toBeVisible();
     }
   });
 
@@ -53,7 +62,9 @@ test.describe('Recipes (no code changes)', () => {
     await expect(page.getByRole('article')).toHaveCount(expected);
   });
 
-  test('Ingredient chips add/remove/deduplication ("Tomato")', async ({ page }) => {
+  test('Ingredient chips add/remove/deduplication ("Tomato")', async ({
+    page,
+  }) => {
     // Ingredient input uses placeholder "example: tomato, beef"
     await page.getByPlaceholder('example: tomato, beef').fill('Tomato');
     await page.getByRole('button', { name: 'Add' }).click();
@@ -63,9 +74,7 @@ test.describe('Recipes (no code changes)', () => {
     await page.getByRole('button', { name: 'Add' }).click();
 
     // Verify that adding "tomato" after "Tomato" does not create a second chip
-    const removeTomato = page.getByRole('button', { name: 'Remove Tomato' }).or(
-      page.getByRole('button', { name: 'Remove tomato' }),
-    );
+    const removeTomato = page.getByRole('button', { name: /Remove Tomato/i });
     // If present, click it
     if (await removeTomato.isVisible()) {
       await removeTomato.click();

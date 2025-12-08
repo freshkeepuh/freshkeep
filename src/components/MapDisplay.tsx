@@ -3,14 +3,17 @@
 import { APIProvider, Map, Marker } from '@vis.gl/react-google-maps';
 import { useEffect, useState } from 'react';
 
-type LatLng = { lat: number; lng: number };
+interface LatLng {
+  lat: number;
+  lng: number;
+}
 const FALLBACK_CENTER: LatLng = { lat: 21.3099, lng: -157.8581 };
 
-type Props = {
+interface Props {
   location?: { id: string; name: string; address: string };
-};
+}
 
-const MapComponent = ({ location }: Props) => {
+function MapComponent({ location }: Props) {
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
   const address = location?.address;
   const [center, setCenter] = useState<LatLng>(FALLBACK_CENTER);
@@ -41,20 +44,23 @@ const MapComponent = ({ location }: Props) => {
       }
     })();
 
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [apiKey, address]);
 
   if (!ready) {
     return (
-      <div style={{
-        width: '100%',
-        height: '400px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: '#f8f9fa',
-        borderRadius: '8px',
-      }}
+      <div
+        style={{
+          width: '100%',
+          height: '400px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: '#f8f9fa',
+          borderRadius: '8px',
+        }}
       >
         Loading map...
       </div>
@@ -74,7 +80,7 @@ const MapComponent = ({ location }: Props) => {
       </Map>
     </APIProvider>
   );
-};
+}
 
 MapComponent.defaultProps = {
   location: undefined,

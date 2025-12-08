@@ -7,17 +7,21 @@ import { Row, Col, Container, Card, Button, ListGroup } from 'react-bootstrap';
 import swal from 'sweetalert';
 // components
 import StorageList, { StorageType } from '@/components/dashboard/StorageList';
-import AddStorageModal, { NewStorageData } from '@/components/dashboard/AddStorageModal';
+import AddStorageModal, {
+  NewStorageData,
+} from '@/components/dashboard/AddStorageModal';
 import DashboardTileButton from '@/components/dashboard/DashboardTileButton';
 import styles from '../../styles/dashboard.module.css';
 
-const DashboardPage = () => {
+function DashboardPage(): React.JSX.Element {
   const router = useRouter();
   const { data: session } = useSession();
 
   const [storages, setStorages] = useState<StorageType[]>([]);
   const [totalItems, setTotalItems] = useState(0);
-  const [locations, setLocations] = useState<{ id: string; name: string }[]>([]);
+  const [locations, setLocations] = useState<{ id: string; name: string }[]>(
+    [],
+  );
   const [expiringSoon, setExpiringSoon] = useState(0);
   const [shoppingListCount, setShoppingListCount] = useState(0);
   const [showModal, setShowModal] = useState(false);
@@ -38,8 +42,9 @@ const DashboardPage = () => {
           setTotalItems(0);
         }
         if (locationsRes.ok) {
-          const locs: { id: string; name: string }[] = await locationsRes.json();
-          setLocations(locs.map(l => ({ id: l.id, name: l.name })));
+          const locs: { id: string; name: string }[] =
+            await locationsRes.json();
+          setLocations(locs.map((l) => ({ id: l.id, name: l.name })));
         } else {
           setLocations([]);
         }
@@ -48,16 +53,19 @@ const DashboardPage = () => {
         setShoppingListCount(5);
       }
     };
-    load().catch(err => {
+    load().catch((err) => {
       console.error('Failed to load dashboard data', err);
     });
   }, []);
 
-  const locationsById = useMemo(() => {
-    const map: Record<string, string> = {};
-    for (const l of locations) map[l.id] = l.name;
-    return map;
-  }, [locations]);
+  const locationsById = useMemo(
+    () =>
+      Object.fromEntries(locations.map((l) => [l.id, l.name])) as Record<
+        string,
+        string
+      >,
+    [locations],
+  );
 
   const handleAddStorage = async (newStorage: NewStorageData) => {
     try {
@@ -81,7 +89,8 @@ const DashboardPage = () => {
       setTotalItems((prev) => prev + (createdStorage.itemCount || 0));
     } catch (error) {
       console.error('Error adding storage:', error);
-      const message = error instanceof Error ? error.message : 'Failed to add storage';
+      const message =
+        error instanceof Error ? error.message : 'Failed to add storage';
       await swal('Error', message, 'error');
     }
   };
@@ -92,28 +101,13 @@ const DashboardPage = () => {
       <Card className={styles.dashboardHeader}>
         <Card.Body>
           <Card.Title as="h1">
-            Welcome back,
-            {' '}
-            {session?.user?.email?.split('@')[0] || 'user'}
-            !
+            Welcome back, {session?.user?.email?.split('@')[0] || 'user'}!
           </Card.Title>
           <Card.Text>
-            You have
-            {' '}
-            <span className={styles.greenText}>
-              {totalItems}
-              {' '}
-              items
-            </span>
-            {' '}
-            across your storage areas.
-            {' '}
-            <span className={styles.orangeText}>
-              {expiringSoon}
-              {' '}
-              items
-            </span>
-            {' '}
+            You have{' '}
+            <span className={styles.greenText}>{totalItems} items </span>
+            across your storage areas.{' '}
+            <span className={styles.orangeText}>{expiringSoon} items </span>
             are expiring soon.
           </Card.Text>
         </Card.Body>
@@ -187,10 +181,16 @@ const DashboardPage = () => {
           <Card className={`${styles.quickActions} mt-3`}>
             <Card.Body>
               <Card.Title>Quick Actions</Card.Title>
-              <Button className={`w-100 mt-2 ${styles.actionBtn}`} onClick={() => router.push('/recipes')}>
+              <Button
+                className={`w-100 mt-2 ${styles.actionBtn}`}
+                onClick={() => router.push('/recipes')}
+              >
                 🍳 Find Recipes
               </Button>
-              <Button className={`w-100 mt-2 ${styles.actionBtn}`} onClick={() => router.push('/shoppingList')}>
+              <Button
+                className={`w-100 mt-2 ${styles.actionBtn}`}
+                onClick={() => router.push('/shoppingList')}
+              >
                 🛒 View Shopping List
               </Button>
             </Card.Body>
@@ -207,6 +207,6 @@ const DashboardPage = () => {
       />
     </Container>
   );
-};
+}
 
 export default DashboardPage;

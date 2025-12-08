@@ -9,10 +9,14 @@ import { splitIngredientsByStock } from '@/lib/ingredientMatch';
  */
 const toUiDifficulty = (d: RecipeDifficulty): UiRecipe['difficulty'] => {
   switch (d) {
-    case 'EASY': return 'Easy';
-    case 'NORMAL': return 'Normal';
-    case 'HARD': return 'Hard';
-    default: return 'Any';
+    case 'EASY':
+      return 'Easy';
+    case 'NORMAL':
+      return 'Normal';
+    case 'HARD':
+      return 'Hard';
+    default:
+      return 'Any';
   }
 };
 
@@ -21,10 +25,14 @@ const toUiDifficulty = (d: RecipeDifficulty): UiRecipe['difficulty'] => {
  */
 const toUiDiet = (d: RecipeDiet): UiRecipe['diet'] => {
   switch (d) {
-    case 'VEGAN': return 'Vegan';
-    case 'VEGETARIAN': return 'Vegetarian';
-    case 'PESCETARIAN': return 'Pescetarian';
-    default: return 'Any';
+    case 'VEGAN':
+      return 'Vegan';
+    case 'VEGETARIAN':
+      return 'Vegetarian';
+    case 'PESCETARIAN':
+      return 'Pescetarian';
+    default:
+      return 'Any';
   }
 };
 
@@ -35,9 +43,11 @@ const toUiDiet = (d: RecipeDiet): UiRecipe['diet'] => {
 export default async function Page(props: any) {
   // Normalize searchParams (Next may give it as a Promise)
   const rawSearchParams = await Promise.resolve(props?.searchParams ?? {});
-  const selectedLocationId = typeof rawSearchParams.locationId === 'string' && rawSearchParams.locationId.length > 0
-    ? rawSearchParams.locationId
-    : '';
+  const selectedLocationId =
+    typeof rawSearchParams.locationId === 'string' &&
+    rawSearchParams.locationId.length > 0
+      ? rawSearchParams.locationId
+      : '';
 
   // Load recipes, in-stock product instances and locations
   const [rows, instances, locations] = await Promise.all([
@@ -61,11 +71,8 @@ export default async function Page(props: any) {
   const initialRecipes: UiRecipe[] = rows.map((r) => {
     const ingredients = (r.ingredients as string[]) ?? [];
 
-    const {
-      haveCount,
-      missingCount,
-      totalIngredients,
-    } = splitIngredientsByStock(ingredients, haveNames);
+    const { haveCount, missingCount, totalIngredients } =
+      splitIngredientsByStock(ingredients, haveNames);
 
     return {
       id: r.id,

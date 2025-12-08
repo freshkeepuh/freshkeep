@@ -6,23 +6,25 @@ import Link from 'next/link';
 import { DIFFICULTY_OPTIONS, DIET_OPTIONS } from '@/lib/recipeUI';
 import styles from '@/app/recipes/add/recipesPage.module.css';
 
-type AddRecipeFormProps = {
+interface AddRecipeFormProps {
   action: (formData: FormData) => Promise<void>;
-};
+}
 
 // Red asterisk that fades in when the field is invalid
-const RequiredStar = ({ active }: { active: boolean }) => (
-  <span
-    style={{
-      color: '#d93025',
-      marginLeft: 4,
-      opacity: active ? 1 : 0,
-      transition: 'opacity 0.25s ease',
-    }}
-  >
-    *
-  </span>
-);
+function RequiredStar({ active }: { active: boolean }) {
+  return (
+    <span
+      style={{
+        color: '#d93025',
+        marginLeft: 4,
+        opacity: active ? 1 : 0,
+        transition: 'opacity 0.25s ease',
+      }}
+    >
+      *
+    </span>
+  );
+}
 
 // Multiline placeholders without long lines
 const INGREDIENTS_PLACEHOLDER = [
@@ -95,9 +97,10 @@ export default function AddRecipeForm({ action }: AddRecipeFormProps) {
       try {
         await action(formData);
       } catch (err: unknown) {
-        const message = err instanceof Error
-          ? err.message
-          : 'Something went wrong while creating the recipe.';
+        const message =
+          err instanceof Error
+            ? err.message
+            : 'Something went wrong while creating the recipe.';
         setError(message);
       }
     });
@@ -127,10 +130,7 @@ export default function AddRecipeForm({ action }: AddRecipeFormProps) {
 
       {/* Title */}
       <div className="col-12">
-        <label
-          htmlFor="title"
-          className="form-label fw-semibold w-100"
-        >
+        <label htmlFor="title" className="form-label fw-semibold w-100">
           <span>
             Title
             <RequiredStar active={!!fieldErrors.title} />
@@ -144,18 +144,13 @@ export default function AddRecipeForm({ action }: AddRecipeFormProps) {
           />
         </label>
         {fieldErrors.title && (
-          <div className="invalid-feedback d-block">
-            {fieldErrors.title}
-          </div>
+          <div className="invalid-feedback d-block">{fieldErrors.title}</div>
         )}
       </div>
 
       {/* Cook Time */}
       <div className="col-12" style={{ maxWidth: '250px' }}>
-        <label
-          htmlFor="cookTime"
-          className="form-label fw-semibold w-100"
-        >
+        <label htmlFor="cookTime" className="form-label fw-semibold w-100">
           <span>
             Cook Time (minutes)
             <RequiredStar active={!!fieldErrors.cookTime} />
@@ -170,9 +165,7 @@ export default function AddRecipeForm({ action }: AddRecipeFormProps) {
           />
         </label>
         {fieldErrors.cookTime && (
-          <div className="invalid-feedback d-block">
-            {fieldErrors.cookTime}
-          </div>
+          <div className="invalid-feedback d-block">{fieldErrors.cookTime}</div>
         )}
       </div>
 
@@ -206,10 +199,7 @@ export default function AddRecipeForm({ action }: AddRecipeFormProps) {
 
           {/* Diet */}
           <div>
-            <label
-              htmlFor="diet"
-              className="form-label fw-semibold w-100"
-            >
+            <label htmlFor="diet" className="form-label fw-semibold w-100">
               <span>
                 Diet
                 <RequiredStar active={false} />
@@ -231,10 +221,7 @@ export default function AddRecipeForm({ action }: AddRecipeFormProps) {
 
           {/* Image Upload */}
           <div>
-            <label
-              htmlFor="image"
-              className="form-label fw-semibold w-100"
-            >
+            <label htmlFor="image" className="form-label fw-semibold w-100">
               <span>Recipe Image</span>
               <input
                 id="image"
@@ -250,10 +237,7 @@ export default function AddRecipeForm({ action }: AddRecipeFormProps) {
 
       {/* Ingredients */}
       <div className="col-12">
-        <label
-          htmlFor="ingredients"
-          className="form-label fw-semibold w-100"
-        >
+        <label htmlFor="ingredients" className="form-label fw-semibold w-100">
           <span>
             Ingredients (one per line)
             <RequiredStar active={!!fieldErrors.ingredients} />
@@ -275,10 +259,7 @@ export default function AddRecipeForm({ action }: AddRecipeFormProps) {
 
       {/* Instructions */}
       <div className="col-12">
-        <label
-          htmlFor="instructions"
-          className="form-label fw-semibold w-100"
-        >
+        <label htmlFor="instructions" className="form-label fw-semibold w-100">
           <span>
             Instructions (each step on a new line)
             <RequiredStar active={!!fieldErrors.instructions} />
@@ -300,11 +281,7 @@ export default function AddRecipeForm({ action }: AddRecipeFormProps) {
 
       {/* Buttons */}
       <div className="col-12 d-flex gap-2 mt-3">
-        <button
-          type="submit"
-          className={styles.rpBtnDark}
-          disabled={isPending}
-        >
+        <button type="submit" className={styles.rpBtnDark} disabled={isPending}>
           {isPending ? 'Saving…' : 'Save Recipe'}
         </button>
 

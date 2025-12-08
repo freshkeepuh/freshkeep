@@ -4,11 +4,11 @@ import React from 'react';
 import styles from './add.module.css';
 import type { StorageUnit } from './types';
 
-type Props = {
+interface Props {
   units: StorageUnit[];
   selected: StorageUnit | null;
   onSelect: (u: StorageUnit) => void;
-};
+}
 
 export default function StorageSelector({ units, selected, onSelect }: Props) {
   return (

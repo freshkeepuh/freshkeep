@@ -18,7 +18,12 @@ interface AddStorageModalProps {
   locations: { id: string; name: string }[]; // narrow Location type as needed
 }
 
-export default function AddStorageModal({ show, onClose, onAdd, locations }: AddStorageModalProps) {
+export default function AddStorageModal({
+  show,
+  onClose,
+  onAdd,
+  locations,
+}: AddStorageModalProps) {
   const [formData, setFormData] = useState<NewStorageData>({
     name: '',
     type: '' as any,
@@ -26,9 +31,15 @@ export default function AddStorageModal({ show, onClose, onAdd, locations }: Add
     locId: '',
   });
 
-  const [errors, setErrors] = useState<{ [key in keyof NewStorageData]?: boolean }>({});
+  const [errors, setErrors] = useState<{
+    [key in keyof NewStorageData]?: boolean;
+  }>({});
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
@@ -51,7 +62,8 @@ export default function AddStorageModal({ show, onClose, onAdd, locations }: Add
     }
 
     // convert input itemCount to number
-    const itemCountNumber = formData.itemCount === '' ? 0 : Number(formData.itemCount);
+    const itemCountNumber =
+      formData.itemCount === '' ? 0 : Number(formData.itemCount);
 
     const submissionData: NewStorageData = {
       name: formData.name.trim(),
@@ -83,26 +95,43 @@ export default function AddStorageModal({ show, onClose, onAdd, locations }: Add
               onChange={handleChange}
               isInvalid={errors.name}
             />
-            <Form.Control.Feedback type="invalid">Please provide a storage name.</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">
+              Please provide a storage name.
+            </Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group className="mb-3">
             <RequiredLabel htmlFor="type">Storage Type</RequiredLabel>
-            <Form.Select name="type" value={formData.type} onChange={handleChange} isInvalid={errors.type}>
-              <option value="" disabled hidden>Select type</option>
+            <Form.Select
+              name="type"
+              value={formData.type}
+              onChange={handleChange}
+              isInvalid={errors.type}
+            >
+              <option value="" disabled hidden>
+                Select type
+              </option>
               <option value="Fridge">Fridge</option>
               <option value="Freezer">Freezer</option>
               <option value="Pantry">Pantry</option>
               <option value="Spice Rack">Spice Rack</option>
               <option value="Other">Other</option>
             </Form.Select>
-            <Form.Control.Feedback type="invalid">Please select a storage type.</Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">
+              Please select a storage type.
+            </Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group controlId="storageLocation" className="mb-3">
             <Form.Label>Location</Form.Label>
-            <Form.Select name="locId" value={formData.locId} onChange={handleChange}>
-              <option value="" disabled hidden>Select location</option>
+            <Form.Select
+              name="locId"
+              value={formData.locId}
+              onChange={handleChange}
+            >
+              <option value="" disabled hidden>
+                Select location
+              </option>
               {locations.map((loc) => (
                 <option key={loc.id} value={loc.id}>
                   {loc.name}

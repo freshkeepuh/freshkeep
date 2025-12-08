@@ -8,10 +8,10 @@ import { getCountryDisplayName } from '@/lib/dbEnums';
 import RequiredLabel from './RequiredLabel';
 
 interface CountryDropDownProps {
-  label?: string;
-  disabled?: boolean;
-  required?: boolean;
-  onChange?: React.ChangeEventHandler<HTMLSelectElement>;
+  label: string;
+  disabled: boolean;
+  required: boolean;
+  onChange: React.ChangeEventHandler<HTMLSelectElement>;
 }
 
 /**
@@ -21,14 +21,12 @@ interface CountryDropDownProps {
  * not via a prop or defaultValue on the select element. Example:
  *   useForm({ defaultValues: { country: Country.USA } })
  */
-const CountryDropDown: React.FC<CountryDropDownProps> = (
-  {
-    label = 'Country',
-    disabled = false,
-    required = false,
-    onChange = () => { /* no-op */ },
-  },
-) => {
+function CountryDropDown({
+  label = 'Country',
+  disabled = false,
+  required = false,
+  onChange = () => {},
+}: CountryDropDownProps): React.JSX.Element {
   const context = useFormContext();
   if (!context) {
     throw new Error('CountryDropDown must be used within a FormProvider');
@@ -39,8 +37,10 @@ const CountryDropDown: React.FC<CountryDropDownProps> = (
   } = context;
   return (
     <>
-      {(label && !required) && <Form.Label htmlFor="country">{label}</Form.Label>}
-      {(label && required) && <RequiredLabel htmlFor="country">{label}</RequiredLabel>}
+      {label && !required && <Form.Label htmlFor="country">{label}</Form.Label>}
+      {label && required && (
+        <RequiredLabel htmlFor="country">{label}</RequiredLabel>
+      )}
       <Form.Select
         id="country"
         size="lg"
@@ -51,22 +51,20 @@ const CountryDropDown: React.FC<CountryDropDownProps> = (
         isInvalid={!!errors.country}
         onChange={onChange}
       >
-        {
-          Object.values(Country)
-            .filter((country) => typeof country === 'string')
-            .sort()
-            .map((country) => (
-              <option key={country} value={country}>
-                {getCountryDisplayName(country as Country)}
-              </option>
-            ))
-        }
+        {Object.values(Country)
+          .filter((country) => typeof country === 'string')
+          .sort()
+          .map((country) => (
+            <option key={country} value={country}>
+              {getCountryDisplayName(country as Country)}
+            </option>
+          ))}
       </Form.Select>
       <Form.Control.Feedback type="invalid">
         {errors.country ? errors.country.message?.toString() : null}
       </Form.Control.Feedback>
     </>
   );
-};
+}
 
 export default CountryDropDown;

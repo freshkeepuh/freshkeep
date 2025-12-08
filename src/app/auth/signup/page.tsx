@@ -11,15 +11,19 @@ import { signUpValidation } from '@/lib/validationSchemas';
 import ErrorPopUp from '@/components/ErrorPopUp';
 import LogoHeader from '@/components/LogoHeader';
 import WelcomeSection from '@/components/WelcomeSection';
-import EmailAddressField, { IEmailAddressField } from '@/components/EmailAddressField';
+import EmailAddressField, {
+  IEmailAddressField,
+} from '@/components/EmailAddressField';
 import PasswordField, { IPasswordField } from '@/components/PasswordField';
-import ConfirmPasswordField, { IConfirmPasswordField } from '@/components/ConfirmPasswordField';
+import ConfirmPasswordField, {
+  IConfirmPasswordField,
+} from '@/components/ConfirmPasswordField';
 
 import styles from './SignUpPage.module.css';
 
 type SignUpForm = IEmailAddressField & IPasswordField & IConfirmPasswordField;
 
-const SignUpPage = () => {
+function SignUpPage() {
   const router = useRouter();
   const {
     register,
@@ -79,23 +83,32 @@ const SignUpPage = () => {
               <Form method="post" onSubmit={handleSubmit(onSubmit)}>
                 <Form.Group className="mb-4">
                   <EmailAddressField
-                    register={register as unknown as UseFormRegister<IEmailAddressField>}
+                    register={
+                      register as unknown as UseFormRegister<IEmailAddressField>
+                    }
                     errors={errors}
                     data-testid="sign-up-form-email-field"
+                    placeholder=""
+                    disabled={false}
                   />
                 </Form.Group>
 
                 <Form.Group className="mb-4">
                   <PasswordField
-                    register={register as unknown as UseFormRegister<IPasswordField>}
+                    register={
+                      register as unknown as UseFormRegister<IPasswordField>
+                    }
                     errors={errors}
                     data-testid="sign-up-form-password-field"
+                    placeholder=""
                   />
                 </Form.Group>
 
                 <Form.Group className="mb-4">
                   <ConfirmPasswordField
-                    register={register as unknown as UseFormRegister<IConfirmPasswordField>}
+                    register={
+                      register as unknown as UseFormRegister<IConfirmPasswordField>
+                    }
                     errors={errors}
                     data-testid="sign-up-form-confirm-password-field"
                   />
@@ -144,6 +157,6 @@ const SignUpPage = () => {
       </section>
     </main>
   );
-};
+}
 
 export default SignUpPage;

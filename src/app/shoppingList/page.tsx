@@ -10,7 +10,7 @@ import Badge from 'react-bootstrap/Badge';
 import ShoppingListCard from '@/components/ShoppingListCard';
 import ShoppingListModal from '@/components/ShoppingListModal';
 
-const ShoppingListPage = () => {
+function ShoppingListPage() {
   const [showModal, setShowModal] = useState(false);
   const [selectedList, setSelectedList] = useState<{
     title: string;
@@ -21,7 +21,8 @@ const ShoppingListPage = () => {
     () => [
       {
         id: 'groceryItem-1',
-        groceryItemImage: 'https://images.cdn.shop.foodland.com/detail/4011.jpg',
+        groceryItemImage:
+          'https://images.cdn.shop.foodland.com/detail/4011.jpg',
         groceryItemTitle: 'Bananas',
         store: 'Foodland',
         storageType: 'Counter',
@@ -78,7 +79,8 @@ const ShoppingListPage = () => {
       },
       {
         id: 'groceryItem-8',
-        groceryItemImage: 'https://target.scene7.com/is/image/Target/GUEST_8cc36efc-6e13-4cd6-aac4-dc0d79de2851',
+        groceryItemImage:
+          'https://target.scene7.com/is/image/Target/GUEST_8cc36efc-6e13-4cd6-aac4-dc0d79de2851',
         groceryItemTitle: 'Oreos',
         store: 'Walmart',
         storageType: 'Pantry',
@@ -91,11 +93,16 @@ const ShoppingListPage = () => {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedStores, setSelectedStores] = useState<string[]>([]);
-  const [selectedStorageTypes, setSelectedStorageTypes] = useState<string[]>([]);
+  const [selectedStorageTypes, setSelectedStorageTypes] = useState<string[]>(
+    [],
+  );
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(false);
 
-  const uniqueStores = useMemo(() => [...new Set(samplegroceryItems.map((item) => item.store))], [samplegroceryItems]);
+  const uniqueStores = useMemo(
+    () => [...new Set(samplegroceryItems.map((item) => item.store))],
+    [samplegroceryItems],
+  );
   const uniqueStorageTypes = useMemo(
     () => [...new Set(samplegroceryItems.map((item) => item.storageType))],
     [samplegroceryItems],
@@ -124,14 +131,21 @@ const ShoppingListPage = () => {
     setSearchTerm('');
   };
 
-  const activeFiltersCount = selectedStores.length + selectedStorageTypes.length + selectedTypes.length;
+  const activeFiltersCount =
+    selectedStores.length + selectedStorageTypes.length + selectedTypes.length;
 
   // Test data for shopping list cards
   const shoppingLists = [
     {
       id: 1,
       title: 'Weekly Groceries',
-      items: ['Bananas', 'Greek Yogurt', 'Whole Wheat Bread', 'Chicken Breasts', 'Olive Oil'],
+      items: [
+        'Bananas',
+        'Greek Yogurt',
+        'Whole Wheat Bread',
+        'Chicken Breasts',
+        'Olive Oil',
+      ],
       fullItems: samplegroceryItems.slice(0, 5),
     },
     {
@@ -149,7 +163,14 @@ const ShoppingListPage = () => {
     {
       id: 4,
       title: 'Meal Prep',
-      items: ['Rice', 'Beans', 'Ground Beef', 'Tomatoes', 'Onions', 'Bell Peppers'],
+      items: [
+        'Rice',
+        'Beans',
+        'Ground Beef',
+        'Tomatoes',
+        'Onions',
+        'Bell Peppers',
+      ],
       fullItems: samplegroceryItems.slice(0, 6),
     },
   ];
@@ -173,7 +194,10 @@ const ShoppingListPage = () => {
         }}
         className="d-flex justify-content-center bg-success p-1 rounded mb-4"
       >
-        <Row className="align-items-center justify-content-center py-3" style={{ height: '50px' }}>
+        <Row
+          className="align-items-center justify-content-center py-3"
+          style={{ height: '50px' }}
+        >
           <Col xs="auto" className="px-1">
             <Form.Control
               type="search"
@@ -184,9 +208,14 @@ const ShoppingListPage = () => {
             />
           </Col>
           <Col xs="auto" className="ps-1">
-            <Button variant="light" onClick={() => setShowFilters(!showFilters)}>
+            <Button
+              variant="light"
+              onClick={() => setShowFilters(!showFilters)}
+            >
               Filters
-              {activeFiltersCount > 0 && <Badge bg="success">{activeFiltersCount}</Badge>}
+              {activeFiltersCount > 0 && (
+                <Badge bg="success">{activeFiltersCount}</Badge>
+              )}
             </Button>
           </Col>
           <Col xs="auto" className="ps-1">
@@ -222,7 +251,14 @@ const ShoppingListPage = () => {
           </div>
           <Row className="g-4">
             <Col md={4} className="d-flex flex-column ps-3">
-              <div className="mb-2" style={{ fontSize: '18px', fontWeight: '640', color: '#3B593B' }}>
+              <div
+                className="mb-2"
+                style={{
+                  fontSize: '18px',
+                  fontWeight: '640',
+                  color: '#3B593B',
+                }}
+              >
                 Store
               </div>
               {uniqueStores.map((store) => (
@@ -232,7 +268,9 @@ const ShoppingListPage = () => {
                   id={`store-${store}`}
                   label={store}
                   checked={selectedStores.includes(store)}
-                  onChange={() => toggleFilter(store, selectedStores, setSelectedStores)}
+                  onChange={() =>
+                    toggleFilter(store, selectedStores, setSelectedStores)
+                  }
                   className="mb-1"
                   style={{ fontSize: '16px' }}
                 />
@@ -240,7 +278,14 @@ const ShoppingListPage = () => {
             </Col>
 
             <Col md={4}>
-              <div className="mb-2" style={{ fontSize: '18px', fontWeight: '640', color: '#3B593B' }}>
+              <div
+                className="mb-2"
+                style={{
+                  fontSize: '18px',
+                  fontWeight: '640',
+                  color: '#3B593B',
+                }}
+              >
                 Storage Type
               </div>
               {uniqueStorageTypes.map((storage) => (
@@ -250,7 +295,13 @@ const ShoppingListPage = () => {
                   id={`storage-${storage}`}
                   label={storage}
                   checked={selectedStorageTypes.includes(storage)}
-                  onChange={() => toggleFilter(storage, selectedStorageTypes, setSelectedStorageTypes)}
+                  onChange={() =>
+                    toggleFilter(
+                      storage,
+                      selectedStorageTypes,
+                      setSelectedStorageTypes,
+                    )
+                  }
                   className="mb-1"
                   style={{ fontSize: '16px' }}
                 />
@@ -258,7 +309,14 @@ const ShoppingListPage = () => {
             </Col>
 
             <Col md={4}>
-              <div className="mb-2" style={{ fontSize: '18px', fontWeight: '640', color: '#3B593B' }}>
+              <div
+                className="mb-2"
+                style={{
+                  fontSize: '18px',
+                  fontWeight: '640',
+                  color: '#3B593B',
+                }}
+              >
                 Type
               </div>
               {uniqueTypes.map((type) => (
@@ -268,7 +326,9 @@ const ShoppingListPage = () => {
                   id={`type-${type}`}
                   label={type}
                   checked={selectedTypes.includes(type)}
-                  onChange={() => toggleFilter(type, selectedTypes, setSelectedTypes)}
+                  onChange={() =>
+                    toggleFilter(type, selectedTypes, setSelectedTypes)
+                  }
                   className="mb-1"
                   style={{ fontSize: '16px' }}
                 />
@@ -282,7 +342,11 @@ const ShoppingListPage = () => {
       <Row className="mb-5">
         {shoppingLists.map((list) => (
           <Col key={list.id} lg={3} md={6} sm={12} className="mb-4">
-            <ShoppingListCard listTitle={list.title} items={list.items} onEdit={() => handleEditList(list)} />
+            <ShoppingListCard
+              listTitle={list.title}
+              items={list.items}
+              onEdit={() => handleEditList(list)}
+            />
           </Col>
         ))}
       </Row>
@@ -298,6 +362,6 @@ const ShoppingListPage = () => {
       )}
     </Container>
   );
-};
+}
 
 export default ShoppingListPage;

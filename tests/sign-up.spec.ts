@@ -1,5 +1,11 @@
 import { Page } from '@playwright/test';
-import { test, expect, BASE_URL, expectSignedInOrRedirected, fillFormWithRetry, checkFormEmpty } from './auth-utils';
+import fillFormWithRetry, {
+  test,
+  expect,
+  BASE_URL,
+  expectSignedInOrRedirected,
+  checkFormEmpty,
+} from './auth-utils';
 
 const SIGNUP_URL = `${BASE_URL}/auth/signup`;
 
@@ -14,7 +20,7 @@ async function submitSignup(page: Page) {
 async function fillSignup(
   page: Page,
   email: string,
-  password: string = 'secret123',
+  password = 'secret123',
   confirmPassword: string = password,
 ) {
   await fillFormWithRetry(page, [
@@ -35,7 +41,7 @@ async function isEmptySignup(page: Page) {
 async function fillAndSubmitSignup(
   page: Page,
   email: string,
-  password: string = 'secret123',
+  password = 'secret123',
   confirmPassword: string = password,
 ) {
   await fillSignup(page, email, password, confirmPassword);
@@ -48,7 +54,11 @@ test('sign up page — successful login', async ({ page }) => {
   const email = uniqueEmail();
 
   await fillAndSubmitSignup(page, email);
-  await expectSignedInOrRedirected({ page, url: `${BASE_URL}/`, timeout: 10000 });
+  await expectSignedInOrRedirected({
+    page,
+    url: `${BASE_URL}/`,
+    timeout: 10000,
+  });
 });
 
 test('sign up page — Reset clears fields and errors', async ({ page }) => {

@@ -3,7 +3,9 @@ import { prisma } from '@/lib/prisma';
 import { getServerSession } from 'next-auth';
 import authOptions from '@/lib/authOptions';
 
-type RouteContext = { params: Promise<{ id: string }> };
+interface RouteContext {
+  params: Promise<{ id: string }>;
+}
 
 /**
  * Gets the signed-in user's ID or throws if unauthenticated.
@@ -16,7 +18,7 @@ async function requireUserId() {
     (err as any).code = 401;
     throw err;
   }
-  return session.user.id as string;
+  return session.user.id;
 }
 
 /**
@@ -38,7 +40,10 @@ export async function GET(request: Request, context: RouteContext) {
     return NextResponse.json({ favorite: Boolean(match) });
   } catch (e: any) {
     const status = e?.code === 401 ? 401 : 400;
-    return NextResponse.json({ error: e?.message ?? 'Failed to load' }, { status });
+    return NextResponse.json(
+      { error: e?.message ?? 'Failed to load' },
+      { status },
+    );
   }
 }
 
@@ -61,7 +66,10 @@ export async function POST(request: Request, context: RouteContext) {
     return NextResponse.json({ ok: true });
   } catch (e: any) {
     const status = e?.code === 401 ? 401 : 400;
-    return NextResponse.json({ error: e?.message ?? 'Failed to favorite' }, { status });
+    return NextResponse.json(
+      { error: e?.message ?? 'Failed to favorite' },
+      { status },
+    );
   }
 }
 
@@ -84,6 +92,9 @@ export async function DELETE(request: Request, context: RouteContext) {
     return NextResponse.json({ ok: true });
   } catch (e: any) {
     const status = e?.code === 401 ? 401 : 400;
-    return NextResponse.json({ error: e?.message ?? 'Failed to unfavorite' }, { status });
+    return NextResponse.json(
+      { error: e?.message ?? 'Failed to unfavorite' },
+      { status },
+    );
   }
 }

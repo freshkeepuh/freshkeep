@@ -10,33 +10,48 @@ function sanitizeFilename(name: string) {
 
 export async function POST(request: NextRequest) {
   try {
-    const body = (await request.json().catch(() => ({}))) as Record<string, any>;
-    const fileName = typeof body?.fileName === 'string' ? body.fileName.trim() : '';
-    const fileType = typeof body?.fileType === 'string' ? body.fileType.trim() : '';
+    const body = (await request.json().catch(() => ({}))) as Record<
+      string,
+      any
+    >;
+    const fileName =
+      typeof body?.fileName === 'string' ? body.fileName.trim() : '';
+    const fileType =
+      typeof body?.fileType === 'string' ? body.fileType.trim() : '';
     const itemId = body?.itemId ?? null;
 
     console.log('Upload request:', { fileName, fileType, itemId });
 
     if (!fileName || !fileType) {
-      return NextResponse.json({ error: 'fileName and fileType are required' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'fileName and fileType are required' },
+        { status: 400 },
+      );
     }
 
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
     if (!allowedTypes.includes(fileType)) {
-      return NextResponse.json({ error: 'File type not allowed. Only images are permitted.' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'File type not allowed. Only images are permitted.' },
+        { status: 400 },
+      );
     }
 
     const safeName = sanitizeFilename(fileName);
     const key = `catalog/uploads/${Date.now()}-${safeName}`;
 
-    const bucket = process.env.AWS_S3_BUCKET || process.env.NEXT_PUBLIC_S3_BUCKET;
+    const bucket =
+      process.env.AWS_S3_BUCKET || process.env.NEXT_PUBLIC_S3_BUCKET;
     const region = process.env.AWS_REGION || process.env.NEXT_PUBLIC_AWS_REGION;
 
     console.log('S3 Config:', { bucket, region, key });
 
     if (!bucket || !region) {
       console.error('Missing S3_BUCKET or AWS_REGION env variables');
-      return NextResponse.json({ error: 'Server S3 configuration missing' }, { status: 500 });
+      return NextResponse.json(
+        { error: 'Server S3 configuration missing' },
+        { status: 500 },
+      );
     }
 
     const { url, fields } = await createPresignedPost(s3Client, {

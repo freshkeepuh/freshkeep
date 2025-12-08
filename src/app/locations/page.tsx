@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Col, Container, Form, Row, Spinner } from 'react-bootstrap';
 import { Plus, Search, GeoAlt } from 'react-bootstrap-icons';
 import { Country } from '@prisma/client';
@@ -22,7 +22,7 @@ interface Location {
   updatedAt: Date;
 }
 
-const LocationsPage = () => {
+function LocationsPage() {
   const [locations, setLocations] = useState<Location[]>([]);
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
@@ -68,7 +68,11 @@ const LocationsPage = () => {
   };
 
   // Inline edit: only name and address1
-  const handleEditLocation = async (id: string, name: string, address: string) => {
+  const handleEditLocation = async (
+    id: string,
+    name: string,
+    address: string,
+  ) => {
     await fetch(`/api/location/${encodeURIComponent(id)}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -79,7 +83,9 @@ const LocationsPage = () => {
 
   // Delete location
   const handleDeleteLocation = async (id: string) => {
-    await fetch(`/api/location/${encodeURIComponent(id)}`, { method: 'DELETE' });
+    await fetch(`/api/location/${encodeURIComponent(id)}`, {
+      method: 'DELETE',
+    });
     await reloadLocations();
   };
 
@@ -87,10 +93,10 @@ const LocationsPage = () => {
   const getNextAutoNumber = () => {
     const base = 'new location';
     const nums = locations
-      .map(l => l.name || '')
-      .filter(n => n.toLowerCase().startsWith(base))
-      .map(n => parseInt(n.slice(base.length).trim(), 10))
-      .filter(n => Number.isFinite(n));
+      .map((l) => l.name || '')
+      .filter((n) => n.toLowerCase().startsWith(base))
+      .map((n) => parseInt(n.slice(base.length).trim(), 10))
+      .filter((n) => Number.isFinite(n));
     return nums.length ? Math.max(...nums) + 1 : 1;
   };
 
@@ -123,7 +129,7 @@ const LocationsPage = () => {
   if (loading) {
     locationsList = <li className="text-muted text-center p-3">Loading...</li>;
   } else if (locations.length > 0) {
-    locationsList = locations.map(l => (
+    locationsList = locations.map((l) => (
       <LocationCard
         key={l.id}
         id={l.id}
@@ -133,15 +139,20 @@ const LocationsPage = () => {
         onDelete={handleDeleteLocation}
         selected={l.id === selectedId}
         onSelect={(id) => setSelectedId(id)}
+        className=""
       />
     ));
   } else {
-    locationsList = <li className="text-muted text-center p-3">No locations found.</li>;
+    locationsList = (
+      <li className="text-muted text-center p-3">No locations found.</li>
+    );
   }
 
   const selectedForMap = (() => {
     if (locations.length === 0) return undefined;
-    const sel = selectedId ? locations.find(l => l.id === selectedId) : undefined;
+    const sel = selectedId
+      ? locations.find((l) => l.id === selectedId)
+      : undefined;
     const target = sel || locations[0];
     return { id: target.id, name: target.name, address: target.address1 };
   })();
@@ -179,7 +190,11 @@ const LocationsPage = () => {
                     >
                       {adding ? (
                         <>
-                          <Spinner animation="border" size="sm" className="me-1" />
+                          <Spinner
+                            animation="border"
+                            size="sm"
+                            className="me-1"
+                          />
                           Adding…
                         </>
                       ) : (
@@ -204,7 +219,10 @@ const LocationsPage = () => {
               {/* Search Bar */}
               <Row className="mb-4 align-items-center">
                 <Col>
-                  <Form.Control type="text" placeholder="Search for a location or address..." />
+                  <Form.Control
+                    type="text"
+                    placeholder="Search for a location or address..."
+                  />
                 </Col>
                 {/* Search Button */}
                 <Col xs="auto">
@@ -232,5 +250,5 @@ const LocationsPage = () => {
       </Container>
     </main>
   );
-};
+}
 export default LocationsPage;

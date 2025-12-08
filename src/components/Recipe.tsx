@@ -23,16 +23,16 @@ export interface Recipe {
 }
 
 // Props passed from server component
-type LocationOption = {
+interface LocationOption {
   id: string;
   name: string;
-};
+}
 
-type Props = {
+interface Props {
   initialRecipes: Recipe[];
-  locations?: LocationOption[];
-  selectedLocationId?: string;
-};
+  locations: LocationOption[];
+  selectedLocationId: string;
+}
 
 // Filter option types
 type MaxTimeFilter = '< 15 min' | '< 30 min' | '< 45 min' | '< 60 min' | 'Any';
@@ -87,9 +87,7 @@ export default function RecipesPage({
     if (!v) return;
 
     setIngredients((prev) => {
-      const exists = prev.some(
-        (i) => i.toLowerCase() === v.toLowerCase(),
-      );
+      const exists = prev.some((i) => i.toLowerCase() === v.toLowerCase());
       if (exists) {
         return prev;
       }
@@ -103,7 +101,9 @@ export default function RecipesPage({
     setIngredients((prev) => prev.filter((i) => i !== ing));
   };
 
-  const handleIngredientKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleIngredientKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
     if (e.key === 'Enter') handleAddIngredient();
   };
 
@@ -120,13 +120,15 @@ export default function RecipesPage({
 
     // Filter logic
     const result = recipes.filter((r) => {
-      const matchesQuery = q.length === 0
-        || r.title.toLowerCase().includes(q)
-        || r.ingredients.some((ing) => ing.toLowerCase().includes(q));
+      const matchesQuery =
+        q.length === 0 ||
+        r.title.toLowerCase().includes(q) ||
+        r.ingredients.some((ing) => ing.toLowerCase().includes(q));
 
       // Check cook time, difficulty & diet dropdowns
       const matchesTime = maxMinutes == null || r.cookTime <= maxMinutes;
-      const matchesDifficulty = difficulty === 'Any' || r.difficulty === difficulty;
+      const matchesDifficulty =
+        difficulty === 'Any' || r.difficulty === difficulty;
       const matchesDiet = diet === 'Any' || r.diet === diet;
 
       // Check ingredients
@@ -134,19 +136,20 @@ export default function RecipesPage({
         ? r.ingredients.map((i) => String(i).toLowerCase())
         : [];
 
-      const matchesIngredients = ingredients.length === 0
-        || ingredients.every((chip) => {
+      const matchesIngredients =
+        ingredients.length === 0 ||
+        ingredients.every((chip) => {
           const c = chip.trim().toLowerCase();
           if (!c) return true;
           return recipeIngs.some((ing) => ing.includes(c));
         });
 
       return (
-        matchesQuery
-        && matchesTime
-        && matchesDifficulty
-        && matchesDiet
-        && matchesIngredients
+        matchesQuery &&
+        matchesTime &&
+        matchesDifficulty &&
+        matchesDiet &&
+        matchesIngredients
       );
     });
 
@@ -287,7 +290,9 @@ export default function RecipesPage({
                 <select
                   id="difficultySelect"
                   value={difficulty}
-                  onChange={(e) => setDifficulty(e.target.value as DifficultyFilter)}
+                  onChange={(e) =>
+                    setDifficulty(e.target.value as DifficultyFilter)
+                  }
                   className={styles.rpSelect}
                   aria-label="Difficulty"
                 >
@@ -364,6 +369,7 @@ export default function RecipesPage({
                     <p className={styles.rpH2}>{r.title}</p>
                   </div>
                   <div className={styles.rpMeta}>
+                    {/* Cook time, difficulty & diet with emojis */}
                     <div>
                       <span>⏳</span>
                       <span>
@@ -382,9 +388,7 @@ export default function RecipesPage({
                   </div>
                   <div className={styles.rpIngredients}>
                     <p className={styles.rpH3}>Ingredients:</p>
-                    <p className={styles.rpText}>
-                      {r.ingredients.join(', ')}
-                    </p>
+                    <p className={styles.rpText}>{r.ingredients.join(', ')}</p>
                   </div>
 
                   <Link
@@ -395,8 +399,8 @@ export default function RecipesPage({
                   </Link>
                 </div>
 
-                {typeof r.haveCount === 'number'
-                  && typeof r.totalIngredients === 'number' && (
+                {typeof r.haveCount === 'number' &&
+                  typeof r.totalIngredients === 'number' && (
                     <div className={styles.rpMatchBar}>
                       <span className={styles.rpMatchHave}>
                         {'Have: '}
@@ -411,7 +415,7 @@ export default function RecipesPage({
                         {r.totalIngredients}
                       </span>
                     </div>
-                )}
+                  )}
               </article>
             ))}
             {filteredRecipes.length === 0 && (
