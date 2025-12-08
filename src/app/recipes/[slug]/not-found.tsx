@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowLeft } from 'react-bootstrap-icons';
+import { ArrowLeft } from 'lucide-react';
 import styles from '../page.module.css';
 
 export default function NotFound() {
@@ -13,8 +13,10 @@ export default function NotFound() {
 
           {/* Back Button */}
           <Link href="/recipes" className={styles.rpBackBtn}>
-            <ArrowLeft className={styles.rpBackIcon} />
-            Back to Recipes
+            <span className={styles.rpBackIcon} aria-hidden>
+              <ArrowLeft />
+            </span>
+            <span>Back to Recipes</span>
           </Link>
 
           {/* Card */}
