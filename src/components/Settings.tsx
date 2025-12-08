@@ -72,7 +72,7 @@ const applyTheme = (t: 'light' | 'dark') => {
   if (typeof localStorage !== 'undefined') localStorage.setItem('fk-theme', t);
 };
 
-function Settings({ user }: Props) {
+function Settings({ user = DEFAULT_USER }: Props) {
   const router = useRouter();
   const [theme, setTheme] = useState<'light' | 'dark'>(user.theme ?? 'light');
   const [firstName, setFirstName] = useState<string>(user.firstName ?? '');
