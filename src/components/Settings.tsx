@@ -35,11 +35,20 @@ interface UserData {
 }
 
 interface Props {
-  user: UserData;
+  user?: UserData;
 }
 
 const DEFAULT_UNITS: 'Imperial' | 'Metric' = 'Imperial';
 const DEFAULT_COUNTRY = 'USA';
+const DEFAULT_USER: UserData = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  profilePicture: null,
+  theme: 'light',
+  units: DEFAULT_UNITS,
+  country: DEFAULT_COUNTRY,
+};
 
 const AVATAR_PLACEHOLDER_CLASS = [
   'avatar-xl',
@@ -383,5 +392,9 @@ function Settings({ user = DEFAULT_USER }: Props) {
     </>
   );
 }
+
+Settings.defaultProps = {
+  user: DEFAULT_USER,
+};
 
 export default Settings;
