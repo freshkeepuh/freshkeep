@@ -1,10 +1,6 @@
 'use client';
 
-import {
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ProductCategory } from '@prisma/client';
 import styles from '../../components/add/add.module.css';
@@ -20,7 +16,6 @@ import type { Category, StorageUnit } from '../../components/add/types';
 
 function mapCategoryToEnum(category: Category): ProductCategory {
   const key = String(category).replace(/\s+/g, '').toLowerCase();
-
   const mapping: Record<string, ProductCategory> = {
     fruits: ProductCategory.Fruits,
     vegetables: ProductCategory.Vegetables,
@@ -41,13 +36,11 @@ function mapCategoryToEnum(category: Category): ProductCategory {
     frozenfoods: ProductCategory.FrozenFoods,
     other: ProductCategory.Other,
   };
-
   return mapping[key] ?? ProductCategory.Other;
 }
 
 export default function AddPage() {
   const router = useRouter();
-
   const [storages, setStorages] = useState<StorageUnit[]>([]);
   const [storagesLoading, setStoragesLoading] = useState(true);
   const [storagesError, setStoragesError] = useState<string | null>(null);
@@ -62,19 +55,16 @@ export default function AddPage() {
 
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
   const [showSuccess, setShowSuccess] = useState(false);
   const [successBody, setSuccessBody] = useState('');
 
   // ---- Load storages + locations ----
   useEffect(() => {
     let cancelled = false;
-
     const load = async () => {
       try {
         setStoragesLoading(true);
         setStoragesError(null);
-
         const [storagesRes, locationsRes] = await Promise.all([
           fetch('/api/storage', { cache: 'no-store' }),
           fetch('/api/location', { cache: 'no-store' }),
@@ -85,9 +75,7 @@ export default function AddPage() {
         }
 
         const rawStorages = (await storagesRes.json()) as any[];
-        const rawLocations = locationsRes.ok
-          ? ((await locationsRes.json()) as any[])
-          : [];
+        const rawLocations = locationsRes.ok ? ((await locationsRes.json()) as any[]) : [];
 
         const locById: Record<string, string> = {};
         rawLocations.forEach((l) => {
@@ -96,7 +84,6 @@ export default function AddPage() {
 
         const mapped: StorageUnit[] = rawStorages.map((s) => {
           const t = (s.type as string) || 'Pantry';
-
           let uiType: StorageUnit['type'] = 'pantry';
           if (t === 'Refrigerator' || t === 'Fridge') uiType = 'fridge';
           else if (t === 'Freezer') uiType = 'freezer';
@@ -122,17 +109,14 @@ export default function AddPage() {
         }
       } catch (err: unknown) {
         if (!cancelled) {
-          const msg =
-            err instanceof Error ? err.message : 'Failed to load storage units';
+          const msg = err instanceof Error ? err.message : 'Failed to load storage units';
           setStoragesError(msg);
         }
       } finally {
         if (!cancelled) setStoragesLoading(false);
       }
     };
-
     load().catch(() => {});
-
     return () => {
       cancelled = true;
     };
@@ -202,7 +186,6 @@ export default function AddPage() {
 
     setSaving(true);
     setError(null);
-
     const trimmedName = name.trim();
 
     try {
@@ -223,12 +206,13 @@ export default function AddPage() {
       const body: any = await res.json().catch(() => ({}));
 
       if (!res.ok) {
-        const message =
-          typeof body.error === 'string' ? body.error : 'Failed to create product';
+        const message = typeof body.error === 'string' ? body.error : 'Failed to create product';
         throw new Error(message);
       }
 
+      // eslint-disable-next-line no-underscore-dangle
       const prodId: string | undefined = body.id ?? body._id;
+
       if (!prodId) {
         throw new Error('Could not determine ID of new product');
       }
@@ -253,33 +237,29 @@ export default function AddPage() {
       const instBody: any = await instRes.json().catch(() => ({}));
 
       if (!instRes.ok) {
-        const message =
-          typeof instBody.error === 'string'
-            ? instBody.error
-            : 'Failed to create product in storage';
+        const message = typeof instBody.error === 'string' ? instBody.error : 'Failed to create product in storage';
         throw new Error(message);
       }
 
       // 4) Update local counts
-      setStorages((prev) =>
-        prev.map((s) =>
-          s.id === selected.id
-            ? { ...s, items: (s.items ?? 0) + 1 }
-            : s,
-        ),
-      );
-      setSelected((prev) =>
-        prev && prev.id === selected.id
-          ? { ...prev, items: (prev.items ?? 0) + 1 }
-          : prev,
-      );
+      setStorages((prev) => prev.map((s) => {
+        if (s.id === selected.id) {
+          return { ...s, items: (s.items ?? 0) + 1 };
+        }
+        return s;
+      }));
+      setSelected((prev) => {
+        if (prev && prev.id === selected.id) {
+          return { ...prev, items: (prev.items ?? 0) + 1 };
+        }
+        return prev;
+      });
 
       setSuccessBody(`"${trimmedName}" was added to ${selected.name}.`);
       setShowSuccess(true);
       resetForm();
     } catch (err: unknown) {
-      const message =
-        err instanceof Error ? err.message : 'Failed to add product';
+      const message = err instanceof Error ? err.message : 'Failed to add product';
       setError(message);
     } finally {
       setSaving(false);
