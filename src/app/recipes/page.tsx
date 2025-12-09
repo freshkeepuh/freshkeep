@@ -18,12 +18,12 @@ const normalizeIngredients = (value: unknown): UiRecipe['ingredients'] => {
 
     // New shape: { name, quantity, unitName, note }
     if (ing && typeof ing === 'object') {
-      const name =
-        typeof ing.name === 'string'
-          ? ing.name
-          : ing.name != null
-          ? String(ing.name)
-          : '';
+      let name: any;
+      if (typeof ing.name === 'string') {
+        name = ing.name;
+      } else {
+        name = ing.name != null ? String(ing.name) : '';
+      }
 
       return {
         name,
