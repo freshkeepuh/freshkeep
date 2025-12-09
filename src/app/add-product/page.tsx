@@ -48,13 +48,11 @@ function mapCategoryToEnum(category: Category): ProductCategory {
 export default function AddPage() {
   const router = useRouter();
 
-  // ---- Real storage + location data ----
   const [storages, setStorages] = useState<StorageUnit[]>([]);
   const [storagesLoading, setStoragesLoading] = useState(true);
   const [storagesError, setStoragesError] = useState<string | null>(null);
   const [selected, setSelected] = useState<StorageUnit | null>(null);
 
-  // ---- Form state ----
   const [name, setName] = useState('');
   const [qty, setQty] = useState(1);
   const [unit, setUnit] = useState<string | null>(null);
@@ -68,7 +66,7 @@ export default function AddPage() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [successBody, setSuccessBody] = useState('');
 
-  // --- Load storages + locations from API (same data as dashboard/locations) ---
+  // ---- Load storages + locations ----
   useEffect(() => {
     let cancelled = false;
 
@@ -78,7 +76,7 @@ export default function AddPage() {
         setStoragesError(null);
 
         const [storagesRes, locationsRes] = await Promise.all([
-          fetch('/api/storages', { cache: 'no-store' }),
+          fetch('/api/storage', { cache: 'no-store' }),
           fetch('/api/location', { cache: 'no-store' }),
         ]);
 
@@ -100,9 +98,9 @@ export default function AddPage() {
           const t = (s.type as string) || 'Pantry';
 
           let uiType: StorageUnit['type'] = 'pantry';
-          if (t === 'Refrigerator') uiType = 'fridge';
+          if (t === 'Refrigerator' || t === 'Fridge') uiType = 'fridge';
           else if (t === 'Freezer') uiType = 'freezer';
-          else if (t === 'SpiceRack') uiType = 'spice-rack';
+          else if (t === 'SpiceRack' || t === 'Spice Rack') uiType = 'spice-rack';
           else if (t === 'Pantry') uiType = 'pantry';
           else uiType = 'other';
 
@@ -124,7 +122,8 @@ export default function AddPage() {
         }
       } catch (err: unknown) {
         if (!cancelled) {
-          const msg = err instanceof Error ? err.message : 'Failed to load storage units';
+          const msg =
+            err instanceof Error ? err.message : 'Failed to load storage units';
           setStoragesError(msg);
         }
       } finally {
@@ -132,7 +131,7 @@ export default function AddPage() {
       }
     };
 
-    load().catch((e) => console.error('Failed to load storages/locations for add-product', e));
+    load().catch(() => {});
 
     return () => {
       cancelled = true;
@@ -140,7 +139,7 @@ export default function AddPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Default expiry = 7 days from today
+  // ---- Default expiry to +7 days ----
   useEffect(() => {
     const d = new Date();
     d.setDate(d.getDate() + 7);
@@ -166,7 +165,6 @@ export default function AddPage() {
     setName('');
     setQty(1);
     setUnit(null);
-    // keep the same selected storage so user doesn’t have to reselect
     setCategory(null);
     setPicture(undefined);
     const d = new Date();
@@ -175,6 +173,7 @@ export default function AddPage() {
     setError(null);
   }, []);
 
+  // ---- Save handler: create Product + ProductInstance ----
   const onSave = useCallback(async () => {
     if (!name.trim()) {
       setError('Name is required');
@@ -190,6 +189,14 @@ export default function AddPage() {
     }
     if (!expiresAt) {
       setError('Please select an expiry date');
+      return;
+    }
+    if (!selected) {
+      setError('Please select a storage area');
+      return;
+    }
+    if (!selected.locId) {
+      setError('Selected storage must be linked to a location');
       return;
     }
 
@@ -213,23 +220,71 @@ export default function AddPage() {
         }),
       });
 
-      const body = await res.json().catch(() => ({}));
+      const body: any = await res.json().catch(() => ({}));
 
       if (!res.ok) {
-        const message = typeof body.error === 'string' ? body.error : 'Failed to create product';
+        const message =
+          typeof body.error === 'string' ? body.error : 'Failed to create product';
         throw new Error(message);
       }
 
-      setSuccessBody(`"${trimmedName}" was added to your products.`);
+      const prodId: string | undefined = body.id ?? body._id;
+      if (!prodId) {
+        throw new Error('Could not determine ID of new product');
+      }
+
+      // 2) Convert date-only string to full ISO DateTime for Prisma
+      const isoExpiresAt = `${expiresAt}T00:00:00.000Z`;
+
+      // 3) Create ProductInstance in selected storage
+      const instRes = await fetch('/api/product/instance', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          locId: selected.locId,
+          storId: selected.id,
+          prodId,
+          unitId: unit,
+          quantity: qty,
+          expiresAt: isoExpiresAt,
+        }),
+      });
+
+      const instBody: any = await instRes.json().catch(() => ({}));
+
+      if (!instRes.ok) {
+        const message =
+          typeof instBody.error === 'string'
+            ? instBody.error
+            : 'Failed to create product in storage';
+        throw new Error(message);
+      }
+
+      // 4) Update local counts
+      setStorages((prev) =>
+        prev.map((s) =>
+          s.id === selected.id
+            ? { ...s, items: (s.items ?? 0) + 1 }
+            : s,
+        ),
+      );
+      setSelected((prev) =>
+        prev && prev.id === selected.id
+          ? { ...prev, items: (prev.items ?? 0) + 1 }
+          : prev,
+      );
+
+      setSuccessBody(`"${trimmedName}" was added to ${selected.name}.`);
       setShowSuccess(true);
       resetForm();
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Failed to add product';
+      const message =
+        err instanceof Error ? err.message : 'Failed to add product';
       setError(message);
     } finally {
       setSaving(false);
     }
-  }, [category, expiresAt, name, picture, qty, resetForm, unit]);
+  }, [category, expiresAt, name, picture, qty, resetForm, selected, unit]);
 
   const goBack = useCallback(() => {
     router.back();
@@ -239,7 +294,9 @@ export default function AddPage() {
     <main className={styles.max} style={{ paddingTop: 24, paddingBottom: 32 }}>
       <div style={{ marginBottom: 24 }}>
         <h2 className={styles.h1}>Add New Product 📦</h2>
-        <p className={styles.p}>Add items to your storage units and track their freshness</p>
+        <p className={styles.p}>
+          Add items to your storage units and track their freshness
+        </p>
       </div>
 
       <div className={styles.grid}>
@@ -255,7 +312,9 @@ export default function AddPage() {
             </p>
           )}
           {storagesError && (
-            <p style={{ color: 'red', marginTop: -12, marginBottom: 8, fontSize: 13 }}>
+            <p
+              style={{ color: 'red', marginTop: -12, marginBottom: 8, fontSize: 13 }}
+            >
               {storagesError}
             </p>
           )}

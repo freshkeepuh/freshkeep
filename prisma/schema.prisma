@@ -42,9 +42,13 @@ model User {
   settings  Json?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  catalog   Catalog[]
-  favoriteRecipes  Recipe[]
+
+  catalog         Catalog[]
+  favoriteRecipes Recipe[]
+  locations       Location[]
+  storages        StorageArea[]
 }
+
 
 /**
  * Unit of Measure
@@ -87,7 +91,7 @@ enum Country {
  */
 model Location {
   id        String            @id @default(uuid()) @map("_id")
-  name      String            @unique
+  name      String
   address1  String
   address2  String?
   city      String
@@ -95,11 +99,18 @@ model Location {
   zipcode   String
   country   Country           @default(USA)
   picture   String?
+
+  userId    String
+  user      User              @relation(fields: [userId], references: [id])
+
   areas     StorageArea[]
   instances ProductInstance[]
   createdAt DateTime          @default(now())
   updatedAt DateTime          @updatedAt
+
+  @@unique([userId, name], name: "Location_userId_name_key")
 }
+
 
 // TODO: Create Icons in public/icons/{storagetype}.svg
 /**
@@ -123,13 +134,20 @@ model StorageArea {
   id        String            @id @default(uuid()) @map("_id")
   location  Location          @relation(fields: [locId], references: [id])
   locId     String
-  name      String            @unique
+  name      String
   type      StorageType
   picture   String?
+
+  userId    String
+  user      User              @relation(fields: [userId], references: [id])
+
   instances ProductInstance[]
   createdAt DateTime          @default(now())
   updatedAt DateTime          @updatedAt
+
+  @@unique([userId, name], name: "StorageArea_userId_name_key")
 }
+
 
 // TODO: Create Icons in public/icons/{category}.svg
 /**
@@ -137,7 +155,6 @@ model StorageArea {
  * Shopping Lists should be grouped by this.
  * Used By: Product
  */
-
 enum ProductCategory {
   Fruits
   Vegetables
@@ -276,7 +293,6 @@ model Store {
  * These ensure only valid, pre-defined values are stored in the DB
  * Used By: Recipe Page
  */
-
 enum RecipeDifficulty {
   EASY
   NORMAL
@@ -315,7 +331,6 @@ model Recipe {
  * Catalog of Products
  * Uses: User, Product
  */
-
 model Catalog {
   id            String   @id @default(uuid()) @map("_id")
   userId        String

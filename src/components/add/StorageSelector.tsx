@@ -19,22 +19,16 @@ export default function StorageSelector({ units, selected, onSelect }: Props) {
         {units.map((s) => {
           const isSelected = selected?.id === s.id;
 
-          let activeClass = '';
-          if (isSelected) {
-            if (s.type === 'fridge' || s.type === 'freezer') {
-              activeClass = styles.storageActiveFridge;
-            } else if (s.type === 'pantry' || s.type === 'spice-rack') {
-              activeClass = styles.storageActivePantry;
-            } else {
-              activeClass = '';
-            }
-          }
+          // One consistent "active" style for ALL types
+          const activeClass = isSelected ? styles.storageActivePantry : '';
 
+          // Emoji by type (purely visual)
           let emoji = '📦';
-          if (s.type === 'fridge') emoji = '❄️';
-          else if (s.type === 'freezer') emoji = '🧊';
-          else if (s.type === 'pantry') emoji = '🏠';
-          else if (s.type === 'spice-rack') emoji = '🧂';
+          if (s.type === 'fridge' || s.type === 'freezer') {
+            emoji = '🧊';
+          } else if (s.type === 'pantry' || s.type === 'spice-rack') {
+            emoji = '🏠';
+          }
 
           return (
             <button
@@ -47,10 +41,9 @@ export default function StorageSelector({ units, selected, onSelect }: Props) {
               <div className={styles.storageEmoji}>{emoji}</div>
               <div className={styles.storageName}>{s.name}</div>
 
+              {/* Location name (e.g., Main Home, Vacation Home) */}
               {s.locationName && (
-                <p className={styles.storageMeta}>
-                  <span>{s.locationName}</span>
-                </p>
+                <p className={styles.storageMeta}>{s.locationName}</p>
               )}
 
               <p className={styles.storageMeta}>

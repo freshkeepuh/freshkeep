@@ -77,6 +77,7 @@ function assertAccounts(x: any): asserts x is AccountFromConfig[] {
     }
   });
 }
+
 /**
  * Seed users into the database
  * This function creates users based on the default accounts specified in the configuration file.
@@ -182,18 +183,20 @@ async function seedStores(): Promise<Array<Store>> {
 /**
  * Seed locations into the database
  * This function creates locations based on the default locations specified in the configuration file.
- * If a location already exists, it skips creation for that location.
+ * Locations are now tied to a specific owner user via userId.
  * @returns {Promise<Array<Location>>} A promise that resolves to an array of created or existing locations.
  */
-async function seedLocations(): Promise<Array<Location>> {
+async function seedLocations(owner: User): Promise<Array<Location>> {
   const locations: Array<Location> = [];
-  // Wait for all Locations to complete
   for (const defaultLocation of config.defaultLocations) {
-    // Get the Country
     const country = (defaultLocation.country as Country) || Country.USA;
-    // Upsert the Location to avoid duplicates
     const location = await prisma.location.upsert({
-      where: { name: defaultLocation.name },
+      where: {
+        userId_name: {
+          userId: owner.id,
+          name: defaultLocation.name,
+        },
+      },
       update: {},
       create: {
         name: defaultLocation.name,
@@ -204,6 +207,9 @@ async function seedLocations(): Promise<Array<Location>> {
         zipcode: defaultLocation.zipcode,
         country,
         picture: defaultLocation.picture || undefined,
+        user: {
+          connect: { id: owner.id },
+        },
       },
     });
     // Push the Location onto the array
@@ -216,30 +222,39 @@ async function seedLocations(): Promise<Array<Location>> {
 /**
  * Seed storageAreas into the database
  * This function creates storageAreas based on the default storageAreas specified in the configuration file.
- * It associates each storageArea with a location.
- * If a storageArea already exists, it skips creation for that storageArea.
+ * It associates each storageArea with a location and owner user.
+ * If a storageArea already exists (per user), it skips creation for that storageArea.
  * @param locations The Locations in which the StorageAreas are found.
  * @returns {Promise<Array<StorageArea>>} A promise that resolves to an array of created or existing storageAreas.
  */
-async function seedStorageAreas(locations: Array<Location>): Promise<Array<StorageArea>> {
+async function seedStorageAreas(
+  locations: Array<Location>,
+  owner: User,
+): Promise<Array<StorageArea>> {
   const storageAreas: Array<StorageArea> = [];
-  // Process the default storageAreas
   for (const defaultStorageArea of config.defaultStorageAreas) {
-    // Find the Location in which the storageArea belongs
     const location = findByName(locations, defaultStorageArea.locationName);
-    // Get the StorageArea Type
+
     const storageType = (defaultStorageArea.type as StorageType) || StorageType.Pantry;
-    // Upsert the StorageArea to avoid duplicates
+
     const storageArea = await prisma.storageArea.upsert({
-      where: { name: defaultStorageArea.name },
+      where: {
+        userId_name: {
+          userId: owner.id,
+          name: defaultStorageArea.name,
+        },
+      },
       update: {},
       create: {
         name: defaultStorageArea.name,
         type: storageType,
         locId: location.id,
         picture: defaultStorageArea.picture || undefined,
+        // use scalar FK instead of nested relation
+        userId: owner.id,
       },
     });
+
     // Push the storageArea into the array
     storageAreas.push(storageArea);
   }
@@ -346,7 +361,6 @@ async function seedProducts(units: Array<Unit>, stores: Array<Store>): Promise<A
   return products;
 }
 
-
 /**
  * Seed items into the database
  * This function creates items based on the default items specified in the configuration file.
@@ -356,7 +370,7 @@ async function seedProducts(units: Array<Unit>, stores: Array<Store>): Promise<A
  * @param storageAreas The StorageAreas in which the Items can be stored.
  * @param products The Products that the Items are based on.
  * @param units The Units of measurement for the Items.
- * @returns {Promise<Array<Item>>} A promise that resolves to an array of created or existing items.
+ * @returns {Promise<void>} A promise that resolves when done.
  */
 async function seedProductInstances(
   locations: Array<Location>,
@@ -526,10 +540,12 @@ async function seedRecipes(): Promise<void> {
  * Main seeding function
  */
 async function main() {
-  await seedUsers();
+  const users = await seedUsers();
+  const primaryUser = users[0]; // first default account gets the seeded locations & storages
+
   const stores = await seedStores();
-  const locations = await seedLocations();
-  const storageAreas = await seedStorageAreas(locations);
+  const locations = await seedLocations(primaryUser);
+  const storageAreas = await seedStorageAreas(locations, primaryUser);
   const units = await seedUnits();
   const products = await seedProducts(units, stores);
   await seedProductInstances(locations, storageAreas, products, units);
