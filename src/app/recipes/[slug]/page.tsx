@@ -10,12 +10,12 @@ import { splitIngredientsByStock } from '@/lib/ingredientMatch';
 
 export const dynamic = 'force-dynamic';
 
-type UiIngredient = {
+interface UiIngredient {
   name: string;
   quantity?: number;
   unitName?: string;
   note?: string;
-};
+}
 
 /**
  * Normalize raw DB ingredients (string[] or object[]) into UiIngredient[].
@@ -31,12 +31,12 @@ const normalizeIngredients = (value: unknown): UiIngredient[] => {
 
     // New shape: { name, quantity, unitName, note }
     if (ing && typeof ing === 'object') {
-      const name =
-        typeof ing.name === 'string'
-          ? ing.name
-          : ing.name != null
-          ? String(ing.name)
-          : '';
+      let name: any;
+      if (typeof ing.name === 'string') {
+        name = ing.name;
+      } else {
+        name = ing.name != null ? String(ing.name) : '';
+      }
 
       return {
         name,
@@ -95,23 +95,22 @@ const formatIngredientDisplay = (item: UiIngredient | string): string => {
       ? item.unitName
       : undefined;
 
-  const qtyStr =
-    qty != null
-      ? Number.isInteger(qty)
-        ? String(qty)
-        : String(qty)
-      : '';
+  let qtyStr: string;
+  if (Number.isInteger(qty)) {
+    qtyStr = qty != null ? String(qty) : '';
+  } else {
+    qtyStr = qty != null ? String(qty) : '';
+  }
 
   // Units that should be treated as a plain count
   const COUNT_UNITS = ['each', 'ea', 'piece', 'pc', 'pieces'];
 
-  const useUnit =
-    unitRaw && !COUNT_UNITS.includes(unitRaw.toLowerCase());
+  const useUnit = unitRaw && !COUNT_UNITS.includes(unitRaw.toLowerCase());
 
   const parts: string[] = [];
   if (qtyStr) parts.push(qtyStr);
-  if (useUnit) parts.push(unitRaw!); // e.g. "cup", "tbsp", "oz"
-  parts.push(name);                  // ingredient name
+  if (useUnit) parts.push(unitRaw); // e.g. "cup", "tbsp", "oz"
+  parts.push(name); // ingredient name
 
   return parts.join(' ');
 };
