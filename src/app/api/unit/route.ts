@@ -7,9 +7,6 @@ import getResponseError from '@/lib/routeHelpers';
 
 export const runtime = 'nodejs';
 
-/**
- * List units filtered by User's System Preference (Metric/Imperial)
- */
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);
@@ -52,9 +49,6 @@ export async function GET() {
   }
 }
 
-/**
- * Create a new unit
- */
 export async function POST(request: NextRequest) {
   try {
     const { name, abbr, baseId, factor } = await request.json();
