@@ -274,17 +274,16 @@ async function seedStorageAreas(
  * @returns {Promise<Array<Unit>>} A promise that resolves to an array of created or existing units.
  */
 async function seedUnits(): Promise<Array<Unit>> {
-  console.log('🌱 Seeding Classified Units...');
 
   const units: Array<Unit> = [];
 
   const unitsData = [
-    // --- UNIVERSAL (Visible to everyone) ---
+    //UNIVERSAL (Visible to everyone)
     { name: 'each', abbr: 'ea', factor: 1, system: 'universal' },
     { name: 'piece', abbr: 'pc', factor: 1, system: 'universal' },
     { name: 'dozen', abbr: 'dz', factor: 12, system: 'universal' },
 
-    // --- METRIC ONLY ---
+    //METRIC ONLY
     { name: 'milligram', abbr: 'mg', factor: 0.001, system: 'metric' },
     { name: 'gram', abbr: 'g', factor: 1, system: 'metric' },
     { name: 'kilogram', abbr: 'kg', factor: 1000, system: 'metric' },
@@ -292,7 +291,7 @@ async function seedUnits(): Promise<Array<Unit>> {
     { name: 'deciliter', abbr: 'dl', factor: 100, system: 'metric' },
     { name: 'liter', abbr: 'l', factor: 1000, system: 'metric' },
 
-    // --- IMPERIAL ONLY ---
+    //IMPERIAL ONLY
     { name: 'teaspoon', abbr: 'tsp', factor: 5, system: 'imperial' },
     { name: 'tablespoon', abbr: 'tbsp', factor: 15, system: 'imperial' },
     { name: 'fluid ounce', abbr: 'fl oz', factor: 29.5735, system: 'imperial' },
@@ -317,14 +316,11 @@ async function seedUnits(): Promise<Array<Unit>> {
         abbr: unitData.abbr,
         factor: unitData.factor,
         system: unitData.system,
-        // Optional: If you want to maintain baseId relationships, you can add logic here later,
-        // but for now we treat them as individual units with factors.
       },
     });
     units.push(unit);
   }
 
-  console.log(`✅ ${units.length} Units seeded successfully.`);
   return units;
 }
 
@@ -413,7 +409,6 @@ async function seedProductInstances(
         quantity: defaultItem.quantity || 0.0,
       },
     });
-    console.log('Created item:', instance);
   }
 }
 
