@@ -59,7 +59,10 @@ export async function readStorageAreas(userId: string) {
 /**
  * Read a storage area by ID (and verify ownership).
  */
-export async function readStorageArea(userId: string, id: string | null | undefined) {
+export async function readStorageArea(
+  userId: string,
+  id: string | null | undefined,
+) {
   if (!id) return null;
 
   // Changed from findUnique to findFirst to enforce userId check

@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { readStorageAreas, createStorageArea } from '@/lib/dbStorageAreaActions';
+import {
+  readStorageAreas,
+  createStorageArea,
+} from '@/lib/dbStorageAreaActions';
 import { getServerSession } from 'next-auth';
-import authOptions from "@/lib/authOptions";
+import authOptions from '@/lib/authOptions';
 import { prisma } from '@/lib/prisma';
 
 export const runtime = 'nodejs';

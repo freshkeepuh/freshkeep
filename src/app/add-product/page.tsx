@@ -75,7 +75,9 @@ export default function AddPage() {
         }
 
         const rawStorages = (await storagesRes.json()) as any[];
-        const rawLocations = locationsRes.ok ? ((await locationsRes.json()) as any[]) : [];
+        const rawLocations = locationsRes.ok
+          ? ((await locationsRes.json()) as any[])
+          : [];
 
         const locById: Record<string, string> = {};
         rawLocations.forEach((l) => {
@@ -87,7 +89,8 @@ export default function AddPage() {
           let uiType: StorageUnit['type'] = 'pantry';
           if (t === 'Refrigerator' || t === 'Fridge') uiType = 'fridge';
           else if (t === 'Freezer') uiType = 'freezer';
-          else if (t === 'SpiceRack' || t === 'Spice Rack') uiType = 'spice-rack';
+          else if (t === 'SpiceRack' || t === 'Spice Rack')
+            uiType = 'spice-rack';
           else if (t === 'Pantry') uiType = 'pantry';
           else uiType = 'other';
 
@@ -245,17 +248,22 @@ export default function AddPage() {
       const instBody: any = await instRes.json().catch(() => ({}));
 
       if (!instRes.ok) {
-        const message = typeof instBody.error === 'string' ? instBody.error : 'Failed to create product in storage';
+        const message =
+          typeof instBody.error === 'string'
+            ? instBody.error
+            : 'Failed to create product in storage';
         throw new Error(message);
       }
 
       // 4) Update local counts
-      setStorages((prev) => prev.map((s) => {
-        if (s.id === selected.id) {
-          return { ...s, items: (s.items ?? 0) + 1 };
-        }
-        return s;
-      }));
+      setStorages((prev) =>
+        prev.map((s) => {
+          if (s.id === selected.id) {
+            return { ...s, items: (s.items ?? 0) + 1 };
+          }
+          return s;
+        }),
+      );
       setSelected((prev) => {
         if (prev && prev.id === selected.id) {
           return { ...prev, items: (prev.items ?? 0) + 1 };
