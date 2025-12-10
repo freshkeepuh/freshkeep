@@ -12,7 +12,7 @@
   background: #fff;
   padding: 1.5rem;
   border-radius: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .greenText {
@@ -51,12 +51,11 @@
 
 .btnBlue {
   background-color: #98bcee;
-  color: rgb(13, 59, 225); 
+  color: rgb(13, 59, 225);
   border: none;
   border-radius: 8px;
   padding: 0.5rem 1rem;
   cursor: pointer;
-  
 }
 
 .storageIcon {
@@ -70,7 +69,7 @@
   padding: 1rem;
   text-align: center;
   align-items: center;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
   flex-direction: column;
   justify-content: center;
   display: flex;
@@ -137,7 +136,7 @@
   border-radius: 10px;
   padding: 0.75rem 0 1rem;
   border: 1px solid #e5e7eb;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
   width: 100%;
 }
 
@@ -168,7 +167,7 @@
 }
 
 .storageGrid :global(.col),
-.storageGrid :global([class*="col-"]) {
+.storageGrid :global([class*='col-']) {
   padding-left: 0;
   padding-right: 0;
 }
@@ -227,17 +226,18 @@
   }
 }
 
-.expiringSoonBox, .quickActions {
+.expiringSoonBox,
+.quickActions {
   background: #fff;
   border-radius: 12px;
   margin-bottom: 2rem;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
   padding: 1.5rem;
 }
 
 .actionBtn {
   width: 100%;
-  color: black; 
+  color: black;
   margin-top: 0.5rem;
   border: none;
   background: #eaf3ff;

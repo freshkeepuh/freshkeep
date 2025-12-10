@@ -32,7 +32,7 @@ export async function createUnit(data: {
 export async function readUnits() {
   const units = await prisma.unit.findMany({
     select: {
-      base: true, 
+      base: true,
       ...unitSelect,
     },
     orderBy: { name: 'asc' },

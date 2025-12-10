@@ -15,12 +15,15 @@ import {
  * @param userId The ID of the owner.
  * @param data The storage area data.
  */
-export async function createStorageArea(userId: string, data: {
-  locId: string,
-  name: string,
-  type: string,
-  picture: string | undefined,
-}) {
+export async function createStorageArea(
+  userId: string,
+  data: {
+    locId: string;
+    name: string;
+    type: string;
+    picture: string | undefined;
+  },
+) {
   const newStorageArea = await prisma.storageArea.create({
     data: {
       userId,
@@ -59,7 +62,10 @@ export async function readStorageAreas(userId: string) {
 /**
  * Read a storage area by ID (and verify ownership).
  */
-export async function readStorageArea(userId: string, id: string | null | undefined) {
+export async function readStorageArea(
+  userId: string,
+  id: string | null | undefined,
+) {
   if (!id) return null;
 
   const storageArea = await prisma.storageArea.findFirst({
@@ -83,12 +89,16 @@ export async function readStorageArea(userId: string, id: string | null | undefi
 /**
  * Update a storage area by ID.
  */
-export async function updateStorageArea(userId: string, id: string, data: {
-  locId: string,
-  name: string,
-  type: string,
-  picture: string | undefined,
-}) {
+export async function updateStorageArea(
+  userId: string,
+  id: string,
+  data: {
+    locId: string;
+    name: string;
+    type: string;
+    picture: string | undefined;
+  },
+) {
   const updatedBatch = await prisma.storageArea.updateMany({
     where: { id, userId },
     data: {

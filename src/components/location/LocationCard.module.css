@@ -2,7 +2,9 @@
   background: #f8f9fa;
   border-radius: 8px;
   border: 1px solid #dee2e6;
-  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+  transition:
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .card:hover {

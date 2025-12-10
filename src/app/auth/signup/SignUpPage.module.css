@@ -28,7 +28,6 @@
   filter: saturate(1.1) brightness(1.1) hue-rotate(-10deg);
 }
 
-
 /* Right side background */
 .right {
   background-image: url('/images/sign-up/bg-right2.png');
@@ -41,8 +40,12 @@
   inset: 0;
   pointer-events: none;
 }
-.overlayDark  { background: rgba(0, 0, 0, 0.3); }
-.overlayLight { background: rgba(255, 255, 255, 0.12); }
+.overlayDark {
+  background: rgba(0, 0, 0, 0.3);
+}
+.overlayLight {
+  background: rgba(255, 255, 255, 0.12);
+}
 
 /* Welcome content (left container) */
 .welcomeWrap {
@@ -51,7 +54,7 @@
   padding: 40px;
   max-width: 600px;
   width: 90%;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
 /* Right container for card */
@@ -67,46 +70,51 @@
   background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255,255,255,0.5);
-  box-shadow: 0 12px 36px rgba(0,0,0,0.15);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.15);
   border-radius: 20px;
 }
 
 /* Responsive (stack on mobile) */
 @media (max-width: 900px) {
-  .authHero { flex-direction: column; }
-  .side { min-height: 50vh; }
-  .welcomeWrap { text-align: center; }
+  .authHero {
+    flex-direction: column;
+  }
+  .side {
+    min-height: 50vh;
+  }
+  .welcomeWrap {
+    text-align: center;
+  }
 }
-
 
 /* Mobile: show only the form side */
 @media (max-width: 768px) {
   .authHero {
-    flex-direction: column;          /* not required, but safe */
+    flex-direction: column; /* not required, but safe */
   }
 
   .left {
-    display: none;                   /* hide hero side */
+    display: none; /* hide hero side */
   }
 
   .right {
     flex: 1 1 100%;
-    min-height: 100vh;               /* full height */
-    align-items: center;             /* center card vertically */
-    justify-content: center;         /* center card horizontally */
-    padding: 24px 16px;              /* breathing room around card */
-    filter: none;                    /* keep background clean on mobile */
+    min-height: 100vh; /* full height */
+    align-items: center; /* center card vertically */
+    justify-content: center; /* center card horizontally */
+    padding: 24px 16px; /* breathing room around card */
+    filter: none; /* keep background clean on mobile */
   }
 
   .cardWrap {
-    width: min(520px, 94%);          /* comfortable width on phones */
-    padding: 0;                      /* card has its own padding */
+    width: min(520px, 94%); /* comfortable width on phones */
+    padding: 0; /* card has its own padding */
   }
 
   .glassyCard {
     border-radius: 16px;
-    box-shadow: 0 10px 28px rgba(0,0,0,0.15);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.15);
   }
 
   /* Optional: slightly dim bg so the white card pops */
@@ -115,12 +123,20 @@
   }
 
   /* Optional helper if you add mobile-only intro text */
-  .mobileOnly { display: block; }
-  .desktopOnly { display: none; }
+  .mobileOnly {
+    display: block;
+  }
+  .desktopOnly {
+    display: none;
+  }
 }
 
 /* Desktop defaults */
 @media (min-width: 769px) {
-  .mobileOnly { display: none; }
-  .desktopOnly { display: block; }
+  .mobileOnly {
+    display: none;
+  }
+  .desktopOnly {
+    display: block;
+  }
 }

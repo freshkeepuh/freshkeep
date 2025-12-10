@@ -129,7 +129,8 @@ async function seedUsers(): Promise<User[]> {
       users.push(created);
     } else {
       // on reseed, do NOT clobber existing settings (user changes win)
-      const prevSettings = (existing.settings as Record<string, any> | null) ?? {};
+      const prevSettings =
+        (existing.settings as Record<string, any> | null) ?? {};
       const settingsForUpdate = {
         ...DEFAULT_SETTINGS,
         ...(account.settings ?? {}),
@@ -238,7 +239,8 @@ async function seedStorageAreas(
   for (const defaultStorageArea of config.defaultStorageAreas) {
     const location = findByName(locations, defaultStorageArea.locationName);
 
-    const storageType = (defaultStorageArea.type as StorageType) || StorageType.Pantry;
+    const storageType =
+      (defaultStorageArea.type as StorageType) || StorageType.Pantry;
 
     const storageArea = await prisma.storageArea.upsert({
       where: {
@@ -273,7 +275,7 @@ async function seedStorageAreas(
  */
 async function seedUnits(): Promise<Array<Unit>> {
   console.log('🌱 Seeding Classified Units...');
-  
+
   const units: Array<Unit> = [];
 
   const unitsData = [
@@ -334,7 +336,10 @@ async function seedUnits(): Promise<Array<Unit>> {
  * @param {Array<Unit>} units - An array of Unit objects to associate with products.
  * @returns {Promise<Array<Product>>} A promise that resolves to an array of created or existing products.
  */
-async function seedProducts(units: Array<Unit>, stores: Array<Store>): Promise<Array<Product>> {
+async function seedProducts(
+  units: Array<Unit>,
+  stores: Array<Store>,
+): Promise<Array<Product>> {
   const products: Array<Product> = [];
 
   // Optional: if you DON'T want products to accumulate on repeated seeds in dev,
@@ -417,7 +422,9 @@ async function seedProductInstances(
  * @param stores The Stores to which the lists belong.
  * @returns A promise that resolves to an array of created or existing Shopping Lists.
  */
-const seedShoppingList = async (stores: Array<Store>): Promise<Array<ShoppingList>> => {
+const seedShoppingList = async (
+  stores: Array<Store>,
+): Promise<Array<ShoppingList>> => {
   const shoppingLists: Array<ShoppingList> = [];
   for (const defaultList of config.defaultShoppingLists) {
     const store = findByName(stores, defaultList.storeName);

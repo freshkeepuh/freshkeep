@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
-import authOptions from "@/lib/authOptions";
-import { prisma } from '@/lib/prisma'; 
+import authOptions from '@/lib/authOptions';
+import { prisma } from '@/lib/prisma';
 import { createUnit, updateUnit } from '@/lib/dbUnitActions';
 import getResponseError from '@/lib/routeHelpers';
 
@@ -13,29 +13,30 @@ export const runtime = 'nodejs';
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);
-    
+
     let userSystem = 'metric';
 
     if (session?.user?.email) {
       const user = await prisma.user.findUnique({
         where: { email: session.user.email },
-        select: { settings: true }
+        select: { settings: true },
       });
 
-      if (user?.settings && typeof user.settings === 'object' && !Array.isArray(user.settings)) {
-         if (user.settings.unitSystem) {
-            // @ts-ignore
-            userSystem = user.settings.unitSystem;
-         }
+      if (
+        user?.settings &&
+        typeof user.settings === 'object' &&
+        !Array.isArray(user.settings)
+      ) {
+        if (user.settings.unitSystem) {
+          // @ts-ignore
+          userSystem = user.settings.unitSystem;
+        }
       }
     }
 
     const units = await prisma.unit.findMany({
       where: {
-        OR: [
-          { system: 'universal' },
-          { system: userSystem }
-        ]
+        OR: [{ system: 'universal' }, { system: userSystem }],
       },
       orderBy: {
         name: 'asc',
