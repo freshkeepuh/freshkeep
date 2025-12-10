@@ -4,7 +4,7 @@ Best practices for the React UI framework.
 
 ### RE-01: Components should be simple.
 
-Components should do one thing.  If they are doing many things, then consider breaking them up into subcomponents.
+Components should do one thing. If they are doing many things, then consider breaking them up into subcomponents.
 
 ### RE-02: No state updates in loops.
 
@@ -12,7 +12,7 @@ Are there state updates in loops?
 
 ### RE-03: Do not rename default exports.
 
-When importing a component that is exported "by default", do not rename the component.  The code is more understandable if every component is always referenced by its original name.
+When importing a component that is exported "by default", do not rename the component. The code is more understandable if every component is always referenced by its original name.
 
 ### RE-04: Destructure props in component parameter.
 
@@ -53,18 +53,25 @@ class AdminHomeBanner extends React.Component {
   render() {
     const gridStyle = { height: '500px' };
     return (
-        <div className="adminhome-banner">
-          <Grid container verticalAlign="middle" textAlign="center" style={gridStyle}>
-            <Grid.Row>
-              <Grid.Column>
-                <div className="welcome-text"><p>Hello there</p></div>
-                <Header as="h1" inverted>
-                  Manage your site
-                </Header>
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </div>
+      <div className="adminhome-banner">
+        <Grid
+          container
+          verticalAlign="middle"
+          textAlign="center"
+          style={gridStyle}
+        >
+          <Grid.Row>
+            <Grid.Column>
+              <div className="welcome-text">
+                <p>Hello there</p>
+              </div>
+              <Header as="h1" inverted>
+                Manage your site
+              </Header>
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </div>
     );
   }
 }
@@ -76,18 +83,25 @@ Should be
 const AdminHomeBanner = () => {
   const gridStyle = { height: '500px' };
   return (
-      <div className="adminhome-banner">
-        <Grid container verticalAlign="middle" textAlign="center" style={gridStyle}>
-          <Grid.Row>
-            <Grid.Column>
-              <div className="welcome-text"><p>Hello there</p></div>
-              <Header as="h1" inverted>
-                Manage your site
-              </Header>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </div>
+    <div className="adminhome-banner">
+      <Grid
+        container
+        verticalAlign="middle"
+        textAlign="center"
+        style={gridStyle}
+      >
+        <Grid.Row>
+          <Grid.Column>
+            <div className="welcome-text">
+              <p>Hello there</p>
+            </div>
+            <Header as="h1" inverted>
+              Manage your site
+            </Header>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+    </div>
   );
-}
+};
 ```

@@ -1,17 +1,47 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createUnit, readUnits, updateUnit } from '@/lib/dbUnitActions';
+import { getServerSession } from 'next-auth';
+import authOptions from '@/lib/authOptions';
+import { prisma } from '@/lib/prisma';
+import { createUnit, updateUnit } from '@/lib/dbUnitActions';
 import getResponseError from '@/lib/routeHelpers';
 
 export const runtime = 'nodejs';
 
-/**
- * Handles GET requests for retrieving units.
- * @param request The incoming request
- * @returns A JSON response containing the list of units or an error message
- */
 export async function GET() {
   try {
-    const units = await readUnits();
+    const session = await getServerSession(authOptions);
+
+    let userSystem = 'imperial';
+
+    if (session?.user?.email) {
+      const user = await prisma.user.findUnique({
+        where: { email: session.user.email },
+        select: { settings: true },
+      });
+
+      if (
+        user?.settings &&
+        typeof user.settings === 'object' &&
+        !Array.isArray(user.settings)
+      ) {
+        const savedSystem = (
+          user.settings as { unitSystem?: string } | null | undefined
+        )?.unitSystem;
+
+        if (savedSystem) {
+          userSystem = savedSystem;
+        }
+      }
+    }
+
+    const units = await prisma.unit.findMany({
+      where: {
+        OR: [{ system: 'universal' }, { system: userSystem }],
+      },
+      orderBy: {
+        name: 'asc',
+      },
+    });
 
     return NextResponse.json(units, { status: 200 });
   } catch (error: Error | any) {
@@ -19,16 +49,11 @@ export async function GET() {
   }
 }
 
-/**
- * Handles POST requests for creating a new unit.
- * @param request The incoming request
- * @returns A JSON response containing the created unit or an error message
- */
 export async function POST(request: NextRequest) {
   try {
     const { name, abbr, baseId, factor } = await request.json();
 
-    if (!name || !abbr || !baseId || factor === undefined) {
+    if (!name || !abbr || factor === undefined) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 },
@@ -38,7 +63,7 @@ export async function POST(request: NextRequest) {
     const newUnit = await createUnit({
       name,
       abbr,
-      baseId,
+      baseId: baseId || null,
       factor,
     });
 
@@ -48,16 +73,11 @@ export async function POST(request: NextRequest) {
   }
 }
 
-/**
- * Handles PUT requests for updating an existing unit.
- * @param request The incoming request
- * @returns A JSON response containing the updated unit or an error message
- */
 export async function PUT(request: NextRequest) {
   try {
     const { id, name, abbr, baseId, factor } = await request.json();
 
-    if (!id || !name || !abbr || !baseId || factor === undefined) {
+    if (!id || !name || !abbr || factor === undefined) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 },
@@ -67,7 +87,7 @@ export async function PUT(request: NextRequest) {
     const updatedUnit = await updateUnit(id, {
       name,
       abbr,
-      baseId,
+      baseId: baseId || null,
       factor,
     });
 

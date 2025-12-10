@@ -1,4 +1,5 @@
-.auth-hero, .signin-hero {
+.auth-hero,
+.signin-hero {
   position: relative;
   background-size: cover;
   background-position: center;
@@ -17,15 +18,16 @@
   background-image: url('/images/sign-in/Sign-in-bg-photo.png');
 }
 
-.auth-hero::before, .signin-hero::before {
-  content: "";
+.auth-hero::before,
+.signin-hero::before {
+  content: '';
   position: absolute;
   inset: 0;
   background: linear-gradient(
     to right,
-    rgba(0,0,0,0.55) 0%,
-    rgba(0,0,0,0.25) 35%,
-    rgba(0,0,0,0) 60%
+    rgba(0, 0, 0, 0.55) 0%,
+    rgba(0, 0, 0, 0.25) 35%,
+    rgba(0, 0, 0, 0) 60%
   );
   pointer-events: none;
   z-index: 1;
@@ -50,7 +52,8 @@
   font-weight: 500;
 }
 
-.auth-card-wrap, .signin-card-wrap {
+.auth-card-wrap,
+.signin-card-wrap {
   position: relative;
   z-index: 2;
   width: 500px;
@@ -61,7 +64,8 @@
 
 /* Mobile: stack vertically */
 @media (max-width: 992px) {
-  .auth-hero, .signin-hero {
+  .auth-hero,
+  .signin-hero {
     flex-direction: column;
     justify-content: center;
     gap: 2rem;
@@ -69,12 +73,13 @@
     padding: 5vh 1.25rem;
   }
 
-  .auth-hero::before, .signin-hero::before {
+  .auth-hero::before,
+  .signin-hero::before {
     background: linear-gradient(
       to bottom,
-      rgba(0,0,0,0.55) 0%,
-      rgba(0,0,0,0.25) 40%,
-      rgba(0,0,0,0) 70%
+      rgba(0, 0, 0, 0.55) 0%,
+      rgba(0, 0, 0, 0.25) 40%,
+      rgba(0, 0, 0, 0) 70%
     );
   }
 
@@ -91,7 +96,8 @@
     font-size: 1.2rem;
   }
 
-  .auth-card-wrap, .signin-card-wrap {
+  .auth-card-wrap,
+  .signin-card-wrap {
     width: 100%;
     max-width: 500px;
     margin-left: 0;

@@ -1,7 +1,3 @@
-/**
- * CRUD Actions for the Storage Area Model.
- */
-
 'use server';
 
 import { StorageType } from '@prisma/client';
@@ -16,17 +12,21 @@ import {
 
 /**
  * Create a new storage area.
- * @param data The storage area data to create.
- * @returns The created storage area.
+ * @param userId The ID of the owner.
+ * @param data The storage area data.
  */
-export async function createStorageArea(data: {
-  locId: string;
-  name: string;
-  type: string;
-  picture: string | undefined;
-}) {
+export async function createStorageArea(
+  userId: string,
+  data: {
+    locId: string;
+    name: string;
+    type: string;
+    picture: string | undefined;
+  },
+) {
   const newStorageArea = await prisma.storageArea.create({
     data: {
+      userId,
       locId: data.locId,
       name: data.name,
       type: data.type as StorageType,
@@ -41,11 +41,12 @@ export async function createStorageArea(data: {
 }
 
 /**
- * Read all storage areas.
- * @returns All storage areas.
+ * Read all storage areas for a specific user.
+ * @param userId The ID of the user.
  */
-export async function readStorageAreas() {
+export async function readStorageAreas(userId: string) {
   const storageAreas = await prisma.storageArea.findMany({
+    where: { userId },
     select: {
       locId: true,
       ...storageAreaSelect,
@@ -59,14 +60,16 @@ export async function readStorageAreas() {
 }
 
 /**
- * Read a storage area by ID.
- * @param id The ID of the storage area to read.
- * @returns The storage area if found, otherwise null.
+ * Read a storage area by ID (and verify ownership).
  */
-export async function readStorageArea(id: string | null | undefined) {
+export async function readStorageArea(
+  userId: string,
+  id: string | null | undefined,
+) {
   if (!id) return null;
-  const storageArea = await prisma.storageArea.findUnique({
-    where: { id },
+
+  const storageArea = await prisma.storageArea.findFirst({
+    where: { id, userId },
     select: {
       locId: true,
       ...storageAreaSelect,
@@ -85,11 +88,9 @@ export async function readStorageArea(id: string | null | undefined) {
 
 /**
  * Update a storage area by ID.
- * @param id The ID of the storage area to update.
- * @param data The new data for the storage area.
- * @returns The updated storage area if found, otherwise null.
  */
 export async function updateStorageArea(
+  userId: string,
   id: string,
   data: {
     locId: string;
@@ -98,38 +99,28 @@ export async function updateStorageArea(
     picture: string | undefined;
   },
 ) {
-  const updatedStorageArea = await prisma.storageArea.update({
-    where: { id },
+  const updatedBatch = await prisma.storageArea.updateMany({
+    where: { id, userId },
     data: {
       name: data.name,
       locId: data.locId,
       type: data.type as StorageType,
       picture: data.picture,
     },
-    select: {
-      locId: true,
-      ...storageAreaSelect,
-      instances: {
-        select: {
-          unit: unitsSelect,
-          product: productsSelect,
-          ...productInstanceSelect,
-        },
-      },
-    },
   });
-  return updatedStorageArea;
+
+  if (updatedBatch.count === 0) return null;
+
+  // Fetch the updated record to return it (since updateMany doesn't return data)
+  return readStorageArea(userId, id);
 }
 
 /**
  * Delete a storage area by ID.
- * @param id The ID of the storage area to delete.
- * @returns The deleted storage area if found, otherwise null.
  */
-export async function deleteStorageArea(id: string) {
-  const deletedStorageArea = await prisma.storageArea.delete({
-    where: { id },
-    select: storageAreaSelect,
+export async function deleteStorageArea(userId: string, id: string) {
+  const deletedBatch = await prisma.storageArea.deleteMany({
+    where: { id, userId },
   });
-  return deletedStorageArea;
+  return deletedBatch.count > 0;
 }

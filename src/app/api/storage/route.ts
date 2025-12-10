@@ -3,6 +3,9 @@ import {
   readStorageAreas,
   createStorageArea,
 } from '@/lib/dbStorageAreaActions';
+import { getServerSession } from 'next-auth';
+import authOptions from '@/lib/authOptions';
+import { prisma } from '@/lib/prisma';
 
 export const runtime = 'nodejs';
 
@@ -34,14 +37,34 @@ function mapTypeToDb(type: string): string {
     case 'Spice Rack':
       return 'SpiceRack';
     default:
-      return 'Pantry'; // Default to Pantry for 'Other'
+      return 'Pantry';
   }
 }
 
+// Helper to get current User ID
+async function getCurrentUserId() {
+  const session = await getServerSession(authOptions);
+  if (!session || !session.user?.email) return null;
+
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email },
+  });
+
+  return user?.id;
+}
+
 const COUNT_KEY = '_count';
+
 export async function GET() {
   try {
-    const storages = await readStorageAreas();
+    const userId = await getCurrentUserId();
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    // Pass userId to the action
+    const storages = await readStorageAreas(userId);
+
     const data = storages.map((s) => ({
       id: s.id,
       locId: s.locId,
@@ -60,6 +83,11 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+    const userId = await getCurrentUserId();
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const body = await request.json();
     const { name, type, locId } = body;
 
@@ -71,7 +99,9 @@ export async function POST(request: NextRequest) {
     }
 
     const dbType = mapTypeToDb(type);
-    const newStorage = await createStorageArea({
+
+    // Pass userId to the action
+    const newStorage = await createStorageArea(userId, {
       name,
       type: dbType,
       locId: locId || null,

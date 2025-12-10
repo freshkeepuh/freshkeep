@@ -1,7 +1,21 @@
 {
   "defaultAccounts": [
-    { "email": "admin@foo.com", "password": "changeme", "role": "ADMIN", "settings": { "units": "imperial", "country": "USA", "theme": "light", "profilePicture": "/images/avatars/default.jpg"}},
-    { "email": "john@foo.com", "password": "changeme", "settings": { "units": "metric", "country": "CAN", "theme": "dark" }}
+    {
+      "email": "admin@foo.com",
+      "password": "changeme",
+      "role": "ADMIN",
+      "settings": {
+        "units": "imperial",
+          "country": "USA",
+        "theme": "light",
+        "profilePicture": "/images/avatars/default.jpg"
+      }
+    },
+    {
+      "email": "john@foo.com",
+      "password": "changeme",
+      "settings": { "units": "metric", "country": "CAN", "theme": "dark" }
+    }
   ],
   "defaultUnits": [
     { "name": "each", "abbr": "ea", "baseName": "each", "factor": 1 },
@@ -9,105 +23,665 @@
     { "name": "piece", "abbr": "pc", "baseName": "each", "factor": 1 },
     { "name": "ounce", "abbr": "oz", "baseName": "ounce", "factor": 1 },
     { "name": "pound", "abbr": "lb", "baseName": "ounce", "factor": 16 },
-    { "name": "fluid ounce", "abbr": "fl oz", "baseName": "fluid ounce", "factor": 1 },
+    {
+      "name": "fluid ounce",
+      "abbr": "fl oz",
+      "baseName": "fluid ounce",
+      "factor": 1
+    },
     { "name": "pint", "abbr": "pt", "baseName": "fluid ounce", "factor": 16 },
     { "name": "quart", "abbr": "qt", "baseName": "fluid ounce", "factor": 32 },
-    { "name": "gallon", "abbr": "gal", "baseName": "fluid ounce", "factor": 128 },
+    {
+      "name": "gallon",
+      "abbr": "gal",
+      "baseName": "fluid ounce",
+      "factor": 128
+    },
     { "name": "cup", "abbr": "cp", "baseName": "fluid ounce", "factor": 8 },
-    { "name": "tablespoon", "abbr": "tbsp", "baseName": "fluid ounce", "factor": 0.5 },
-    { "name": "teaspoon", "abbr": "tsp", "baseName": "fluid ounce", "factor": 0.1666667 },
+    {
+      "name": "tablespoon",
+      "abbr": "tbsp",
+      "baseName": "fluid ounce",
+      "factor": 0.5
+    },
+    {
+      "name": "teaspoon",
+      "abbr": "tsp",
+      "baseName": "fluid ounce",
+      "factor": 0.1666667
+    },
     { "name": "gram", "abbr": "g", "baseName": "gram", "factor": 1 },
     { "name": "milligram", "abbr": "mg", "baseName": "gram", "factor": 0.001 },
     { "name": "kilogram", "abbr": "kg", "baseName": "gram", "factor": 1000 },
-    { "name": "milliliter", "abbr": "ml", "baseName": "milliliter", "factor": 1 },
+    {
+      "name": "milliliter",
+      "abbr": "ml",
+      "baseName": "milliliter",
+      "factor": 1
+    },
     { "name": "liter", "abbr": "l", "baseName": "milliliter", "factor": 1000 },
-    { "name": "deciliter", "abbr": "dl", "baseName": "milliliter", "factor": 100 }
+    {
+      "name": "deciliter",
+      "abbr": "dl",
+      "baseName": "milliliter",
+      "factor": 100
+    }
   ],
   "defaultStores": [
-    { "name": "Walmart", "address1":"123 Main St", "address2": "Suite 200", "city": "Anytown", "state": "CA", "zipcode": "12345", "country": "USA", "website": "https://www.walmart.com", "picture": "https://www.walmart.com/favicon.ico" },
-    { "name": "Costco", "address1":"456 Elm St", "address2": "Apt 5", "city": "Othertown", "state": "CA", "zipcode": "67890", "country": "USA", "website": "https://www.costco.com", "picture": "https://www.costco.com/favicon.ico" },
-    { "name": "Target", "address1":"789 Oak St", "address2": "Floor 3", "city": "Anothertown", "state": "CA", "zipcode": "13579", "country": "USA", "website": "https://www.target.com", "picture": "https://www.target.com/favicon.ico" },
-    { "name": "Whole Foods", "address1":"321 Pine St", "address2": "Building B", "city": "Yetanothertown", "state": "CA", "zipcode": "24680", "country": "USA", "website": "https://www.wholefoodsmarket.com", "picture": "https://www.wholefoodsmarket.com/favicon.ico" },
-    { "name": "Safeway", "address1":"654 Maple St", "address2": "Unit 10", "city": "Somewhere", "state": "CA", "zipcode": "98765", "country": "USA", "website": "https://www.safeway.com", "picture": "https://www.safeway.com/favicon.ico" },
-    { "name": "Kroger", "address1":"987 Cedar St", "address2": "Suite 300", "city": "Anywhere", "state": "CA", "zipcode": "54321", "country": "USA", "website": "https://www.kroger.com", "picture": "https://www.kroger.com/favicon.ico" }
+    {
+      "name": "Walmart",
+      "address1": "123 Main St",
+      "address2": "Suite 200",
+      "city": "Anytown",
+      "state": "CA",
+      "zipcode": "12345",
+      "country": "USA",
+      "website": "https://www.walmart.com",
+      "picture": "https://www.walmart.com/favicon.ico"
+    },
+    {
+      "name": "Costco",
+      "address1": "456 Elm St",
+      "address2": "Apt 5",
+      "city": "Othertown",
+      "state": "CA",
+      "zipcode": "67890",
+      "country": "USA",
+      "website": "https://www.costco.com",
+      "picture": "https://www.costco.com/favicon.ico"
+    },
+    {
+      "name": "Target",
+      "address1": "789 Oak St",
+      "address2": "Floor 3",
+      "city": "Anothertown",
+      "state": "CA",
+      "zipcode": "13579",
+      "country": "USA",
+      "website": "https://www.target.com",
+      "picture": "https://www.target.com/favicon.ico"
+    },
+    {
+      "name": "Whole Foods",
+      "address1": "321 Pine St",
+      "address2": "Building B",
+      "city": "Yetanothertown",
+      "state": "CA",
+      "zipcode": "24680",
+      "country": "USA",
+      "website": "https://www.wholefoodsmarket.com",
+      "picture": "https://www.wholefoodsmarket.com/favicon.ico"
+    },
+    {
+      "name": "Safeway",
+      "address1": "654 Maple St",
+      "address2": "Unit 10",
+      "city": "Somewhere",
+      "state": "CA",
+      "zipcode": "98765",
+      "country": "USA",
+      "website": "https://www.safeway.com",
+      "picture": "https://www.safeway.com/favicon.ico"
+    },
+    {
+      "name": "Kroger",
+      "address1": "987 Cedar St",
+      "address2": "Suite 300",
+      "city": "Anywhere",
+      "state": "CA",
+      "zipcode": "54321",
+      "country": "USA",
+      "website": "https://www.kroger.com",
+      "picture": "https://www.kroger.com/favicon.ico"
+    }
   ],
   "defaultProducts": [
-    { "name": "Apples", "category": "Fruits", "defaultQty": 6, "unitName": "each", "isNeeded": true, "picture": "./images/groceryItems/apples.jpg", "storeName": "Walmart" },
-    { "name": "Bananas", "category": "Fruits", "defaultQty": 6, "unitName": "each", "isNeeded": true, "picture": "./images/groceryItems/bananas.jpg", "storeName": "Walmart" },
-    { "name": "Bell Peppers", "category": "Vegetables", "defaultQty": 3, "unitName": "each", "isNeeded": true, "picture": "./images/groceryItems/bell_peppers.jpg", "storeName": "Walmart" },
-    { "name": "Bread", "category": "Bakery", "defaultQty": 1, "unitName": "each", "isNeeded": true, "picture": "./images/groceryItems/bread.jpg", "storeName": "Walmart" },
-    { "name": "Broccoli", "category": "Vegetables", "defaultQty": 1, "unitName": "pound", "isNeeded": true, "picture": "./images/groceryItems/broccoli.jpg", "storeName": "Walmart" },
-    { "name": "Butter", "category": "Dairy", "defaultQty": 1, "unitName": "pound", "isNeeded": false, "picture": "./images/groceryItems/butter.jpg", "storeName": "Walmart" },
-    { "name": "Carrots", "category": "Vegetables", "defaultQty": 2, "unitName": "pound", "isNeeded": true, "picture": "./images/groceryItems/carrots.jpg", "storeName": "Walmart" },
-    { "name": "Cereal", "category": "Cereal", "defaultQty": 1, "unitName": "each", "isNeeded": true, "picture": "./images/groceryItems/cereal.jpg", "storeName": "Walmart" },
-    { "name": "Cheese", "category": "Dairy", "defaultQty": 1, "unitName": "pound", "isNeeded": false, "picture": "./images/groceryItems/cheese.jpg", "storeName": "Walmart" },
-    { "name": "Chicken Breast", "category": "Meat", "defaultQty": 1, "unitName": "pound", "isNeeded": false, "picture": "./images/groceryItems/chicken_breast.jpg", "storeName": "Walmart" },
-    { "name": "Chicken Thighs", "category": "Meat", "defaultQty": 1, "unitName": "pound", "isNeeded": false, "picture": "./images/groceryItems/chicken_thighs.jpg", "storeName": "Walmart" },
-    { "name": "Chips", "category": "Snacks", "defaultQty": 1, "unitName": "each", "isNeeded": false, "picture": "./images/groceryItems/chips.jpg", "storeName": "Walmart" },
-    { "name": "Chocolate", "category": "Snacks", "defaultQty": 1, "unitName": "each", "isNeeded": false, "picture": "./images/groceryItems/chocolate.jpg", "storeName": "Walmart" },
-    { "name": "Coffee", "category": "Beverages", "defaultQty": 1, "unitName": "pound", "isNeeded": false, "picture": "./images/groceryItems/coffee.jpg", "storeName": "Walmart" },
-    { "name": "Cookies", "category": "Snacks", "defaultQty": 1, "unitName": "each", "isNeeded": false, "picture": "./images/groceryItems/cookies.jpg", "storeName": "Walmart" },
-    { "name": "Cucumbers", "category": "Vegetables", "defaultQty": 2, "unitName": "each", "isNeeded": true, "picture": "./images/groceryItems/cucumbers.jpg", "storeName": "Walmart" },
-    { "name": "Eggs", "category": "Dairy", "defaultQty": 1, "unitName": "dozen", "isNeeded": true, "picture": "./images/groceryItems/eggs.jpg", "storeName": "Walmart" },
-    { "name": "Flour", "category": "Baking", "defaultQty": 5, "unitName": "pound", "isNeeded": false, "picture": "./images/groceryItems/flour.jpg", "storeName": "Walmart" },
-    { "name": "Frozen Vegetables", "category": "FrozenFoods", "defaultQty": 1, "unitName": "pound", "isNeeded": false, "picture": "./images/groceryItems/frozen_vegetables.jpg", "storeName": "Walmart" },
-    { "name": "Garlic", "category": "Vegetables", "defaultQty": 1, "unitName": "each", "isNeeded": false, "picture": "./images/groceryItems/garlic.jpg",  "storeName": "Walmart" },
-    { "name": "Grapes", "category": "Fruits", "defaultQty": 1, "unitName": "pound", "isNeeded": false, "picture": "./images/groceryItems/grapes.jpg", "storeName": "Walmart" },
-    { "name": "Ground Beef", "category": "Meat", "defaultQty": 1, "unitName": "pound", "isNeeded": false, "picture": "./images/groceryItems/ground_beef.jpg", "storeName": "Walmart" },
-    { "name": "Ice Cream", "category": "FrozenFoods", "defaultQty": 1, "unitName": "pint", "isNeeded": false, "picture": "./images/groceryItems/ice_cream.jpg", "storeName": "Walmart" },
-    { "name": "Lettuce", "category": "Vegetables", "defaultQty": 1, "unitName": "each", "isNeeded": true, "picture": "./images/groceryItems/lettuce.jpg", "storeName": "Walmart" },
-    { "name": "Milk", "category": "Dairy", "defaultQty": 1, "unitName": "gallon", "isNeeded": true, "picture": "./images/groceryItems/milk.jpg", "storeName": "Walmart" },
-    { "name": "Olive Oil", "category": "Condiments", "defaultQty": 1, "unitName": "liter", "isNeeded": false, "picture": "./images/groceryItems/olive_oil.jpg", "storeName": "Walmart" },
-    { "name": "Onions", "category": "Vegetables", "defaultQty": 3, "unitName": "each", "isNeeded": true, "picture": "./images/groceryItems/onions.jpg", "storeName": "Walmart" },
-    { "name": "Oranges", "category": "Fruits", "defaultQty": 6, "unitName": "each", "isNeeded": true, "picture": "./images/groceryItems/oranges.jpg", "storeName": "Walmart" },
-    { "name": "Pasta", "category": "Pasta", "defaultQty": 1, "unitName": "pound", "isNeeded": false, "picture": "./images/groceryItems/pasta.jpg", "storeName": "Walmart" },
-    { "name": "Pepper", "category": "Spices", "defaultQty": 0.5, "unitName": "ounce", "isNeeded": false, "picture": "./images/groceryItems/pepper.jpg", "storeName": "Walmart" },
-    { "name": "Potatoes", "category": "Vegetables", "defaultQty": 5, "unitName": "pound", "isNeeded": true, "picture": "./images/groceryItems/potatoes.jpg", "storeName": "Walmart" },
-    { "name": "Rice", "category": "Grains", "defaultQty": 2, "unitName": "pound", "isNeeded": false, "picture": "./images/groceryItems/rice.jpg", "storeName": "Walmart" },
-    { "name": "Salmon Fillet", "category": "Meat", "defaultQty": 1, "unitName": "pound", "isNeeded": false, "picture": "./images/groceryItems/salmon_fillet.jpg", "storeName": "Walmart" },
-    { "name": "Salsa", "category": "Condiments", "defaultQty": 1, "unitName": "each", "isNeeded": false, "picture": "./images/groceryItems/salsa.jpg", "storeName": "Walmart" },
-    { "name": "Salt", "category": "Spices", "defaultQty": 1, "unitName": "pound", "isNeeded": false, "picture": "./images/groceryItems/salt.jpg", "storeName": "Walmart" },
-    { "name": "Spinach", "category": "Vegetables", "defaultQty": 1, "unitName": "pound", "isNeeded": true, "picture": "./images/groceryItems/spinach.jpg", "storeName": "Walmart" },
-    { "name": "Strawberries", "category": "Fruits", "defaultQty": 1, "unitName": "pound", "isNeeded": false, "picture": "./images/groceryItems/strawberries.jpg", "storeName": "Walmart" },
-    { "name": "Sugar", "category": "Baking", "defaultQty": 2, "unitName": "pound", "isNeeded": false, "picture": "./images/groceryItems/sugar.jpg", "storeName": "Walmart" },
-    { "name": "Tea", "category": "Beverages", "defaultQty": 1, "unitName": "ounce", "isNeeded": false, "picture": "./images/groceryItems/tea.jpg", "storeName": "Walmart" },
-    { "name": "Tomatoes", "category": "Vegetables", "defaultQty": 4, "unitName": "each", "isNeeded": true, "picture": "./images/groceryItems/tomatoes.jpg", "storeName": "Walmart" },
-    { "name": "Yogurt", "category": "Dairy", "defaultQty": 4, "unitName": "each", "isNeeded": false, "picture": "./images/groceryItems/yogurt.jpg", "storeName": "Walmart" }
+    {
+      "name": "Apples",
+      "category": "Fruits",
+      "defaultQty": 6,
+      "unitName": "each",
+      "isNeeded": true,
+      "picture": "./images/groceryItems/apples.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Bananas",
+      "category": "Fruits",
+      "defaultQty": 6,
+      "unitName": "each",
+      "isNeeded": true,
+      "picture": "./images/groceryItems/bananas.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Bell Peppers",
+      "category": "Vegetables",
+      "defaultQty": 3,
+      "unitName": "each",
+      "isNeeded": true,
+      "picture": "./images/groceryItems/bell_peppers.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Bread",
+      "category": "Bakery",
+      "defaultQty": 1,
+      "unitName": "each",
+      "isNeeded": true,
+      "picture": "./images/groceryItems/bread.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Broccoli",
+      "category": "Vegetables",
+      "defaultQty": 1,
+      "unitName": "pound",
+      "isNeeded": true,
+      "picture": "./images/groceryItems/broccoli.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Butter",
+      "category": "Dairy",
+      "defaultQty": 1,
+      "unitName": "pound",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/butter.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Carrots",
+      "category": "Vegetables",
+      "defaultQty": 2,
+      "unitName": "pound",
+      "isNeeded": true,
+      "picture": "./images/groceryItems/carrots.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Cereal",
+      "category": "Cereal",
+      "defaultQty": 1,
+      "unitName": "each",
+      "isNeeded": true,
+      "picture": "./images/groceryItems/cereal.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Cheese",
+      "category": "Dairy",
+      "defaultQty": 1,
+      "unitName": "pound",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/cheese.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Chicken Breast",
+      "category": "Meat",
+      "defaultQty": 1,
+      "unitName": "pound",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/chicken_breast.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Chicken Thighs",
+      "category": "Meat",
+      "defaultQty": 1,
+      "unitName": "pound",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/chicken_thighs.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Chips",
+      "category": "Snacks",
+      "defaultQty": 1,
+      "unitName": "each",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/chips.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Chocolate",
+      "category": "Snacks",
+      "defaultQty": 1,
+      "unitName": "each",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/chocolate.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Coffee",
+      "category": "Beverages",
+      "defaultQty": 1,
+      "unitName": "pound",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/coffee.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Cookies",
+      "category": "Snacks",
+      "defaultQty": 1,
+      "unitName": "each",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/cookies.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Cucumbers",
+      "category": "Vegetables",
+      "defaultQty": 2,
+      "unitName": "each",
+      "isNeeded": true,
+      "picture": "./images/groceryItems/cucumbers.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Eggs",
+      "category": "Dairy",
+      "defaultQty": 1,
+      "unitName": "dozen",
+      "isNeeded": true,
+      "picture": "./images/groceryItems/eggs.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Flour",
+      "category": "Baking",
+      "defaultQty": 5,
+      "unitName": "pound",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/flour.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Frozen Vegetables",
+      "category": "FrozenFoods",
+      "defaultQty": 1,
+      "unitName": "pound",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/frozen_vegetables.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Garlic",
+      "category": "Vegetables",
+      "defaultQty": 1,
+      "unitName": "each",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/garlic.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Grapes",
+      "category": "Fruits",
+      "defaultQty": 1,
+      "unitName": "pound",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/grapes.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Ground Beef",
+      "category": "Meat",
+      "defaultQty": 1,
+      "unitName": "pound",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/ground_beef.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Ice Cream",
+      "category": "FrozenFoods",
+      "defaultQty": 1,
+      "unitName": "pint",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/ice_cream.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Lettuce",
+      "category": "Vegetables",
+      "defaultQty": 1,
+      "unitName": "each",
+      "isNeeded": true,
+      "picture": "./images/groceryItems/lettuce.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Milk",
+      "category": "Dairy",
+      "defaultQty": 1,
+      "unitName": "gallon",
+      "isNeeded": true,
+      "picture": "./images/groceryItems/milk.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Olive Oil",
+      "category": "Condiments",
+      "defaultQty": 1,
+      "unitName": "liter",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/olive_oil.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Onions",
+      "category": "Vegetables",
+      "defaultQty": 3,
+      "unitName": "each",
+      "isNeeded": true,
+      "picture": "./images/groceryItems/onions.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Oranges",
+      "category": "Fruits",
+      "defaultQty": 6,
+      "unitName": "each",
+      "isNeeded": true,
+      "picture": "./images/groceryItems/oranges.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Pasta",
+      "category": "Pasta",
+      "defaultQty": 1,
+      "unitName": "pound",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/pasta.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Pepper",
+      "category": "Spices",
+      "defaultQty": 0.5,
+      "unitName": "ounce",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/pepper.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Potatoes",
+      "category": "Vegetables",
+      "defaultQty": 5,
+      "unitName": "pound",
+      "isNeeded": true,
+      "picture": "./images/groceryItems/potatoes.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Rice",
+      "category": "Grains",
+      "defaultQty": 2,
+      "unitName": "pound",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/rice.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Salmon Fillet",
+      "category": "Meat",
+      "defaultQty": 1,
+      "unitName": "pound",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/salmon_fillet.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Salsa",
+      "category": "Condiments",
+      "defaultQty": 1,
+      "unitName": "each",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/salsa.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Salt",
+      "category": "Spices",
+      "defaultQty": 1,
+      "unitName": "pound",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/salt.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Spinach",
+      "category": "Vegetables",
+      "defaultQty": 1,
+      "unitName": "pound",
+      "isNeeded": true,
+      "picture": "./images/groceryItems/spinach.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Strawberries",
+      "category": "Fruits",
+      "defaultQty": 1,
+      "unitName": "pound",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/strawberries.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Sugar",
+      "category": "Baking",
+      "defaultQty": 2,
+      "unitName": "pound",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/sugar.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Tea",
+      "category": "Beverages",
+      "defaultQty": 1,
+      "unitName": "ounce",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/tea.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Tomatoes",
+      "category": "Vegetables",
+      "defaultQty": 4,
+      "unitName": "each",
+      "isNeeded": true,
+      "picture": "./images/groceryItems/tomatoes.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Yogurt",
+      "category": "Dairy",
+      "defaultQty": 4,
+      "unitName": "each",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/yogurt.jpg",
+      "storeName": "Walmart"
+    }
   ],
   "defaultLocations": [
-    { "name": "Main Home", "address1": "123 Main St", "address2": "", "city": "Honolulu", "state": "HI", "zipcode": "12345", "country": "USA", "picture": "./images/locations/main_home.jpg" },
-    { "name": "Vacation Home", "address1": "123 Main St", "address2": "", "city": "Hilo", "state": "HI", "zipcode": "12345", "country": "USA", "picture": "./images/locations/vacay_home.jpg" }
+    {
+      "name": "Main Home",
+      "address1": "123 Main St",
+      "address2": "",
+      "city": "Honolulu",
+      "state": "HI",
+      "zipcode": "12345",
+      "country": "USA",
+      "picture": "./images/locations/main_home.jpg"
+    },
+    {
+      "name": "Vacation Home",
+      "address1": "123 Main St",
+      "address2": "",
+      "city": "Hilo",
+      "state": "HI",
+      "zipcode": "12345",
+      "country": "USA",
+      "picture": "./images/locations/vacay_home.jpg"
+    }
   ],
   "defaultStorageAreas": [
-    { "name": "Kitchen Fridge", "locationName": "Main Home", "type": "Refrigerator", "picture": "./images/containers/fridge.jpg" },
-    { "name": "Garage Freezer", "locationName": "Main Home", "type": "Freezer", "picture": "./images/containers/freezer.jpg" },
-    { "name": "House Pantry", "locationName": "Main Home", "type": "Pantry", "picture": "./images/containers/pantry.jpg" },
-    { "name": "Spice Rack", "locationName": "Main Home", "type": "SpiceRack", "picture": "./images/containers/spice_rack.jpg" },
-    { "name": "Fridge", "locationName": "Vacation Home", "type": "Refrigerator", "picture":  "./images/containers/fridge.jpg" },
-    { "name": "Freezer", "locationName": "Vacation Home", "type": "Freezer", "picture":  "./images/containers/freezer.jpg" },
-    { "name": "Pantry", "locationName": "Vacation Home", "type": "Pantry", "picture":  "./images/containers/pantry.jpg" },
-    { "name": "Spice Rack Vacation", "locationName": "Vacation Home", "type": "SpiceRack", "picture":  "./images/containers/spice_rack.jpg" }
+    {
+      "name": "Kitchen Fridge",
+      "locationName": "Main Home",
+      "type": "Refrigerator",
+      "picture": "./images/containers/fridge.jpg"
+    },
+    {
+      "name": "Garage Freezer",
+      "locationName": "Main Home",
+      "type": "Freezer",
+      "picture": "./images/containers/freezer.jpg"
+    },
+    {
+      "name": "House Pantry",
+      "locationName": "Main Home",
+      "type": "Pantry",
+      "picture": "./images/containers/pantry.jpg"
+    },
+    {
+      "name": "Spice Rack",
+      "locationName": "Main Home",
+      "type": "SpiceRack",
+      "picture": "./images/containers/spice_rack.jpg"
+    },
+    {
+      "name": "Fridge",
+      "locationName": "Vacation Home",
+      "type": "Refrigerator",
+      "picture": "./images/containers/fridge.jpg"
+    },
+    {
+      "name": "Freezer",
+      "locationName": "Vacation Home",
+      "type": "Freezer",
+      "picture": "./images/containers/freezer.jpg"
+    },
+    {
+      "name": "Pantry",
+      "locationName": "Vacation Home",
+      "type": "Pantry",
+      "picture": "./images/containers/pantry.jpg"
+    },
+    {
+      "name": "Spice Rack Vacation",
+      "locationName": "Vacation Home",
+      "type": "SpiceRack",
+      "picture": "./images/containers/spice_rack.jpg"
+    }
   ],
   "defaultProductInstances": [
-    { "productName": "Milk", "storageAreaName": "Kitchen Fridge", "locationName": "Main Home", "quantity": 1, "unitName": "gallon", "expirationDate": null },
-    { "productName": "Eggs", "storageAreaName": "Kitchen Fridge", "locationName": "Main Home", "quantity": 1, "unitName": "dozen", "expirationDate": null },
-    { "productName": "Butter", "storageAreaName": "Kitchen Fridge", "locationName": "Main Home", "quantity": 1, "unitName": "pound", "expirationDate": null },
-    { "productName": "Cheese", "storageAreaName": "Kitchen Fridge", "locationName": "Main Home", "quantity": 0.5, "unitName": "pound", "expirationDate": null },
-    { "productName": "Chicken Breast", "storageAreaName": "Garage Freezer", "locationName": "Main Home", "quantity": 2, "unitName": "pound", "expirationDate": null },
-    { "productName": "Broccoli", "storageAreaName": "Kitchen Fridge", "locationName": "Main Home", "quantity": 1, "unitName": "pound", "expirationDate": null }
+    {
+      "productName": "Milk",
+      "storageAreaName": "Kitchen Fridge",
+      "locationName": "Main Home",
+      "quantity": 1,
+      "unitName": "gallon",
+      "expirationDate": null
+    },
+    {
+      "productName": "Eggs",
+      "storageAreaName": "Kitchen Fridge",
+      "locationName": "Main Home",
+      "quantity": 1,
+      "unitName": "dozen",
+      "expirationDate": null
+    },
+    {
+      "productName": "Butter",
+      "storageAreaName": "Kitchen Fridge",
+      "locationName": "Main Home",
+      "quantity": 1,
+      "unitName": "pound",
+      "expirationDate": null
+    },
+    {
+      "productName": "Cheese",
+      "storageAreaName": "Kitchen Fridge",
+      "locationName": "Main Home",
+      "quantity": 0.5,
+      "unitName": "pound",
+      "expirationDate": null
+    },
+    {
+      "productName": "Chicken Breast",
+      "storageAreaName": "Garage Freezer",
+      "locationName": "Main Home",
+      "quantity": 2,
+      "unitName": "pound",
+      "expirationDate": null
+    },
+    {
+      "productName": "Broccoli",
+      "storageAreaName": "Kitchen Fridge",
+      "locationName": "Main Home",
+      "quantity": 1,
+      "unitName": "pound",
+      "expirationDate": null
+    }
   ],
   "defaultShoppingLists": [
     { "name": "Weekly Groceries", "storeName": "Walmart", "isDefault": true },
     { "name": "Party Supplies", "storeName": "Target", "isDefault": false }
   ],
   "defaultShoppingListItems": [
-    { "shoppingListName": "Weekly Groceries", "productName": "Apples", "quantity": 6, "unitName": "each", "isPurchased": false },
-    { "shoppingListName": "Weekly Groceries", "productName": "Bananas", "quantity": 6, "unitName": "each", "isPurchased": false },
-    { "shoppingListName": "Weekly Groceries", "productName": "Bread", "quantity": 1, "unitName": "each", "isPurchased": false },
-    { "shoppingListName": "Weekly Groceries", "productName": "Carrots", "quantity": 2, "unitName": "pound", "isPurchased": false },
-    { "shoppingListName": "Party Supplies", "productName": "Chips", "quantity": 3, "unitName": "each", "isPurchased": false },
-    { "shoppingListName": "Party Supplies", "productName": "Salsa", "quantity": 2, "unitName": "each", "isPurchased": false },
-    { "shoppingListName": "Party Supplies", "productName": "Cookies", "quantity": 2, "unitName": "each", "isPurchased": false }
+    {
+      "shoppingListName": "Weekly Groceries",
+      "productName": "Apples",
+      "quantity": 6,
+      "unitName": "each",
+      "isPurchased": false
+    },
+    {
+      "shoppingListName": "Weekly Groceries",
+      "productName": "Bananas",
+      "quantity": 6,
+      "unitName": "each",
+      "isPurchased": false
+    },
+    {
+      "shoppingListName": "Weekly Groceries",
+      "productName": "Bread",
+      "quantity": 1,
+      "unitName": "each",
+      "isPurchased": false
+    },
+    {
+      "shoppingListName": "Weekly Groceries",
+      "productName": "Carrots",
+      "quantity": 2,
+      "unitName": "pound",
+      "isPurchased": false
+    },
+    {
+      "shoppingListName": "Party Supplies",
+      "productName": "Chips",
+      "quantity": 3,
+      "unitName": "each",
+      "isPurchased": false
+    },
+    {
+      "shoppingListName": "Party Supplies",
+      "productName": "Salsa",
+      "quantity": 2,
+      "unitName": "each",
+      "isPurchased": false
+    },
+    {
+      "shoppingListName": "Party Supplies",
+      "productName": "Cookies",
+      "quantity": 2,
+      "unitName": "each",
+      "isPurchased": false
+    }
   ],
   "defaultRecipes": [
     {
@@ -120,12 +694,42 @@
         { "name": "panko breadcrumbs", "quantity": 1, "unitName": "cup" },
         { "name": "eggs", "quantity": 1, "unitName": "each", "note": "beaten" },
         { "name": "flour", "quantity": 0.5, "unitName": "cup" },
-        { "name": "Japanese curry roux", "quantity": 4, "unitName": "piece", "note": "blocks" },
-        { "name": "onion", "quantity": 1, "unitName": "each", "note": "sliced" },
-        { "name": "carrot", "quantity": 1, "unitName": "each", "note": "sliced" },
-        { "name": "potato", "quantity": 1, "unitName": "each", "note": "diced" },
-        { "name": "steamed rice", "quantity": 2, "unitName": "cup", "note": "cooked" },
-        { "name": "oil", "quantity": 0.25, "unitName": "cup", "note": "for shallow frying" },
+        {
+          "name": "Japanese curry roux",
+          "quantity": 4,
+          "unitName": "piece",
+          "note": "blocks"
+        },
+        {
+          "name": "onion",
+          "quantity": 1,
+          "unitName": "each",
+          "note": "sliced"
+        },
+        {
+          "name": "carrot",
+          "quantity": 1,
+          "unitName": "each",
+          "note": "sliced"
+        },
+        {
+          "name": "potato",
+          "quantity": 1,
+          "unitName": "each",
+          "note": "diced"
+        },
+        {
+          "name": "steamed rice",
+          "quantity": 2,
+          "unitName": "cup",
+          "note": "cooked"
+        },
+        {
+          "name": "oil",
+          "quantity": 0.25,
+          "unitName": "cup",
+          "note": "for shallow frying"
+        },
         { "name": "salt", "quantity": 0.5, "unitName": "teaspoon" },
         { "name": "pepper", "quantity": 0.25, "unitName": "teaspoon" }
       ],
@@ -145,14 +749,44 @@
       "difficulty": "EASY",
       "diet": "ANY",
       "ingredients": [
-        { "name": "saimin noodles", "quantity": 2, "unitName": "each", "note": "portions" },
+        {
+          "name": "saimin noodles",
+          "quantity": 2,
+          "unitName": "each",
+          "note": "portions"
+        },
         { "name": "chicken broth", "quantity": 4, "unitName": "cup" },
         { "name": "soy sauce", "quantity": 2, "unitName": "tablespoon" },
-        { "name": "garlic", "quantity": 2, "unitName": "clove", "note": "minced; use 1–2 cloves" },
-        { "name": "green onion", "quantity": 1, "unitName": "each", "note": "sliced" },
-        { "name": "kamaboko", "quantity": 6, "unitName": "piece", "note": "slices" },
-        { "name": "char siu", "quantity": 6, "unitName": "piece", "note": "thin slices" },
-        { "name": "nori", "quantity": 1, "unitName": "each", "note": "sheet, cut into strips" }
+        {
+          "name": "garlic",
+          "quantity": 2,
+          "unitName": "clove",
+          "note": "minced; use 1–2 cloves"
+        },
+        {
+          "name": "green onion",
+          "quantity": 1,
+          "unitName": "each",
+          "note": "sliced"
+        },
+        {
+          "name": "kamaboko",
+          "quantity": 6,
+          "unitName": "piece",
+          "note": "slices"
+        },
+        {
+          "name": "char siu",
+          "quantity": 6,
+          "unitName": "piece",
+          "note": "thin slices"
+        },
+        {
+          "name": "nori",
+          "quantity": 1,
+          "unitName": "each",
+          "note": "sheet, cut into strips"
+        }
       ],
       "instructions": [
         "Bring 4 cups chicken broth to a simmer; add 2 tablespoons soy sauce and 1–2 minced garlic cloves.",
@@ -171,11 +805,21 @@
       "ingredients": [
         { "name": "shrimp", "quantity": 1, "unitName": "pound" },
         { "name": "butter", "quantity": 4, "unitName": "tablespoon" },
-        { "name": "garlic", "quantity": 8, "unitName": "clove", "note": "minced; 6–8 cloves" },
+        {
+          "name": "garlic",
+          "quantity": 8,
+          "unitName": "clove",
+          "note": "minced; 6–8 cloves"
+        },
         { "name": "flour", "quantity": 0.25, "unitName": "cup" },
         { "name": "paprika", "quantity": 1, "unitName": "teaspoon" },
         { "name": "lemon", "quantity": 1, "unitName": "each" },
-        { "name": "white rice", "quantity": 2, "unitName": "cup", "note": "cooked" },
+        {
+          "name": "white rice",
+          "quantity": 2,
+          "unitName": "cup",
+          "note": "cooked"
+        },
         { "name": "macaroni salad", "quantity": 1.5, "unitName": "cup" },
         { "name": "salt", "quantity": 1, "unitName": "teaspoon" },
         { "name": "pepper", "quantity": 0.5, "unitName": "teaspoon" }
@@ -200,8 +844,18 @@
         { "name": "sriracha", "quantity": 2, "unitName": "teaspoon" },
         { "name": "mayonnaise", "quantity": 2, "unitName": "tablespoon" },
         { "name": "sesame oil", "quantity": 1, "unitName": "teaspoon" },
-        { "name": "green onion", "quantity": 2, "unitName": "tablespoon", "note": "sliced" },
-        { "name": "white rice", "quantity": 2, "unitName": "cup", "note": "cooked" },
+        {
+          "name": "green onion",
+          "quantity": 2,
+          "unitName": "tablespoon",
+          "note": "sliced"
+        },
+        {
+          "name": "white rice",
+          "quantity": 2,
+          "unitName": "cup",
+          "note": "cooked"
+        },
         { "name": "avocado", "quantity": 1, "unitName": "each" },
         { "name": "sesame seeds", "quantity": 2, "unitName": "teaspoon" }
       ],
@@ -221,12 +875,32 @@
       "diet": "VEGETARIAN",
       "ingredients": [
         { "name": "penne", "quantity": 8, "unitName": "ounce" },
-        { "name": "crushed tomatoes", "quantity": 15, "unitName": "ounce", "note": "1 can (14–15 oz)" },
+        {
+          "name": "crushed tomatoes",
+          "quantity": 15,
+          "unitName": "ounce",
+          "note": "1 can (14–15 oz)"
+        },
         { "name": "heavy cream", "quantity": 0.5, "unitName": "cup" },
-        { "name": "garlic", "quantity": 2, "unitName": "clove", "note": "minced" },
+        {
+          "name": "garlic",
+          "quantity": 2,
+          "unitName": "clove",
+          "note": "minced"
+        },
         { "name": "olive oil", "quantity": 2, "unitName": "tablespoon" },
-        { "name": "parmesan", "quantity": 0.5, "unitName": "cup", "note": "grated" },
-        { "name": "basil", "quantity": 0.25, "unitName": "cup", "note": "torn leaves, loosely packed" },
+        {
+          "name": "parmesan",
+          "quantity": 0.5,
+          "unitName": "cup",
+          "note": "grated"
+        },
+        {
+          "name": "basil",
+          "quantity": 0.25,
+          "unitName": "cup",
+          "note": "torn leaves, loosely packed"
+        },
         { "name": "salt", "quantity": 0.5, "unitName": "teaspoon" },
         { "name": "pepper", "quantity": 0.25, "unitName": "teaspoon" }
       ],
@@ -245,16 +919,51 @@
       "difficulty": "NORMAL",
       "diet": "VEGAN",
       "ingredients": [
-        { "name": "soft tofu", "quantity": 1, "unitName": "each", "note": "1 block (about 14 oz), cubed" },
-        { "name": "shiitake mushrooms", "quantity": 1, "unitName": "cup", "note": "diced" },
+        {
+          "name": "soft tofu",
+          "quantity": 1,
+          "unitName": "each",
+          "note": "1 block (about 14 oz), cubed"
+        },
+        {
+          "name": "shiitake mushrooms",
+          "quantity": 1,
+          "unitName": "cup",
+          "note": "diced"
+        },
         { "name": "doubanjiang", "quantity": 2, "unitName": "tablespoon" },
         { "name": "soy sauce", "quantity": 2, "unitName": "tablespoon" },
-        { "name": "garlic", "quantity": 2, "unitName": "clove", "note": "minced" },
-        { "name": "ginger", "quantity": 1, "unitName": "teaspoon", "note": "minced" },
-        { "name": "Sichuan peppercorns", "quantity": 0.5, "unitName": "teaspoon", "note": "ground" },
+        {
+          "name": "garlic",
+          "quantity": 2,
+          "unitName": "clove",
+          "note": "minced"
+        },
+        {
+          "name": "ginger",
+          "quantity": 1,
+          "unitName": "teaspoon",
+          "note": "minced"
+        },
+        {
+          "name": "Sichuan peppercorns",
+          "quantity": 0.5,
+          "unitName": "teaspoon",
+          "note": "ground"
+        },
         { "name": "vegetable broth", "quantity": 1, "unitName": "cup" },
-        { "name": "cornstarch slurry", "quantity": 2, "unitName": "tablespoon", "note": "1 tbsp cornstarch + 1 tbsp water" },
-        { "name": "green onion", "quantity": 2, "unitName": "tablespoon", "note": "chopped" },
+        {
+          "name": "cornstarch slurry",
+          "quantity": 2,
+          "unitName": "tablespoon",
+          "note": "1 tbsp cornstarch + 1 tbsp water"
+        },
+        {
+          "name": "green onion",
+          "quantity": 2,
+          "unitName": "tablespoon",
+          "note": "chopped"
+        },
         { "name": "oil", "quantity": 2, "unitName": "tablespoon" }
       ],
       "instructions": [
@@ -275,10 +984,25 @@
         { "name": "chicken thighs", "quantity": 2.5, "unitName": "pound" },
         { "name": "soy sauce", "quantity": 1, "unitName": "cup" },
         { "name": "brown sugar", "quantity": 0.5, "unitName": "cup" },
-        { "name": "garlic", "quantity": 4, "unitName": "clove", "note": "crushed" },
-        { "name": "ginger", "quantity": 4, "unitName": "piece", "note": "slices" },
+        {
+          "name": "garlic",
+          "quantity": 4,
+          "unitName": "clove",
+          "note": "crushed"
+        },
+        {
+          "name": "ginger",
+          "quantity": 4,
+          "unitName": "piece",
+          "note": "slices"
+        },
         { "name": "water", "quantity": 1, "unitName": "cup" },
-        { "name": "green onion", "quantity": 2, "unitName": "each", "note": "chopped, for garnish" }
+        {
+          "name": "green onion",
+          "quantity": 2,
+          "unitName": "each",
+          "note": "chopped, for garnish"
+        }
       ],
       "instructions": [
         "In a large pot, combine 1 cup soy sauce, 1 cup water, 1/2 cup brown sugar, 4 slices ginger, and 4 crushed garlic cloves. Stir until the sugar dissolves.",
@@ -298,8 +1022,18 @@
       "ingredients": [
         { "name": "ground beef", "quantity": 1, "unitName": "pound" },
         { "name": "egg", "quantity": 4, "unitName": "each" },
-        { "name": "white rice", "quantity": 3, "unitName": "cup", "note": "cooked" },
-        { "name": "onion", "quantity": 1, "unitName": "each", "note": "sliced" },
+        {
+          "name": "white rice",
+          "quantity": 3,
+          "unitName": "cup",
+          "note": "cooked"
+        },
+        {
+          "name": "onion",
+          "quantity": 1,
+          "unitName": "each",
+          "note": "sliced"
+        },
         { "name": "beef broth", "quantity": 2, "unitName": "cup" },
         { "name": "soy sauce", "quantity": 1, "unitName": "tablespoon" },
         { "name": "butter", "quantity": 2, "unitName": "tablespoon" },
@@ -328,8 +1062,18 @@
         { "name": "soy sauce", "quantity": 0.25, "unitName": "cup" },
         { "name": "mirin", "quantity": 0.25, "unitName": "cup" },
         { "name": "sugar", "quantity": 2, "unitName": "tablespoon" },
-        { "name": "ginger", "quantity": 1, "unitName": "teaspoon", "note": "grated" },
-        { "name": "garlic", "quantity": 1, "unitName": "clove", "note": "minced" },
+        {
+          "name": "ginger",
+          "quantity": 1,
+          "unitName": "teaspoon",
+          "note": "grated"
+        },
+        {
+          "name": "garlic",
+          "quantity": 1,
+          "unitName": "clove",
+          "note": "minced"
+        },
         { "name": "sesame seeds", "quantity": 1, "unitName": "teaspoon" },
         { "name": "oil", "quantity": 1, "unitName": "tablespoon" }
       ],
@@ -349,8 +1093,18 @@
       "diet": "ANY",
       "ingredients": [
         { "name": "spam", "quantity": 1, "unitName": "each", "note": "1 can" },
-        { "name": "white rice", "quantity": 3, "unitName": "cup", "note": "cooked" },
-        { "name": "nori", "quantity": 4, "unitName": "piece", "note": "sheets or wide strips" },
+        {
+          "name": "white rice",
+          "quantity": 3,
+          "unitName": "cup",
+          "note": "cooked"
+        },
+        {
+          "name": "nori",
+          "quantity": 4,
+          "unitName": "piece",
+          "note": "sheets or wide strips"
+        },
         { "name": "soy sauce", "quantity": 3, "unitName": "tablespoon" },
         { "name": "sugar", "quantity": 2, "unitName": "tablespoon" }
       ],
@@ -370,10 +1124,20 @@
       "diet": "ANY",
       "ingredients": [
         { "name": "day-old rice", "quantity": 2, "unitName": "cup" },
-        { "name": "kimchi", "quantity": 1, "unitName": "cup", "note": "chopped" },
+        {
+          "name": "kimchi",
+          "quantity": 1,
+          "unitName": "cup",
+          "note": "chopped"
+        },
         { "name": "gochujang", "quantity": 1, "unitName": "tablespoon" },
         { "name": "soy sauce", "quantity": 1, "unitName": "tablespoon" },
-        { "name": "green onion", "quantity": 1, "unitName": "each", "note": "chopped" },
+        {
+          "name": "green onion",
+          "quantity": 1,
+          "unitName": "each",
+          "note": "chopped"
+        },
         { "name": "egg", "quantity": 2, "unitName": "each" },
         { "name": "oil", "quantity": 1, "unitName": "tablespoon" },
         { "name": "sesame oil", "quantity": 1, "unitName": "teaspoon" }
@@ -393,10 +1157,30 @@
       "difficulty": "EASY",
       "diet": "VEGETARIAN",
       "ingredients": [
-        { "name": "yaki soba noodles", "quantity": 2, "unitName": "each", "note": "packs" },
-        { "name": "cabbage", "quantity": 2, "unitName": "cup", "note": "shredded" },
-        { "name": "carrot", "quantity": 1, "unitName": "each", "note": "julienned" },
-        { "name": "onion", "quantity": 0.5, "unitName": "each", "note": "sliced" },
+        {
+          "name": "yaki soba noodles",
+          "quantity": 2,
+          "unitName": "each",
+          "note": "packs"
+        },
+        {
+          "name": "cabbage",
+          "quantity": 2,
+          "unitName": "cup",
+          "note": "shredded"
+        },
+        {
+          "name": "carrot",
+          "quantity": 1,
+          "unitName": "each",
+          "note": "julienned"
+        },
+        {
+          "name": "onion",
+          "quantity": 0.5,
+          "unitName": "each",
+          "note": "sliced"
+        },
         { "name": "soy sauce", "quantity": 2, "unitName": "tablespoon" },
         { "name": "worcestershire", "quantity": 1, "unitName": "tablespoon" },
         { "name": "ketchup", "quantity": 1, "unitName": "tablespoon" },
@@ -422,8 +1206,18 @@
         { "name": "soy sauce", "quantity": 0.5, "unitName": "cup" },
         { "name": "brown sugar", "quantity": 0.5, "unitName": "cup" },
         { "name": "ketchup", "quantity": 0.25, "unitName": "cup" },
-        { "name": "ginger", "quantity": 1, "unitName": "tablespoon", "note": "grated" },
-        { "name": "garlic", "quantity": 2, "unitName": "clove", "note": "minced" }
+        {
+          "name": "ginger",
+          "quantity": 1,
+          "unitName": "tablespoon",
+          "note": "grated"
+        },
+        {
+          "name": "garlic",
+          "quantity": 2,
+          "unitName": "clove",
+          "note": "minced"
+        }
       ],
       "instructions": [
         "In a bowl, combine 1 cup pineapple juice, 1/2 cup soy sauce, 1/2 cup brown sugar, 1/4 cup ketchup, 1 tablespoon grated ginger, and 2 minced garlic cloves.",
@@ -442,9 +1236,24 @@
       "ingredients": [
         { "name": "dashi (veg or kombu)", "quantity": 3, "unitName": "cup" },
         { "name": "miso paste", "quantity": 3, "unitName": "tablespoon" },
-        { "name": "soft tofu", "quantity": 1, "unitName": "cup", "note": "cubed" },
-        { "name": "wakame", "quantity": 2, "unitName": "tablespoon", "note": "soaked" },
-        { "name": "green onion", "quantity": 2, "unitName": "each", "note": "sliced" }
+        {
+          "name": "soft tofu",
+          "quantity": 1,
+          "unitName": "cup",
+          "note": "cubed"
+        },
+        {
+          "name": "wakame",
+          "quantity": 2,
+          "unitName": "tablespoon",
+          "note": "soaked"
+        },
+        {
+          "name": "green onion",
+          "quantity": 2,
+          "unitName": "each",
+          "note": "sliced"
+        }
       ],
       "instructions": [
         "Bring 3 cups dashi broth to a gentle simmer in a small pot.",
@@ -461,11 +1270,25 @@
       "diet": "VEGAN",
       "ingredients": [
         { "name": "day-old rice", "quantity": 3, "unitName": "cup" },
-        { "name": "frozen peas and carrots", "quantity": 1, "unitName": "cup" },
+        {
+          "name": "frozen peas and carrots",
+          "quantity": 1,
+          "unitName": "cup"
+        },
         { "name": "corn", "quantity": 0.5, "unitName": "cup" },
         { "name": "soy sauce", "quantity": 2, "unitName": "tablespoon" },
-        { "name": "garlic", "quantity": 2, "unitName": "clove", "note": "minced" },
-        { "name": "green onion", "quantity": 2, "unitName": "tablespoon", "note": "chopped" },
+        {
+          "name": "garlic",
+          "quantity": 2,
+          "unitName": "clove",
+          "note": "minced"
+        },
+        {
+          "name": "green onion",
+          "quantity": 2,
+          "unitName": "tablespoon",
+          "note": "chopped"
+        },
         { "name": "oil", "quantity": 1, "unitName": "tablespoon" },
         { "name": "sesame oil", "quantity": 1, "unitName": "teaspoon" }
       ],
@@ -484,15 +1307,45 @@
       "difficulty": "NORMAL",
       "diet": "VEGAN",
       "ingredients": [
-        { "name": "firm tofu", "quantity": 1, "unitName": "each", "note": "block, pressed" },
+        {
+          "name": "firm tofu",
+          "quantity": 1,
+          "unitName": "each",
+          "note": "block, pressed"
+        },
         { "name": "flour", "quantity": 0.5, "unitName": "cup" },
         { "name": "plant milk", "quantity": 0.5, "unitName": "cup" },
         { "name": "panko", "quantity": 1, "unitName": "cup" },
-        { "name": "Japanese curry roux", "quantity": 4, "unitName": "piece", "note": "blocks" },
-        { "name": "onion", "quantity": 1, "unitName": "each", "note": "sliced" },
-        { "name": "carrot", "quantity": 1, "unitName": "each", "note": "chopped" },
-        { "name": "potato", "quantity": 1, "unitName": "each", "note": "diced" },
-        { "name": "oil", "quantity": 0.25, "unitName": "cup", "note": "for frying" },
+        {
+          "name": "Japanese curry roux",
+          "quantity": 4,
+          "unitName": "piece",
+          "note": "blocks"
+        },
+        {
+          "name": "onion",
+          "quantity": 1,
+          "unitName": "each",
+          "note": "sliced"
+        },
+        {
+          "name": "carrot",
+          "quantity": 1,
+          "unitName": "each",
+          "note": "chopped"
+        },
+        {
+          "name": "potato",
+          "quantity": 1,
+          "unitName": "each",
+          "note": "diced"
+        },
+        {
+          "name": "oil",
+          "quantity": 0.25,
+          "unitName": "cup",
+          "note": "for frying"
+        },
         { "name": "salt", "quantity": 0.5, "unitName": "teaspoon" },
         { "name": "pepper", "quantity": 0.25, "unitName": "teaspoon" }
       ],
@@ -514,10 +1367,24 @@
       "ingredients": [
         { "name": "sirloin steak", "quantity": 1, "unitName": "pound" },
         { "name": "butter", "quantity": 3, "unitName": "tablespoon" },
-        { "name": "garlic", "quantity": 3, "unitName": "clove", "note": "minced" },
+        {
+          "name": "garlic",
+          "quantity": 3,
+          "unitName": "clove",
+          "note": "minced"
+        },
         { "name": "soy sauce", "quantity": 1, "unitName": "tablespoon" },
-        { "name": "black pepper", "quantity": 0.5, "unitName": "teaspoon" },
-        { "name": "green onion", "quantity": 2, "unitName": "tablespoon", "note": "chopped" },
+        {
+          "name": "black pepper",
+          "quantity": 0.5,
+          "unitName": "teaspoon"
+        },
+        {
+          "name": "green onion",
+          "quantity": 2,
+          "unitName": "tablespoon",
+          "note": "chopped"
+        },
         { "name": "salt", "quantity": 1, "unitName": "teaspoon" }
       ],
       "instructions": [
@@ -536,9 +1403,17 @@
       "difficulty": "EASY",
       "diet": "VEGETARIAN",
       "ingredients": [
-        { "name": "Okinawan sweet potatoes", "quantity": 2.5, "unitName": "pound" },
+        {
+          "name": "Okinawan sweet potatoes",
+          "quantity": 2.5,
+          "unitName": "pound"
+        },
         { "name": "butter", "quantity": 3, "unitName": "tablespoon" },
-        { "name": "milk or cream", "quantity": 0.33, "unitName": "cup" },
+        {
+          "name": "milk or cream",
+          "quantity": 0.33,
+          "unitName": "cup"
+        },
         { "name": "salt", "quantity": 1, "unitName": "teaspoon" }
       ],
       "instructions": [
@@ -559,12 +1434,36 @@
         { "name": "chicken thighs", "quantity": 1, "unitName": "pound" },
         { "name": "soy sauce", "quantity": 2, "unitName": "tablespoon" },
         { "name": "sake", "quantity": 2, "unitName": "tablespoon" },
-        { "name": "ginger", "quantity": 1, "unitName": "teaspoon", "note": "grated" },
-        { "name": "garlic", "quantity": 2, "unitName": "clove", "note": "minced" },
-        { "name": "potato starch", "quantity": 0.5, "unitName": "cup" },
-        { "name": "oil", "quantity": 1, "unitName": "cup", "note": "for deep/shallow frying" },
+        {
+          "name": "ginger",
+          "quantity": 1,
+          "unitName": "teaspoon",
+          "note": "grated"
+        },
+        {
+          "name": "garlic",
+          "quantity": 2,
+          "unitName": "clove",
+          "note": "minced"
+        },
+        {
+          "name": "potato starch",
+          "quantity": 0.5,
+          "unitName": "cup"
+        },
+        {
+          "name": "oil",
+          "quantity": 1,
+          "unitName": "cup",
+          "note": "for deep/shallow frying"
+        },
         { "name": "lemon", "quantity": 1, "unitName": "each" },
-        { "name": "white rice", "quantity": 2, "unitName": "cup", "note": "cooked" }
+        {
+          "name": "white rice",
+          "quantity": 2,
+          "unitName": "cup",
+          "note": "cooked"
+        }
       ],
       "instructions": [
         "Cut 1 pound chicken thighs into bite-sized pieces and marinate in 2 tablespoons soy sauce, 2 tablespoons sake, 1 teaspoon grated ginger, and 2 minced garlic cloves for 10–15 minutes.",
@@ -583,8 +1482,18 @@
       "ingredients": [
         { "name": "chicken breast", "quantity": 1, "unitName": "pound" },
         { "name": "soy sauce", "quantity": 3, "unitName": "tablespoon" },
-        { "name": "garlic", "quantity": 2, "unitName": "clove", "note": "minced" },
-        { "name": "mixed vegetables", "quantity": 3, "unitName": "cup", "note": "like broccoli, carrots, bell peppers" },
+        {
+          "name": "garlic",
+          "quantity": 2,
+          "unitName": "clove",
+          "note": "minced"
+        },
+        {
+          "name": "mixed vegetables",
+          "quantity": 3,
+          "unitName": "cup",
+          "note": "like broccoli, carrots, bell peppers"
+        },
         { "name": "oil", "quantity": 1, "unitName": "tablespoon" },
         { "name": "salt", "quantity": 0.5, "unitName": "teaspoon" }
       ],
@@ -607,8 +1516,18 @@
         { "name": "spaghetti", "quantity": 8, "unitName": "ounce" },
         { "name": "ground beef", "quantity": 1, "unitName": "pound" },
         { "name": "tomato sauce", "quantity": 2, "unitName": "cup" },
-        { "name": "onion", "quantity": 0.5, "unitName": "cup", "note": "minced" },
-        { "name": "garlic", "quantity": 2, "unitName": "clove", "note": "minced" },
+        {
+          "name": "onion",
+          "quantity": 0.5,
+          "unitName": "cup",
+          "note": "minced"
+        },
+        {
+          "name": "garlic",
+          "quantity": 2,
+          "unitName": "clove",
+          "note": "minced"
+        },
         { "name": "olive oil", "quantity": 2, "unitName": "tablespoon" },
         { "name": "salt", "quantity": 1, "unitName": "teaspoon" },
         { "name": "pepper", "quantity": 0.5, "unitName": "teaspoon" }
