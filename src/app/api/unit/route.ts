@@ -29,7 +29,7 @@ export async function GET() {
       ) {
         if (user.settings.unitSystem) {
           // @ts-ignore
-          userSystem = user.settings.unitSystem;
+          const userSystem = ((user.settings as { unitSystem?: string } | null | undefined)?.unitSystem) ?? 'metric';
         }
       }
     }
