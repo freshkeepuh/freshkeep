@@ -30,7 +30,7 @@ Get rid of console.log.
 
 ### TS-08: Use TSDoc comments appropriately.
 
-When a comment starts with '/**', it will be processed by TSDoc. Please ensure those comments are appropriate for inclusion.
+When a comment starts with '/\*\*', it will be processed by TSDoc. Please ensure those comments are appropriate for inclusion.
 
 ## ESLint
 
@@ -41,5 +41,3 @@ Are there ESLint errors or warnings that should be removed?
 ### ES-02: Consider modifying our standards.
 
 Based upon your review of code, should we be modifying the set of ESLint rules?
-
-

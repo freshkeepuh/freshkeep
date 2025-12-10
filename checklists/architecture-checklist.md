@@ -6,8 +6,8 @@ Best practices concerning the overall architecture (file and directory structure
 
 Are the files named according to our conventions?
 
- * Directories use lowercase with - between words.
- * Files use camel case.
+- Directories use lowercase with - between words.
+- Files use camel case.
 
 ### AR-02: Obey directory structure.
 

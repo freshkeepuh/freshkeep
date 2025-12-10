@@ -1,57 +1,112 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import authOptions from '@/lib/authOptions';
+import { prisma } from '@/lib/prisma';
+import {
+  readStorageArea,
+  updateStorageArea,
+  deleteStorageArea,
+} from '@/lib/dbStorageAreaActions';
 import getResponseError from '@/lib/routeHelpers';
-import { deleteStorageArea, readStorageArea } from '@/lib/dbStorageAreaActions';
 
 export const runtime = 'nodejs';
 
+async function getUserId() {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.email) return null;
+
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email },
+    select: { id: true },
+  });
+
+  return user?.id || null;
+}
+
 /**
- * Handles GET requests for retrieving a storage.
- * @param request The incoming request
- * @param context
- * @returns A JSON response containing the storage or an error message
+ * GET /api/storage/[id] - Read a single storage area
  */
-export async function GET(request: NextRequest, context: any) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
-    const { id } = context.params;
-    if (!id) {
-      return NextResponse.json(
-        { error: 'Storage ID is required' },
-        { status: 400 },
-      );
+    const { id } = await params;
+    const userId = await getUserId();
+
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const storage = await readStorageArea(id);
+    const storage = await readStorageArea(userId, id);
 
     if (!storage) {
       return NextResponse.json({ error: 'Storage not found' }, { status: 404 });
     }
 
     return NextResponse.json(storage);
-  } catch (error: Error | any) {
+  } catch (error: any) {
     return getResponseError(error);
   }
 }
 
 /**
- * Handles DELETE requests for deleting a storage.
- * @param request The incoming request
- * @param context
- * @returns A JSON response indicating the result of the deletion
+ * PUT /api/storage/[id] - Update a storage area
  */
-export async function DELETE(request: NextRequest, context: any) {
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
-    const { id } = context.params;
-    if (!id) {
+    const { id } = await params;
+    const userId = await getUserId();
+    const body = await request.json();
+
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const updated = await updateStorageArea(userId, id, body);
+
+    if (!updated) {
       return NextResponse.json(
-        { error: 'Storage ID is required' },
-        { status: 400 },
+        { error: 'Storage not found or update failed' },
+        { status: 404 },
       );
     }
 
-    await deleteStorageArea(id);
+    return NextResponse.json(updated);
+  } catch (error: any) {
+    return getResponseError(error);
+  }
+}
 
-    return NextResponse.json({ message: 'Storage deleted successfully' });
-  } catch (error: Error | any) {
+/**
+ * DELETE /api/storage/[id] - Delete a storage area
+ */
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  try {
+    const { id } = await params;
+    const userId = await getUserId();
+
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const success = await deleteStorageArea(userId, id);
+
+    if (!success) {
+      return NextResponse.json(
+        { error: 'Storage not found or delete failed' },
+        { status: 404 },
+      );
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error: any) {
     return getResponseError(error);
   }
 }
