@@ -16,7 +16,6 @@ import type { Category, StorageUnit } from '../../components/add/types';
 
 function mapCategoryToEnum(category: Category): ProductCategory {
   const key = String(category).replace(/\s+/g, '').toLowerCase();
-
   const mapping: Record<string, ProductCategory> = {
     fruits: ProductCategory.Fruits,
     vegetables: ProductCategory.Vegetables,
@@ -37,20 +36,16 @@ function mapCategoryToEnum(category: Category): ProductCategory {
     frozenfoods: ProductCategory.FrozenFoods,
     other: ProductCategory.Other,
   };
-
   return mapping[key] ?? ProductCategory.Other;
 }
 
 export default function AddPage() {
   const router = useRouter();
-
-  // ---- Real storage + location data ----
   const [storages, setStorages] = useState<StorageUnit[]>([]);
   const [storagesLoading, setStoragesLoading] = useState(true);
   const [storagesError, setStoragesError] = useState<string | null>(null);
   const [selected, setSelected] = useState<StorageUnit | null>(null);
 
-  // ---- Form state ----
   const [name, setName] = useState('');
   const [qty, setQty] = useState(1);
   const [unit, setUnit] = useState<string | null>(null);
@@ -60,19 +55,16 @@ export default function AddPage() {
 
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
   const [showSuccess, setShowSuccess] = useState(false);
   const [successBody, setSuccessBody] = useState('');
 
-  // --- Load storages + locations from API (same data as dashboard/locations) ---
+  // ---- Load storages + locations ----
   useEffect(() => {
     let cancelled = false;
-
     const load = async () => {
       try {
         setStoragesLoading(true);
         setStoragesError(null);
-
         const [storagesRes, locationsRes] = await Promise.all([
           fetch('/api/storage', { cache: 'no-store' }),
           fetch('/api/location', { cache: 'no-store' }),
@@ -94,11 +86,11 @@ export default function AddPage() {
 
         const mapped: StorageUnit[] = rawStorages.map((s) => {
           const t = (s.type as string) || 'Pantry';
-
           let uiType: StorageUnit['type'] = 'pantry';
-          if (t === 'Refrigerator') uiType = 'fridge';
+          if (t === 'Refrigerator' || t === 'Fridge') uiType = 'fridge';
           else if (t === 'Freezer') uiType = 'freezer';
-          else if (t === 'SpiceRack') uiType = 'spice-rack';
+          else if (t === 'SpiceRack' || t === 'Spice Rack')
+            uiType = 'spice-rack';
           else if (t === 'Pantry') uiType = 'pantry';
           else uiType = 'other';
 
@@ -139,7 +131,7 @@ export default function AddPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Default expiry = 7 days from today
+  // ---- Default expiry to +7 days ----
   useEffect(() => {
     const d = new Date();
     d.setDate(d.getDate() + 7);
@@ -165,7 +157,6 @@ export default function AddPage() {
     setName('');
     setQty(1);
     setUnit(null);
-    // keep the same selected storage so user doesn’t have to reselect
     setCategory(null);
     setPicture(undefined);
     const d = new Date();
@@ -174,6 +165,7 @@ export default function AddPage() {
     setError(null);
   }, []);
 
+  // ---- Save handler: create Product + ProductInstance ----
   const onSave = useCallback(async () => {
     if (!name.trim()) {
       setError('Name is required');
@@ -191,10 +183,17 @@ export default function AddPage() {
       setError('Please select an expiry date');
       return;
     }
+    if (!selected) {
+      setError('Please select a storage area');
+      return;
+    }
+    if (!selected.locId) {
+      setError('Selected storage must be linked to a location');
+      return;
+    }
 
     setSaving(true);
     setError(null);
-
     const trimmedName = name.trim();
 
     try {
@@ -212,7 +211,7 @@ export default function AddPage() {
         }),
       });
 
-      const body = await res.json().catch(() => ({}));
+      const body: any = await res.json().catch(() => ({}));
 
       if (!res.ok) {
         const message =
@@ -222,7 +221,57 @@ export default function AddPage() {
         throw new Error(message);
       }
 
-      setSuccessBody(`"${trimmedName}" was added to your products.`);
+      // eslint-disable-next-line no-underscore-dangle
+      const prodId: string | undefined = body.id ?? body._id;
+
+      if (!prodId) {
+        throw new Error('Could not determine ID of new product');
+      }
+
+      // 2) Convert date-only string to full ISO DateTime for Prisma
+      const isoExpiresAt = `${expiresAt}T00:00:00.000Z`;
+
+      // 3) Create ProductInstance in selected storage
+      const instRes = await fetch('/api/product/instance', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          locId: selected.locId,
+          storId: selected.id,
+          prodId,
+          unitId: unit,
+          quantity: qty,
+          expiresAt: isoExpiresAt,
+        }),
+      });
+
+      const instBody: any = await instRes.json().catch(() => ({}));
+
+      if (!instRes.ok) {
+        const message =
+          typeof instBody.error === 'string'
+            ? instBody.error
+            : 'Failed to create product in storage';
+        throw new Error(message);
+      }
+
+      // 4) Update local counts
+      setStorages((prev) =>
+        prev.map((s) => {
+          if (s.id === selected.id) {
+            return { ...s, items: (s.items ?? 0) + 1 };
+          }
+          return s;
+        }),
+      );
+      setSelected((prev) => {
+        if (prev && prev.id === selected.id) {
+          return { ...prev, items: (prev.items ?? 0) + 1 };
+        }
+        return prev;
+      });
+
+      setSuccessBody(`"${trimmedName}" was added to ${selected.name}.`);
       setShowSuccess(true);
       resetForm();
     } catch (err: unknown) {
@@ -232,7 +281,7 @@ export default function AddPage() {
     } finally {
       setSaving(false);
     }
-  }, [category, expiresAt, name, picture, qty, resetForm, unit]);
+  }, [category, expiresAt, name, picture, qty, resetForm, selected, unit]);
 
   const goBack = useCallback(() => {
     router.back();

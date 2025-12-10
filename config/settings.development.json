@@ -1,7 +1,21 @@
 {
   "defaultAccounts": [
-    { "email": "admin@foo.com", "password": "changeme", "role": "ADMIN", "settings": { "units": "imperial", "country": "USA", "theme": "light", "profilePicture": "/images/avatars/default.jpg"}},
-    { "email": "john@foo.com", "password": "changeme", "settings": { "units": "metric", "country": "CAN", "theme": "dark" }}
+    {
+      "email": "admin@foo.com",
+      "password": "changeme",
+      "role": "ADMIN",
+      "settings": {
+        "units": "imperial",
+        "country": "USA",
+        "theme": "light",
+        "profilePicture": "/images/avatars/default.jpg"
+      }
+    },
+    {
+      "email": "john@foo.com",
+      "password": "changeme",
+      "settings": { "units": "metric", "country": "CAN", "theme": "dark" }
+    }
   ],
   "defaultUnits": [
     { "name": "each", "abbr": "ea", "baseName": "each", "factor": 1 },
@@ -9,204 +23,836 @@
     { "name": "piece", "abbr": "pc", "baseName": "each", "factor": 1 },
     { "name": "ounce", "abbr": "oz", "baseName": "ounce", "factor": 1 },
     { "name": "pound", "abbr": "lb", "baseName": "ounce", "factor": 16 },
-    { "name": "fluid ounce", "abbr": "fl oz", "baseName": "fluid ounce", "factor": 1 },
+    {
+      "name": "fluid ounce",
+      "abbr": "fl oz",
+      "baseName": "fluid ounce",
+      "factor": 1
+    },
     { "name": "pint", "abbr": "pt", "baseName": "fluid ounce", "factor": 16 },
     { "name": "quart", "abbr": "qt", "baseName": "fluid ounce", "factor": 32 },
-    { "name": "gallon", "abbr": "gal", "baseName": "fluid ounce", "factor": 128 },
+    {
+      "name": "gallon",
+      "abbr": "gal",
+      "baseName": "fluid ounce",
+      "factor": 128
+    },
     { "name": "cup", "abbr": "cp", "baseName": "fluid ounce", "factor": 8 },
-    { "name": "tablespoon", "abbr": "tbsp", "baseName": "fluid ounce", "factor": 0.5 },
-    { "name": "teaspoon", "abbr": "tsp", "baseName": "fluid ounce", "factor": 0.1666667 },
+    {
+      "name": "tablespoon",
+      "abbr": "tbsp",
+      "baseName": "fluid ounce",
+      "factor": 0.5
+    },
+    {
+      "name": "teaspoon",
+      "abbr": "tsp",
+      "baseName": "fluid ounce",
+      "factor": 0.1666667
+    },
     { "name": "gram", "abbr": "g", "baseName": "gram", "factor": 1 },
     { "name": "milligram", "abbr": "mg", "baseName": "gram", "factor": 0.001 },
     { "name": "kilogram", "abbr": "kg", "baseName": "gram", "factor": 1000 },
-    { "name": "milliliter", "abbr": "ml", "baseName": "milliliter", "factor": 1 },
+    {
+      "name": "milliliter",
+      "abbr": "ml",
+      "baseName": "milliliter",
+      "factor": 1
+    },
     { "name": "liter", "abbr": "l", "baseName": "milliliter", "factor": 1000 },
-    { "name": "deciliter", "abbr": "dl", "baseName": "milliliter", "factor": 100 }
+    {
+      "name": "deciliter",
+      "abbr": "dl",
+      "baseName": "milliliter",
+      "factor": 100
+    }
   ],
   "defaultStores": [
-    { "name": "Walmart", "address1":"123 Main St", "address2": "Suite 200", "city": "Anytown", "state": "CA", "zipcode": "12345", "country": "USA", "website": "https://www.walmart.com", "picture": "https://www.walmart.com/favicon.ico" },
-    { "name": "Costco", "address1":"456 Elm St", "address2": "Apt 5", "city": "Othertown", "state": "CA", "zipcode": "67890", "country": "USA", "website": "https://www.costco.com", "picture": "https://www.costco.com/favicon.ico" },
-    { "name": "Target", "address1":"789 Oak St", "address2": "Floor 3", "city": "Anothertown", "state": "CA", "zipcode": "13579", "country": "USA", "website": "https://www.target.com", "picture": "https://www.target.com/favicon.ico" },
-    { "name": "Whole Foods", "address1":"321 Pine St", "address2": "Building B", "city": "Yetanothertown", "state": "CA", "zipcode": "24680", "country": "USA", "website": "https://www.wholefoodsmarket.com", "picture": "https://www.wholefoodsmarket.com/favicon.ico" },
-    { "name": "Safeway", "address1":"654 Maple St", "address2": "Unit 10", "city": "Somewhere", "state": "CA", "zipcode": "98765", "country": "USA", "website": "https://www.safeway.com", "picture": "https://www.safeway.com/favicon.ico" },
-    { "name": "Kroger", "address1":"987 Cedar St", "address2": "Suite 300", "city": "Anywhere", "state": "CA", "zipcode": "54321", "country": "USA", "website": "https://www.kroger.com", "picture": "https://www.kroger.com/favicon.ico" }
+    {
+      "name": "Walmart",
+      "address1": "123 Main St",
+      "address2": "Suite 200",
+      "city": "Anytown",
+      "state": "CA",
+      "zipcode": "12345",
+      "country": "USA",
+      "website": "https://www.walmart.com",
+      "picture": "https://www.walmart.com/favicon.ico"
+    },
+    {
+      "name": "Costco",
+      "address1": "456 Elm St",
+      "address2": "Apt 5",
+      "city": "Othertown",
+      "state": "CA",
+      "zipcode": "67890",
+      "country": "USA",
+      "website": "https://www.costco.com",
+      "picture": "https://www.costco.com/favicon.ico"
+    },
+    {
+      "name": "Target",
+      "address1": "789 Oak St",
+      "address2": "Floor 3",
+      "city": "Anothertown",
+      "state": "CA",
+      "zipcode": "13579",
+      "country": "USA",
+      "website": "https://www.target.com",
+      "picture": "https://www.target.com/favicon.ico"
+    },
+    {
+      "name": "Whole Foods",
+      "address1": "321 Pine St",
+      "address2": "Building B",
+      "city": "Yetanothertown",
+      "state": "CA",
+      "zipcode": "24680",
+      "country": "USA",
+      "website": "https://www.wholefoodsmarket.com",
+      "picture": "https://www.wholefoodsmarket.com/favicon.ico"
+    },
+    {
+      "name": "Safeway",
+      "address1": "654 Maple St",
+      "address2": "Unit 10",
+      "city": "Somewhere",
+      "state": "CA",
+      "zipcode": "98765",
+      "country": "USA",
+      "website": "https://www.safeway.com",
+      "picture": "https://www.safeway.com/favicon.ico"
+    },
+    {
+      "name": "Kroger",
+      "address1": "987 Cedar St",
+      "address2": "Suite 300",
+      "city": "Anywhere",
+      "state": "CA",
+      "zipcode": "54321",
+      "country": "USA",
+      "website": "https://www.kroger.com",
+      "picture": "https://www.kroger.com/favicon.ico"
+    }
   ],
   "defaultProducts": [
-    { "name": "Apples", "category": "Fruits", "defaultQty": 6, "unitName": "each", "isNeeded": true, "picture": "./images/groceryItems/apples.jpg", "storeName": "Walmart" },
-    { "name": "Bananas", "category": "Fruits", "defaultQty": 6, "unitName": "each", "isNeeded": true, "picture": "./images/groceryItems/bananas.jpg", "storeName": "Walmart" },
-    { "name": "Bell Peppers", "category": "Vegetables", "defaultQty": 3, "unitName": "each", "isNeeded": true, "picture": "./images/groceryItems/bell_peppers.jpg", "storeName": "Walmart" },
-    { "name": "Bread", "category": "Bakery", "defaultQty": 1, "unitName": "each", "isNeeded": true, "picture": "./images/groceryItems/bread.jpg", "storeName": "Walmart" },
-    { "name": "Broccoli", "category": "Vegetables", "defaultQty": 1, "unitName": "pound", "isNeeded": true, "picture": "./images/groceryItems/broccoli.jpg", "storeName": "Walmart" },
-    { "name": "Butter", "category": "Dairy", "defaultQty": 1, "unitName": "pound", "isNeeded": false, "picture": "./images/groceryItems/butter.jpg", "storeName": "Walmart" },
-    { "name": "Carrots", "category": "Vegetables", "defaultQty": 2, "unitName": "pound", "isNeeded": true, "picture": "./images/groceryItems/carrots.jpg", "storeName": "Walmart" },
-    { "name": "Cereal", "category": "Cereal", "defaultQty": 1, "unitName": "each", "isNeeded": true, "picture": "./images/groceryItems/cereal.jpg", "storeName": "Walmart" },
-    { "name": "Cheese", "category": "Dairy", "defaultQty": 1, "unitName": "pound", "isNeeded": false, "picture": "./images/groceryItems/cheese.jpg", "storeName": "Walmart" },
-    { "name": "Chicken Breast", "category": "Meat", "defaultQty": 1, "unitName": "pound", "isNeeded": false, "picture": "./images/groceryItems/chicken_breast.jpg", "storeName": "Walmart" },
-    { "name": "Chicken Thighs", "category": "Meat", "defaultQty": 1, "unitName": "pound", "isNeeded": false, "picture": "./images/groceryItems/chicken_thighs.jpg", "storeName": "Walmart" },
-    { "name": "Chips", "category": "Snacks", "defaultQty": 1, "unitName": "each", "isNeeded": false, "picture": "./images/groceryItems/chips.jpg", "storeName": "Walmart" },
-    { "name": "Chocolate", "category": "Snacks", "defaultQty": 1, "unitName": "each", "isNeeded": false, "picture": "./images/groceryItems/chocolate.jpg", "storeName": "Walmart" },
-    { "name": "Coffee", "category": "Beverages", "defaultQty": 1, "unitName": "pound", "isNeeded": false, "picture": "./images/groceryItems/coffee.jpg", "storeName": "Walmart" },
-    { "name": "Cookies", "category": "Snacks", "defaultQty": 1, "unitName": "each", "isNeeded": false, "picture": "./images/groceryItems/cookies.jpg", "storeName": "Walmart" },
-    { "name": "Cucumbers", "category": "Vegetables", "defaultQty": 2, "unitName": "each", "isNeeded": true, "picture": "./images/groceryItems/cucumbers.jpg", "storeName": "Walmart" },
-    { "name": "Eggs", "category": "Dairy", "defaultQty": 1, "unitName": "dozen", "isNeeded": true, "picture": "./images/groceryItems/eggs.jpg", "storeName": "Walmart" },
-    { "name": "Flour", "category": "Baking", "defaultQty": 5, "unitName": "pound", "isNeeded": false, "picture": "./images/groceryItems/flour.jpg", "storeName": "Walmart" },
-    { "name": "Frozen Vegetables", "category": "FrozenFoods", "defaultQty": 1, "unitName": "pound", "isNeeded": false, "picture": "./images/groceryItems/frozen_vegetables.jpg", "storeName": "Walmart" },
-    { "name": "Garlic", "category": "Vegetables", "defaultQty": 1, "unitName": "each", "isNeeded": false, "picture": "./images/groceryItems/garlic.jpg",  "storeName": "Walmart" },
-    { "name": "Grapes", "category": "Fruits", "defaultQty": 1, "unitName": "pound", "isNeeded": false, "picture": "./images/groceryItems/grapes.jpg", "storeName": "Walmart" },
-    { "name": "Ground Beef", "category": "Meat", "defaultQty": 1, "unitName": "pound", "isNeeded": false, "picture": "./images/groceryItems/ground_beef.jpg", "storeName": "Walmart" },
-    { "name": "Ice Cream", "category": "FrozenFoods", "defaultQty": 1, "unitName": "pint", "isNeeded": false, "picture": "./images/groceryItems/ice_cream.jpg", "storeName": "Walmart" },
-    { "name": "Lettuce", "category": "Vegetables", "defaultQty": 1, "unitName": "each", "isNeeded": true, "picture": "./images/groceryItems/lettuce.jpg", "storeName": "Walmart" },
-    { "name": "Milk", "category": "Dairy", "defaultQty": 1, "unitName": "gallon", "isNeeded": true, "picture": "./images/groceryItems/milk.jpg", "storeName": "Walmart" },
-    { "name": "Olive Oil", "category": "Condiments", "defaultQty": 1, "unitName": "liter", "isNeeded": false, "picture": "./images/groceryItems/olive_oil.jpg", "storeName": "Walmart" },
-    { "name": "Onions", "category": "Vegetables", "defaultQty": 3, "unitName": "each", "isNeeded": true, "picture": "./images/groceryItems/onions.jpg", "storeName": "Walmart" },
-    { "name": "Oranges", "category": "Fruits", "defaultQty": 6, "unitName": "each", "isNeeded": true, "picture": "./images/groceryItems/oranges.jpg", "storeName": "Walmart" },
-    { "name": "Pasta", "category": "Pasta", "defaultQty": 1, "unitName": "pound", "isNeeded": false, "picture": "./images/groceryItems/pasta.jpg", "storeName": "Walmart" },
-    { "name": "Pepper", "category": "Spices", "defaultQty": 0.5, "unitName": "ounce", "isNeeded": false, "picture": "./images/groceryItems/pepper.jpg", "storeName": "Walmart" },
-    { "name": "Potatoes", "category": "Vegetables", "defaultQty": 5, "unitName": "pound", "isNeeded": true, "picture": "./images/groceryItems/potatoes.jpg", "storeName": "Walmart" },
-    { "name": "Rice", "category": "Grains", "defaultQty": 2, "unitName": "pound", "isNeeded": false, "picture": "./images/groceryItems/rice.jpg", "storeName": "Walmart" },
-    { "name": "Salmon Fillet", "category": "Meat", "defaultQty": 1, "unitName": "pound", "isNeeded": false, "picture": "./images/groceryItems/salmon_fillet.jpg", "storeName": "Walmart" },
-    { "name": "Salsa", "category": "Condiments", "defaultQty": 1, "unitName": "each", "isNeeded": false, "picture": "./images/groceryItems/salsa.jpg", "storeName": "Walmart" },
-    { "name": "Salt", "category": "Spices", "defaultQty": 1, "unitName": "pound", "isNeeded": false, "picture": "./images/groceryItems/salt.jpg", "storeName": "Walmart" },
-    { "name": "Spinach", "category": "Vegetables", "defaultQty": 1, "unitName": "pound", "isNeeded": true, "picture": "./images/groceryItems/spinach.jpg", "storeName": "Walmart" },
-    { "name": "Strawberries", "category": "Fruits", "defaultQty": 1, "unitName": "pound", "isNeeded": false, "picture": "./images/groceryItems/strawberries.jpg", "storeName": "Walmart" },
-    { "name": "Sugar", "category": "Baking", "defaultQty": 2, "unitName": "pound", "isNeeded": false, "picture": "./images/groceryItems/sugar.jpg", "storeName": "Walmart" },
-    { "name": "Tea", "category": "Beverages", "defaultQty": 1, "unitName": "ounce", "isNeeded": false, "picture": "./images/groceryItems/tea.jpg", "storeName": "Walmart" },
-    { "name": "Tomatoes", "category": "Vegetables", "defaultQty": 4, "unitName": "each", "isNeeded": true, "picture": "./images/groceryItems/tomatoes.jpg", "storeName": "Walmart" },
-    { "name": "Yogurt", "category": "Dairy", "defaultQty": 4, "unitName": "each", "isNeeded": false, "picture": "./images/groceryItems/yogurt.jpg", "storeName": "Walmart" }
+    {
+      "name": "Apples",
+      "category": "Fruits",
+      "defaultQty": 6,
+      "unitName": "each",
+      "isNeeded": true,
+      "picture": "./images/groceryItems/apples.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Bananas",
+      "category": "Fruits",
+      "defaultQty": 6,
+      "unitName": "each",
+      "isNeeded": true,
+      "picture": "./images/groceryItems/bananas.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Bell Peppers",
+      "category": "Vegetables",
+      "defaultQty": 3,
+      "unitName": "each",
+      "isNeeded": true,
+      "picture": "./images/groceryItems/bell_peppers.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Bread",
+      "category": "Bakery",
+      "defaultQty": 1,
+      "unitName": "each",
+      "isNeeded": true,
+      "picture": "./images/groceryItems/bread.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Broccoli",
+      "category": "Vegetables",
+      "defaultQty": 1,
+      "unitName": "pound",
+      "isNeeded": true,
+      "picture": "./images/groceryItems/broccoli.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Butter",
+      "category": "Dairy",
+      "defaultQty": 1,
+      "unitName": "pound",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/butter.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Carrots",
+      "category": "Vegetables",
+      "defaultQty": 2,
+      "unitName": "pound",
+      "isNeeded": true,
+      "picture": "./images/groceryItems/carrots.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Cereal",
+      "category": "Cereal",
+      "defaultQty": 1,
+      "unitName": "each",
+      "isNeeded": true,
+      "picture": "./images/groceryItems/cereal.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Cheese",
+      "category": "Dairy",
+      "defaultQty": 1,
+      "unitName": "pound",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/cheese.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Chicken Breast",
+      "category": "Meat",
+      "defaultQty": 1,
+      "unitName": "pound",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/chicken_breast.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Chicken Thighs",
+      "category": "Meat",
+      "defaultQty": 1,
+      "unitName": "pound",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/chicken_thighs.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Chips",
+      "category": "Snacks",
+      "defaultQty": 1,
+      "unitName": "each",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/chips.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Chocolate",
+      "category": "Snacks",
+      "defaultQty": 1,
+      "unitName": "each",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/chocolate.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Coffee",
+      "category": "Beverages",
+      "defaultQty": 1,
+      "unitName": "pound",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/coffee.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Cookies",
+      "category": "Snacks",
+      "defaultQty": 1,
+      "unitName": "each",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/cookies.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Cucumbers",
+      "category": "Vegetables",
+      "defaultQty": 2,
+      "unitName": "each",
+      "isNeeded": true,
+      "picture": "./images/groceryItems/cucumbers.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Eggs",
+      "category": "Dairy",
+      "defaultQty": 1,
+      "unitName": "dozen",
+      "isNeeded": true,
+      "picture": "./images/groceryItems/eggs.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Flour",
+      "category": "Baking",
+      "defaultQty": 5,
+      "unitName": "pound",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/flour.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Frozen Vegetables",
+      "category": "FrozenFoods",
+      "defaultQty": 1,
+      "unitName": "pound",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/frozen_vegetables.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Garlic",
+      "category": "Vegetables",
+      "defaultQty": 1,
+      "unitName": "each",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/garlic.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Grapes",
+      "category": "Fruits",
+      "defaultQty": 1,
+      "unitName": "pound",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/grapes.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Ground Beef",
+      "category": "Meat",
+      "defaultQty": 1,
+      "unitName": "pound",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/ground_beef.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Ice Cream",
+      "category": "FrozenFoods",
+      "defaultQty": 1,
+      "unitName": "pint",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/ice_cream.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Lettuce",
+      "category": "Vegetables",
+      "defaultQty": 1,
+      "unitName": "each",
+      "isNeeded": true,
+      "picture": "./images/groceryItems/lettuce.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Milk",
+      "category": "Dairy",
+      "defaultQty": 1,
+      "unitName": "gallon",
+      "isNeeded": true,
+      "picture": "./images/groceryItems/milk.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Olive Oil",
+      "category": "Condiments",
+      "defaultQty": 1,
+      "unitName": "liter",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/olive_oil.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Onions",
+      "category": "Vegetables",
+      "defaultQty": 3,
+      "unitName": "each",
+      "isNeeded": true,
+      "picture": "./images/groceryItems/onions.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Oranges",
+      "category": "Fruits",
+      "defaultQty": 6,
+      "unitName": "each",
+      "isNeeded": true,
+      "picture": "./images/groceryItems/oranges.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Pasta",
+      "category": "Pasta",
+      "defaultQty": 1,
+      "unitName": "pound",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/pasta.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Pepper",
+      "category": "Spices",
+      "defaultQty": 0.5,
+      "unitName": "ounce",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/pepper.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Potatoes",
+      "category": "Vegetables",
+      "defaultQty": 5,
+      "unitName": "pound",
+      "isNeeded": true,
+      "picture": "./images/groceryItems/potatoes.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Rice",
+      "category": "Grains",
+      "defaultQty": 2,
+      "unitName": "pound",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/rice.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Salmon Fillet",
+      "category": "Meat",
+      "defaultQty": 1,
+      "unitName": "pound",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/salmon_fillet.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Salsa",
+      "category": "Condiments",
+      "defaultQty": 1,
+      "unitName": "each",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/salsa.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Salt",
+      "category": "Spices",
+      "defaultQty": 1,
+      "unitName": "pound",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/salt.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Spinach",
+      "category": "Vegetables",
+      "defaultQty": 1,
+      "unitName": "pound",
+      "isNeeded": true,
+      "picture": "./images/groceryItems/spinach.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Strawberries",
+      "category": "Fruits",
+      "defaultQty": 1,
+      "unitName": "pound",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/strawberries.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Sugar",
+      "category": "Baking",
+      "defaultQty": 2,
+      "unitName": "pound",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/sugar.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Tea",
+      "category": "Beverages",
+      "defaultQty": 1,
+      "unitName": "ounce",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/tea.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Tomatoes",
+      "category": "Vegetables",
+      "defaultQty": 4,
+      "unitName": "each",
+      "isNeeded": true,
+      "picture": "./images/groceryItems/tomatoes.jpg",
+      "storeName": "Walmart"
+    },
+    {
+      "name": "Yogurt",
+      "category": "Dairy",
+      "defaultQty": 4,
+      "unitName": "each",
+      "isNeeded": false,
+      "picture": "./images/groceryItems/yogurt.jpg",
+      "storeName": "Walmart"
+    }
   ],
   "defaultLocations": [
-    { "name": "Main Home", "address1": "123 Main St", "address2": "", "city": "Honolulu", "state": "HI", "zipcode": "12345", "country": "USA", "picture": "./images/locations/main_home.jpg" },
-    { "name": "Vacation Home", "address1": "123 Main St", "address2": "", "city": "Hilo", "state": "HI", "zipcode": "12345", "country": "USA", "picture": "./images/locations/vacay_home.jpg" }
+    {
+      "name": "Main Home",
+      "address1": "123 Main St",
+      "address2": "",
+      "city": "Honolulu",
+      "state": "HI",
+      "zipcode": "12345",
+      "country": "USA",
+      "picture": "./images/locations/main_home.jpg"
+    },
+    {
+      "name": "Vacation Home",
+      "address1": "123 Main St",
+      "address2": "",
+      "city": "Hilo",
+      "state": "HI",
+      "zipcode": "12345",
+      "country": "USA",
+      "picture": "./images/locations/vacay_home.jpg"
+    }
   ],
   "defaultStorageAreas": [
-    { "name": "Kitchen Fridge", "locationName": "Main Home", "type": "Refrigerator", "picture": "./images/containers/fridge.jpg" },
-    { "name": "Garage Freezer", "locationName": "Main Home", "type": "Freezer", "picture": "./images/containers/freezer.jpg" },
-    { "name": "House Pantry", "locationName": "Main Home", "type": "Pantry", "picture": "./images/containers/pantry.jpg" },
-    { "name": "Spice Rack", "locationName": "Main Home", "type": "SpiceRack", "picture": "./images/containers/spice_rack.jpg" },
-    { "name": "Fridge", "locationName": "Vacation Home", "type": "Refrigerator", "picture":  "./images/containers/fridge.jpg" },
-    { "name": "Freezer", "locationName": "Vacation Home", "type": "Freezer", "picture":  "./images/containers/freezer.jpg" },
-    { "name": "Pantry", "locationName": "Vacation Home", "type": "Pantry", "picture":  "./images/containers/pantry.jpg" },
-    { "name": "Spice Rack Vacation", "locationName": "Vacation Home", "type": "SpiceRack", "picture":  "./images/containers/spice_rack.jpg" }
+    {
+      "name": "Kitchen Fridge",
+      "locationName": "Main Home",
+      "type": "Refrigerator",
+      "picture": "./images/containers/fridge.jpg"
+    },
+    {
+      "name": "Garage Freezer",
+      "locationName": "Main Home",
+      "type": "Freezer",
+      "picture": "./images/containers/freezer.jpg"
+    },
+    {
+      "name": "House Pantry",
+      "locationName": "Main Home",
+      "type": "Pantry",
+      "picture": "./images/containers/pantry.jpg"
+    },
+    {
+      "name": "Spice Rack",
+      "locationName": "Main Home",
+      "type": "SpiceRack",
+      "picture": "./images/containers/spice_rack.jpg"
+    },
+    {
+      "name": "Fridge",
+      "locationName": "Vacation Home",
+      "type": "Refrigerator",
+      "picture": "./images/containers/fridge.jpg"
+    },
+    {
+      "name": "Freezer",
+      "locationName": "Vacation Home",
+      "type": "Freezer",
+      "picture": "./images/containers/freezer.jpg"
+    },
+    {
+      "name": "Pantry",
+      "locationName": "Vacation Home",
+      "type": "Pantry",
+      "picture": "./images/containers/pantry.jpg"
+    },
+    {
+      "name": "Spice Rack Vacation",
+      "locationName": "Vacation Home",
+      "type": "SpiceRack",
+      "picture": "./images/containers/spice_rack.jpg"
+    }
   ],
   "defaultProductInstances": [
-    { "productName": "Milk", "storageAreaName": "Kitchen Fridge", "locationName": "Main Home", "quantity": 1, "unitName": "gallon", "expirationDate": null },
-    { "productName": "Eggs", "storageAreaName": "Kitchen Fridge", "locationName": "Main Home", "quantity": 1, "unitName": "dozen", "expirationDate": null },
-    { "productName": "Butter", "storageAreaName": "Kitchen Fridge", "locationName": "Main Home", "quantity": 1, "unitName": "pound", "expirationDate": null },
-    { "productName": "Cheese", "storageAreaName": "Kitchen Fridge", "locationName": "Main Home", "quantity": 0.5, "unitName": "pound", "expirationDate": null },
-    { "productName": "Chicken Breast", "storageAreaName": "Garage Freezer", "locationName": "Main Home", "quantity": 2, "unitName": "pound", "expirationDate": null },
-    { "productName": "Broccoli", "storageAreaName": "Kitchen Fridge", "locationName": "Main Home", "quantity": 1, "unitName": "pound", "expirationDate": null }
+    {
+      "productName": "Milk",
+      "storageAreaName": "Kitchen Fridge",
+      "locationName": "Main Home",
+      "quantity": 1,
+      "unitName": "gallon",
+      "expirationDate": null
+    },
+    {
+      "productName": "Eggs",
+      "storageAreaName": "Kitchen Fridge",
+      "locationName": "Main Home",
+      "quantity": 1,
+      "unitName": "dozen",
+      "expirationDate": null
+    },
+    {
+      "productName": "Butter",
+      "storageAreaName": "Kitchen Fridge",
+      "locationName": "Main Home",
+      "quantity": 1,
+      "unitName": "pound",
+      "expirationDate": null
+    },
+    {
+      "productName": "Cheese",
+      "storageAreaName": "Kitchen Fridge",
+      "locationName": "Main Home",
+      "quantity": 0.5,
+      "unitName": "pound",
+      "expirationDate": null
+    },
+    {
+      "productName": "Chicken Breast",
+      "storageAreaName": "Garage Freezer",
+      "locationName": "Main Home",
+      "quantity": 2,
+      "unitName": "pound",
+      "expirationDate": null
+    },
+    {
+      "productName": "Broccoli",
+      "storageAreaName": "Kitchen Fridge",
+      "locationName": "Main Home",
+      "quantity": 1,
+      "unitName": "pound",
+      "expirationDate": null
+    }
   ],
   "defaultShoppingLists": [
     { "name": "Weekly Groceries", "storeName": "Walmart", "isDefault": true },
     { "name": "Party Supplies", "storeName": "Target", "isDefault": false }
   ],
   "defaultShoppingListItems": [
-    { "shoppingListName": "Weekly Groceries", "productName": "Apples", "quantity": 6, "unitName": "each", "isPurchased": false },
-    { "shoppingListName": "Weekly Groceries", "productName": "Bananas", "quantity": 6, "unitName": "each", "isPurchased": false },
-    { "shoppingListName": "Weekly Groceries", "productName": "Bread", "quantity": 1, "unitName": "each", "isPurchased": false },
-    { "shoppingListName": "Weekly Groceries", "productName": "Carrots", "quantity": 2, "unitName": "pound", "isPurchased": false },
-    { "shoppingListName": "Party Supplies", "productName": "Chips", "quantity": 3, "unitName": "each", "isPurchased": false },
-    { "shoppingListName": "Party Supplies", "productName": "Salsa", "quantity": 2, "unitName": "each", "isPurchased": false },
-    { "shoppingListName": "Party Supplies", "productName": "Cookies", "quantity": 2, "unitName": "each", "isPurchased": false }
+    {
+      "shoppingListName": "Weekly Groceries",
+      "productName": "Apples",
+      "quantity": 6,
+      "unitName": "each",
+      "isPurchased": false
+    },
+    {
+      "shoppingListName": "Weekly Groceries",
+      "productName": "Bananas",
+      "quantity": 6,
+      "unitName": "each",
+      "isPurchased": false
+    },
+    {
+      "shoppingListName": "Weekly Groceries",
+      "productName": "Bread",
+      "quantity": 1,
+      "unitName": "each",
+      "isPurchased": false
+    },
+    {
+      "shoppingListName": "Weekly Groceries",
+      "productName": "Carrots",
+      "quantity": 2,
+      "unitName": "pound",
+      "isPurchased": false
+    },
+    {
+      "shoppingListName": "Party Supplies",
+      "productName": "Chips",
+      "quantity": 3,
+      "unitName": "each",
+      "isPurchased": false
+    },
+    {
+      "shoppingListName": "Party Supplies",
+      "productName": "Salsa",
+      "quantity": 2,
+      "unitName": "each",
+      "isPurchased": false
+    },
+    {
+      "shoppingListName": "Party Supplies",
+      "productName": "Cookies",
+      "quantity": 2,
+      "unitName": "each",
+      "isPurchased": false
+    }
   ],
   "defaultRecipes": [
-     {
-    "title": "Chicken Katsu Curry",
-    "cookTime": 35,
-    "difficulty": "NORMAL",
-    "diet": "ANY",
-    "ingredients": ["chicken cutlets", "panko breadcrumbs", "eggs", "flour", "Japanese curry roux", "onion", "carrot", "potato", "steamed rice", "oil", "salt", "pepper"],
-    "instructions": [
-      "Season chicken with salt and pepper, dredge in flour, dip in beaten egg, then coat in panko.",
-      "Shallow-fry cutlets in 350°F/175°C oil until golden and cooked through; drain on a rack.",
-      "In a pot, sauté sliced onion until soft; add carrot and potato and cook 2-3 min.",
-      "Pour in water to cover, simmer until vegetables are tender.",
-      "Stir in curry roux blocks to thicken; simmer 2-3 min more.",
-      "Slice katsu and serve over steamed rice with hot curry sauce."
-    ],
-    "image": "/images/recipes/chicken-katsu-curry.jpg"
-  },
-  {
-    "title": "Garlic Shoyu Saimin",
-    "cookTime": 15,
-    "difficulty": "EASY",
-    "diet": "ANY",
-    "ingredients": ["saimin noodles", "chicken broth", "soy sauce", "garlic", "green onion", "kamaboko", "char siu", "nori"],
-    "instructions": [
-      "Bring chicken broth to a simmer; add soy sauce and 1-2 minced garlic cloves.",
-      "Cook saimin noodles per package; drain.",
-      "Slice kamaboko and char siu thinly.",
-      "Divide noodles into bowls; ladle hot broth over.",
-      "Top with char siu, kamaboko, chopped green onion, and nori strips."
-    ],
-    "image": "/images/recipes/garlic-shoyu-saimin.jpg"
-  },
-  {
-    "title": "Hawaiian Garlic Shrimp Plate",
-    "cookTime": 18,
-    "difficulty": "EASY",
-    "diet": "ANY",
-    "ingredients": ["shrimp", "butter", "garlic", "flour", "paprika", "lemon", "white rice", "macaroni salad", "salt", "pepper"],
-    "instructions": [
-      "Pat shrimp dry; season with salt, pepper, and paprika; lightly dust with flour.",
-      "Melt butter in a skillet; add lots of minced garlic and cook until fragrant.",
-      "Add shrimp; sauté until pink and just cooked through.",
-      "Squeeze lemon over shrimp; toss to coat.",
-      "Serve with white rice and a scoop of macaroni salad."
-    ],
-    "image": "/images/recipes/hawaiian-garlic-shrimp.jpg"
-  },
-  {
-    "title": "Spicy Tuna Poke Bowl",
-    "cookTime": 12,
-    "difficulty": "EASY",
-    "diet": "PESCETARIAN",
-    "ingredients": ["sushi-grade tuna", "soy sauce", "sriracha", "mayonnaise", "sesame oil", "green onion", "white rice", "avocado", "sesame seeds"],
-    "instructions": [
-      "Cube sushi-grade tuna; chill.",
-      "Mix soy sauce, mayo, sriracha, and a few drops of sesame oil.",
-      "Toss tuna with sauce and sliced green onion.",
-      "Serve over warm rice with avocado.",
-      "Finish with sesame seeds (optional furikake)."
-    ],
-    "image": "/images/recipes/spicy-tuna-poke-bowl.jpg"
-  },
-  {
-    "title": "Creamy Tomato Penne",
-    "cookTime": 20,
-    "difficulty": "EASY",
-    "diet": "VEGETARIAN",
-    "ingredients": ["penne", "crushed tomatoes", "heavy cream", "garlic", "olive oil", "parmesan", "basil", "salt", "pepper"],
-    "instructions": [
-      "Boil penne in salted water until al dente.",
-      "Sauté minced garlic in olive oil 30-60 sec; add crushed tomatoes and simmer 5 min.",
-      "Stir in cream; season with salt and pepper.",
-      "Toss in drained penne; add grated parmesan.",
-      "Top with torn basil to serve."
-    ],
-    "image": "/images/recipes/creamy-tomato-penne.jpg"
-  },
-  {
-    "title": "Mushroom Tofu Mapo",
-    "cookTime": 25,
-    "difficulty": "NORMAL",
-    "diet": "VEGAN",
-    "ingredients": ["soft tofu", "shiitake mushrooms", "doubanjiang", "soy sauce", "garlic", "ginger", "Sichuan peppercorns", "vegetable broth", "cornstarch slurry", "green onion"],
-    "instructions": [
-      "Dry-saute diced shiitake to concentrate flavor; add oil, minced garlic, and ginger.",
-      "Stir in doubanjiang; cook 30 sec to bloom.",
-      "Add vegetable broth and cubed soft tofu; simmer gently 3-4 min.",
-      "Season with soy sauce; add cornstarch slurry to thicken.",
-      "Finish with ground Sichuan peppercorns and green onion."
-    ],
-    "image": "/images/recipes/mushroom-tofu-mapo.jpg"
+    {
+      "title": "Chicken Katsu Curry",
+      "cookTime": 35,
+      "difficulty": "NORMAL",
+      "diet": "ANY",
+      "ingredients": [
+        "chicken cutlets",
+        "panko breadcrumbs",
+        "eggs",
+        "flour",
+        "Japanese curry roux",
+        "onion",
+        "carrot",
+        "potato",
+        "steamed rice",
+        "oil",
+        "salt",
+        "pepper"
+      ],
+      "instructions": [
+        "Season chicken with salt and pepper, dredge in flour, dip in beaten egg, then coat in panko.",
+        "Shallow-fry cutlets in 350°F/175°C oil until golden and cooked through; drain on a rack.",
+        "In a pot, sauté sliced onion until soft; add carrot and potato and cook 2-3 min.",
+        "Pour in water to cover, simmer until vegetables are tender.",
+        "Stir in curry roux blocks to thicken; simmer 2-3 min more.",
+        "Slice katsu and serve over steamed rice with hot curry sauce."
+      ],
+      "image": "/images/recipes/chicken-katsu-curry.jpg"
+    },
+    {
+      "title": "Garlic Shoyu Saimin",
+      "cookTime": 15,
+      "difficulty": "EASY",
+      "diet": "ANY",
+      "ingredients": [
+        "saimin noodles",
+        "chicken broth",
+        "soy sauce",
+        "garlic",
+        "green onion",
+        "kamaboko",
+        "char siu",
+        "nori"
+      ],
+      "instructions": [
+        "Bring chicken broth to a simmer; add soy sauce and 1-2 minced garlic cloves.",
+        "Cook saimin noodles per package; drain.",
+        "Slice kamaboko and char siu thinly.",
+        "Divide noodles into bowls; ladle hot broth over.",
+        "Top with char siu, kamaboko, chopped green onion, and nori strips."
+      ],
+      "image": "/images/recipes/garlic-shoyu-saimin.jpg"
+    },
+    {
+      "title": "Hawaiian Garlic Shrimp Plate",
+      "cookTime": 18,
+      "difficulty": "EASY",
+      "diet": "ANY",
+      "ingredients": [
+        "shrimp",
+        "butter",
+        "garlic",
+        "flour",
+        "paprika",
+        "lemon",
+        "white rice",
+        "macaroni salad",
+        "salt",
+        "pepper"
+      ],
+      "instructions": [
+        "Pat shrimp dry; season with salt, pepper, and paprika; lightly dust with flour.",
+        "Melt butter in a skillet; add lots of minced garlic and cook until fragrant.",
+        "Add shrimp; sauté until pink and just cooked through.",
+        "Squeeze lemon over shrimp; toss to coat.",
+        "Serve with white rice and a scoop of macaroni salad."
+      ],
+      "image": "/images/recipes/hawaiian-garlic-shrimp.jpg"
+    },
+    {
+      "title": "Spicy Tuna Poke Bowl",
+      "cookTime": 12,
+      "difficulty": "EASY",
+      "diet": "PESCETARIAN",
+      "ingredients": [
+        "sushi-grade tuna",
+        "soy sauce",
+        "sriracha",
+        "mayonnaise",
+        "sesame oil",
+        "green onion",
+        "white rice",
+        "avocado",
+        "sesame seeds"
+      ],
+      "instructions": [
+        "Cube sushi-grade tuna; chill.",
+        "Mix soy sauce, mayo, sriracha, and a few drops of sesame oil.",
+        "Toss tuna with sauce and sliced green onion.",
+        "Serve over warm rice with avocado.",
+        "Finish with sesame seeds (optional furikake)."
+      ],
+      "image": "/images/recipes/spicy-tuna-poke-bowl.jpg"
+    },
+    {
+      "title": "Creamy Tomato Penne",
+      "cookTime": 20,
+      "difficulty": "EASY",
+      "diet": "VEGETARIAN",
+      "ingredients": [
+        "penne",
+        "crushed tomatoes",
+        "heavy cream",
+        "garlic",
+        "olive oil",
+        "parmesan",
+        "basil",
+        "salt",
+        "pepper"
+      ],
+      "instructions": [
+        "Boil penne in salted water until al dente.",
+        "Sauté minced garlic in olive oil 30-60 sec; add crushed tomatoes and simmer 5 min.",
+        "Stir in cream; season with salt and pepper.",
+        "Toss in drained penne; add grated parmesan.",
+        "Top with torn basil to serve."
+      ],
+      "image": "/images/recipes/creamy-tomato-penne.jpg"
+    },
+    {
+      "title": "Mushroom Tofu Mapo",
+      "cookTime": 25,
+      "difficulty": "NORMAL",
+      "diet": "VEGAN",
+      "ingredients": [
+        "soft tofu",
+        "shiitake mushrooms",
+        "doubanjiang",
+        "soy sauce",
+        "garlic",
+        "ginger",
+        "Sichuan peppercorns",
+        "vegetable broth",
+        "cornstarch slurry",
+        "green onion"
+      ],
+      "instructions": [
+        "Dry-saute diced shiitake to concentrate flavor; add oil, minced garlic, and ginger.",
+        "Stir in doubanjiang; cook 30 sec to bloom.",
+        "Add vegetable broth and cubed soft tofu; simmer gently 3-4 min.",
+        "Season with soy sauce; add cornstarch slurry to thicken.",
+        "Finish with ground Sichuan peppercorns and green onion."
+      ],
+      "image": "/images/recipes/mushroom-tofu-mapo.jpg"
     },
     {
       "title": "Shoyu Chicken",
       "cookTime": 40,
       "difficulty": "EASY",
       "diet": "ANY",
-      "ingredients": ["chicken thighs", "soy sauce", "brown sugar", "garlic", "ginger", "water", "green onion"],
+      "ingredients": [
+        "chicken thighs",
+        "soy sauce",
+        "brown sugar",
+        "garlic",
+        "ginger",
+        "water",
+        "green onion"
+      ],
       "instructions": [
         "In a large pot, combine soy sauce, water, brown sugar, sliced ginger, and crushed garlic. Stir until the sugar dissolves.",
         "Add chicken thighs, ensuring they are mostly covered by the sauce.",
@@ -222,7 +868,18 @@
       "cookTime": 25,
       "difficulty": "NORMAL",
       "diet": "ANY",
-      "ingredients": ["ground beef", "egg", "white rice", "onion", "beef broth", "soy sauce", "butter", "flour", "salt", "pepper"],
+      "ingredients": [
+        "ground beef",
+        "egg",
+        "white rice",
+        "onion",
+        "beef broth",
+        "soy sauce",
+        "butter",
+        "flour",
+        "salt",
+        "pepper"
+      ],
       "instructions": [
         "Shape the ground beef into patties and season both sides with salt and pepper.",
         "Cook patties in a skillet over medium-high heat until browned and cooked through; remove and set aside.",
@@ -239,7 +896,15 @@
       "cookTime": 18,
       "difficulty": "NORMAL",
       "diet": "PESCETARIAN",
-      "ingredients": ["salmon fillets", "soy sauce", "mirin", "sugar", "ginger", "garlic", "sesame seeds"],
+      "ingredients": [
+        "salmon fillets",
+        "soy sauce",
+        "mirin",
+        "sugar",
+        "ginger",
+        "garlic",
+        "sesame seeds"
+      ],
       "instructions": [
         "Whisk together soy sauce, mirin, sugar, grated ginger, and minced garlic to make the teriyaki sauce.",
         "Heat a drizzle of oil in a skillet over medium heat and place salmon fillets skin-side down.",
@@ -269,7 +934,16 @@
       "cookTime": 15,
       "difficulty": "EASY",
       "diet": "ANY",
-      "ingredients": ["day-old rice", "kimchi", "gochujang", "soy sauce", "green onion", "egg", "oil", "sesame oil"],
+      "ingredients": [
+        "day-old rice",
+        "kimchi",
+        "gochujang",
+        "soy sauce",
+        "green onion",
+        "egg",
+        "oil",
+        "sesame oil"
+      ],
       "instructions": [
         "Heat oil in a large pan over medium heat and add chopped kimchi; cook for 1-2 minutes until fragrant.",
         "Stir in a spoonful of gochujang and mix well to coat the kimchi.",
@@ -284,7 +958,16 @@
       "cookTime": 20,
       "difficulty": "EASY",
       "diet": "VEGETARIAN",
-      "ingredients": ["yaki soba noodles", "cabbage", "carrot", "onion", "soy sauce", "worcestershire", "ketchup", "oil"],
+      "ingredients": [
+        "yaki soba noodles",
+        "cabbage",
+        "carrot",
+        "onion",
+        "soy sauce",
+        "worcestershire",
+        "ketchup",
+        "oil"
+      ],
       "instructions": [
         "In a small bowl, mix soy sauce, worcestershire sauce, and ketchup to make yakisoba sauce.",
         "Heat oil in a pan and stir-fry sliced onion, cabbage, and carrot until slightly softened.",
@@ -299,7 +982,15 @@
       "cookTime": 60,
       "difficulty": "NORMAL",
       "diet": "ANY",
-      "ingredients": ["chicken thighs", "pineapple juice", "soy sauce", "brown sugar", "ketchup", "ginger", "garlic"],
+      "ingredients": [
+        "chicken thighs",
+        "pineapple juice",
+        "soy sauce",
+        "brown sugar",
+        "ketchup",
+        "ginger",
+        "garlic"
+      ],
       "instructions": [
         "In a bowl, combine pineapple juice, soy sauce, brown sugar, ketchup, grated ginger, and minced garlic.",
         "Marinate chicken thighs in the mixture for at least 30 minutes (or overnight for more flavor).",
@@ -314,7 +1005,13 @@
       "cookTime": 10,
       "difficulty": "EASY",
       "diet": "VEGAN",
-      "ingredients": ["dashi (veg or kombu)", "miso paste", "soft tofu", "wakame", "green onion"],
+      "ingredients": [
+        "dashi (veg or kombu)",
+        "miso paste",
+        "soft tofu",
+        "wakame",
+        "green onion"
+      ],
       "instructions": [
         "Bring dashi broth to a gentle simmer in a small pot.",
         "Place miso paste in a ladle, add a little hot broth, and stir until smooth before mixing it back into the pot.",
@@ -328,7 +1025,16 @@
       "cookTime": 15,
       "difficulty": "EASY",
       "diet": "VEGAN",
-      "ingredients": ["day-old rice", "frozen peas and carrots", "corn", "soy sauce", "garlic", "green onion", "oil", "sesame oil"],
+      "ingredients": [
+        "day-old rice",
+        "frozen peas and carrots",
+        "corn",
+        "soy sauce",
+        "garlic",
+        "green onion",
+        "oil",
+        "sesame oil"
+      ],
       "instructions": [
         "Heat oil in a large skillet and sauté minced garlic for 30 seconds until fragrant.",
         "Add frozen peas, carrots, and corn; stir-fry for 2-3 minutes.",
@@ -343,7 +1049,19 @@
       "cookTime": 30,
       "difficulty": "NORMAL",
       "diet": "VEGAN",
-      "ingredients": ["firm tofu", "flour", "plant milk", "panko", "Japanese curry roux", "onion", "carrot", "potato", "oil", "salt", "pepper"],
+      "ingredients": [
+        "firm tofu",
+        "flour",
+        "plant milk",
+        "panko",
+        "Japanese curry roux",
+        "onion",
+        "carrot",
+        "potato",
+        "oil",
+        "salt",
+        "pepper"
+      ],
       "instructions": [
         "Press tofu for 10 minutes to remove excess water, then slice into thick pieces.",
         "Season with salt and pepper, dredge in flour, dip in plant milk, then coat with panko.",
@@ -359,7 +1077,14 @@
       "cookTime": 12,
       "difficulty": "EASY",
       "diet": "ANY",
-      "ingredients": ["sirloin steak", "butter", "garlic", "soy sauce", "black pepper", "green onion"],
+      "ingredients": [
+        "sirloin steak",
+        "butter",
+        "garlic",
+        "soy sauce",
+        "black pepper",
+        "green onion"
+      ],
       "instructions": [
         "Cut steak into bite-sized cubes and pat dry with paper towels.",
         "Season with salt and black pepper.",
@@ -375,7 +1100,12 @@
       "cookTime": 25,
       "difficulty": "EASY",
       "diet": "VEGETARIAN",
-      "ingredients": ["Okinawan sweet potatoes", "butter", "milk or cream", "salt"],
+      "ingredients": [
+        "Okinawan sweet potatoes",
+        "butter",
+        "milk or cream",
+        "salt"
+      ],
       "instructions": [
         "Peel and cut Okinawan sweet potatoes into cubes.",
         "Boil in salted water for 12-15 minutes until tender when pierced with a fork.",
@@ -390,7 +1120,17 @@
       "cookTime": 30,
       "difficulty": "NORMAL",
       "diet": "ANY",
-      "ingredients": ["chicken thighs", "soy sauce", "sake", "ginger", "garlic", "potato starch", "oil", "lemon", "white rice"],
+      "ingredients": [
+        "chicken thighs",
+        "soy sauce",
+        "sake",
+        "ginger",
+        "garlic",
+        "potato starch",
+        "oil",
+        "lemon",
+        "white rice"
+      ],
       "instructions": [
         "Cut chicken thighs into bite-sized pieces and marinate in soy sauce, sake, grated ginger, and minced garlic for 10-15 minutes.",
         "Coat each piece with potato starch until evenly covered.",
@@ -405,7 +1145,13 @@
       "cookTime": 20,
       "difficulty": "EASY",
       "diet": "ANY",
-      "ingredients": ["chicken breast", "soy sauce", "garlic", "mixed vegetables", "oil"],
+      "ingredients": [
+        "chicken breast",
+        "soy sauce",
+        "garlic",
+        "mixed vegetables",
+        "oil"
+      ],
       "instructions": [
         "Slice chicken breasts into thin strips and season lightly with salt.",
         "Heat oil in a large pan or wok and cook the chicken until no longer pink.",
@@ -421,7 +1167,16 @@
       "cookTime": 30,
       "difficulty": "NORMAL",
       "diet": "ANY",
-      "ingredients": ["spaghetti", "ground beef", "tomato sauce", "onion", "garlic", "olive oil", "salt", "pepper"],
+      "ingredients": [
+        "spaghetti",
+        "ground beef",
+        "tomato sauce",
+        "onion",
+        "garlic",
+        "olive oil",
+        "salt",
+        "pepper"
+      ],
       "instructions": [
         "Cook spaghetti in a large pot of salted water until al dente; drain and set aside.",
         "Heat olive oil in a pan, then sauté minced onion and garlic until fragrant.",
@@ -452,7 +1207,14 @@
       "cookTime": 15,
       "difficulty": "EASY",
       "diet": "VEGETARIAN",
-      "ingredients": ["flour", "milk", "egg", "sugar", "baking powder", "butter"],
+      "ingredients": [
+        "flour",
+        "milk",
+        "egg",
+        "sugar",
+        "baking powder",
+        "butter"
+      ],
       "instructions": [
         "In a bowl, whisk together flour, sugar, and baking powder.",
         "Add milk and egg, and stir until you get a smooth batter.",
@@ -461,6 +1223,6 @@
         "Serve with butter, syrup, or fruit."
       ],
       "image": "/images/recipes/pancakes.jpg"
-  }
-]
+    }
+  ]
 }
