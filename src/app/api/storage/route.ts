@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import {
-  readStorageAreas,
-  createStorageArea,
-} from '@/lib/dbStorageAreaActions';
+import { readStorageAreas, createStorageArea } from '@/lib/dbStorageAreaActions';
+import { getServerSession } from 'next-auth';
+import authOptions from "@/lib/authOptions";
+import { prisma } from '@/lib/prisma';
 
 export const runtime = 'nodejs';
 
@@ -10,21 +10,31 @@ function mapTypeToUi(
   type: string,
 ): 'Fridge' | 'Freezer' | 'Pantry' | 'Spice Rack' | 'Other' {
   switch (type) {
-    case 'Refrigerator': return 'Fridge';
-    case 'Freezer': return 'Freezer';
-    case 'Pantry': return 'Pantry';
-    case 'SpiceRack': return 'Spice Rack';
-    default: return 'Other';
+    case 'Refrigerator':
+      return 'Fridge';
+    case 'Freezer':
+      return 'Freezer';
+    case 'Pantry':
+      return 'Pantry';
+    case 'SpiceRack':
+      return 'Spice Rack';
+    default:
+      return 'Other';
   }
 }
 
 function mapTypeToDb(type: string): string {
   switch (type) {
-    case 'Fridge': return 'Refrigerator';
-    case 'Freezer': return 'Freezer';
-    case 'Pantry': return 'Pantry';
-    case 'Spice Rack': return 'SpiceRack';
-    default: return 'Pantry';
+    case 'Fridge':
+      return 'Refrigerator';
+    case 'Freezer':
+      return 'Freezer';
+    case 'Pantry':
+      return 'Pantry';
+    case 'Spice Rack':
+      return 'SpiceRack';
+    default:
+      return 'Pantry';
   }
 }
 
@@ -49,6 +59,7 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    // Pass userId to the action
     const storages = await readStorageAreas(userId);
 
     const data = storages.map((s) => ({
@@ -86,6 +97,7 @@ export async function POST(request: NextRequest) {
 
     const dbType = mapTypeToDb(type);
 
+    // Pass userId to the action
     const newStorage = await createStorageArea(userId, {
       name,
       type: dbType,

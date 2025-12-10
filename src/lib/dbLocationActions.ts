@@ -9,16 +9,19 @@ import { locationSelect } from './dbActionTypes';
  * @param userId The ID of the owner.
  * @param data The location data.
  */
-export async function createLocation(userId: string, data: {
-  name: string,
-  address1: string,
-  address2: string | undefined,
-  city: string,
-  state: string,
-  zipcode: string,
-  country: string,
-  picture: string | undefined,
-}) {
+export async function createLocation(
+  userId: string,
+  data: {
+    name: string;
+    address1: string;
+    address2: string | undefined;
+    city: string;
+    state: string;
+    zipcode: string;
+    country: string;
+    picture: string | undefined;
+  },
+) {
   const newLocation = await prisma.location.create({
     data: {
       userId,
@@ -53,12 +56,15 @@ export async function readLocations(userId: string) {
 /**
  * Read a location by ID (and verify ownership).
  */
-export async function readLocation(userId: string, id: string | null | undefined) {
+export async function readLocation(
+  userId: string,
+  id: string | null | undefined,
+) {
   if (!id) return null;
   const location = await prisma.location.findFirst({
-    where: { 
+    where: {
       id,
-      userId
+      userId,
     },
     select: locationSelect,
   });
@@ -68,20 +74,24 @@ export async function readLocation(userId: string, id: string | null | undefined
 /**
  * Update a location by ID.
  */
-export async function updateLocation(userId: string, id: string, data: {
-  name: string,
-  address1: string,
-  address2: string | undefined,
-  city: string,
-  state: string,
-  zipcode: string,
-  country: string,
-  picture: string | undefined,
-}) {
+export async function updateLocation(
+  userId: string,
+  id: string,
+  data: {
+    name: string;
+    address1: string;
+    address2: string | undefined;
+    city: string;
+    state: string;
+    zipcode: string;
+    country: string;
+    picture: string | undefined;
+  },
+) {
   const updatedBatch = await prisma.location.updateMany({
-    where: { 
+    where: {
       id,
-      userId
+      userId,
     },
     data: {
       name: data.name,
@@ -104,9 +114,9 @@ export async function updateLocation(userId: string, id: string, data: {
  */
 export async function deleteLocation(userId: string, id: string) {
   const deletedBatch = await prisma.location.deleteMany({
-    where: { 
+    where: {
       id,
-      userId
+      userId,
     },
   });
   return deletedBatch.count > 0;
