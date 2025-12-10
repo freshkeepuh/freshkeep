@@ -38,7 +38,6 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // FIX: Pass userId as first argument
     const storage = await readStorageArea(userId, id);
 
     if (!storage) {
