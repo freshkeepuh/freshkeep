@@ -22,9 +22,9 @@ interface Storage {
   expiresAt?: string | null;
   [key: string]: any; // Add more fields as needed
 }
-type StorageDetailProps = {
+interface StorageDetailProps {
   storage: Storage | any;
-};
+}
 
 function formatDate(dateStr?: string | null) {
   if (!dateStr) return '—';
@@ -51,10 +51,7 @@ function getExpiryBadge(dte: number | null) {
     return (
       <Badge bg="danger">
         <div>Expired</div>
-        <div>
-          {Math.abs(dte)}
-          d
-        </div>
+        <div>{Math.abs(dte)}d</div>
       </Badge>
     );
   }
@@ -70,20 +67,14 @@ function getExpiryBadge(dte: number | null) {
   if (dte <= 3) {
     return (
       <Badge bg="warning" text="dark">
-        <div>
-          {dte}
-          d left
-        </div>
+        <div>{dte}d left</div>
       </Badge>
     );
   }
 
   return (
     <Badge bg="success">
-      <div>
-        {dte}
-        d left
-      </div>
+      <div>{dte}d left</div>
     </Badge>
   );
 }
@@ -99,7 +90,9 @@ export default function StorageDetail({ storage }: StorageDetailProps) {
     );
   }
 
-  const itemCount = Array.isArray(storage.instances) ? storage.instances.length : 0;
+  const itemCount = Array.isArray(storage.instances)
+    ? storage.instances.length
+    : 0;
 
   return (
     <Container className="py-4">
@@ -110,21 +103,20 @@ export default function StorageDetail({ storage }: StorageDetailProps) {
               <Col>
                 <Card.Title className="mb-1">{storage.name}</Card.Title>
                 {storage.location?.name ? (
-                  <Card.Subtitle className="text-muted">{storage.location.name}</Card.Subtitle>
+                  <Card.Subtitle className="text-muted">
+                    {storage.location.name}
+                  </Card.Subtitle>
                 ) : null}
               </Col>
               <Col xs="auto" className="text-end">
                 <Badge bg="light" text="dark" className="me-2">
-                  {itemCount}
-                  {' '}
-                  items
+                  {itemCount} items
                 </Badge>
               </Col>
             </Row>
           </Card.Body>
         </Card>
-        {
-        itemCount ? (
+        {itemCount ? (
           <Card>
             <Card.Body>
               <Card.Title className="mb-3">Items</Card.Title>
@@ -134,29 +126,35 @@ export default function StorageDetail({ storage }: StorageDetailProps) {
                     const dte = daysUntil(inst.expiresAt);
                     const expiryBadge = getExpiryBadge(dte);
                     return (
-                      <ListGroup.Item key={inst.id} className="d-flex justify-content-between align-items-center">
+                      <ListGroup.Item
+                        key={inst.id}
+                        className="d-flex justify-content-between align-items-center"
+                      >
                         <div>
                           <div>
                             <strong>
-                              { inst.product?.name || 'Unknown product'}
+                              {inst.product?.name || 'Unknown product'}
                             </strong>
-                            {inst.product?.brand ? ` · ${inst.product.brand}` : ''}
+                            {inst.product?.brand
+                              ? ` · ${inst.product.brand}`
+                              : ''}
                           </div>
-                          <div className="text-muted" style={{ fontSize: '0.9rem' }}>
+                          <div
+                            className="text-muted"
+                            style={{ fontSize: '0.9rem' }}
+                          >
                             {inst.product?.category || ''}
-                            {inst.expiresAt ? ` · Exp: ${formatDate(inst.expiresAt)}` : ''}
+                            {inst.expiresAt
+                              ? ` · Exp: ${formatDate(inst.expiresAt)}`
+                              : ''}
                           </div>
                         </div>
                         <div className="text-end">
                           <div>
                             {inst.quantity}
-                            {
-                              inst.unit?.abbr || inst.unit?.name || ''
-                            }
+                            {inst.unit?.abbr || inst.unit?.name || ''}
                           </div>
-                          <div className="mt-1">
-                            {expiryBadge}
-                          </div>
+                          <div className="mt-1">{expiryBadge}</div>
                         </div>
                       </ListGroup.Item>
                     );
@@ -167,8 +165,9 @@ export default function StorageDetail({ storage }: StorageDetailProps) {
               </ListGroup>
             </Card.Body>
           </Card>
-        ) : ('')
-      }
+        ) : (
+          ''
+        )}
       </div>
     </Container>
   );

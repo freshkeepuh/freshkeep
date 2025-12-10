@@ -22,19 +22,14 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const {
-      name,
-      address1,
-      address2,
-      city,
-      state,
-      zipcode,
-      country,
-      picture,
-    } = body || {};
+    const { name, address1, address2, city, state, zipcode, country, picture } =
+      body || {};
 
     if (!name || !address1 || !city || !state || !zipcode || !country) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Missing required fields' },
+        { status: 400 },
+      );
     }
 
     const created = await createLocation({

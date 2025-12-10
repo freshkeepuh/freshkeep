@@ -8,7 +8,7 @@ export const forgotPasswordValidation = Yup.object().shape({
     .email('Email is invalid')
     .test('unique-email', 'Email not found', async (value) => {
       if (!value) return false;
-      return (checkUser({ email: value }));
+      return checkUser({ email: value });
     }),
 });
 
@@ -30,9 +30,7 @@ export const signUpValidation = Yup.object().shape({
 });
 
 export const signInValidation = Yup.object().shape({
-  email: Yup.string()
-    .required('Email is required')
-    .email('Email is invalid'),
+  email: Yup.string().required('Email is required').email('Email is invalid'),
   password: Yup.string()
     .required('Password is required')
     .min(6, 'Password must be at least 6 characters')
@@ -42,42 +40,46 @@ export const signInValidation = Yup.object().shape({
 export const AddStorageSchema = Yup.object({
   locId: Yup.string().required(),
   name: Yup.string().required(),
-  type: Yup.mixed<StorageType>()
-    .oneOf(Object.values(StorageType))
-    .required(),
+  type: Yup.mixed<StorageType>().oneOf(Object.values(StorageType)).required(),
   picture: Yup.string().url('Must be a valid URL').nullable(),
-  instances: Yup.array().of(Yup.object().shape({
-    picture: Yup.string().url('Must be a valid URL').nullable(),
-    id: Yup.string().required(),
-    locId: Yup.string().required(),
-    storId: Yup.string().required(),
-    prodId: Yup.string().required(),
-    grocId: Yup.string().required(),
-    unitId: Yup.string().required(),
-    quantity: Yup.number().positive().required(),
-    expiresAt: Yup.date().nullable(),
-  })).nullable(),
+  instances: Yup.array()
+    .of(
+      Yup.object().shape({
+        picture: Yup.string().url('Must be a valid URL').nullable(),
+        id: Yup.string().required(),
+        locId: Yup.string().required(),
+        storId: Yup.string().required(),
+        prodId: Yup.string().required(),
+        grocId: Yup.string().required(),
+        unitId: Yup.string().required(),
+        quantity: Yup.number().positive().required(),
+        expiresAt: Yup.date().nullable(),
+      }),
+    )
+    .nullable(),
 });
 
 export const EditStorageSchema = Yup.object({
   id: Yup.string().required(),
   locId: Yup.string().required(),
   name: Yup.string().required(),
-  type: Yup.mixed<StorageType>()
-    .oneOf(Object.values(StorageType))
-    .required(),
+  type: Yup.mixed<StorageType>().oneOf(Object.values(StorageType)).required(),
   picture: Yup.string().url('Must be a valid URL').nullable(),
-  instances: Yup.array().of(Yup.object().shape({
-    picture: Yup.string().url('Must be a valid URL').nullable(),
-    id: Yup.string().required(),
-    locId: Yup.string().required(),
-    storId: Yup.string().required(),
-    prodId: Yup.string().required(),
-    grocId: Yup.string().required(),
-    unitId: Yup.string().required(),
-    quantity: Yup.number().positive().required(),
-    expiresAt: Yup.date().nullable(),
-  })).nullable(),
+  instances: Yup.array()
+    .of(
+      Yup.object().shape({
+        picture: Yup.string().url('Must be a valid URL').nullable(),
+        id: Yup.string().required(),
+        locId: Yup.string().required(),
+        storId: Yup.string().required(),
+        prodId: Yup.string().required(),
+        grocId: Yup.string().required(),
+        unitId: Yup.string().required(),
+        quantity: Yup.number().positive().required(),
+        expiresAt: Yup.date().nullable(),
+      }),
+    )
+    .nullable(),
 });
 
 export const AddLocationSchema = Yup.object({
@@ -88,20 +90,26 @@ export const AddLocationSchema = Yup.object({
   city: Yup.string().required('City is required'),
   state: Yup.string().required('State is required'),
   zip: Yup.string().required('Zip code is required'),
-  country: Yup.mixed<Country>().oneOf(Object.values(Country)).required('Country is required'),
+  country: Yup.mixed<Country>()
+    .oneOf(Object.values(Country))
+    .required('Country is required'),
   picture: Yup.string().url('Must be a valid URL').nullable(),
-  storageAreas: Yup.array().of(Yup.mixed<StorageType>().oneOf(Object.values(StorageType))),
-  instances: Yup.array().of(Yup.object({
-    picture: Yup.string().url('Must be a valid URL').nullable(),
-    id: Yup.string().required(),
-    locId: Yup.string().required(),
-    prodId: Yup.string().required(),
-    storId: Yup.string().required(),
-    grocId: Yup.string().required(),
-    unitId: Yup.string().required(),
-    quantity: Yup.number().positive().required(),
-    expiresAt: Yup.date().nullable(),
-  })),
+  storageAreas: Yup.array().of(
+    Yup.mixed<StorageType>().oneOf(Object.values(StorageType)),
+  ),
+  instances: Yup.array().of(
+    Yup.object({
+      picture: Yup.string().url('Must be a valid URL').nullable(),
+      id: Yup.string().required(),
+      locId: Yup.string().required(),
+      prodId: Yup.string().required(),
+      storId: Yup.string().required(),
+      grocId: Yup.string().required(),
+      unitId: Yup.string().required(),
+      quantity: Yup.number().positive().required(),
+      expiresAt: Yup.date().nullable(),
+    }),
+  ),
   createdAt: Yup.date().required(),
   updatedAt: Yup.date().required(),
 });
@@ -117,8 +125,7 @@ export const storeValidation = Yup.object().shape({
   address1: Yup.string()
     .required('Address 1 is required')
     .max(100, 'Address 1 must not exceed 100 characters'),
-  address2: Yup.string()
-    .max(100, 'Address 2 must not exceed 100 characters'),
+  address2: Yup.string().max(100, 'Address 2 must not exceed 100 characters'),
   city: Yup.string()
     .required('City is required')
     .max(50, 'City must not exceed 50 characters'),
@@ -128,8 +135,7 @@ export const storeValidation = Yup.object().shape({
   zipcode: Yup.string()
     .required('Zipcode is required')
     .max(20, 'Zipcode must not exceed 20 characters'),
-  country: Yup.mixed<Country>()
-    .required('Country is required'),
+  country: Yup.mixed<Country>().required('Country is required'),
   phone: Yup.string()
     .optional()
     .max(20, 'Phone number must not exceed 20 characters'),

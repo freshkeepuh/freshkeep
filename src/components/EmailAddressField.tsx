@@ -11,26 +11,33 @@ export interface IEmailAddressField {
 export interface EmailAddressFieldProps {
   register: UseFormRegister<IEmailAddressField>;
   errors: { email?: { message?: string } };
-  placeholder?: string;
-  disabled?: boolean;
+  placeholder: string;
+  disabled: boolean;
 }
 
-const EmailAddressField = ({ register, errors, placeholder, disabled }: EmailAddressFieldProps) => (
-  <>
-    <Form.Control
-      id="email"
-      type="email"
-      placeholder={placeholder || '📧 Email'}
-      disabled={disabled}
-      size="lg"
-      autoFocus
-      isInvalid={!!errors.email}
-      {...register('email')}
-    />
-    <Form.Control.Feedback type="invalid">
-      {errors.email?.message}
-    </Form.Control.Feedback>
-  </>
-);
+function EmailAddressField({
+  register,
+  errors,
+  placeholder,
+  disabled,
+}: EmailAddressFieldProps) {
+  return (
+    <>
+      <Form.Control
+        id="email"
+        type="email"
+        placeholder={placeholder || '📧 Email'}
+        disabled={disabled}
+        size="lg"
+        autoFocus
+        isInvalid={!!errors.email}
+        {...register('email')}
+      />
+      <Form.Control.Feedback type="invalid">
+        {errors.email?.message}
+      </Form.Control.Feedback>
+    </>
+  );
+}
 
 export default EmailAddressField;

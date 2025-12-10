@@ -7,7 +7,7 @@ import type { GroceryOption, Mode, UnitOption } from './types';
 
 type GroceryCategory = $Enums.ProductCategory;
 
-type Props = {
+interface Props {
   mode: Mode;
   setMode: (m: Mode) => void;
 
@@ -15,18 +15,18 @@ type Props = {
   groceryItemId: string | null;
   setGroceryItemId: (id: string | null) => void;
 
-  newName?: string;
+  newName: string;
   setNewName: (v: string) => void;
-  newCategory?: GroceryCategory;
+  newCategory: GroceryCategory;
   setNewCategory: (v: GroceryCategory | undefined) => void;
-  newDefaultQty?: number;
+  newDefaultQty: number;
   setNewDefaultQty: (v: number | undefined) => void;
-  newUnitId?: string;
+  newUnitId: string;
   setNewUnitId: (v: string | undefined) => void;
 
   units: UnitOption[];
-  disabled?: boolean;
-};
+  disabled: boolean;
+}
 
 const CATEGORY_VALUES: GroceryCategory[] = [
   'Fruits',
@@ -131,7 +131,9 @@ export default function ProductInformation({
               <Form.Label>Existing Grocery Item</Form.Label>
               <Form.Select
                 value={groceryItemId ?? ''}
-                onChange={(e) => setGroceryItemId(e.currentTarget.value || null)}
+                onChange={(e) =>
+                  setGroceryItemId(e.currentTarget.value || null)
+                }
                 disabled={disabled}
               >
                 <option value="">Select…</option>
@@ -166,9 +168,13 @@ export default function ProductInformation({
               <Form.Label>Category</Form.Label>
               <Form.Select
                 value={newCategory ?? ''}
-                onChange={(e) => setNewCategory(
-                  (e.currentTarget.value || undefined) as GroceryCategory | undefined,
-                )}
+                onChange={(e) =>
+                  setNewCategory(
+                    (e.currentTarget.value || undefined) as
+                      | GroceryCategory
+                      | undefined,
+                  )
+                }
                 disabled={disabled}
               >
                 <option value="">Select…</option>
@@ -188,9 +194,13 @@ export default function ProductInformation({
                 type="number"
                 step="0.01"
                 value={newDefaultQty ?? ''}
-                onChange={(e) => setNewDefaultQty(
-                  e.currentTarget.value === '' ? undefined : Number(e.currentTarget.value),
-                )}
+                onChange={(e) =>
+                  setNewDefaultQty(
+                    e.currentTarget.value === ''
+                      ? undefined
+                      : Number(e.currentTarget.value),
+                  )
+                }
                 disabled={disabled}
               />
             </Form.Group>
@@ -201,7 +211,9 @@ export default function ProductInformation({
               <Form.Label>Default Unit (optional)</Form.Label>
               <Form.Select
                 value={newUnitId ?? ''}
-                onChange={(e) => setNewUnitId(e.currentTarget.value || undefined)}
+                onChange={(e) =>
+                  setNewUnitId(e.currentTarget.value || undefined)
+                }
                 disabled={disabled}
               >
                 <option value="">(none)</option>

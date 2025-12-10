@@ -17,10 +17,13 @@ export interface StorageType {
 interface StorageListProps {
   storages: StorageType[];
   // onRemove: (id: string, count: number) => void;
-  locationsById?: Record<string, string>;
+  locationsById: Record<string, string>;
 }
 
-export default function StorageList({ storages, locationsById = {} }: StorageListProps) {
+export default function StorageList({
+  storages,
+  locationsById = {},
+}: StorageListProps) {
   const router = useRouter();
   const getIcon = (type: string) => {
     switch (type) {
@@ -37,7 +40,7 @@ export default function StorageList({ storages, locationsById = {} }: StorageLis
     }
   };
 
-  const grouped = useMemo(() => {
+  /* const grouped = useMemo(() => {
     const byLoc: Record<string, StorageType[]> = {};
     for (const s of storages) {
       const key = s.locId || 'unassigned';
@@ -46,6 +49,21 @@ export default function StorageList({ storages, locationsById = {} }: StorageLis
     }
     return byLoc;
   }, [storages]);
+  */
+  const grouped = useMemo(
+    () =>
+      storages.reduce(
+        (acc, storage) => {
+          const key = storage.locId || 'unassigned';
+          return {
+            ...acc,
+            [key]: [...(acc[key] || []), storage],
+          };
+        },
+        {} as Record<string, StorageType[]>,
+      ),
+    [storages],
+  );
 
   const locationKeys = Object.keys(grouped);
 
@@ -54,7 +72,8 @@ export default function StorageList({ storages, locationsById = {} }: StorageLis
       {locationKeys.map((locKey) => (
         <div key={locKey} className={styles.locationGroup}>
           <div className={styles.locationHeader}>
-            {locationsById[locKey] || (locKey === 'unassigned' ? 'Unassigned' : 'Unknown Location')}
+            {locationsById[locKey] ||
+              (locKey === 'unassigned' ? 'Unassigned' : 'Unknown Location')}
           </div>
           <Row className={`g-3 mt-2 ${styles.storageGrid}`}>
             {grouped[locKey].map((storage) => (
@@ -65,13 +84,13 @@ export default function StorageList({ storages, locationsById = {} }: StorageLis
                   onClick={() => router.push(`/storage/${storage.id}`)}
                 >
                   <Card.Body className="text-center">
-                    <div className={styles.storageIcon}>{getIcon(storage.type)}</div>
-                    <Card.Title className={styles.storageTitle}>{storage.name}</Card.Title>
-                    <Card.Text>
-                      {storage.itemCount || 0}
-                      {' '}
-                      items
-                    </Card.Text>
+                    <div className={styles.storageIcon}>
+                      {getIcon(storage.type)}
+                    </div>
+                    <Card.Title className={styles.storageTitle}>
+                      {storage.name}
+                    </Card.Title>
+                    <Card.Text>{storage.itemCount || 0} items</Card.Text>
                   </Card.Body>
                 </Card>
               </Col>

@@ -5,22 +5,22 @@ import { useFormContext } from 'react-hook-form';
 import RequiredLabel from '@/components/RequiredLabel';
 
 interface ProductDropDownProps {
-  label?: string;
-  disabled?: boolean;
-  required?: boolean;
-  products?: Product[];
-  onChange?: React.ChangeEventHandler<HTMLSelectElement>;
+  label: string;
+  disabled: boolean;
+  required: boolean;
+  products: Product[];
+  onChange: React.ChangeEventHandler<HTMLSelectElement>;
 }
 
-const ProductDropDown: React.FC<ProductDropDownProps> = (
-  {
-    label = 'Product',
-    disabled = false,
-    required = false,
-    products = [],
-    onChange = () => { /* no-op */ },
+function ProductDropDown({
+  label = 'Product',
+  disabled = false,
+  required = false,
+  products = [],
+  onChange = () => {
+    /* no-op */
   },
-) => {
+}: ProductDropDownProps) {
   const context = useFormContext();
   if (!context) {
     throw new Error('ProductDropDown must be used within a FormProvider');
@@ -31,8 +31,10 @@ const ProductDropDown: React.FC<ProductDropDownProps> = (
   } = context;
   return (
     <>
-      {(label && !required) && <Form.Label htmlFor="product">{label}</Form.Label>}
-      {(label && required) && <RequiredLabel htmlFor="product">{label}</RequiredLabel>}
+      {label && !required && <Form.Label htmlFor="product">{label}</Form.Label>}
+      {label && required && (
+        <RequiredLabel htmlFor="product">{label}</RequiredLabel>
+      )}
       <Form.Select
         id="product"
         size="lg"
@@ -43,20 +45,19 @@ const ProductDropDown: React.FC<ProductDropDownProps> = (
         isInvalid={!!errors.product}
         onChange={onChange}
       >
-        {
-          products.sort((a, b) => a.name.localeCompare(b.name))
-            .map(product => (
-              <option key={product.id} value={product.id}>
-                {product.name}
-              </option>
-            ))
-        }
+        {products
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .map((product) => (
+            <option key={product.id} value={product.id}>
+              {product.name}
+            </option>
+          ))}
       </Form.Select>
       <Form.Control.Feedback type="invalid">
         {errors.product ? errors.product.message?.toString() : null}
       </Form.Control.Feedback>
     </>
   );
-};
+}
 
 export default ProductDropDown;

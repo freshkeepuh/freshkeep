@@ -1,8 +1,8 @@
 import Home from '@/components/Home';
 
 /** The Home page. */
-const HomePage = () => (
-  <Home />
-);
+function HomePage() {
+  return <Home />;
+}
 
 export default HomePage;

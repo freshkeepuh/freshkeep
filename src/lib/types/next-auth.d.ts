@@ -1,3 +1,4 @@
+import { Role } from '@prisma/client';
 import 'next-auth';
 import 'next-auth/jwt';
 
@@ -10,7 +11,7 @@ declare module 'next-auth' {
     user: {
       id?: string;
       email?: string | null;
-      role?: string | null;
+      role?: Role | Role.USER;
       settings?: {
         units: 'imperial' | 'metric';
         country: string;

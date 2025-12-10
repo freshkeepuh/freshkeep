@@ -14,7 +14,10 @@ export async function GET(request: NextRequest, context: any) {
   try {
     const { id } = context.params;
     if (!id) {
-      return NextResponse.json({ error: 'Product ID is required' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Product ID is required' },
+        { status: 400 },
+      );
     }
 
     const product = await readProduct(id);
@@ -39,7 +42,10 @@ export async function DELETE(request: NextRequest, context: any) {
   try {
     const { id } = context.params;
     if (!id) {
-      return NextResponse.json({ error: 'Product ID is required' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Product ID is required' },
+        { status: 400 },
+      );
     }
 
     await deleteProduct(id);

@@ -28,7 +28,10 @@ const prisma = new PrismaClient();
  * @returns The found item.
  * @throws If the array is empty, name is empty, or item is not found.
  */
-const findByName = <T extends { name: string }>(array: Array<T>, name: string): T => {
+const findByName = <T extends { name: string }>(
+  array: T[],
+  name: string,
+): T => {
   if (!array || array.length === 0) {
     throw new Error('Array is empty or undefined.');
   }
@@ -52,7 +55,7 @@ const findByName = <T extends { name: string }>(array: Array<T>, name: string): 
  * - settings: Optional JSON object containing user preferences
  *   such as units, country, theme and profile picture.
  */
-type AccountFromConfig = {
+interface AccountFromConfig {
   email: string;
   password?: string;
   role?: Role;
@@ -62,7 +65,7 @@ type AccountFromConfig = {
     theme?: 'light' | 'dark';
     profilePicture?: string;
   };
-};
+}
 
 /**
  * Runtime type validation for defaultAccounts.
@@ -86,8 +89,8 @@ function assertAccounts(x: any): asserts x is AccountFromConfig[] {
  * If a user already exists, it updates their password, role, and settings.
  * @returns {Promise<Array<User>>} A promise that resolves to an array of created or existing users.
  */
-async function seedUsers(): Promise<Array<User>> {
-  const users: Array<User> = [];
+async function seedUsers(): Promise<User[]> {
+  const users: User[] = [];
 
   // Tell TypeScript that the config accounts conform to AccountFromConfig
   const accountsRaw: unknown = config.defaultAccounts;

@@ -10,17 +10,20 @@ const countryDisplayNames: Record<Country, string> = {
  * @param country The Country Enum Value
  * @returns The Country Display Name
  */
-export const getCountryDisplayName = (country: Country): string => (
-  countryDisplayNames[country] ?? country
-);
+export const getCountryDisplayName = (country: Country): string =>
+  countryDisplayNames[country] ?? country;
 
 /**
  * Gets the country enum value from a display name.
  * @param displayName The Display Name of the Country
  * @returns The Country Code
  */
-export const getCountryFromDisplayName = (displayName: string): Country | null => {
-  const entry = Object.entries(countryDisplayNames).find(([, name]) => name === displayName);
+export const getCountryFromDisplayName = (
+  displayName: string,
+): Country | null => {
+  const entry = Object.entries(countryDisplayNames).find(
+    ([, name]) => name === displayName,
+  );
   return entry ? (entry[0] as Country) : null;
 };
 
@@ -37,17 +40,20 @@ const storageTypeDisplayNames: Record<StorageType, string> = {
  * @param storageType The Storage Type Enum Value
  * @returns The Display Name of the Storage Type
  */
-export const getStorageTypeDisplayName = (storageType: StorageType): string => (
-  storageTypeDisplayNames[storageType] ?? storageType
-);
+export const getStorageTypeDisplayName = (storageType: StorageType): string =>
+  storageTypeDisplayNames[storageType] ?? storageType;
 
 /**
  * Gets the storage area enum value from a display name.
  * @param displayName The Display Name of the Storage Area
  * @returns The Storage Area Code
  */
-export const getStorageTypeFromDisplayName = (displayName: string): StorageType | null => {
-  const entry = Object.entries(storageTypeDisplayNames).find(([, name]) => name === displayName);
+export const getStorageTypeFromDisplayName = (
+  displayName: string,
+): StorageType | null => {
+  const entry = Object.entries(storageTypeDisplayNames).find(
+    ([, name]) => name === displayName,
+  );
   return entry ? (entry[0] as StorageType) : null;
 };
 
@@ -77,16 +83,20 @@ const productCategoryDisplayNames: Record<ProductCategory, string> = {
  * @param category The Product Category Enum Type
  * @returns The Display Name of the Product Category
  */
-export const getProductCategoryDisplayName = (category: ProductCategory): string => (
-  productCategoryDisplayNames[category] ?? category
-);
+export const getProductCategoryDisplayName = (
+  category: ProductCategory,
+): string => productCategoryDisplayNames[category] ?? category;
 
 /**
  * Gets the product category enum value from a display name.
  * @param displayName The Display Name of the Product Category
  * @returns The Product Category Code
  */
-export const getProductCategoryFromDisplayName = (displayName: string): ProductCategory | null => {
-  const entry = Object.entries(productCategoryDisplayNames).find(([, name]) => name === displayName);
+export const getProductCategoryFromDisplayName = (
+  displayName: string,
+): ProductCategory | null => {
+  const entry = Object.entries(productCategoryDisplayNames).find(
+    ([, name]) => name === displayName,
+  );
   return entry ? (entry[0] as ProductCategory) : null;
 };

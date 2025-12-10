@@ -4,20 +4,20 @@ import { Location } from '@prisma/client';
 import { useFormContext } from 'react-hook-form';
 
 interface LocationFilterProps {
-  label?: string;
-  disabled?: boolean;
-  locations?: Location[];
-  onChange?: React.ChangeEventHandler<HTMLSelectElement>;
+  label: string;
+  disabled: boolean;
+  locations: Location[];
+  onChange: React.ChangeEventHandler<HTMLSelectElement>;
 }
 
-const LocationFilter: React.FC<LocationFilterProps> = (
-  {
-    label = 'Location',
-    disabled = false,
-    locations = [],
-    onChange = () => { /* no-op */ },
+function LocationFilter({
+  label = 'Location',
+  disabled = false,
+  locations = [],
+  onChange = () => {
+    /* no-op */
   },
-) => {
+}: LocationFilterProps) {
   const context = useFormContext();
   if (!context) {
     throw new Error('LocationFilter must be used within a FormProvider');
@@ -39,21 +39,22 @@ const LocationFilter: React.FC<LocationFilterProps> = (
         isInvalid={!!errors.location}
         onChange={onChange}
       >
-        <option key="all" value="">All</option>
-        {
-          locations.sort((a, b) => a.name.localeCompare(b.name))
-            .map(location => (
-              <option key={location.id} value={location.id}>
-                {location.name}
-              </option>
-            ))
-        }
+        <option key="all" value="">
+          All
+        </option>
+        {locations
+          .sort((a, b) => a.name.localeCompare(b.name))
+          .map((location) => (
+            <option key={location.id} value={location.id}>
+              {location.name}
+            </option>
+          ))}
       </Form.Select>
       <Form.Control.Feedback type="invalid">
         {errors.location ? errors.location.message?.toString() : null}
       </Form.Control.Feedback>
     </>
   );
-};
+}
 
 export default LocationFilter;

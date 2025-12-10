@@ -23,7 +23,7 @@ interface CatalogItem {
   updatedAt: string;
 }
 
-const CatalogPage = () => {
+function CatalogPage(): React.JSX.Element {
   const { data: session, status } = useSession();
   const [CatalogItems, setCatalogItems] = useState<CatalogItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -56,7 +56,8 @@ const CatalogPage = () => {
         setError(null);
       } catch (err) {
         console.error('Error fetching catalog items:', err);
-        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+        const errorMessage =
+          err instanceof Error ? err.message : 'Unknown error';
         setError(`Failed to load catalog items: ${errorMessage}`);
         setCatalogItems([]);
       } finally {
@@ -98,10 +99,15 @@ const CatalogPage = () => {
         <h1>Catalog</h1>
         <div className="text-center py-5">
           <div className="mb-4">
-            <i className="bi bi-person-circle" style={{ fontSize: '4rem', color: '#6c757d' }} />
+            <i
+              className="bi bi-person-circle"
+              style={{ fontSize: '4rem', color: '#6c757d' }}
+            />
           </div>
           <h3 className="text-muted">Please sign in to view your products</h3>
-          <p className="text-muted mb-4">You need to be logged in to access your personal catalog.</p>
+          <p className="text-muted mb-4">
+            You need to be logged in to access your personal catalog.
+          </p>
           <Button variant="success" href="/api/auth/signin" size="lg">
             <i className="bi bi-box-arrow-in-right me-2" />
             Sign In
@@ -136,7 +142,11 @@ const CatalogPage = () => {
             <h4 className="alert-heading">Oops! Something went wrong</h4>
             <p>{error}</p>
             <hr />
-            <Button variant="outline-danger" onClick={() => window.location.reload()} type="button">
+            <Button
+              variant="outline-danger"
+              onClick={() => window.location.reload()}
+              type="button"
+            >
               Try Again
             </Button>
           </div>
@@ -156,9 +166,16 @@ const CatalogPage = () => {
         }}
         className="d-flex justify-content-center bg-success p-1 rounded mb-4 "
       >
-        <Row className=" align-items-center justify-content-center py-3" style={{ height: '50px' }}>
+        <Row
+          className=" align-items-center justify-content-center py-3"
+          style={{ height: '50px' }}
+        >
           <Col xs="auto" className="px-1">
-            <Form.Control type="search" placeholder="Search catalogItems..." style={{ width: '400px' }} />
+            <Form.Control
+              type="search"
+              placeholder="Search catalogItems..."
+              style={{ width: '400px' }}
+            />
           </Col>
           <Col xs="auto" className="ps-1">
             <Button variant="light">Filters</Button>
@@ -179,10 +196,15 @@ const CatalogPage = () => {
       {CatalogItems.length === 0 ? (
         <div className="text-center py-5">
           <div className="mb-4">
-            <i className="bi bi-basket" style={{ fontSize: '4rem', color: '#6c757d' }} />
+            <i
+              className="bi bi-basket"
+              style={{ fontSize: '4rem', color: '#6c757d' }}
+            />
           </div>
           <h3 className="text-muted">No items found</h3>
-          <p className="text-muted mb-4">You haven&apos;t added any products yet.</p>
+          <p className="text-muted mb-4">
+            You haven&apos;t added any products yet.
+          </p>
           <Button variant="success" href="/createCatalogItem" size="lg">
             <i className="bi bi-plus-circle me-2" />
             Add Your First Product
@@ -208,6 +230,6 @@ const CatalogPage = () => {
       )}
     </Container>
   );
-};
+}
 
 export default CatalogPage;

@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Container, Row } from 'react-bootstrap';
+import { Col, Container, Row } from 'react-bootstrap';
 import { FormProvider, useForm } from 'react-hook-form';
-import { Location, Product, ProductCategory, StorageArea, StorageType } from '@prisma/client';
+import {
+  Location,
+  Product,
+  ProductCategory,
+  StorageArea,
+  StorageType,
+} from '@prisma/client';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import LocationFilter from '@/components/LocationFilter';
 import StorageTypeFilter from '@/components/StorageTypeFilter';
@@ -11,7 +17,7 @@ import ProductCategoryFilter from './ProductCategoryFilter';
 
 interface ReportFilterProps {
   title: string;
-  onFilterChange?: (
+  onFilterChange: (
     location: string | null,
     storageType: string | null,
     storageArea: string | null,
@@ -20,20 +26,30 @@ interface ReportFilterProps {
   ) => void;
 }
 
-const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) => {
+function ReportFilter({ title, onFilterChange = () => {} }: ReportFilterProps) {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [location, setLocation] = useState<string | null>(null);
-  const [currLocations, setCurrentLocations] = useState<Location[] | undefined>(undefined);
-  const [origLocations, setOriginalLocations] = useState<Location[] | undefined>(undefined);
+  const [currLocations, setCurrentLocations] = useState<Location[] | undefined>(
+    undefined,
+  );
+
   const [storageType, setStorageType] = useState<string | null>(null);
   const [storageArea, setStorageArea] = useState<string | null>(null);
-  const [currStorageAreas, setCurrentStorageAreas] = useState<StorageArea[] | undefined>(undefined);
-  const [origStorageAreas, setOriginalStorageAreas] = useState<StorageArea[] | undefined>(undefined);
+  const [currStorageAreas, setCurrentStorageAreas] = useState<
+    StorageArea[] | undefined
+  >(undefined);
+  const [origStorageAreas, setOriginalStorageAreas] = useState<
+    StorageArea[] | undefined
+  >(undefined);
   const [productCategory, setProductCategory] = useState<string | null>(null);
   const [product, setProduct] = useState<string | null>(null);
-  const [currProducts, setCurrentProducts] = useState<Product[] | undefined>(undefined);
-  const [origProducts, setOriginalProducts] = useState<Product[] | undefined>(undefined);
+  const [currProducts, setCurrentProducts] = useState<Product[] | undefined>(
+    undefined,
+  );
+  const [origProducts, setOriginalProducts] = useState<Product[] | undefined>(
+    undefined,
+  );
   const [isDisabled, setIsDisabled] = useState(false);
   const methods = useForm({
     defaultValues: {
@@ -46,23 +62,63 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
     mode: 'all',
   });
 
-  const onChange: React.ChangeEventHandler<HTMLSelectElement> = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const onChange: React.ChangeEventHandler<HTMLSelectElement> = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
     try {
       setIsDisabled(true);
       const { name, value } = event.target;
+
+      // compute next values so we don't rely on stale state when calling onFilterChange
+      const nextLocation = name === 'location' ? value : (location ?? '');
+      const nextStorageType =
+        name === 'storageType' ? value : (storageType ?? '');
+      let nextStorageArea =
+        name === 'storageArea' ? value : (storageArea ?? '');
+      const nextProductCategory =
+        name === 'productCategory' ? value : (productCategory ?? '');
+      let nextProduct = name === 'product' ? value : (product ?? '');
+
       switch (name) {
         case 'location':
           setLocation(value);
           if (origStorageAreas) {
-            setCurrentStorageAreas(origStorageAreas.filter((area) => (area.locId === value || value === '')
-              && (area.type === (storageType as StorageType) || !storageType)));
+            const filteredStorageAreas = origStorageAreas.filter(
+              (area) =>
+                (area.locId === value || value === '') &&
+                (area.type === (nextStorageType as StorageType) ||
+                  !nextStorageType),
+            );
+            setCurrentStorageAreas(filteredStorageAreas);
+            if (
+              !(
+                nextStorageArea &&
+                filteredStorageAreas.some((area) => area.id === nextStorageArea)
+              )
+            ) {
+              nextStorageArea = '';
+              setStorageArea('');
+            }
           }
           break;
         case 'storageType':
           setStorageType(value);
           if (origStorageAreas) {
-            setCurrentStorageAreas(origStorageAreas.filter((area) => (area.locId === location || location === '')
-              && (area.type === (value as StorageType) || !value)));
+            const filteredStorageAreas = origStorageAreas.filter(
+              (area) =>
+                (area.locId === nextLocation || nextLocation === '') &&
+                (area.type === (value as StorageType) || !value),
+            );
+            setCurrentStorageAreas(filteredStorageAreas);
+            if (
+              !(
+                nextStorageArea &&
+                filteredStorageAreas.some((area) => area.id === nextStorageArea)
+              )
+            ) {
+              nextStorageArea = '';
+              setStorageArea('');
+            }
           }
           break;
         case 'storageArea':
@@ -71,7 +127,21 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
         case 'productCategory':
           setProductCategory(value);
           if (origProducts) {
-            setCurrentProducts(origProducts.filter((prod) => prod.category === (value as ProductCategory) || !value));
+            const filteredProducts = origProducts.filter(
+              (prod) => prod.category === (value as ProductCategory) || !value,
+            );
+            setCurrentProducts(filteredProducts);
+            let resetProduct = nextProduct;
+            if (
+              !(
+                resetProduct &&
+                filteredProducts.some((prod) => prod.id === resetProduct)
+              )
+            ) {
+              resetProduct = '';
+              setProduct('');
+            }
+            nextProduct = resetProduct;
           }
           break;
         case 'product':
@@ -80,30 +150,14 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
         default:
           break;
       }
-      if (onFilterChange) {
-        onFilterChange(
-          location,
-          storageType,
-          storageArea,
-          productCategory,
-          product,
-        );
-      }
-    } finally {
-      setIsDisabled(false);
-    }
-  };
 
-  const onFormSubmit = () => {
-    try {
-      setIsDisabled(true);
       if (onFilterChange) {
         onFilterChange(
-          location,
-          storageType,
-          storageArea,
-          productCategory,
-          product,
+          nextLocation || null,
+          nextStorageType || null,
+          nextStorageArea || null,
+          nextProductCategory || null,
+          nextProduct || null,
         );
       }
     } finally {
@@ -114,7 +168,7 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
   useEffect(() => {
     const addError = (message: string) => {
       if (error) {
-        setError(`${error}<br />${message}`);
+        setError(`${error}\n${message}`);
         return;
       }
       setError(message);
@@ -129,32 +183,37 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
         setLoading(true);
         resetError();
         try {
-          const locationsRes = await fetch('/api/location', { cache: 'no-store' });
+          const locationsRes = await fetch('/api/location', {
+            cache: 'no-store',
+          });
           if (!locationsRes.ok) {
             throw new Error(locationsRes.status.toString());
           }
           const locData = await locationsRes.json();
-          setOriginalLocations(locData);
+          setCurrentLocations(locData);
         } catch (err) {
           if (process.env.NODE_ENV === 'development') {
-            const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+            const errorMessage =
+              err instanceof Error ? err.message : 'Unknown error';
             addError(`Failed to load locations: ${errorMessage}`);
           }
-          setOriginalLocations(undefined);
         }
         try {
-          const storagesRes = await fetch('/api/storage', { cache: 'no-store' });
+          const storagesRes = await fetch('/api/storage', {
+            cache: 'no-store',
+          });
           if (!storagesRes.ok) {
             throw new Error(storagesRes.status.toString());
           }
           const storData = await storagesRes.json();
           setOriginalStorageAreas(storData);
+          setCurrentStorageAreas(storData);
         } catch (err) {
           if (process.env.NODE_ENV === 'development') {
-            const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+            const errorMessage =
+              err instanceof Error ? err.message : 'Unknown error';
             addError(`Failed to load storage areas: ${errorMessage}`);
           }
-          setOriginalStorageAreas(undefined);
         }
         try {
           const productRes = await fetch('/api/product', { cache: 'no-store' });
@@ -163,28 +222,26 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
           }
           const prodData = await productRes.json();
           setOriginalProducts(prodData);
+          setCurrentProducts(prodData);
         } catch (err) {
           if (process.env.NODE_ENV === 'development') {
-            const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+            const errorMessage =
+              err instanceof Error ? err.message : 'Unknown error';
             addError(`Failed to load products: ${errorMessage}`);
           }
-          setOriginalProducts(undefined);
         }
       } finally {
         setLoading(false);
       }
     };
     fetchData();
-
+    // initialize simple scalar filter values once on mount
     setLocation('');
-    setCurrentLocations(origLocations);
     setStorageType('');
     setStorageArea('');
-    setCurrentStorageAreas(origStorageAreas);
     setProductCategory('');
     setProduct('');
-    setCurrentProducts(origProducts);
-  }, [error, origLocations, origStorageAreas, origProducts]);
+  }, [error]);
 
   if (loading) {
     return <LoadingSpinner />;
@@ -201,7 +258,7 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
               <LocationFilter
                 label="Location"
                 disabled={isDisabled}
-                locations={currLocations}
+                locations={currLocations ?? []}
                 onChange={onChange}
               />
             </Col>
@@ -218,7 +275,7 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
               <StorageAreaFilter
                 label="Storage Area"
                 disabled={isDisabled}
-                storageAreas={currStorageAreas}
+                storageAreas={currStorageAreas ?? []}
                 onChange={onChange}
               />
             </Col>
@@ -235,20 +292,15 @@ const ReportFilter: React.FC<ReportFilterProps> = ({ title, onFilterChange }) =>
               <ProductFilter
                 label="Product"
                 disabled={isDisabled}
-                products={currProducts}
+                products={currProducts ?? []}
                 onChange={onChange}
               />
-            </Col>
-          </Row>
-          <Row className="report-filter-buttons-row">
-            <Col className="report-filter-search-button-col">
-              <Button type="submit" onClick={methods.handleSubmit(onFormSubmit)} disabled={isDisabled}>Search</Button>
             </Col>
           </Row>
         </Container>
       </FormProvider>
     </>
   );
-};
+}
 
 export default ReportFilter;

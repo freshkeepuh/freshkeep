@@ -23,16 +23,16 @@ export interface Recipe {
 }
 
 // Props passed from server component
-type LocationOption = {
+interface LocationOption {
   id: string;
   name: string;
-};
+}
 
-type Props = {
+interface Props {
   initialRecipes: Recipe[];
-  locations?: LocationOption[];
-  selectedLocationId?: string;
-};
+  locations: LocationOption[];
+  selectedLocationId: string;
+}
 
 // Filter option types
 type MaxTimeFilter = '< 15 min' | '< 30 min' | '< 45 min' | '< 60 min' | 'Any';
@@ -85,14 +85,30 @@ export default function RecipesPage({
   const handleAddIngredient = () => {
     const v = currentIngredient.trim();
     if (!v) return;
-    setIngredients(prev => (prev.some(i => i.toLowerCase() === v.toLowerCase()) ? prev : [...prev, v]));
+
+    setIngredients((prev) => {
+      const exists = prev.some((i) => i.toLowerCase() === v.toLowerCase());
+      if (exists) {
+        return prev;
+      }
+      return [...prev, v];
+    });
+
     setCurrentIngredient('');
   };
-  const handleRemoveIngredient = (ing: string) => setIngredients(prev => prev.filter(i => i !== ing));
-  const handleIngredientKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+
+  const handleRemoveIngredient = (ing: string) => {
+    setIngredients((prev) => prev.filter((i) => i !== ing));
+  };
+
+  const handleIngredientKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+  ) => {
     if (e.key === 'Enter') handleAddIngredient();
   };
+
   const handleSearch = () => setCommittedQuery(searchQuery.trim());
+
   const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') handleSearch();
   };
@@ -103,14 +119,16 @@ export default function RecipesPage({
     const q = committedQuery.toLowerCase();
 
     // Filter logic
-    return recipes.filter((r) => {
-      const matchesQuery = q.length === 0
-        || r.title.toLowerCase().includes(q)
-        || r.ingredients.some((ing) => ing.toLowerCase().includes(q));
+    const result = recipes.filter((r) => {
+      const matchesQuery =
+        q.length === 0 ||
+        r.title.toLowerCase().includes(q) ||
+        r.ingredients.some((ing) => ing.toLowerCase().includes(q));
 
       // Check cook time, difficulty & diet dropdowns
       const matchesTime = maxMinutes == null || r.cookTime <= maxMinutes;
-      const matchesDifficulty = difficulty === 'Any' || r.difficulty === difficulty;
+      const matchesDifficulty =
+        difficulty === 'Any' || r.difficulty === difficulty;
       const matchesDiet = diet === 'Any' || r.diet === diet;
 
       // Check ingredients
@@ -118,21 +136,24 @@ export default function RecipesPage({
         ? r.ingredients.map((i) => String(i).toLowerCase())
         : [];
 
-      const matchesIngredients = ingredients.length === 0
-        || ingredients.every((chip) => {
+      const matchesIngredients =
+        ingredients.length === 0 ||
+        ingredients.every((chip) => {
           const c = chip.trim().toLowerCase();
           if (!c) return true;
           return recipeIngs.some((ing) => ing.includes(c));
         });
 
       return (
-        matchesQuery
-        && matchesTime
-        && matchesDifficulty
-        && matchesDiet
-        && matchesIngredients
+        matchesQuery &&
+        matchesTime &&
+        matchesDifficulty &&
+        matchesDiet &&
+        matchesIngredients
       );
     });
+
+    return result;
   }, [recipes, committedQuery, maxTime, difficulty, diet, ingredients]);
 
   // Keep location in View Recipe link
@@ -152,35 +173,36 @@ export default function RecipesPage({
           <section className={styles.rpCard}>
             {/* Location selector */}
             {locations.length > 0 && (
-            <div className={styles.rpBlock} style={{ marginBottom: 16 }}>
-              <h2 className={styles.rpH3}>🏠 Location</h2>
+              <div className={styles.rpBlock} style={{ marginBottom: 16 }}>
+                <h2 className={styles.rpH3}>🏠 Location</h2>
 
-              <form
-                method="get"
-                className={styles.rpRow}
-                style={{ alignItems: 'center', gap: 8 }}
-              >
-                <select
-                  name="locationId"
-                  defaultValue={selectedLocationId}
-                  className={styles.rpSelect}
-                  aria-label="Location"
-                  style={{ flex: 1 }}
+                <form
+                  method="get"
+                  className={styles.rpRow}
+                  style={{ alignItems: 'center', gap: 8 }}
                 >
-                  <option value="">All locations</option>
-                  {locations.map((loc) => (
-                    <option key={loc.id} value={loc.id}>
-                      {loc.name}
-                    </option>
-                  ))}
-                </select>
+                  <select
+                    name="locationId"
+                    defaultValue={selectedLocationId}
+                    className={styles.rpSelect}
+                    aria-label="Location"
+                    style={{ flex: 1 }}
+                  >
+                    <option value="">All locations</option>
+                    {locations.map((loc) => (
+                      <option key={loc.id} value={loc.id}>
+                        {loc.name}
+                      </option>
+                    ))}
+                  </select>
 
-                <button type="submit" className={styles.rpBtnDark}>
-                  Apply
-                </button>
-              </form>
-            </div>
+                  <button type="submit" className={styles.rpBtnDark}>
+                    Apply
+                  </button>
+                </form>
+              </div>
             )}
+
             {/* Ingredients input */}
             <div className={styles.rpBlock}>
               <h2 className={styles.rpH3}>🍅 Your Ingredients</h2>
@@ -202,21 +224,21 @@ export default function RecipesPage({
                 </button>
               </div>
               {ingredients.length > 0 && (
-              <div className={styles.rpChips}>
-                {ingredients.map((ing) => (
-                  <span key={ing.toLowerCase()} className={styles.rpChip}>
-                    {ing}
-                    <button
-                      type="button"
-                      className={styles.rpChipX}
-                      onClick={() => handleRemoveIngredient(ing)}
-                      aria-label={`Remove ${ing}`}
-                    >
-                      ×
-                    </button>
-                  </span>
-                ))}
-              </div>
+                <div className={styles.rpChips}>
+                  {ingredients.map((ing) => (
+                    <span key={ing.toLowerCase()} className={styles.rpChip}>
+                      {ing}
+                      <button
+                        type="button"
+                        className={styles.rpChipX}
+                        onClick={() => handleRemoveIngredient(ing)}
+                        aria-label={`Remove ${ing}`}
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
               )}
             </div>
 
@@ -242,69 +264,82 @@ export default function RecipesPage({
               </div>
             </div>
 
-            {/* Dropdown filters: time, difficulty & diet */}
+            {/* Dropdown filters: time, difficulty & diet (+ Add Recipe button) */}
             <div className={styles.rpGrid3}>
+              {/* Max Time */}
               <div>
-                <label className={styles.rpH4} htmlFor="maxTimeSelect">
-                  ⏳ Max Time
-                  <select
-                    id="maxTimeSelect"
-                    value={maxTime}
-                    onChange={(e) => setMaxTime(e.target.value as MaxTimeFilter)}
-                    className={styles.rpSelect}
-                  >
-                    <option>{'< 15 min'}</option>
-                    <option>{'< 30 min'}</option>
-                    <option>{'< 45 min'}</option>
-                    <option>{'< 60 min'}</option>
-                    <option>Any</option>
-                  </select>
-                </label>
+                <p className={styles.rpH4}>⏳ Max Time</p>
+                <select
+                  id="maxTimeSelect"
+                  value={maxTime}
+                  onChange={(e) => setMaxTime(e.target.value as MaxTimeFilter)}
+                  className={styles.rpSelect}
+                  aria-label="Max Time"
+                >
+                  <option>{'< 15 min'}</option>
+                  <option>{'< 30 min'}</option>
+                  <option>{'< 45 min'}</option>
+                  <option>{'< 60 min'}</option>
+                  <option>Any</option>
+                </select>
               </div>
+
+              {/* Difficulty */}
               <div>
-                <label className={styles.rpH4} htmlFor="difficultySelect">
-                  🎯 Difficulty
-                  <select
-                    id="difficultySelect"
-                    value={difficulty}
-                    onChange={(e) => setDifficulty(e.target.value as DifficultyFilter)}
-                    className={styles.rpSelect}
-                  >
-                    <option>Any</option>
-                    <option>Easy</option>
-                    <option>Normal</option>
-                    <option>Hard</option>
-                  </select>
-                </label>
+                <p className={styles.rpH4}>🎯 Difficulty</p>
+                <select
+                  id="difficultySelect"
+                  value={difficulty}
+                  onChange={(e) =>
+                    setDifficulty(e.target.value as DifficultyFilter)
+                  }
+                  className={styles.rpSelect}
+                  aria-label="Difficulty"
+                >
+                  <option>Any</option>
+                  <option>Easy</option>
+                  <option>Normal</option>
+                  <option>Hard</option>
+                </select>
               </div>
+
+              {/* Diet + Add Recipe */}
               <div>
-                <label className={styles.rpH4} htmlFor="dietSelect">
-                  🍽️ Diet
+                <p className={styles.rpH4}>🍽️ Diet</p>
+                <div className={styles.rpRow}>
                   <select
                     id="dietSelect"
                     value={diet}
                     onChange={(e) => setDiet(e.target.value as DietFilter)}
                     className={styles.rpSelect}
+                    style={{ flex: 1 }}
+                    aria-label="Diet"
                   >
                     <option>Any</option>
                     <option>Vegan</option>
                     <option>Vegetarian</option>
                     <option>Pescetarian</option>
                   </select>
-                </label>
+
+                  <Link
+                    href="/recipes/add"
+                    className={styles.rpBtnDark}
+                    style={{ textDecoration: 'none' }}
+                  >
+                    Add Recipe
+                  </Link>
+                </div>
               </div>
             </div>
           </section>
 
           {/* Results */}
           <p className={styles.rpCount}>
-            Showing
-            {' '}
+            {'Showing '}
             <span className={styles.rpCountStrong}>
               {filteredRecipes.length}
             </span>
-            {' '}
-            results
+            {' results'}
           </p>
 
           {/* Recipe cards */}
@@ -339,8 +374,7 @@ export default function RecipesPage({
                       <span>⏳</span>
                       <span>
                         {r.cookTime}
-                        {' '}
-                        min
+                        {' min'}
                       </span>
                     </div>
                     <div>
@@ -352,13 +386,11 @@ export default function RecipesPage({
                       <span>{r.diet}</span>
                     </div>
                   </div>
-                  {/* Ingredients list */}
                   <div className={styles.rpIngredients}>
                     <p className={styles.rpH3}>Ingredients:</p>
                     <p className={styles.rpText}>{r.ingredients.join(', ')}</p>
                   </div>
 
-                  {/* View Recipe button */}
                   <Link
                     href={buildRecipeHref(r.slug || slugify(r.title))}
                     className={styles.rpBtnLight}
@@ -367,30 +399,25 @@ export default function RecipesPage({
                   </Link>
                 </div>
 
-                {/* Match bar: number of ingredients we have / are missing */}
-                {typeof r.haveCount === 'number'
-                  && typeof r.totalIngredients === 'number' && (
+                {typeof r.haveCount === 'number' &&
+                  typeof r.totalIngredients === 'number' && (
                     <div className={styles.rpMatchBar}>
                       <span className={styles.rpMatchHave}>
-                        Have:
-                        {' '}
+                        {'Have: '}
                         {r.haveCount}
-                        /
+                        {' / '}
                         {r.totalIngredients}
                       </span>
                       <span className={styles.rpMatchMissing}>
-                        Missing:
-                        {' '}
+                        {'Missing: '}
                         {r.totalIngredients - r.haveCount}
-                        /
+                        {' / '}
                         {r.totalIngredients}
                       </span>
                     </div>
-                )}
+                  )}
               </article>
             ))}
-
-            {/* Empty state */}
             {filteredRecipes.length === 0 && (
               <div className={styles.rpEmpty}>
                 <p>No recipes match your filters.</p>

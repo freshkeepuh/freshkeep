@@ -1,26 +1,29 @@
 'use client';
 
+import React from 'react';
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
-import { Container, Nav, Navbar, NavDropdown, Offcanvas } from 'react-bootstrap';
+import {
+  Container,
+  Nav,
+  Navbar,
+  NavDropdown,
+  Offcanvas,
+} from 'react-bootstrap';
 import { BoxArrowRight, Lock, Gear } from 'react-bootstrap-icons';
 
-const NavBar: React.FC = () => {
+function NavBar(): React.JSX.Element {
   const { data: session } = useSession();
   const currentUser = session?.user?.email ?? 'Account';
   const pathName = usePathname();
-  const isActive = (href: string) => pathName === href || (href !== '/' && pathName.startsWith(href));
+  const isActive = (href: string) =>
+    pathName === href || (href !== '/' && pathName.startsWith(href));
 
   const offcanvasId = 'main-offcanvas';
 
   return (
-    <Navbar
-      data-testid="navbar"
-      bg="success"
-      expand="lg"
-      data-bs-theme="dark"
-    >
+    <Navbar data-testid="navbar" bg="success" expand="lg" data-bs-theme="dark">
       <Container>
         <Navbar.Brand
           data-testid="navbar-brand"
@@ -32,7 +35,12 @@ const NavBar: React.FC = () => {
         </Navbar.Brand>
 
         {/* Only show the links when signed in */}
-        {session && <Navbar.Toggle data-testid="navbar-toggle" aria-controls={offcanvasId} />}
+        {session && (
+          <Navbar.Toggle
+            data-testid="navbar-toggle"
+            aria-controls={offcanvasId}
+          />
+        )}
 
         {session ? (
           <Navbar.Offcanvas
@@ -41,8 +49,14 @@ const NavBar: React.FC = () => {
             placement="end"
             style={{ backgroundColor: 'var(--bs-success)', color: 'white' }}
           >
-            <Offcanvas.Header data-testid="navbar-offcanvas-header" closeButton closeVariant="white">
-              <Offcanvas.Title data-testid="navbar-offcanvas-title">Menu</Offcanvas.Title>
+            <Offcanvas.Header
+              data-testid="navbar-offcanvas-header"
+              closeButton
+              closeVariant="white"
+            >
+              <Offcanvas.Title data-testid="navbar-offcanvas-title">
+                Menu
+              </Offcanvas.Title>
             </Offcanvas.Header>
 
             <Offcanvas.Body data-testid="navbar-offcanvas-body">
@@ -53,7 +67,6 @@ const NavBar: React.FC = () => {
                   as={Link}
                   href="/locations"
                   active={isActive('/locations')}
-                  style={{ color: 'white' }}
                 >
                   Locations
                 </Nav.Link>
@@ -61,8 +74,7 @@ const NavBar: React.FC = () => {
                   data-testid="navbar-link-catalog"
                   as={Link}
                   href="/catalog"
-                  active={isActive('/shop')}
-                  style={{ color: 'white' }}
+                  active={isActive('/catalog')}
                 >
                   Catalog
                 </Nav.Link>
@@ -71,16 +83,23 @@ const NavBar: React.FC = () => {
                   as={Link}
                   href="/shoppingList"
                   active={isActive('/shoppingList')}
-                  style={{ color: 'white' }}
                 >
                   Shopping List
+                </Nav.Link>
+
+                <Nav.Link
+                  data-testid="navbar-link-add-product"
+                  as={Link}
+                  href="/add-product"
+                  active={isActive('/add-product')}
+                >
+                  Add Product
                 </Nav.Link>
                 <Nav.Link
                   data-testid="navbar-link-stores"
                   as={Link}
                   href="/stores"
                   active={isActive('/stores')}
-                  style={{ color: 'white' }}
                 >
                   Stores
                 </Nav.Link>
@@ -89,30 +108,83 @@ const NavBar: React.FC = () => {
                   as={Link}
                   href="/recipes"
                   active={isActive('/recipes')}
-                  style={{ color: 'white' }}
                 >
                   Recipes
                 </Nav.Link>
+                <NavDropdown
+                  data-testid="navbar-dropdown-reports"
+                  title="Reports"
+                  id="navbar-dropdown-reports"
+                  align="end"
+                  active={isActive('/report')}
+                >
+                  <NavDropdown.Item
+                    data-testid="navbar-link-report-inventory"
+                    as={Link}
+                    active={isActive('/report/inventory')}
+                    href="/report/inventory"
+                  >
+                    Inventory
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    data-testid="navbar-link-report-expired"
+                    as={Link}
+                    active={isActive('/report/expired')}
+                    href="/report/expired"
+                  >
+                    Expired
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    data-testid="navbar-link-report-expiring"
+                    as={Link}
+                    active={isActive('/report/expiring')}
+                    href="/report/expiring"
+                  >
+                    Expiring
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    data-testid="navbar-link-report-restock"
+                    as={Link}
+                    active={isActive('/report/restock')}
+                    href="/report/restock"
+                  >
+                    Restock
+                  </NavDropdown.Item>
+                </NavDropdown>
               </Nav>
 
               {/* Account dropdown */}
               <Nav>
-                <NavDropdown data-testid="navbar-dropdown-account" title={currentUser} align="end">
-                  <NavDropdown.Item data-testid="navbar-link-settings" as={Link} href="/settings">
+                <NavDropdown
+                  data-testid="navbar-dropdown-account"
+                  title={currentUser}
+                  align="end"
+                >
+                  <NavDropdown.Item
+                    data-testid="navbar-link-settings"
+                    as={Link}
+                    href="/settings"
+                  >
                     <Gear className="me-2" />
                     Settings
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
-                  <NavDropdown.Item data-testid="navbar-link-change-password" as={Link} href="/auth/change-password">
+                  <NavDropdown.Item
+                    data-testid="navbar-link-change-password"
+                    as={Link}
+                    href="/auth/change-password"
+                  >
                     <Lock className="me-2" />
                     Change Password
                   </NavDropdown.Item>
                   <NavDropdown.Item
                     data-testid="navbar-link-signout"
-                    onClick={() => signOut({
-                      callbackUrl: `${window.location.origin}/`,
-                      redirect: true,
-                    })}
+                    onClick={() =>
+                      signOut({
+                        callbackUrl: `${window.location.origin}/`,
+                        redirect: true,
+                      })
+                    }
                   >
                     <BoxArrowRight className="me-2" />
                     Sign Out
@@ -124,7 +196,12 @@ const NavBar: React.FC = () => {
         ) : (
           // Signed out: only show Sign In
           <Nav className="ms-auto">
-            <Nav.Link data-testid="navbar-link-signin" as={Link} href="/auth/signin" active={isActive('/auth/signin')}>
+            <Nav.Link
+              data-testid="navbar-link-signin"
+              as={Link}
+              href="/auth/signin"
+              active={isActive('/auth/signin')}
+            >
               Sign In
             </Nav.Link>
           </Nav>
@@ -132,6 +209,6 @@ const NavBar: React.FC = () => {
       </Container>
     </Navbar>
   );
-};
+}
 
 export default NavBar;

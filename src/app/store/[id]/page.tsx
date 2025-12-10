@@ -3,7 +3,9 @@ import authOptions from '@/lib/authOptions';
 import { loggedInProtectedPage } from '@/lib/page-protection';
 import StoreForm from '@/components/StoreForm';
 
-export default async function StorePage({ params }: { params: { id: string } } | any) {
+export default async function StorePage({
+  params,
+}: { params: { id: string } } | any) {
   const session = await getServerSession(authOptions);
   await loggedInProtectedPage(session);
 

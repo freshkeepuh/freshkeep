@@ -97,7 +97,7 @@ export default function AddPage() {
             items: s.itemCount ?? 0,
             type: uiType,
             locId: s.locId ?? null,
-            locationName: s.locId ? locById[s.locId] ?? null : null,
+            locationName: s.locId ? (locById[s.locId] ?? null) : null,
           };
         });
 
@@ -109,14 +109,19 @@ export default function AddPage() {
         }
       } catch (err: unknown) {
         if (!cancelled) {
-          const msg = err instanceof Error ? err.message : 'Failed to load storage units';
+          const msg =
+            err instanceof Error ? err.message : 'Failed to load storage units';
           setStoragesError(msg);
         }
       } finally {
         if (!cancelled) setStoragesLoading(false);
       }
     };
-    load().catch(() => {});
+
+    load().catch((e) => {
+      console.error('Failed to load storages/locations for add-product', e);
+    });
+
     return () => {
       cancelled = true;
     };
@@ -206,7 +211,10 @@ export default function AddPage() {
       const body: any = await res.json().catch(() => ({}));
 
       if (!res.ok) {
-        const message = typeof body.error === 'string' ? body.error : 'Failed to create product';
+        const message =
+          typeof body.error === 'string'
+            ? body.error
+            : 'Failed to create product';
         throw new Error(message);
       }
 
@@ -259,7 +267,8 @@ export default function AddPage() {
       setShowSuccess(true);
       resetForm();
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'Failed to add product';
+      const message =
+        err instanceof Error ? err.message : 'Failed to add product';
       setError(message);
     } finally {
       setSaving(false);
@@ -293,7 +302,12 @@ export default function AddPage() {
           )}
           {storagesError && (
             <p
-              style={{ color: 'red', marginTop: -12, marginBottom: 8, fontSize: 13 }}
+              style={{
+                color: 'red',
+                marginTop: -12,
+                marginBottom: 8,
+                fontSize: 13,
+              }}
             >
               {storagesError}
             </p>

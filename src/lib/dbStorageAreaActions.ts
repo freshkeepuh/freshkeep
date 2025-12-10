@@ -15,11 +15,11 @@ import {
  * @param userId The ID of the owner.
  * @param data The storage area data.
  */
-export async function createStorageArea(userId: string, data: {
-  locId: string,
-  name: string,
-  type: string,
-  picture: string | undefined,
+export async function createStorageArea(data: {
+  locId: string;
+  name: string;
+  type: string;
+  picture: string | undefined;
 }) {
   const newStorageArea = await prisma.storageArea.create({
     data: {
@@ -84,16 +84,17 @@ export async function readStorageArea(userId: string, id: string | null | undefi
 /**
  * Update a storage area by ID.
  */
-export async function updateStorageArea(userId: string, id: string, data: {
-  locId: string,
-  name: string,
-  type: string,
-  picture: string | undefined,
-}) {
-  // Use updateMany or verify existence first to ensure ownership
-  // updateMany is safer here as it only updates if userId matches
-  const updatedBatch = await prisma.storageArea.updateMany({
-    where: { id, userId },
+export async function updateStorageArea(
+  id: string,
+  data: {
+    locId: string;
+    name: string;
+    type: string;
+    picture: string | undefined;
+  },
+) {
+  const updatedStorageArea = await prisma.storageArea.update({
+    where: { id },
     data: {
       name: data.name,
       locId: data.locId,

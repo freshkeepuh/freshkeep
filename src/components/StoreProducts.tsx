@@ -3,9 +3,9 @@ import React from 'react';
 import ProductCard from '@/components/ProductCard';
 import { Col, Container, Row } from 'react-bootstrap';
 
-type StoreProductsProps = {
+interface StoreProductsProps {
   products: Product[] | undefined;
-};
+}
 
 export default function StoreProducts({ products }: StoreProductsProps) {
   if (!products) {
@@ -21,11 +21,13 @@ export default function StoreProducts({ products }: StoreProductsProps) {
       <h3>Products</h3>
       <Container fluid>
         <Row className="g-4">
-          {products.sort((a, b) => a.category.localeCompare(b.category)).map(product => (
-            <Col key={product.id} xs={6} md={4} lg={3}>
-              <ProductCard key={product.id} product={product} />
-            </Col>
-          ))}
+          {products
+            .sort((a, b) => a.category.localeCompare(b.category))
+            .map((product) => (
+              <Col key={product.id} xs={6} md={4} lg={3}>
+                <ProductCard key={product.id} product={product} />
+              </Col>
+            ))}
         </Row>
       </Container>
     </div>

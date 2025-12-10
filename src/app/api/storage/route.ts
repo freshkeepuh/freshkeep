@@ -1,12 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { readStorageAreas, createStorageArea } from '@/lib/dbStorageAreaActions';
-import { getServerSession } from 'next-auth';
-import authOptions from '@/lib/authOptions';
-import { prisma } from '@/lib/prisma';
+import {
+  readStorageAreas,
+  createStorageArea,
+} from '@/lib/dbStorageAreaActions';
 
 export const runtime = 'nodejs';
 
-function mapTypeToUi(type: string): 'Fridge' | 'Freezer' | 'Pantry' | 'Spice Rack' | 'Other' {
+function mapTypeToUi(
+  type: string,
+): 'Fridge' | 'Freezer' | 'Pantry' | 'Spice Rack' | 'Other' {
   switch (type) {
     case 'Refrigerator': return 'Fridge';
     case 'Freezer': return 'Freezer';
@@ -58,7 +60,10 @@ export async function GET() {
     }));
     return NextResponse.json(data);
   } catch (error: any) {
-    return NextResponse.json({ error: error?.message || 'Failed to load storages' }, { status: 500 });
+    return NextResponse.json(
+      { error: error?.message || 'Failed to load storages' },
+      { status: 500 },
+    );
   }
 }
 
@@ -73,7 +78,10 @@ export async function POST(request: NextRequest) {
     const { name, type, locId } = body;
 
     if (!name || !type) {
-      return NextResponse.json({ error: 'Name and type are required' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Name and type are required' },
+        { status: 400 },
+      );
     }
 
     const dbType = mapTypeToDb(type);
@@ -85,15 +93,19 @@ export async function POST(request: NextRequest) {
       picture: undefined,
     });
 
-    return NextResponse.json({
-      id: newStorage.id,
-      locId: newStorage.locId,
-      name: newStorage.name,
-      type: mapTypeToUi(String(newStorage.type)),
-      itemCount: 0,
-    }, { status: 201 });
+    return NextResponse.json(
+      {
+        id: newStorage.id,
+        locId: newStorage.locId,
+        name: newStorage.name,
+        type: mapTypeToUi(String(newStorage.type)),
+        itemCount: 0,
+      },
+      { status: 201 },
+    );
   } catch (error: unknown) {
-    const message = error instanceof Error ? error.message : 'Failed to create storage';
+    const message =
+      error instanceof Error ? error.message : 'Failed to create storage';
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

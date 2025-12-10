@@ -1,5 +1,11 @@
 import { Page } from '@playwright/test';
-import { test, expect, BASE_URL, expectSignedInOrRedirected, fillFormWithRetry, checkFormEmpty } from './auth-utils';
+import fillFormWithRetry, {
+  test,
+  expect,
+  BASE_URL,
+  expectSignedInOrRedirected,
+  checkFormEmpty,
+} from './auth-utils';
 
 const SIGNIN_URL = `${BASE_URL}/auth/signin`;
 
@@ -7,7 +13,7 @@ async function submitSignin(page: Page) {
   await page.getByTestId('sign-in-form-submit').click();
 }
 
-async function fillSignin(page: Page, email: string, password: string = 'changeme') {
+async function fillSignin(page: Page, email: string, password = 'changeme') {
   await fillFormWithRetry(page, [
     { selector: '[id="email"]', value: email },
     { selector: '[id="password"]', value: password },
@@ -24,8 +30,8 @@ async function isEmptySignin(page: Page) {
 async function fillAndSubmitSignup(
   page: Page,
   email: string,
-  password: string = 'secret123',
-//  confirmPassword: string = password
+  password = 'secret123',
+  //  confirmPassword: string = password
 ) {
   await fillSignin(page, email, password);
   await submitSignin(page);
@@ -36,7 +42,11 @@ test('sign in page - successful login', async ({ page }) => {
   const email = 'john@foo.com';
 
   await fillAndSubmitSignup(page, email);
-  await expectSignedInOrRedirected({ page, url: `${BASE_URL}/`, timeout: 10000 });
+  await expectSignedInOrRedirected({
+    page,
+    url: `${BASE_URL}/`,
+    timeout: 10000,
+  });
 });
 
 test('sign in page — Reset clears fields and errors', async ({ page }) => {
