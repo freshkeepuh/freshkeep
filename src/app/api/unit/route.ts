@@ -14,7 +14,7 @@ export async function GET() {
   try {
     const session = await getServerSession(authOptions);
 
-    let userSystem = 'metric';
+    let userSystem = 'imperial';
 
     if (session?.user?.email) {
       const user = await prisma.user.findUnique({
@@ -27,9 +27,12 @@ export async function GET() {
         typeof user.settings === 'object' &&
         !Array.isArray(user.settings)
       ) {
-        if (user.settings.unitSystem) {
-          // @ts-ignore
-          const userSystem = ((user.settings as { unitSystem?: string } | null | undefined)?.unitSystem) ?? 'metric';
+        const savedSystem = (
+          user.settings as { unitSystem?: string } | null | undefined
+        )?.unitSystem;
+
+        if (savedSystem) {
+          userSystem = savedSystem;
         }
       }
     }
@@ -50,7 +53,7 @@ export async function GET() {
 }
 
 /**
- * POST /api/unit - Create a new unit
+ * Create a new unit
  */
 export async function POST(request: NextRequest) {
   try {
@@ -76,9 +79,6 @@ export async function POST(request: NextRequest) {
   }
 }
 
-/**
- * PUT /api/unit - Update a unit
- */
 export async function PUT(request: NextRequest) {
   try {
     const { id, name, abbr, baseId, factor } = await request.json();
