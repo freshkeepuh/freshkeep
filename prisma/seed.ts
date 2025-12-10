@@ -53,7 +53,7 @@ const findByName = <T extends { name: string }>(
  * - password: Optional raw password from the config (defaults to 'changeme' if not provided).
  * - role: Optional Role enum (defaults to USER if not provided).
  * - settings: Optional JSON object containing user preferences
- *   such as units, country, theme and profile picture.
+ * such as units, country, theme and profile picture.
  */
 interface AccountFromConfig {
   email: string;
@@ -267,56 +267,62 @@ async function seedStorageAreas(
 
 /**
  * Seed units into the database
- * This function creates measurement units based on the default units specified in the configuration file.
- * It handles both base units and derived units, ensuring proper relationships are established.
- * If a unit already exists, it skips creation for that unit.
+ * This function creates measurement units based on the hardcoded standard list.
+ * It handles system tags (Metric/Imperial/Universal) and factors.
  * @returns {Promise<Array<Unit>>} A promise that resolves to an array of created or existing units.
  */
 async function seedUnits(): Promise<Array<Unit>> {
+  console.log('🌱 Seeding Classified Units...');
+  
   const units: Array<Unit> = [];
-  // First, create all base units
-  for (const defaultUnit of config.defaultUnits.filter((unit) => unit.name === unit.baseName)) {
-    // Upsert base unit to avoid duplicates
+
+  const unitsData = [
+    // --- UNIVERSAL (Visible to everyone) ---
+    { name: 'each', abbr: 'ea', factor: 1, system: 'universal' },
+    { name: 'piece', abbr: 'pc', factor: 1, system: 'universal' },
+    { name: 'dozen', abbr: 'dz', factor: 12, system: 'universal' },
+
+    // --- METRIC ONLY ---
+    { name: 'milligram', abbr: 'mg', factor: 0.001, system: 'metric' },
+    { name: 'gram', abbr: 'g', factor: 1, system: 'metric' },
+    { name: 'kilogram', abbr: 'kg', factor: 1000, system: 'metric' },
+    { name: 'milliliter', abbr: 'ml', factor: 1, system: 'metric' },
+    { name: 'deciliter', abbr: 'dl', factor: 100, system: 'metric' },
+    { name: 'liter', abbr: 'l', factor: 1000, system: 'metric' },
+
+    // --- IMPERIAL ONLY ---
+    { name: 'teaspoon', abbr: 'tsp', factor: 5, system: 'imperial' },
+    { name: 'tablespoon', abbr: 'tbsp', factor: 15, system: 'imperial' },
+    { name: 'fluid ounce', abbr: 'fl oz', factor: 29.5735, system: 'imperial' },
+    { name: 'cup', abbr: 'cp', factor: 236.588, system: 'imperial' },
+    { name: 'pint', abbr: 'pt', factor: 473.176, system: 'imperial' },
+    { name: 'quart', abbr: 'qt', factor: 946.353, system: 'imperial' },
+    { name: 'gallon', abbr: 'gal', factor: 3785.41, system: 'imperial' },
+    { name: 'ounce', abbr: 'oz', factor: 28.3495, system: 'imperial' },
+    { name: 'pound', abbr: 'lb', factor: 453.592, system: 'imperial' },
+  ];
+
+  for (const unitData of unitsData) {
     const unit = await prisma.unit.upsert({
-      where: { name: defaultUnit.name },
-      update: {},
+      where: { name: unitData.name },
+      update: {
+        abbr: unitData.abbr,
+        factor: unitData.factor,
+        system: unitData.system,
+      },
       create: {
-        name: defaultUnit.name,
-        abbr: defaultUnit.abbr,
-        baseId: null,
-        factor: defaultUnit.factor || 1.0,
+        name: unitData.name,
+        abbr: unitData.abbr,
+        factor: unitData.factor,
+        system: unitData.system,
+        // Optional: If you want to maintain baseId relationships, you can add logic here later,
+        // but for now we treat them as individual units with factors.
       },
     });
-    // After creation, set the baseId to its own id for self reference
-    unit.baseId = unit.id;
-    // Update the unit with the new baseId
-    await prisma.unit.update({
-      where: { id: unit.id },
-      data: { baseId: unit.id },
-    });
-    // Add the unit to the array
     units.push(unit);
   }
 
-  // Then, create all derived units
-  for (const defaultUnit of config.defaultUnits.filter((unit) => unit.name !== unit.baseName)) {
-    // Find the parent unit to establish the relationship
-    const parentUnit = findByName(units, defaultUnit.baseName);
-    // Upsert derived unit to avoid duplicates
-    const unit = await prisma.unit.upsert({
-      where: { name: defaultUnit.name },
-      update: {},
-      create: {
-        name: defaultUnit.name,
-        abbr: defaultUnit.abbr,
-        baseId: parentUnit.id,
-        factor: defaultUnit.factor || 1.0,
-      },
-    });
-    // Add the unit to the array
-    units.push(unit);
-  }
-  // Return the array of units
+  console.log(`✅ ${units.length} Units seeded successfully.`);
   return units;
 }
 

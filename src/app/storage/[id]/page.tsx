@@ -3,6 +3,7 @@ import authOptions from '@/lib/authOptions';
 import { loggedInProtectedPage } from '@/lib/page-protection';
 import { readStorageArea } from '@/lib/dbStorageAreaActions';
 import StorageDetail from '@/components/dashboard/StorageDetail';
+import { prisma } from '@/lib/prisma';
 
 export default async function StorageDetailPage({
   params,
@@ -12,8 +13,18 @@ export default async function StorageDetailPage({
   const session = await getServerSession(authOptions);
   await loggedInProtectedPage(session);
 
-  // In this project, dynamic route params are awaited (see store/[id]/page.tsx)
   const { id } = await params;
-  const storageArea = await readStorageArea(id);
+
+  const user = await prisma.user.findUnique({
+    where: { email: session?.user?.email || '' },
+    select: { id: true },
+  });
+
+  if (!user) {
+    return <div>User not found</div>;
+  }
+
+  const storageArea = await readStorageArea(user.id, id);
+
   return <StorageDetail storage={storageArea} />;
 }
