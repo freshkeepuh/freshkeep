@@ -6,6 +6,7 @@ import { unitSelect } from './dbActionTypes';
 /**
  * Create a new unit.
  * @param data The unit data to create.
+ * @returns The created unit.
  */
 export async function createUnit(data: {
   name: string;
