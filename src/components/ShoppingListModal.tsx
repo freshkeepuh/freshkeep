@@ -11,6 +11,9 @@ import Tabs from 'react-bootstrap/Tabs';
 import Spinner from 'react-bootstrap/Spinner';
 import styles from './ShoppingListModal.module.css';
 
+const DEFAULT_FALLBACK_IMAGE =
+  'https://sites.duke.edu/dek23/wp-content/themes/koji/assets/images/default-fallback-image.png';
+
 interface GroceryItem {
   id: string;
   groceryItemImage: string;
@@ -19,6 +22,7 @@ interface GroceryItem {
   storageType: string;
   groceryItemType: string;
   inList: boolean;
+  quantity?: number;
 }
 
 interface CatalogItem {
@@ -63,6 +67,17 @@ function ShoppingListModal({ show, onHide, listTitle, listId, items, onItemAdded
   const [hasSearched, setHasSearched] = useState(false);
   const [itemQuantities, setItemQuantities] = useState<Record<string, number>>({});
   const [isAdding, setIsAdding] = useState<string | null>(null);
+
+  // Initialize quantities from passed items
+  useEffect(() => {
+    const initialQuantities: Record<string, number> = {};
+    items.forEach((item) => {
+      if (item.quantity) {
+        initialQuantities[item.id] = item.quantity;
+      }
+    });
+    setItemQuantities((prev) => ({ ...initialQuantities, ...prev }));
+  }, [items]);
 
   // Get quantity for an item (default to 1)
   const getQuantity = (itemId: string) => itemQuantities[itemId] || 1;
@@ -266,7 +281,7 @@ function ShoppingListModal({ show, onHide, listTitle, listId, items, onItemAdded
 
                           <div>
                             <Image
-                              src={item.groceryItemImage}
+                              src={item.groceryItemImage || DEFAULT_FALLBACK_IMAGE}
                               alt={item.groceryItemTitle}
                               width={60}
                               height={60}
@@ -274,6 +289,9 @@ function ShoppingListModal({ show, onHide, listTitle, listId, items, onItemAdded
                                 objectFit: 'cover',
                                 borderRadius: '6px',
                                 border: '1px solid #e9ecef',
+                              }}
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).src = DEFAULT_FALLBACK_IMAGE;
                               }}
                             />
                           </div>
@@ -442,7 +460,7 @@ function ShoppingListModal({ show, onHide, listTitle, listId, items, onItemAdded
                         >
                           <div>
                             <Image
-                              src={item.image}
+                              src={item.image || DEFAULT_FALLBACK_IMAGE}
                               alt={item.name}
                               width={60}
                               height={60}
@@ -452,7 +470,7 @@ function ShoppingListModal({ show, onHide, listTitle, listId, items, onItemAdded
                                 border: '1px solid #e9ecef',
                               }}
                               onError={(e) => {
-                                (e.target as HTMLImageElement).src = '/images/recipes/placeholder.jpg';
+                                (e.target as HTMLImageElement).src = DEFAULT_FALLBACK_IMAGE;
                               }}
                             />
                           </div>

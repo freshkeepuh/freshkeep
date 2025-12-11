@@ -26,16 +26,20 @@ interface ShoppingList {
   items: ShoppingListItem[];
 }
 
+const DEFAULT_FALLBACK_IMAGE =
+  'https://sites.duke.edu/dek23/wp-content/themes/koji/assets/images/default-fallback-image.png';
+
 // Convert ShoppingListItem to the format expected by ShoppingListModal
 function convertToGroceryItem(item: ShoppingListItem) {
   return {
     id: item.id,
-    groceryItemImage: item.image || '/images/recipes/placeholder.jpg',
+    groceryItemImage: item.image || DEFAULT_FALLBACK_IMAGE,
     groceryItemTitle: item.name,
     store: '',
     storageType: '',
     groceryItemType: item.category || 'Other',
     inList: true,
+    quantity: item.quantity,
   };
 }
 
