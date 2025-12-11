@@ -538,8 +538,7 @@ async function main() {
   const units = await seedUnits();
   const products = await seedProducts(units, stores);
   await seedProductInstances(locations, storageAreas, products, units);
-  const shoppingList = await seedShoppingList(stores);
-  await seedShoppingListItems(shoppingList, products);
+  // Shopping lists are user-created, not seeded
   await seedRecipes();
 }
 

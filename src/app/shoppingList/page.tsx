@@ -6,6 +6,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
+import Modal from 'react-bootstrap/Modal';
+import Form from 'react-bootstrap/Form';
 import ShoppingListCard from '@/components/ShoppingListCard';
 import ShoppingListModal from '@/components/ShoppingListModal';
 
@@ -45,10 +47,14 @@ function convertToGroceryItem(item: ShoppingListItem) {
 
 function ShoppingListPage() {
   const [showModal, setShowModal] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
   const [selectedList, setSelectedList] = useState<ShoppingList | null>(null);
   const [shoppingLists, setShoppingLists] = useState<ShoppingList[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [newListName, setNewListName] = useState('');
+  const [isCreating, setIsCreating] = useState(false);
+  const [isDeleting, setIsDeleting] = useState<string | null>(null);
 
   // Fetch shopping lists from API
   const fetchShoppingLists = useCallback(async () => {
@@ -80,6 +86,58 @@ function ShoppingListPage() {
   const handleItemAdded = () => {
     // Refresh the list data after adding an item
     fetchShoppingLists();
+  };
+
+  const handleCreateList = async () => {
+    if (!newListName.trim()) return;
+
+    setIsCreating(true);
+    try {
+      const response = await fetch('/api/shoppingList', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: newListName.trim() }),
+      });
+
+      if (response.ok) {
+        const newList = await response.json();
+        // Ensure items array exists (API doesn't return items for new lists)
+        const listWithItems = { ...newList, items: newList.items || [] };
+        setShoppingLists([...shoppingLists, listWithItems]);
+        setNewListName('');
+        setShowCreateModal(false);
+        // Open the new list in edit mode with catalog tab
+        setSelectedList(listWithItems);
+        setShowModal(true);
+      } else {
+        console.error('Failed to create shopping list');
+      }
+    } catch (err) {
+      console.error('Error creating shopping list:', err);
+    } finally {
+      setIsCreating(false);
+    }
+  };
+
+  const handleDeleteList = async (listId: string) => {
+    if (!confirm('Are you sure you want to delete this shopping list?')) return;
+
+    setIsDeleting(listId);
+    try {
+      const response = await fetch(`/api/shoppingList/${listId}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        setShoppingLists(shoppingLists.filter((list) => list.id !== listId));
+      } else {
+        console.error('Failed to delete shopping list');
+      }
+    } catch (err) {
+      console.error('Error deleting shopping list:', err);
+    } finally {
+      setIsDeleting(null);
+    }
   };
 
   if (isLoading) {
@@ -115,8 +173,8 @@ function ShoppingListPage() {
       >
         <Row className="align-items-center justify-content-center py-3" style={{ height: '50px' }}>
           <Col xs="auto" className="ps-1">
-            <Button variant="light" href="/catalog">
-              Add To List
+            <Button variant="light" onClick={() => setShowCreateModal(true)}>
+              + Create Shopping List
             </Button>
           </Col>
         </Row>
@@ -131,6 +189,8 @@ function ShoppingListPage() {
                 listTitle={list.name}
                 items={list.items.map((item) => item.name)}
                 onEdit={() => handleEditList(list)}
+                onDelete={() => handleDeleteList(list.id)}
+                isDeleting={isDeleting === list.id}
               />
             </Col>
           ))
@@ -142,6 +202,38 @@ function ShoppingListPage() {
         )}
       </Row>
 
+      {/* Create Shopping List Modal */}
+      <Modal show={showCreateModal} onHide={() => setShowCreateModal(false)} centered>
+        <Modal.Header closeButton className="bg-success text-white">
+          <Modal.Title>Create Shopping List</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form.Group>
+            <Form.Label>List Name</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter list name (e.g., Weekly Groceries)"
+              value={newListName}
+              onChange={(e) => setNewListName(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleCreateList();
+                }
+              }}
+              autoFocus
+            />
+          </Form.Group>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowCreateModal(false)}>
+            Cancel
+          </Button>
+          <Button variant="success" onClick={handleCreateList} disabled={isCreating || !newListName.trim()}>
+            {isCreating ? <Spinner animation="border" size="sm" /> : 'Create List'}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
       {/* Shopping List Modal */}
       {selectedList && (
         <ShoppingListModal
@@ -151,6 +243,7 @@ function ShoppingListPage() {
           listId={selectedList.id}
           items={selectedList.items.map(convertToGroceryItem)}
           onItemAdded={handleItemAdded}
+          defaultTab={selectedList.items.length === 0 ? 'catalog' : 'list'}
         />
       )}
     </Container>

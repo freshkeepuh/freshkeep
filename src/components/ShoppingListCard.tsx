@@ -1,14 +1,17 @@
 import Card from 'react-bootstrap/Card';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button';
+import Spinner from 'react-bootstrap/Spinner';
 
 interface ShoppingListCardProps {
   listTitle: string;
   items: string[];
   onEdit: () => void;
+  onDelete?: () => void;
+  isDeleting?: boolean;
 }
 
-function ShoppingListCard({ listTitle, items, onEdit }: ShoppingListCardProps) {
+function ShoppingListCard({ listTitle, items, onEdit, onDelete, isDeleting }: ShoppingListCardProps) {
   return (
     <div
       style={{
@@ -78,10 +81,25 @@ function ShoppingListCard({ listTitle, items, onEdit }: ShoppingListCardProps) {
               borderRadius: '20px',
               width: '100%',
               fontWeight: '500',
+              marginBottom: '10px',
             }}
           >
             Edit
           </Button>
+          {onDelete && (
+            <Button
+              variant="outline-danger"
+              onClick={onDelete}
+              disabled={isDeleting}
+              style={{
+                borderRadius: '20px',
+                width: '100%',
+                fontWeight: '500',
+              }}
+            >
+              {isDeleting ? <Spinner animation="border" size="sm" /> : 'Remove'}
+            </Button>
+          )}
         </Card.Body>
       </Card>
     </div>

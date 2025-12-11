@@ -54,12 +54,21 @@ interface ShoppingListModalProps {
   listId: string;
   items: GroceryItem[];
   onItemAdded?: () => void;
+  defaultTab?: 'list' | 'catalog';
 }
 
-function ShoppingListModal({ show, onHide, listTitle, listId, items, onItemAdded }: ShoppingListModalProps) {
+function ShoppingListModal({
+  show,
+  onHide,
+  listTitle,
+  listId,
+  items,
+  onItemAdded,
+  defaultTab = 'list',
+}: ShoppingListModalProps) {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeTab, setActiveTab] = useState('list');
+  const [activeTab, setActiveTab] = useState(defaultTab);
   const [catalogSearchTerm, setCatalogSearchTerm] = useState('');
   const [addedToList, setAddedToList] = useState<string[]>([]);
   const [catalogItems, setCatalogItems] = useState<CatalogItem[]>([]);
@@ -67,6 +76,11 @@ function ShoppingListModal({ show, onHide, listTitle, listId, items, onItemAdded
   const [hasSearched, setHasSearched] = useState(false);
   const [itemQuantities, setItemQuantities] = useState<Record<string, number>>({});
   const [isAdding, setIsAdding] = useState<string | null>(null);
+
+  // Reset active tab when modal opens with different default
+  useEffect(() => {
+    setActiveTab(defaultTab);
+  }, [defaultTab, show]);
 
   // Initialize quantities from passed items
   useEffect(() => {
@@ -189,7 +203,7 @@ function ShoppingListModal({ show, onHide, listTitle, listId, items, onItemAdded
       <Modal.Body style={{ padding: 0 }}>
         <Tabs
           activeKey={activeTab}
-          onSelect={(k) => setActiveTab(k || 'list')}
+          onSelect={(k) => setActiveTab((k as 'list' | 'catalog') || 'list')}
           className="mb-0"
           style={{ padding: '0 1rem', paddingTop: '0.5rem', backgroundColor: '#f8f9fa' }}
         >

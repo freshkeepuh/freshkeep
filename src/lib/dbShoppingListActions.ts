@@ -12,12 +12,22 @@ import { shoppingListItemSelect, shoppingListSelect } from '@/lib/dbActionTypes'
  * @param data The shoppingList data to create.
  * @returns The created shoppingList.
  */
-export async function createShoppingList(data: { name: string; storeId: string; isDefault: boolean }) {
+export async function createShoppingList(data: { name: string; storeId?: string; isDefault?: boolean }) {
+  // If no storeId provided, get the first available store
+  let storeId = data.storeId;
+  if (!storeId) {
+    const store = await prisma.store.findFirst();
+    if (!store) {
+      throw new Error('No stores available. Please create a store first.');
+    }
+    storeId = store.id;
+  }
+
   const newShoppingList = await prisma.shoppingList.create({
     data: {
       name: data.name,
-      storeId: data.storeId,
-      isDefault: data.isDefault,
+      storeId: storeId,
+      isDefault: data.isDefault ?? false,
     },
     select: shoppingListSelect,
   });
