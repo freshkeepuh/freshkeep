@@ -5,6 +5,46 @@ import type { RecipeDifficulty, RecipeDiet } from '@prisma/client';
 import { splitIngredientsByStock } from '@/lib/ingredientMatch';
 
 /**
+ * Normalize raw DB ingredients (string[] or object[]) into UiRecipe ingredients.
+ */
+const normalizeIngredients = (value: unknown): UiRecipe['ingredients'] => {
+  if (!Array.isArray(value)) return [];
+
+  return value.map((ing: any) => {
+    // Old shape: "chicken thighs"
+    if (typeof ing === 'string') {
+      return { name: ing };
+    }
+
+    // New shape: { name, quantity, unitName, note }
+    if (ing && typeof ing === 'object') {
+      let name: any;
+      if (typeof ing.name === 'string') {
+        name = ing.name;
+      } else {
+        name = ing.name != null ? String(ing.name) : '';
+      }
+
+      return {
+        name,
+        quantity: typeof ing.quantity === 'number' ? ing.quantity : undefined,
+        unitName:
+          typeof ing.unitName === 'string' && ing.unitName.length > 0
+            ? ing.unitName
+            : undefined,
+        note:
+          typeof ing.note === 'string' && ing.note.length > 0
+            ? ing.note
+            : undefined,
+      };
+    }
+
+    // Fallback – weird value, just stringify
+    return { name: String(ing ?? '') };
+  });
+};
+
+/**
  * Maps Prisma RecipeDifficulty enum to UI difficulty label.
  */
 const toUiDifficulty = (d: RecipeDifficulty): UiRecipe['difficulty'] => {
@@ -69,7 +109,8 @@ export default async function Page(props: any) {
 
   // Build recipe objects with have/missing counts
   const initialRecipes: UiRecipe[] = rows.map((r) => {
-    const ingredients = (r.ingredients as string[]) ?? [];
+    // r.ingredients can be string[] (old) or object[] (new)
+    const ingredients = normalizeIngredients(r.ingredients as unknown);
 
     const { haveCount, missingCount, totalIngredients } =
       splitIngredientsByStock(ingredients, haveNames);
@@ -81,7 +122,7 @@ export default async function Page(props: any) {
       cookTime: r.cookTime,
       difficulty: toUiDifficulty(r.difficulty),
       diet: toUiDiet(r.diet),
-      ingredients,
+      ingredients, // full ingredient objects
       image: r.image ?? undefined,
       haveCount,
       missingCount,
