@@ -11,10 +11,10 @@
 ALTER TYPE "StorageType" ADD VALUE 'Other';
 
 -- DropIndex
-DROP INDEX "public"."Location_name_key";
+DROP INDEX "Location_name_key";
 
 -- DropIndex
-DROP INDEX "public"."StorageArea_name_key";
+DROP INDEX "StorageArea_name_key";
 
 -- AlterTable
 ALTER TABLE "Location" ADD COLUMN     "userId" TEXT NOT NULL;

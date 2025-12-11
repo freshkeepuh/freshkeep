@@ -6,7 +6,7 @@
       "role": "ADMIN",
       "settings": {
         "units": "imperial",
-        "country": "USA",
+          "country": "USA",
         "theme": "light",
         "profilePicture": "/images/avatars/default.jpg"
       }
@@ -690,26 +690,56 @@
       "difficulty": "NORMAL",
       "diet": "ANY",
       "ingredients": [
-        "chicken cutlets",
-        "panko breadcrumbs",
-        "eggs",
-        "flour",
-        "Japanese curry roux",
-        "onion",
-        "carrot",
-        "potato",
-        "steamed rice",
-        "oil",
-        "salt",
-        "pepper"
+        { "name": "chicken cutlets", "quantity": 2, "unitName": "each" },
+        { "name": "panko breadcrumbs", "quantity": 1, "unitName": "cup" },
+        { "name": "eggs", "quantity": 1, "unitName": "each", "note": "beaten" },
+        { "name": "flour", "quantity": 0.5, "unitName": "cup" },
+        {
+          "name": "Japanese curry roux",
+          "quantity": 4,
+          "unitName": "piece",
+          "note": "blocks"
+        },
+        {
+          "name": "onion",
+          "quantity": 1,
+          "unitName": "each",
+          "note": "sliced"
+        },
+        {
+          "name": "carrot",
+          "quantity": 1,
+          "unitName": "each",
+          "note": "sliced"
+        },
+        {
+          "name": "potato",
+          "quantity": 1,
+          "unitName": "each",
+          "note": "diced"
+        },
+        {
+          "name": "steamed rice",
+          "quantity": 2,
+          "unitName": "cup",
+          "note": "cooked"
+        },
+        {
+          "name": "oil",
+          "quantity": 0.25,
+          "unitName": "cup",
+          "note": "for shallow frying"
+        },
+        { "name": "salt", "quantity": 0.5, "unitName": "teaspoon" },
+        { "name": "pepper", "quantity": 0.25, "unitName": "teaspoon" }
       ],
       "instructions": [
-        "Season chicken with salt and pepper, dredge in flour, dip in beaten egg, then coat in panko.",
-        "Shallow-fry cutlets in 350°F/175°C oil until golden and cooked through; drain on a rack.",
-        "In a pot, sauté sliced onion until soft; add carrot and potato and cook 2-3 min.",
-        "Pour in water to cover, simmer until vegetables are tender.",
-        "Stir in curry roux blocks to thicken; simmer 2-3 min more.",
-        "Slice katsu and serve over steamed rice with hot curry sauce."
+        "Season 2 chicken cutlets with 1/2 teaspoon salt and 1/4 teaspoon pepper, dredge in 1/2 cup flour, dip in 1 beaten egg, then coat in about 1 cup panko.",
+        "Shallow-fry cutlets in about 1/4 cup oil heated to 350°F/175°C until golden and cooked through; drain on a rack.",
+        "In a pot, sauté 1 sliced onion until soft; add 1 sliced carrot and 1 diced potato and cook 2–3 minutes.",
+        "Pour in enough water (about 2 cups) to just cover the vegetables; simmer until they are tender.",
+        "Stir in 3–4 blocks of Japanese curry roux to thicken; simmer 2–3 minutes more.",
+        "Slice the katsu and serve over about 2 cups steamed rice per serving with hot curry sauce."
       ],
       "image": "/images/recipes/chicken-katsu-curry.jpg"
     },
@@ -719,21 +749,51 @@
       "difficulty": "EASY",
       "diet": "ANY",
       "ingredients": [
-        "saimin noodles",
-        "chicken broth",
-        "soy sauce",
-        "garlic",
-        "green onion",
-        "kamaboko",
-        "char siu",
-        "nori"
+        {
+          "name": "saimin noodles",
+          "quantity": 2,
+          "unitName": "each",
+          "note": "portions"
+        },
+        { "name": "chicken broth", "quantity": 4, "unitName": "cup" },
+        { "name": "soy sauce", "quantity": 2, "unitName": "tablespoon" },
+        {
+          "name": "garlic",
+          "quantity": 2,
+          "unitName": "clove",
+          "note": "minced; use 1–2 cloves"
+        },
+        {
+          "name": "green onion",
+          "quantity": 1,
+          "unitName": "each",
+          "note": "sliced"
+        },
+        {
+          "name": "kamaboko",
+          "quantity": 6,
+          "unitName": "piece",
+          "note": "slices"
+        },
+        {
+          "name": "char siu",
+          "quantity": 6,
+          "unitName": "piece",
+          "note": "thin slices"
+        },
+        {
+          "name": "nori",
+          "quantity": 1,
+          "unitName": "each",
+          "note": "sheet, cut into strips"
+        }
       ],
       "instructions": [
-        "Bring chicken broth to a simmer; add soy sauce and 1-2 minced garlic cloves.",
-        "Cook saimin noodles per package; drain.",
-        "Slice kamaboko and char siu thinly.",
-        "Divide noodles into bowls; ladle hot broth over.",
-        "Top with char siu, kamaboko, chopped green onion, and nori strips."
+        "Bring 4 cups chicken broth to a simmer; add 2 tablespoons soy sauce and 1–2 minced garlic cloves.",
+        "Cook 2 portions of saimin noodles per package; drain.",
+        "Slice 4–6 pieces of kamaboko and 4–6 thin slices of char siu.",
+        "Divide noodles into 2 bowls; ladle about 2 cups hot broth over each.",
+        "Top each bowl with char siu, kamaboko, 1 sliced green onion, and a few strips of nori."
       ],
       "image": "/images/recipes/garlic-shoyu-saimin.jpg"
     },
@@ -743,23 +803,33 @@
       "difficulty": "EASY",
       "diet": "ANY",
       "ingredients": [
-        "shrimp",
-        "butter",
-        "garlic",
-        "flour",
-        "paprika",
-        "lemon",
-        "white rice",
-        "macaroni salad",
-        "salt",
-        "pepper"
+        { "name": "shrimp", "quantity": 1, "unitName": "pound" },
+        { "name": "butter", "quantity": 4, "unitName": "tablespoon" },
+        {
+          "name": "garlic",
+          "quantity": 8,
+          "unitName": "clove",
+          "note": "minced; 6–8 cloves"
+        },
+        { "name": "flour", "quantity": 0.25, "unitName": "cup" },
+        { "name": "paprika", "quantity": 1, "unitName": "teaspoon" },
+        { "name": "lemon", "quantity": 1, "unitName": "each" },
+        {
+          "name": "white rice",
+          "quantity": 2,
+          "unitName": "cup",
+          "note": "cooked"
+        },
+        { "name": "macaroni salad", "quantity": 1.5, "unitName": "cup" },
+        { "name": "salt", "quantity": 1, "unitName": "teaspoon" },
+        { "name": "pepper", "quantity": 0.5, "unitName": "teaspoon" }
       ],
       "instructions": [
-        "Pat shrimp dry; season with salt, pepper, and paprika; lightly dust with flour.",
-        "Melt butter in a skillet; add lots of minced garlic and cook until fragrant.",
-        "Add shrimp; sauté until pink and just cooked through.",
-        "Squeeze lemon over shrimp; toss to coat.",
-        "Serve with white rice and a scoop of macaroni salad."
+        "Pat 1 pound shrimp dry; season with 1 teaspoon salt, 1/2 teaspoon pepper, and 1 teaspoon paprika; lightly dust with 1/4 cup flour.",
+        "Melt 4 tablespoons butter in a skillet; add 6–8 minced garlic cloves and cook until fragrant.",
+        "Add shrimp; sauté 2–3 minutes per side until pink and just cooked through.",
+        "Squeeze the juice of 1/2–1 lemon over shrimp; toss to coat.",
+        "Serve with 2 scoops of white rice and a scoop of macaroni salad."
       ],
       "image": "/images/recipes/hawaiian-garlic-shrimp.jpg"
     },
@@ -769,22 +839,32 @@
       "difficulty": "EASY",
       "diet": "PESCETARIAN",
       "ingredients": [
-        "sushi-grade tuna",
-        "soy sauce",
-        "sriracha",
-        "mayonnaise",
-        "sesame oil",
-        "green onion",
-        "white rice",
-        "avocado",
-        "sesame seeds"
+        { "name": "sushi-grade tuna", "quantity": 0.5, "unitName": "pound" },
+        { "name": "soy sauce", "quantity": 2, "unitName": "tablespoon" },
+        { "name": "sriracha", "quantity": 2, "unitName": "teaspoon" },
+        { "name": "mayonnaise", "quantity": 2, "unitName": "tablespoon" },
+        { "name": "sesame oil", "quantity": 1, "unitName": "teaspoon" },
+        {
+          "name": "green onion",
+          "quantity": 2,
+          "unitName": "tablespoon",
+          "note": "sliced"
+        },
+        {
+          "name": "white rice",
+          "quantity": 2,
+          "unitName": "cup",
+          "note": "cooked"
+        },
+        { "name": "avocado", "quantity": 1, "unitName": "each" },
+        { "name": "sesame seeds", "quantity": 2, "unitName": "teaspoon" }
       ],
       "instructions": [
-        "Cube sushi-grade tuna; chill.",
-        "Mix soy sauce, mayo, sriracha, and a few drops of sesame oil.",
-        "Toss tuna with sauce and sliced green onion.",
-        "Serve over warm rice with avocado.",
-        "Finish with sesame seeds (optional furikake)."
+        "Cube 1/2 pound sushi-grade tuna into bite-sized pieces; chill.",
+        "In a bowl, mix 2 tablespoons soy sauce, 2 tablespoons mayonnaise, 1–2 teaspoons sriracha, and 1 teaspoon sesame oil.",
+        "Toss tuna with the sauce and 2 tablespoons sliced green onion.",
+        "Serve over 2 cups warm cooked white rice with 1/2 sliced avocado per bowl.",
+        "Finish with 1 teaspoon sesame seeds per serving (optional furikake)."
       ],
       "image": "/images/recipes/spicy-tuna-poke-bowl.jpg"
     },
@@ -794,22 +874,42 @@
       "difficulty": "EASY",
       "diet": "VEGETARIAN",
       "ingredients": [
-        "penne",
-        "crushed tomatoes",
-        "heavy cream",
-        "garlic",
-        "olive oil",
-        "parmesan",
-        "basil",
-        "salt",
-        "pepper"
+        { "name": "penne", "quantity": 8, "unitName": "ounce" },
+        {
+          "name": "crushed tomatoes",
+          "quantity": 15,
+          "unitName": "ounce",
+          "note": "1 can (14–15 oz)"
+        },
+        { "name": "heavy cream", "quantity": 0.5, "unitName": "cup" },
+        {
+          "name": "garlic",
+          "quantity": 2,
+          "unitName": "clove",
+          "note": "minced"
+        },
+        { "name": "olive oil", "quantity": 2, "unitName": "tablespoon" },
+        {
+          "name": "parmesan",
+          "quantity": 0.5,
+          "unitName": "cup",
+          "note": "grated"
+        },
+        {
+          "name": "basil",
+          "quantity": 0.25,
+          "unitName": "cup",
+          "note": "torn leaves, loosely packed"
+        },
+        { "name": "salt", "quantity": 0.5, "unitName": "teaspoon" },
+        { "name": "pepper", "quantity": 0.25, "unitName": "teaspoon" }
       ],
       "instructions": [
-        "Boil penne in salted water until al dente.",
-        "Sauté minced garlic in olive oil 30-60 sec; add crushed tomatoes and simmer 5 min.",
-        "Stir in cream; season with salt and pepper.",
-        "Toss in drained penne; add grated parmesan.",
-        "Top with torn basil to serve."
+        "Boil 8 ounces penne in a large pot of salted water until al dente.",
+        "Sauté 2 minced garlic cloves in 2 tablespoons olive oil 30–60 seconds; add 1 can (14–15 ounces) crushed tomatoes and simmer 5 minutes.",
+        "Stir in 1/2 cup heavy cream; season with 1/2 teaspoon salt and 1/4 teaspoon pepper.",
+        "Toss in the drained penne; add 1/2 cup grated parmesan.",
+        "Top with a handful of torn basil leaves to serve."
       ],
       "image": "/images/recipes/creamy-tomato-penne.jpg"
     },
@@ -819,23 +919,59 @@
       "difficulty": "NORMAL",
       "diet": "VEGAN",
       "ingredients": [
-        "soft tofu",
-        "shiitake mushrooms",
-        "doubanjiang",
-        "soy sauce",
-        "garlic",
-        "ginger",
-        "Sichuan peppercorns",
-        "vegetable broth",
-        "cornstarch slurry",
-        "green onion"
+        {
+          "name": "soft tofu",
+          "quantity": 1,
+          "unitName": "each",
+          "note": "1 block (about 14 oz), cubed"
+        },
+        {
+          "name": "shiitake mushrooms",
+          "quantity": 1,
+          "unitName": "cup",
+          "note": "diced"
+        },
+        { "name": "doubanjiang", "quantity": 2, "unitName": "tablespoon" },
+        { "name": "soy sauce", "quantity": 2, "unitName": "tablespoon" },
+        {
+          "name": "garlic",
+          "quantity": 2,
+          "unitName": "clove",
+          "note": "minced"
+        },
+        {
+          "name": "ginger",
+          "quantity": 1,
+          "unitName": "teaspoon",
+          "note": "minced"
+        },
+        {
+          "name": "Sichuan peppercorns",
+          "quantity": 0.5,
+          "unitName": "teaspoon",
+          "note": "ground"
+        },
+        { "name": "vegetable broth", "quantity": 1, "unitName": "cup" },
+        {
+          "name": "cornstarch slurry",
+          "quantity": 2,
+          "unitName": "tablespoon",
+          "note": "1 tbsp cornstarch + 1 tbsp water"
+        },
+        {
+          "name": "green onion",
+          "quantity": 2,
+          "unitName": "tablespoon",
+          "note": "chopped"
+        },
+        { "name": "oil", "quantity": 2, "unitName": "tablespoon" }
       ],
       "instructions": [
-        "Dry-saute diced shiitake to concentrate flavor; add oil, minced garlic, and ginger.",
-        "Stir in doubanjiang; cook 30 sec to bloom.",
-        "Add vegetable broth and cubed soft tofu; simmer gently 3-4 min.",
-        "Season with soy sauce; add cornstarch slurry to thicken.",
-        "Finish with ground Sichuan peppercorns and green onion."
+        "Dry-saute 1 cup diced shiitake mushrooms to concentrate flavor; add 2 tablespoons oil, 2 minced garlic cloves, and 1 teaspoon minced ginger.",
+        "Stir in 1–2 tablespoons doubanjiang; cook 30 seconds to bloom.",
+        "Add 1 cup vegetable broth and 1 block (about 14 ounces) cubed soft tofu; simmer gently 3–4 minutes.",
+        "Season with 1–2 tablespoons soy sauce; add 2 tablespoons cornstarch slurry (1 tablespoon cornstarch mixed with 1 tablespoon water) to thicken.",
+        "Finish with 1/2 teaspoon ground Sichuan peppercorns and 2 tablespoons chopped green onion."
       ],
       "image": "/images/recipes/mushroom-tofu-mapo.jpg"
     },
@@ -845,21 +981,36 @@
       "difficulty": "EASY",
       "diet": "ANY",
       "ingredients": [
-        "chicken thighs",
-        "soy sauce",
-        "brown sugar",
-        "garlic",
-        "ginger",
-        "water",
-        "green onion"
+        { "name": "chicken thighs", "quantity": 2.5, "unitName": "pound" },
+        { "name": "soy sauce", "quantity": 1, "unitName": "cup" },
+        { "name": "brown sugar", "quantity": 0.5, "unitName": "cup" },
+        {
+          "name": "garlic",
+          "quantity": 4,
+          "unitName": "clove",
+          "note": "crushed"
+        },
+        {
+          "name": "ginger",
+          "quantity": 4,
+          "unitName": "piece",
+          "note": "slices"
+        },
+        { "name": "water", "quantity": 1, "unitName": "cup" },
+        {
+          "name": "green onion",
+          "quantity": 2,
+          "unitName": "each",
+          "note": "chopped, for garnish"
+        }
       ],
       "instructions": [
-        "In a large pot, combine soy sauce, water, brown sugar, sliced ginger, and crushed garlic. Stir until the sugar dissolves.",
-        "Add chicken thighs, ensuring they are mostly covered by the sauce.",
+        "In a large pot, combine 1 cup soy sauce, 1 cup water, 1/2 cup brown sugar, 4 slices ginger, and 4 crushed garlic cloves. Stir until the sugar dissolves.",
+        "Add 2–3 pounds chicken thighs, ensuring they are mostly covered by the sauce.",
         "Bring to a boil over medium heat, then reduce to low heat and simmer for 25–30 minutes.",
         "Flip the chicken halfway through so both sides absorb the flavor.",
         "Remove the lid near the end to let the sauce reduce and thicken into a glaze.",
-        "Serve hot over steamed rice and garnish with chopped green onions."
+        "Serve hot over steamed rice and garnish with 2 chopped green onions."
       ],
       "image": "/images/recipes/shoyu-chicken.jpg"
     },
@@ -869,25 +1020,35 @@
       "difficulty": "NORMAL",
       "diet": "ANY",
       "ingredients": [
-        "ground beef",
-        "egg",
-        "white rice",
-        "onion",
-        "beef broth",
-        "soy sauce",
-        "butter",
-        "flour",
-        "salt",
-        "pepper"
+        { "name": "ground beef", "quantity": 1, "unitName": "pound" },
+        { "name": "egg", "quantity": 4, "unitName": "each" },
+        {
+          "name": "white rice",
+          "quantity": 3,
+          "unitName": "cup",
+          "note": "cooked"
+        },
+        {
+          "name": "onion",
+          "quantity": 1,
+          "unitName": "each",
+          "note": "sliced"
+        },
+        { "name": "beef broth", "quantity": 2, "unitName": "cup" },
+        { "name": "soy sauce", "quantity": 1, "unitName": "tablespoon" },
+        { "name": "butter", "quantity": 2, "unitName": "tablespoon" },
+        { "name": "flour", "quantity": 2, "unitName": "tablespoon" },
+        { "name": "salt", "quantity": 1, "unitName": "teaspoon" },
+        { "name": "pepper", "quantity": 0.5, "unitName": "teaspoon" }
       ],
       "instructions": [
-        "Shape the ground beef into patties and season both sides with salt and pepper.",
-        "Cook patties in a skillet over medium-high heat until browned and cooked through; remove and set aside.",
-        "In the same pan, melt butter and sauté sliced onions until soft and golden.",
-        "Add flour and stir for 1 minute to form a roux.",
-        "Gradually whisk in beef broth and soy sauce until smooth; simmer until thickened into gravy.",
-        "Fry eggs sunny-side up in a separate pan.",
-        "Assemble: scoop rice onto a plate, top with a beef patty, pour gravy generously, and finish with a fried egg on top."
+        "Shape 1 pound ground beef into 3–4 patties and season both sides with 1 teaspoon salt and 1/2 teaspoon pepper.",
+        "Cook patties in a skillet over medium-high heat 3–4 minutes per side until browned and cooked through; remove and set aside.",
+        "In the same pan, melt 2 tablespoons butter and sauté 1 sliced onion until soft and golden.",
+        "Add 2 tablespoons flour and stir for 1 minute to form a roux.",
+        "Gradually whisk in 2 cups beef broth and 1 tablespoon soy sauce until smooth; simmer until thickened into gravy.",
+        "Fry 3–4 eggs sunny-side up in a separate pan, 1 per serving.",
+        "Assemble: scoop about 1 cup rice onto a plate, top with a beef patty, pour about 1/2 cup gravy generously, and finish with a fried egg on top."
       ],
       "image": "/images/recipes/loco-moco.jpg"
     },
@@ -897,20 +1058,31 @@
       "difficulty": "NORMAL",
       "diet": "PESCETARIAN",
       "ingredients": [
-        "salmon fillets",
-        "soy sauce",
-        "mirin",
-        "sugar",
-        "ginger",
-        "garlic",
-        "sesame seeds"
+        { "name": "salmon fillets", "quantity": 2, "unitName": "each" },
+        { "name": "soy sauce", "quantity": 0.25, "unitName": "cup" },
+        { "name": "mirin", "quantity": 0.25, "unitName": "cup" },
+        { "name": "sugar", "quantity": 2, "unitName": "tablespoon" },
+        {
+          "name": "ginger",
+          "quantity": 1,
+          "unitName": "teaspoon",
+          "note": "grated"
+        },
+        {
+          "name": "garlic",
+          "quantity": 1,
+          "unitName": "clove",
+          "note": "minced"
+        },
+        { "name": "sesame seeds", "quantity": 1, "unitName": "teaspoon" },
+        { "name": "oil", "quantity": 1, "unitName": "tablespoon" }
       ],
       "instructions": [
-        "Whisk together soy sauce, mirin, sugar, grated ginger, and minced garlic to make the teriyaki sauce.",
-        "Heat a drizzle of oil in a skillet over medium heat and place salmon fillets skin-side down.",
-        "Cook for 2-3 minutes until the skin is crisp, then flip.",
-        "Pour the teriyaki sauce into the pan and simmer until the sauce thickens and coats the fish.",
-        "Spoon extra glaze over the top and sprinkle with sesame seeds before serving."
+        "Whisk together 1/4 cup soy sauce, 1/4 cup mirin, 2 tablespoons sugar, 1 teaspoon grated ginger, and 1 minced garlic clove to make the teriyaki sauce.",
+        "Heat 1 tablespoon oil in a skillet over medium heat and place 2 salmon fillets skin-side down.",
+        "Cook for 2–3 minutes until the skin is crisp, then flip.",
+        "Pour the teriyaki sauce into the pan and simmer 3–4 minutes until the sauce thickens and coats the fish.",
+        "Spoon extra glaze over the top and sprinkle with 1 teaspoon sesame seeds before serving."
       ],
       "image": "/images/recipes/teriyaki-salmon.jpg"
     },
@@ -919,11 +1091,27 @@
       "cookTime": 20,
       "difficulty": "EASY",
       "diet": "ANY",
-      "ingredients": ["spam", "white rice", "nori", "soy sauce", "sugar"],
+      "ingredients": [
+        { "name": "spam", "quantity": 1, "unitName": "each", "note": "1 can" },
+        {
+          "name": "white rice",
+          "quantity": 3,
+          "unitName": "cup",
+          "note": "cooked"
+        },
+        {
+          "name": "nori",
+          "quantity": 4,
+          "unitName": "piece",
+          "note": "sheets or wide strips"
+        },
+        { "name": "soy sauce", "quantity": 3, "unitName": "tablespoon" },
+        { "name": "sugar", "quantity": 2, "unitName": "tablespoon" }
+      ],
       "instructions": [
-        "Cut spam into 6-8 slices and pan-fry in a nonstick pan until both sides are lightly browned.",
-        "Mix soy sauce and sugar in the pan and cook until the spam slices are evenly coated and caramelized.",
-        "Place a slice of glazed spam on top of a compact block of warm rice (use a musubi mold or shape by hand).",
+        "Cut spam into 6–8 slices and pan-fry in a nonstick pan until both sides are lightly browned.",
+        "Mix 3 tablespoons soy sauce and 2 tablespoons sugar in the pan and cook until the spam slices are evenly coated and caramelized.",
+        "Place a slice of glazed spam on top of a compact block of about 1/2 cup warm rice (use a musubi mold or shape by hand).",
         "Wrap a strip of nori around the center to hold it together.",
         "Let it cool slightly before serving or wrapping for later."
       ],
@@ -935,21 +1123,31 @@
       "difficulty": "EASY",
       "diet": "ANY",
       "ingredients": [
-        "day-old rice",
-        "kimchi",
-        "gochujang",
-        "soy sauce",
-        "green onion",
-        "egg",
-        "oil",
-        "sesame oil"
+        { "name": "day-old rice", "quantity": 2, "unitName": "cup" },
+        {
+          "name": "kimchi",
+          "quantity": 1,
+          "unitName": "cup",
+          "note": "chopped"
+        },
+        { "name": "gochujang", "quantity": 1, "unitName": "tablespoon" },
+        { "name": "soy sauce", "quantity": 1, "unitName": "tablespoon" },
+        {
+          "name": "green onion",
+          "quantity": 1,
+          "unitName": "each",
+          "note": "chopped"
+        },
+        { "name": "egg", "quantity": 2, "unitName": "each" },
+        { "name": "oil", "quantity": 1, "unitName": "tablespoon" },
+        { "name": "sesame oil", "quantity": 1, "unitName": "teaspoon" }
       ],
       "instructions": [
-        "Heat oil in a large pan over medium heat and add chopped kimchi; cook for 1-2 minutes until fragrant.",
-        "Stir in a spoonful of gochujang and mix well to coat the kimchi.",
-        "Add day-old rice, breaking up any clumps, and stir-fry until the rice is hot and evenly mixed.",
-        "Add a splash of soy sauce and drizzle a little sesame oil for flavor.",
-        "Top with a fried egg and sprinkle chopped green onions before serving."
+        "Heat 1 tablespoon oil in a large pan over medium heat and add 1 cup chopped kimchi; cook for 1–2 minutes until fragrant.",
+        "Stir in 1 tablespoon gochujang and mix well to coat the kimchi.",
+        "Add 2 cups day-old rice, breaking up any clumps, and stir-fry until the rice is hot and evenly mixed.",
+        "Add 1 tablespoon soy sauce and drizzle 1 teaspoon sesame oil for flavor.",
+        "Top each serving with 1 fried egg and sprinkle 1 sliced green onion before serving."
       ],
       "image": "/images/recipes/kimchi-fried-rice.jpg"
     },
@@ -959,20 +1157,40 @@
       "difficulty": "EASY",
       "diet": "VEGETARIAN",
       "ingredients": [
-        "yaki soba noodles",
-        "cabbage",
-        "carrot",
-        "onion",
-        "soy sauce",
-        "worcestershire",
-        "ketchup",
-        "oil"
+        {
+          "name": "yaki soba noodles",
+          "quantity": 2,
+          "unitName": "each",
+          "note": "packs"
+        },
+        {
+          "name": "cabbage",
+          "quantity": 2,
+          "unitName": "cup",
+          "note": "shredded"
+        },
+        {
+          "name": "carrot",
+          "quantity": 1,
+          "unitName": "each",
+          "note": "julienned"
+        },
+        {
+          "name": "onion",
+          "quantity": 0.5,
+          "unitName": "each",
+          "note": "sliced"
+        },
+        { "name": "soy sauce", "quantity": 2, "unitName": "tablespoon" },
+        { "name": "worcestershire", "quantity": 1, "unitName": "tablespoon" },
+        { "name": "ketchup", "quantity": 1, "unitName": "tablespoon" },
+        { "name": "oil", "quantity": 1, "unitName": "tablespoon" }
       ],
       "instructions": [
-        "In a small bowl, mix soy sauce, worcestershire sauce, and ketchup to make yakisoba sauce.",
-        "Heat oil in a pan and stir-fry sliced onion, cabbage, and carrot until slightly softened.",
-        "Add the noodles to the pan, pour in the sauce, and toss until everything is evenly coated and hot.",
-        "Cook for another 2-3 minutes until the noodles absorb the sauce.",
+        "In a small bowl, mix 2 tablespoons soy sauce, 1 tablespoon worcestershire sauce, and 1 tablespoon ketchup to make yakisoba sauce.",
+        "Heat 1 tablespoon oil in a pan and stir-fry 1/2 sliced onion, 2 cups shredded cabbage, and 1 julienned carrot until slightly softened.",
+        "Add 2 packs yaki soba noodles to the pan, pour in the sauce, and toss until everything is evenly coated and hot.",
+        "Cook for another 2–3 minutes until the noodles absorb the sauce.",
         "Serve warm and top with green onions or pickled ginger if desired."
       ],
       "image": "/images/recipes/vegetable-yakisoba.jpg"
@@ -983,20 +1201,30 @@
       "difficulty": "NORMAL",
       "diet": "ANY",
       "ingredients": [
-        "chicken thighs",
-        "pineapple juice",
-        "soy sauce",
-        "brown sugar",
-        "ketchup",
-        "ginger",
-        "garlic"
+        { "name": "chicken thighs", "quantity": 2.5, "unitName": "pound" },
+        { "name": "pineapple juice", "quantity": 1, "unitName": "cup" },
+        { "name": "soy sauce", "quantity": 0.5, "unitName": "cup" },
+        { "name": "brown sugar", "quantity": 0.5, "unitName": "cup" },
+        { "name": "ketchup", "quantity": 0.25, "unitName": "cup" },
+        {
+          "name": "ginger",
+          "quantity": 1,
+          "unitName": "tablespoon",
+          "note": "grated"
+        },
+        {
+          "name": "garlic",
+          "quantity": 2,
+          "unitName": "clove",
+          "note": "minced"
+        }
       ],
       "instructions": [
-        "In a bowl, combine pineapple juice, soy sauce, brown sugar, ketchup, grated ginger, and minced garlic.",
-        "Marinate chicken thighs in the mixture for at least 30 minutes (or overnight for more flavor).",
-        "Preheat the grill to medium heat and cook the chicken, turning and basting with leftover sauce every few minutes.",
+        "In a bowl, combine 1 cup pineapple juice, 1/2 cup soy sauce, 1/2 cup brown sugar, 1/4 cup ketchup, 1 tablespoon grated ginger, and 2 minced garlic cloves.",
+        "Marinate 2–3 pounds chicken thighs in the mixture for at least 30 minutes (or overnight for more flavor).",
+        "Preheat the grill to medium heat and cook the chicken 6–8 minutes per side, turning and basting with leftover sauce every few minutes.",
         "Continue grilling until the chicken is cooked through and slightly charred at the edges.",
-        "Let it rest for a few minutes, then slice and serve with rice."
+        "Let it rest for 5 minutes, then slice and serve with rice."
       ],
       "image": "/images/recipes/huli-huli-chicken.jpg"
     },
@@ -1006,17 +1234,32 @@
       "difficulty": "EASY",
       "diet": "VEGAN",
       "ingredients": [
-        "dashi (veg or kombu)",
-        "miso paste",
-        "soft tofu",
-        "wakame",
-        "green onion"
+        { "name": "dashi (veg or kombu)", "quantity": 3, "unitName": "cup" },
+        { "name": "miso paste", "quantity": 3, "unitName": "tablespoon" },
+        {
+          "name": "soft tofu",
+          "quantity": 1,
+          "unitName": "cup",
+          "note": "cubed"
+        },
+        {
+          "name": "wakame",
+          "quantity": 2,
+          "unitName": "tablespoon",
+          "note": "soaked"
+        },
+        {
+          "name": "green onion",
+          "quantity": 2,
+          "unitName": "each",
+          "note": "sliced"
+        }
       ],
       "instructions": [
-        "Bring dashi broth to a gentle simmer in a small pot.",
-        "Place miso paste in a ladle, add a little hot broth, and stir until smooth before mixing it back into the pot.",
-        "Add cubed tofu and soaked wakame seaweed; warm gently without boiling.",
-        "Garnish with sliced green onions and serve hot."
+        "Bring 3 cups dashi broth to a gentle simmer in a small pot.",
+        "Place 2–3 tablespoons miso paste in a ladle, add a little hot broth, and stir until smooth before mixing it back into the pot.",
+        "Add 1 cup cubed tofu and 2 tablespoons soaked wakame seaweed; warm gently without boiling.",
+        "Garnish with 1–2 sliced green onions and serve hot."
       ],
       "image": "/images/recipes/miso-soup-tofu.jpg"
     },
@@ -1026,21 +1269,35 @@
       "difficulty": "EASY",
       "diet": "VEGAN",
       "ingredients": [
-        "day-old rice",
-        "frozen peas and carrots",
-        "corn",
-        "soy sauce",
-        "garlic",
-        "green onion",
-        "oil",
-        "sesame oil"
+        { "name": "day-old rice", "quantity": 3, "unitName": "cup" },
+        {
+          "name": "frozen peas and carrots",
+          "quantity": 1,
+          "unitName": "cup"
+        },
+        { "name": "corn", "quantity": 0.5, "unitName": "cup" },
+        { "name": "soy sauce", "quantity": 2, "unitName": "tablespoon" },
+        {
+          "name": "garlic",
+          "quantity": 2,
+          "unitName": "clove",
+          "note": "minced"
+        },
+        {
+          "name": "green onion",
+          "quantity": 2,
+          "unitName": "tablespoon",
+          "note": "chopped"
+        },
+        { "name": "oil", "quantity": 1, "unitName": "tablespoon" },
+        { "name": "sesame oil", "quantity": 1, "unitName": "teaspoon" }
       ],
       "instructions": [
-        "Heat oil in a large skillet and sauté minced garlic for 30 seconds until fragrant.",
-        "Add frozen peas, carrots, and corn; stir-fry for 2-3 minutes.",
-        "Add day-old rice and stir until hot and well mixed.",
-        "Pour in soy sauce and toss to coat evenly.",
-        "Finish with a drizzle of sesame oil and chopped green onions before serving."
+        "Heat 1 tablespoon oil in a large skillet and sauté 2 minced garlic cloves for 30 seconds until fragrant.",
+        "Add 1 cup frozen peas and carrots and 1/2 cup corn; stir-fry for 2–3 minutes.",
+        "Add 3 cups day-old rice and stir until hot and well mixed.",
+        "Pour in 2 tablespoons soy sauce and toss to coat evenly.",
+        "Finish with 1 teaspoon sesame oil and 2 tablespoons chopped green onions before serving."
       ],
       "image": "/images/recipes/veggie-fried-rice.jpg"
     },
@@ -1050,24 +1307,54 @@
       "difficulty": "NORMAL",
       "diet": "VEGAN",
       "ingredients": [
-        "firm tofu",
-        "flour",
-        "plant milk",
-        "panko",
-        "Japanese curry roux",
-        "onion",
-        "carrot",
-        "potato",
-        "oil",
-        "salt",
-        "pepper"
+        {
+          "name": "firm tofu",
+          "quantity": 1,
+          "unitName": "each",
+          "note": "block, pressed"
+        },
+        { "name": "flour", "quantity": 0.5, "unitName": "cup" },
+        { "name": "plant milk", "quantity": 0.5, "unitName": "cup" },
+        { "name": "panko", "quantity": 1, "unitName": "cup" },
+        {
+          "name": "Japanese curry roux",
+          "quantity": 4,
+          "unitName": "piece",
+          "note": "blocks"
+        },
+        {
+          "name": "onion",
+          "quantity": 1,
+          "unitName": "each",
+          "note": "sliced"
+        },
+        {
+          "name": "carrot",
+          "quantity": 1,
+          "unitName": "each",
+          "note": "chopped"
+        },
+        {
+          "name": "potato",
+          "quantity": 1,
+          "unitName": "each",
+          "note": "diced"
+        },
+        {
+          "name": "oil",
+          "quantity": 0.25,
+          "unitName": "cup",
+          "note": "for frying"
+        },
+        { "name": "salt", "quantity": 0.5, "unitName": "teaspoon" },
+        { "name": "pepper", "quantity": 0.25, "unitName": "teaspoon" }
       ],
       "instructions": [
-        "Press tofu for 10 minutes to remove excess water, then slice into thick pieces.",
-        "Season with salt and pepper, dredge in flour, dip in plant milk, then coat with panko.",
-        "Fry tofu slices in hot oil until golden brown and crisp; set aside on a paper towel.",
-        "In a saucepan, sauté onions, carrots, and potatoes until slightly softened, then add water and simmer until tender.",
-        "Stir in curry roux blocks to thicken the sauce.",
+        "Press 1 block firm tofu for 10 minutes to remove excess water, then slice into 4–6 thick pieces.",
+        "Season with 1/2 teaspoon salt and 1/4 teaspoon pepper, dredge in 1/2 cup flour, dip in 1/2 cup plant milk, then coat with about 1 cup panko.",
+        "Fry tofu slices in about 1/4 inch hot oil until golden brown and crisp; set aside on a paper towel.",
+        "In a saucepan, sauté 1 sliced onion, 1 chopped carrot, and 1 diced potato until slightly softened, then add about 2 cups water and simmer until tender.",
+        "Stir in 3–4 curry roux blocks to thicken the sauce.",
         "Serve tofu katsu over rice topped with the warm curry sauce."
       ],
       "image": "/images/recipes/tofu-katsu-curry.jpg"
@@ -1078,20 +1365,35 @@
       "difficulty": "EASY",
       "diet": "ANY",
       "ingredients": [
-        "sirloin steak",
-        "butter",
-        "garlic",
-        "soy sauce",
-        "black pepper",
-        "green onion"
+        { "name": "sirloin steak", "quantity": 1, "unitName": "pound" },
+        { "name": "butter", "quantity": 3, "unitName": "tablespoon" },
+        {
+          "name": "garlic",
+          "quantity": 3,
+          "unitName": "clove",
+          "note": "minced"
+        },
+        { "name": "soy sauce", "quantity": 1, "unitName": "tablespoon" },
+        {
+          "name": "black pepper",
+          "quantity": 0.5,
+          "unitName": "teaspoon"
+        },
+        {
+          "name": "green onion",
+          "quantity": 2,
+          "unitName": "tablespoon",
+          "note": "chopped"
+        },
+        { "name": "salt", "quantity": 1, "unitName": "teaspoon" }
       ],
       "instructions": [
-        "Cut steak into bite-sized cubes and pat dry with paper towels.",
-        "Season with salt and black pepper.",
-        "Heat a pan over high heat and sear the steak cubes for 1-2 minutes per side until browned.",
-        "Reduce heat to medium, add butter and minced garlic, and cook for 30 seconds.",
-        "Add a splash of soy sauce and toss the steak in the garlic butter.",
-        "Sprinkle with chopped green onions before serving."
+        "Cut 1 pound sirloin steak into bite-sized cubes and pat dry with paper towels.",
+        "Season with 1 teaspoon salt and 1/2 teaspoon black pepper.",
+        "Heat a pan over high heat and sear the steak cubes for 1–2 minutes per side until browned.",
+        "Reduce heat to medium, add 3 tablespoons butter and 3 minced garlic cloves, and cook for 30 seconds.",
+        "Add 1 tablespoon soy sauce and toss the steak in the garlic butter.",
+        "Sprinkle with 2 tablespoons chopped green onions before serving."
       ],
       "image": "/images/recipes/garlic-butter-steak-bites.jpg"
     },
@@ -1101,17 +1403,25 @@
       "difficulty": "EASY",
       "diet": "VEGETARIAN",
       "ingredients": [
-        "Okinawan sweet potatoes",
-        "butter",
-        "milk or cream",
-        "salt"
+        {
+          "name": "Okinawan sweet potatoes",
+          "quantity": 2.5,
+          "unitName": "pound"
+        },
+        { "name": "butter", "quantity": 3, "unitName": "tablespoon" },
+        {
+          "name": "milk or cream",
+          "quantity": 0.33,
+          "unitName": "cup"
+        },
+        { "name": "salt", "quantity": 1, "unitName": "teaspoon" }
       ],
       "instructions": [
-        "Peel and cut Okinawan sweet potatoes into cubes.",
-        "Boil in salted water for 12-15 minutes until tender when pierced with a fork.",
-        "Drain and mash with butter until smooth.",
-        "Add warm milk or cream to reach the desired texture.",
-        "Season with salt and serve warm as a side dish."
+        "Peel and cut 2–3 medium Okinawan sweet potatoes into cubes.",
+        "Boil in salted water (about 1 teaspoon salt) for 12–15 minutes until tender when pierced with a fork.",
+        "Drain and mash with 2–3 tablespoons butter until smooth.",
+        "Add 1/4–1/3 cup warm milk or cream to reach the desired texture.",
+        "Season with additional salt to taste and serve warm as a side dish."
       ],
       "image": "/images/recipes/okinawan-sweet-potato-mash.jpg"
     },
@@ -1121,22 +1431,46 @@
       "difficulty": "NORMAL",
       "diet": "ANY",
       "ingredients": [
-        "chicken thighs",
-        "soy sauce",
-        "sake",
-        "ginger",
-        "garlic",
-        "potato starch",
-        "oil",
-        "lemon",
-        "white rice"
+        { "name": "chicken thighs", "quantity": 1, "unitName": "pound" },
+        { "name": "soy sauce", "quantity": 2, "unitName": "tablespoon" },
+        { "name": "sake", "quantity": 2, "unitName": "tablespoon" },
+        {
+          "name": "ginger",
+          "quantity": 1,
+          "unitName": "teaspoon",
+          "note": "grated"
+        },
+        {
+          "name": "garlic",
+          "quantity": 2,
+          "unitName": "clove",
+          "note": "minced"
+        },
+        {
+          "name": "potato starch",
+          "quantity": 0.5,
+          "unitName": "cup"
+        },
+        {
+          "name": "oil",
+          "quantity": 1,
+          "unitName": "cup",
+          "note": "for deep/shallow frying"
+        },
+        { "name": "lemon", "quantity": 1, "unitName": "each" },
+        {
+          "name": "white rice",
+          "quantity": 2,
+          "unitName": "cup",
+          "note": "cooked"
+        }
       ],
       "instructions": [
-        "Cut chicken thighs into bite-sized pieces and marinate in soy sauce, sake, grated ginger, and minced garlic for 10-15 minutes.",
-        "Coat each piece with potato starch until evenly covered.",
-        "Heat oil to 350°F (175°C) and fry chicken in small batches until golden brown and crisp.",
-        "Drain on a rack or paper towels and squeeze a little lemon juice over the top.",
-        "Serve over a bowl of hot white rice."
+        "Cut 1 pound chicken thighs into bite-sized pieces and marinate in 2 tablespoons soy sauce, 2 tablespoons sake, 1 teaspoon grated ginger, and 2 minced garlic cloves for 10–15 minutes.",
+        "Coat each piece with about 1/2 cup potato starch until evenly covered.",
+        "Heat oil to 350°F (175°C) and fry chicken in small batches 4–5 minutes until golden brown and crisp.",
+        "Drain on a rack or paper towels and squeeze a little lemon juice (about 1–2 wedges) over the top.",
+        "Serve over a bowl of about 1 cup hot white rice."
       ],
       "image": "/images/recipes/chicken-karaage-bowl.jpg"
     },
@@ -1146,18 +1480,29 @@
       "difficulty": "EASY",
       "diet": "ANY",
       "ingredients": [
-        "chicken breast",
-        "soy sauce",
-        "garlic",
-        "mixed vegetables",
-        "oil"
+        { "name": "chicken breast", "quantity": 1, "unitName": "pound" },
+        { "name": "soy sauce", "quantity": 3, "unitName": "tablespoon" },
+        {
+          "name": "garlic",
+          "quantity": 2,
+          "unitName": "clove",
+          "note": "minced"
+        },
+        {
+          "name": "mixed vegetables",
+          "quantity": 3,
+          "unitName": "cup",
+          "note": "like broccoli, carrots, bell peppers"
+        },
+        { "name": "oil", "quantity": 1, "unitName": "tablespoon" },
+        { "name": "salt", "quantity": 0.5, "unitName": "teaspoon" }
       ],
       "instructions": [
-        "Slice chicken breasts into thin strips and season lightly with salt.",
-        "Heat oil in a large pan or wok and cook the chicken until no longer pink.",
-        "Add minced garlic and mixed vegetables (like broccoli, carrots, and bell peppers).",
-        "Stir-fry for 3-5 minutes until vegetables are tender but still crisp.",
-        "Pour in soy sauce and toss everything together for 1 more minute.",
+        "Slice 1 pound chicken breasts into thin strips and season lightly with 1/2 teaspoon salt.",
+        "Heat 1 tablespoon oil in a large pan or wok and cook the chicken 4–5 minutes until no longer pink.",
+        "Add 2 minced garlic cloves and 3 cups mixed vegetables (like broccoli, carrots, and bell peppers).",
+        "Stir-fry for 3–5 minutes until vegetables are tender but still crisp.",
+        "Pour in 2–3 tablespoons soy sauce and toss everything together for 1 more minute.",
         "Serve hot over rice or noodles."
       ],
       "image": "/images/recipes/chicken-stir-fry.jpg"
@@ -1168,22 +1513,32 @@
       "difficulty": "NORMAL",
       "diet": "ANY",
       "ingredients": [
-        "spaghetti",
-        "ground beef",
-        "tomato sauce",
-        "onion",
-        "garlic",
-        "olive oil",
-        "salt",
-        "pepper"
+        { "name": "spaghetti", "quantity": 8, "unitName": "ounce" },
+        { "name": "ground beef", "quantity": 1, "unitName": "pound" },
+        { "name": "tomato sauce", "quantity": 2, "unitName": "cup" },
+        {
+          "name": "onion",
+          "quantity": 0.5,
+          "unitName": "cup",
+          "note": "minced"
+        },
+        {
+          "name": "garlic",
+          "quantity": 2,
+          "unitName": "clove",
+          "note": "minced"
+        },
+        { "name": "olive oil", "quantity": 2, "unitName": "tablespoon" },
+        { "name": "salt", "quantity": 1, "unitName": "teaspoon" },
+        { "name": "pepper", "quantity": 0.5, "unitName": "teaspoon" }
       ],
       "instructions": [
-        "Cook spaghetti in a large pot of salted water until al dente; drain and set aside.",
-        "Heat olive oil in a pan, then sauté minced onion and garlic until fragrant.",
-        "Add ground beef and cook until browned, breaking it apart with a spatula.",
-        "Stir in tomato sauce and season with salt and pepper.",
-        "Simmer for 10-15 minutes until thick and flavorful.",
-        "Serve sauce over spaghetti and sprinkle with parmesan if desired."
+        "Cook 8 ounces spaghetti in a large pot of salted water until al dente; drain and set aside.",
+        "Heat 2 tablespoons olive oil in a pan, then sauté 1/2 cup minced onion and 2 minced garlic cloves until fragrant.",
+        "Add 1 pound ground beef and cook until browned, breaking it apart with a spatula.",
+        "Stir in 2 cups tomato sauce and season with 1 teaspoon salt and 1/2 teaspoon pepper.",
+        "Simmer for 10–15 minutes until thick and flavorful.",
+        "Serve about 1 cup sauce over each portion of spaghetti and sprinkle with parmesan if desired."
       ],
       "image": "/images/recipes/spaghetti-bolognese.jpg"
     },
@@ -1192,10 +1547,16 @@
       "cookTime": 10,
       "difficulty": "EASY",
       "diet": "ANY",
-      "ingredients": ["eggs", "milk", "salt", "pepper", "butter"],
+      "ingredients": [
+        { "name": "eggs", "quantity": 3, "unitName": "each" },
+        { "name": "milk", "quantity": 2, "unitName": "tablespoon" },
+        { "name": "salt", "quantity": 0.125, "unitName": "teaspoon" },
+        { "name": "pepper", "quantity": 0.125, "unitName": "teaspoon" },
+        { "name": "butter", "quantity": 1, "unitName": "teaspoon" }
+      ],
       "instructions": [
-        "Crack eggs into a bowl, add milk, salt, and pepper, and whisk until smooth and slightly frothy.",
-        "Heat butter in a nonstick pan over medium heat until melted.",
+        "Crack 2–3 eggs into a bowl, add 2 tablespoons milk, 1/8 teaspoon salt, and a pinch of pepper, and whisk until smooth and slightly frothy.",
+        "Heat 1 teaspoon butter in a nonstick pan over medium heat until melted.",
         "Pour in the egg mixture and swirl to coat the pan evenly.",
         "When the bottom is set but the top is still soft, fold the omelette in half.",
         "Cook another 30 seconds, then slide onto a plate."
@@ -1208,19 +1569,19 @@
       "difficulty": "EASY",
       "diet": "VEGETARIAN",
       "ingredients": [
-        "flour",
-        "milk",
-        "egg",
-        "sugar",
-        "baking powder",
-        "butter"
+        { "name": "flour", "quantity": 1, "unitName": "cup" },
+        { "name": "milk", "quantity": 1, "unitName": "cup" },
+        { "name": "egg", "quantity": 1, "unitName": "each" },
+        { "name": "sugar", "quantity": 2, "unitName": "tablespoon" },
+        { "name": "baking powder", "quantity": 2, "unitName": "teaspoon" },
+        { "name": "butter", "quantity": 1, "unitName": "tablespoon" }
       ],
       "instructions": [
-        "In a bowl, whisk together flour, sugar, and baking powder.",
-        "Add milk and egg, and stir until you get a smooth batter.",
-        "Melt butter in a pan over medium heat and pour in about 1/4 cup of batter per pancake.",
+        "In a bowl, whisk together 1 cup flour, 2 tablespoons sugar, and 2 teaspoons baking powder.",
+        "Add 1 cup milk and 1 egg, and stir until you get a smooth batter.",
+        "Melt 1 tablespoon butter in a pan over medium heat and pour in about 1/4 cup of batter per pancake.",
         "Cook until bubbles form on the surface, then flip and cook the other side until golden.",
-        "Serve with butter, syrup, or fruit."
+        "Serve with extra butter, syrup, or fruit."
       ],
       "image": "/images/recipes/pancakes.jpg"
     }

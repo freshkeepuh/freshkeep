@@ -12,6 +12,111 @@ import { splitIngredientsByStock } from '@/lib/ingredientMatch';
 
 export const dynamic = 'force-dynamic';
 
+interface UiIngredient {
+  name: string;
+  quantity?: number;
+  unitName?: string;
+  note?: string;
+}
+
+/**
+ * Normalize raw DB ingredients (string[] or object[]) into UiIngredient[].
+ */
+const normalizeIngredients = (value: unknown): UiIngredient[] => {
+  if (!Array.isArray(value)) return [];
+
+  return value.map((ing: any) => {
+    // Old shape: "chicken thighs"
+    if (typeof ing === 'string') {
+      return { name: ing };
+    }
+
+    // New shape: { name, quantity, unitName, note }
+    if (ing && typeof ing === 'object') {
+      let name: any;
+      if (typeof ing.name === 'string') {
+        name = ing.name;
+      } else {
+        name = ing.name != null ? String(ing.name) : '';
+      }
+
+      return {
+        name,
+        quantity: typeof ing.quantity === 'number' ? ing.quantity : undefined,
+        unitName:
+          typeof ing.unitName === 'string' && ing.unitName.length > 0
+            ? ing.unitName
+            : undefined,
+        note:
+          typeof ing.note === 'string' && ing.note.length > 0
+            ? ing.note
+            : undefined,
+      };
+    }
+
+    // Fallback – weird value, just stringify
+    return { name: String(ing ?? '') };
+  });
+};
+
+/**
+ * Normalize instructions from JSON into string[]
+ */
+const normalizeInstructions = (value: unknown): string[] => {
+  if (!Array.isArray(value)) return [];
+  return value.map((step) => String(step ?? ''));
+};
+
+/**
+ * Get just the ingredient name (no quantity) from either a string or object.
+ */
+const getIngredientName = (item: UiIngredient | string): string => {
+  if (typeof item === 'string') return item;
+  if (item && typeof item.name === 'string') return item.name;
+  return '';
+};
+
+/**
+ * Format ingredient for display like "2 cups flour" or "1 nori".
+ * Treats "each"/"piece"/"ea"/"pc" as a plain count, so you get
+ * "2 saimin noodles" instead of "2 each saimin noodles".
+ */
+const formatIngredientDisplay = (item: UiIngredient | string): string => {
+  if (typeof item === 'string') return item;
+
+  const name = item?.name ?? '';
+  if (!name) return '';
+
+  const qty =
+    typeof item.quantity === 'number' && Number.isFinite(item.quantity)
+      ? item.quantity
+      : undefined;
+
+  const unitRaw =
+    typeof item.unitName === 'string' && item.unitName.length > 0
+      ? item.unitName
+      : undefined;
+
+  let qtyStr: string;
+  if (Number.isInteger(qty)) {
+    qtyStr = qty != null ? String(qty) : '';
+  } else {
+    qtyStr = qty != null ? String(qty) : '';
+  }
+
+  // Units that should be treated as a plain count
+  const COUNT_UNITS = ['each', 'ea', 'piece', 'pc', 'pieces'];
+
+  const useUnit = unitRaw && !COUNT_UNITS.includes(unitRaw.toLowerCase());
+
+  const parts: string[] = [];
+  if (qtyStr) parts.push(qtyStr);
+  if (useUnit) parts.push(unitRaw); // e.g. "cup", "tbsp", "oz"
+  parts.push(name); // ingredient name
+
+  return parts.join(' ');
+};
+
 export default async function RecipeViewPage(props: any) {
   const { slug: routeSlug } = await Promise.resolve(props?.params);
   const rawSearchParams = await Promise.resolve(props?.searchParams ?? {});
@@ -46,12 +151,8 @@ export default async function RecipeViewPage(props: any) {
 
   if (!recipe) notFound();
 
-  const ingredients: string[] = Array.isArray(recipe.ingredients)
-    ? (recipe.ingredients as any)
-    : [];
-  const instructions: string[] = Array.isArray(recipe.instructions)
-    ? (recipe.instructions as any)
-    : [];
+  const ingredients = normalizeIngredients(recipe.ingredients as unknown);
+  const instructions = normalizeInstructions(recipe.instructions as unknown);
 
   // Load all locations for the dropdown (no user filter for now)
   const locations = await prisma.location.findMany({
@@ -71,7 +172,10 @@ export default async function RecipeViewPage(props: any) {
     .map((inst) => inst.product?.name)
     .filter((name): name is string => !!name);
 
-  const { inStock, missing } = splitIngredientsByStock(ingredients, haveNames);
+  const { inStock, missing } = splitIngredientsByStock(
+    ingredients as any,
+    haveNames,
+  );
 
   const difficultyMeta = {
     EASY: { label: 'Easy', icon: '⭐️' },
@@ -205,8 +309,12 @@ export default async function RecipeViewPage(props: any) {
                     In Stock:
                   </h3>
                   <div className={styles.rpIngredientsGrid}>
-                    {inStock.map((item, idx) => {
-                      const id = `have-${item.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}-${idx}`;
+                    {inStock.map((item: any, idx: number) => {
+                      const name = getIngredientName(item);
+                      const label = formatIngredientDisplay(item);
+                      const id = `have-${name
+                        .replace(/[^a-z0-9]+/gi, '-')
+                        .toLowerCase()}-${idx}`;
                       return (
                         <div key={id} className={styles.rpIngredientItem}>
                           <input
@@ -214,10 +322,10 @@ export default async function RecipeViewPage(props: any) {
                             type="checkbox"
                             className={styles.rpCheckbox}
                             name="ingredients-have"
-                            value={item}
+                            value={label}
                           />
                           <label htmlFor={id} className={styles.rpMedium}>
-                            {item}
+                            {label}
                           </label>
                         </div>
                       );
@@ -236,8 +344,12 @@ export default async function RecipeViewPage(props: any) {
                     Missing:
                   </h3>
                   <div className={styles.rpIngredientsGrid}>
-                    {missing.map((item, idx) => {
-                      const id = `miss-${item.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}-${idx}`;
+                    {missing.map((item: any, idx: number) => {
+                      const name = getIngredientName(item);
+                      const label = formatIngredientDisplay(item);
+                      const id = `miss-${name
+                        .replace(/[^a-z0-9]+/gi, '-')
+                        .toLowerCase()}-${idx}`;
                       return (
                         <div key={id} className={styles.rpIngredientItem}>
                           <input
@@ -245,10 +357,10 @@ export default async function RecipeViewPage(props: any) {
                             type="checkbox"
                             className={styles.rpCheckbox}
                             name="ingredients-miss"
-                            value={item}
+                            value={label}
                           />
                           <label htmlFor={id} className={styles.rpMedium}>
-                            {item}
+                            {label}
                           </label>
                         </div>
                       );

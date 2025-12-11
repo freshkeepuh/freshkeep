@@ -7,6 +7,14 @@ import Link from 'next/link';
 import slugify from '@/lib/slug';
 import FavoriteHeart from './FavoriteHeart';
 
+// Ingredient UI type
+export interface RecipeIngredient {
+  name: string;
+  quantity?: number;
+  unitName?: string;
+  note?: string;
+}
+
 // Strict UI type
 export interface Recipe {
   id: string;
@@ -15,7 +23,7 @@ export interface Recipe {
   cookTime: number;
   difficulty: 'Easy' | 'Normal' | 'Hard' | 'Any';
   diet: 'Vegan' | 'Vegetarian' | 'Pescetarian' | 'Any';
-  ingredients: string[];
+  ingredients: RecipeIngredient[]; // 👈 was string[]
   image?: string;
   haveCount?: number;
   missingCount?: number;
@@ -56,6 +64,10 @@ const DIET_EMOJI: Record<DietFilter, string> = {
 
 const getDifficultyEmoji = (d: DifficultyFilter) => DIFFICULTY_EMOJI[d];
 const getDietEmoji = (d: DietFilter) => DIET_EMOJI[d];
+
+// Turn an ingredient object into a display string
+const ingredientLabel = (ing: RecipeIngredient | string): string =>
+  typeof ing === 'string' ? ing : ing.name;
 
 export default function RecipesPage({
   initialRecipes,
@@ -120,10 +132,14 @@ export default function RecipesPage({
 
     // Filter logic
     const result = recipes.filter((r) => {
+      const ingredientNames = Array.isArray(r.ingredients)
+        ? r.ingredients.map((ing) => ingredientLabel(ing).toLowerCase())
+        : [];
+
       const matchesQuery =
         q.length === 0 ||
         r.title.toLowerCase().includes(q) ||
-        r.ingredients.some((ing) => ing.toLowerCase().includes(q));
+        ingredientNames.some((name) => name.includes(q));
 
       // Check cook time, difficulty & diet dropdowns
       const matchesTime = maxMinutes == null || r.cookTime <= maxMinutes;
@@ -131,17 +147,13 @@ export default function RecipesPage({
         difficulty === 'Any' || r.difficulty === difficulty;
       const matchesDiet = diet === 'Any' || r.diet === diet;
 
-      // Check ingredients
-      const recipeIngs = Array.isArray(r.ingredients)
-        ? r.ingredients.map((i) => String(i).toLowerCase())
-        : [];
-
+      // Check "Your Ingredients" chips
       const matchesIngredients =
         ingredients.length === 0 ||
         ingredients.every((chip) => {
           const c = chip.trim().toLowerCase();
           if (!c) return true;
-          return recipeIngs.some((ing) => ing.includes(c));
+          return ingredientNames.some((name) => name.includes(c));
         });
 
       return (
@@ -388,7 +400,11 @@ export default function RecipesPage({
                   </div>
                   <div className={styles.rpIngredients}>
                     <p className={styles.rpH3}>Ingredients:</p>
-                    <p className={styles.rpText}>{r.ingredients.join(', ')}</p>
+                    <p className={styles.rpText}>
+                      {r.ingredients
+                        .map((ing) => ingredientLabel(ing))
+                        .join(', ')}
+                    </p>
                   </div>
 
                   <Link
