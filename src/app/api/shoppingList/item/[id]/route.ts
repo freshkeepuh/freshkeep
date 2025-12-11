@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import getResponseError from '@/lib/routeHelpers';
-import { deleteShoppingListItem, readShoppingListItem, updateShoppingListItem } from '@/lib/dbShoppingListActions';
+import {
+  deleteShoppingListItem,
+  readShoppingListItem,
+  updateShoppingListItem,
+} from '@/lib/dbShoppingListActions';
 
 export const runtime = 'nodejs';
 
@@ -14,13 +18,19 @@ export async function GET(request: NextRequest, context: any) {
   try {
     const { id } = context.params;
     if (!id) {
-      return NextResponse.json({ error: 'ShoppingListItem ID is required' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'ShoppingListItem ID is required' },
+        { status: 400 },
+      );
     }
 
     const shoppingListItem = await readShoppingListItem(id);
 
     if (!shoppingListItem) {
-      return NextResponse.json({ error: 'ShoppingListItem not found' }, { status: 404 });
+      return NextResponse.json(
+        { error: 'ShoppingListItem not found' },
+        { status: 404 },
+      );
     }
 
     return NextResponse.json(shoppingListItem);
@@ -39,7 +49,10 @@ export async function PUT(request: NextRequest, context: any) {
   try {
     const { id } = context.params;
     if (!id) {
-      return NextResponse.json({ error: 'ShoppingListItem ID is required' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'ShoppingListItem ID is required' },
+        { status: 400 },
+      );
     }
 
     const body = await request.json();
@@ -69,7 +82,10 @@ export async function DELETE(request: NextRequest, context: any) {
   try {
     const { id } = context.params;
     if (!id) {
-      return NextResponse.json({ error: 'ShoppingListItem ID is required' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'ShoppingListItem ID is required' },
+        { status: 400 },
+      );
     }
 
     await deleteShoppingListItem(id);

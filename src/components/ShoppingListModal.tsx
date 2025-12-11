@@ -63,7 +63,7 @@ function ShoppingListModal({
   listTitle,
   listId,
   items,
-  onItemAdded,
+  onItemAdded = undefined,
   defaultTab = 'list',
 }: ShoppingListModalProps) {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
@@ -75,7 +75,9 @@ function ShoppingListModal({
   const [isLoading, setIsLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
   const [searchError, setSearchError] = useState<string | null>(null);
-  const [itemQuantities, setItemQuantities] = useState<Record<string, number>>({});
+  const [itemQuantities, setItemQuantities] = useState<Record<string, number>>(
+    {},
+  );
   const [isAdding, setIsAdding] = useState<string | null>(null);
 
   // Reset active tab when modal opens with different default
@@ -148,7 +150,9 @@ function ShoppingListModal({
     setHasSearched(true);
     setSearchError(null);
     try {
-      const response = await fetch(`/api/products/search?q=${encodeURIComponent(query)}`);
+      const response = await fetch(
+        `/api/products/search?q=${encodeURIComponent(query)}`,
+      );
       if (response.ok) {
         const data = await response.json();
         setCatalogItems(data);
@@ -159,7 +163,9 @@ function ShoppingListModal({
       }
     } catch (error) {
       console.error('Error searching products:', error);
-      setSearchError('Network error. Please check your connection and try again.');
+      setSearchError(
+        'Network error. Please check your connection and try again.',
+      );
       setCatalogItems([]);
     } finally {
       setIsLoading(false);
@@ -174,10 +180,14 @@ function ShoppingListModal({
   };
 
   const handleButtonClick = (itemTitle: string, inList: boolean) => {
-    console.log(`${inList ? 'Removing' : 'Adding'} ${itemTitle} ${inList ? 'from' : 'to'} list`);
+    console.log(
+      `${inList ? 'Removing' : 'Adding'} ${itemTitle} ${inList ? 'from' : 'to'} list`,
+    );
   };
 
-  const filteredItems = items.filter((item) => item.groceryItemTitle.toLowerCase().includes(searchTerm.toLowerCase()));
+  const filteredItems = items.filter((item) =>
+    item.groceryItemTitle.toLowerCase().includes(searchTerm.toLowerCase()),
+  );
 
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
@@ -195,11 +205,19 @@ function ShoppingListModal({
     }
   };
 
-  const allSelected = filteredItems.length > 0 && selectedItems.length === filteredItems.length;
-  const someSelected = selectedItems.length > 0 && selectedItems.length < filteredItems.length;
+  const allSelected =
+    filteredItems.length > 0 && selectedItems.length === filteredItems.length;
+  const someSelected =
+    selectedItems.length > 0 && selectedItems.length < filteredItems.length;
 
   return (
-    <Modal show={show} onHide={onHide} size="lg" centered dialogClassName={styles.modal80w}>
+    <Modal
+      show={show}
+      onHide={onHide}
+      size="lg"
+      centered
+      dialogClassName={styles.modal80w}
+    >
       <Modal.Header closeButton className="bg-success text-white">
         <Modal.Title>{listTitle}</Modal.Title>
       </Modal.Header>
@@ -208,7 +226,11 @@ function ShoppingListModal({
           activeKey={activeTab}
           onSelect={(k) => setActiveTab((k as 'list' | 'catalog') || 'list')}
           className="mb-0"
-          style={{ padding: '0 1rem', paddingTop: '0.5rem', backgroundColor: '#f8f9fa' }}
+          style={{
+            padding: '0 1rem',
+            paddingTop: '0.5rem',
+            backgroundColor: '#f8f9fa',
+          }}
         >
           <Tab eventKey="list" title="📋 My List">
             <div style={{ padding: '1rem 1.5rem' }}>
@@ -272,7 +294,8 @@ function ShoppingListModal({
                           className="bg-white border rounded mb-2 py-2 px-3"
                           style={{
                             display: 'grid',
-                            gridTemplateColumns: '40px 80px 1fr 120px 100px 90px',
+                            gridTemplateColumns:
+                              '40px 80px 1fr 120px 100px 90px',
                             gap: '12px',
                             alignItems: 'center',
                             transition: 'all 0.2s',
@@ -280,25 +303,31 @@ function ShoppingListModal({
                           }}
                           onMouseEnter={(e) => {
                             e.currentTarget.style.backgroundColor = '#f8f9fa';
-                            e.currentTarget.style.boxShadow = '0 2px 8px rgba(25, 135, 84, 0.15)';
+                            e.currentTarget.style.boxShadow =
+                              '0 2px 8px rgba(25, 135, 84, 0.15)';
                           }}
                           onMouseLeave={(e) => {
                             e.currentTarget.style.backgroundColor = 'white';
-                            e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.05)';
+                            e.currentTarget.style.boxShadow =
+                              '0 1px 3px rgba(0,0,0,0.05)';
                           }}
                         >
                           <div className="d-flex align-items-center">
                             <Form.Check
                               type="checkbox"
                               checked={selectedItems.includes(item.id)}
-                              onChange={(e) => handleSelectItem(item.id, e.target.checked)}
+                              onChange={(e) =>
+                                handleSelectItem(item.id, e.target.checked)
+                              }
                               aria-label={`Select ${item.groceryItemTitle}`}
                             />
                           </div>
 
                           <div>
                             <Image
-                              src={item.groceryItemImage || DEFAULT_FALLBACK_IMAGE}
+                              src={
+                                item.groceryItemImage || DEFAULT_FALLBACK_IMAGE
+                              }
                               alt={item.groceryItemTitle}
                               width={60}
                               height={60}
@@ -308,7 +337,8 @@ function ShoppingListModal({
                                 border: '1px solid #e9ecef',
                               }}
                               onError={(e) => {
-                                (e.target as HTMLImageElement).src = DEFAULT_FALLBACK_IMAGE;
+                                (e.target as HTMLImageElement).src =
+                                  DEFAULT_FALLBACK_IMAGE;
                               }}
                             />
                           </div>
@@ -326,7 +356,11 @@ function ShoppingListModal({
                           </div>
 
                           <div>
-                            <Badge bg="success" className="px-2 py-1" style={{ fontSize: '11px' }}>
+                            <Badge
+                              bg="success"
+                              className="px-2 py-1"
+                              style={{ fontSize: '11px' }}
+                            >
                               {item.groceryItemType}
                             </Badge>
                           </div>
@@ -334,27 +368,49 @@ function ShoppingListModal({
                           <div>
                             <div
                               className="d-flex align-items-center rounded-pill overflow-hidden"
-                              style={{ border: '1px solid #dee2e6', width: 'fit-content' }}
+                              style={{
+                                border: '1px solid #dee2e6',
+                                width: 'fit-content',
+                              }}
                             >
                               <Button
                                 variant="light"
                                 size="sm"
-                                onClick={() => updateQuantity(item.id, getQuantity(item.id) - 1)}
+                                onClick={() =>
+                                  updateQuantity(
+                                    item.id,
+                                    getQuantity(item.id) - 1,
+                                  )
+                                }
                                 className="border-0 px-2 py-1 rounded-0"
-                                style={{ fontSize: '14px', color: 'var(--bs-danger)' }}
+                                style={{
+                                  fontSize: '14px',
+                                  color: 'var(--bs-danger)',
+                                }}
                                 disabled={getQuantity(item.id) <= 1}
                               >
                                 −
                               </Button>
-                              <span className="px-2 fw-bold text-center" style={{ fontSize: '13px', minWidth: '30px' }}>
+                              <span
+                                className="px-2 fw-bold text-center"
+                                style={{ fontSize: '13px', minWidth: '30px' }}
+                              >
                                 {getQuantity(item.id)}
                               </span>
                               <Button
                                 variant="light"
                                 size="sm"
-                                onClick={() => updateQuantity(item.id, getQuantity(item.id) + 1)}
+                                onClick={() =>
+                                  updateQuantity(
+                                    item.id,
+                                    getQuantity(item.id) + 1,
+                                  )
+                                }
                                 className="border-0 px-2 py-1 rounded-0"
-                                style={{ fontSize: '14px', color: 'var(--bs-success)' }}
+                                style={{
+                                  fontSize: '14px',
+                                  color: 'var(--bs-success)',
+                                }}
                               >
                                 +
                               </Button>
@@ -363,9 +419,16 @@ function ShoppingListModal({
 
                           <div className="text-center">
                             <Button
-                              variant={item.inList ? 'outline-danger' : 'success'}
+                              variant={
+                                item.inList ? 'outline-danger' : 'success'
+                              }
                               size="sm"
-                              onClick={() => handleButtonClick(item.groceryItemTitle, item.inList)}
+                              onClick={() =>
+                                handleButtonClick(
+                                  item.groceryItemTitle,
+                                  item.inList,
+                                )
+                              }
                               style={{
                                 width: '80px',
                                 fontSize: '12px',
@@ -403,7 +466,11 @@ function ShoppingListModal({
                   onClick={handleSearch}
                   disabled={isLoading || catalogSearchTerm.trim().length < 2}
                 >
-                  {isLoading ? <Spinner animation="border" size="sm" /> : 'Search'}
+                  {isLoading ? (
+                    <Spinner animation="border" size="sm" />
+                  ) : (
+                    'Search'
+                  )}
                 </Button>
               </div>
               <div className="mt-2 d-flex flex-wrap gap-1">
@@ -423,6 +490,7 @@ function ShoppingListModal({
                 ))}
               </div>
               <div className="mt-2 text-muted" style={{ fontSize: '14px' }}>
+                {/* eslint-disable-next-line no-nested-ternary */}
                 {isLoading
                   ? 'Searching catalog... (this may take up to 30 seconds)'
                   : catalogItems.length > 0
@@ -456,6 +524,7 @@ function ShoppingListModal({
                 </div>
 
                 <div style={{ height: '40vh', overflowY: 'auto' }}>
+                  {/* eslint-disable no-nested-ternary */}
                   <div className="px-3 py-2">
                     {isLoading ? (
                       <div className="text-center py-5">
@@ -477,11 +546,13 @@ function ShoppingListModal({
                           }}
                           onMouseEnter={(e) => {
                             e.currentTarget.style.backgroundColor = '#f8f9fa';
-                            e.currentTarget.style.boxShadow = '0 2px 8px rgba(13, 110, 253, 0.15)';
+                            e.currentTarget.style.boxShadow =
+                              '0 2px 8px rgba(13, 110, 253, 0.15)';
                           }}
                           onMouseLeave={(e) => {
                             e.currentTarget.style.backgroundColor = 'white';
-                            e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.05)';
+                            e.currentTarget.style.boxShadow =
+                              '0 1px 3px rgba(0,0,0,0.05)';
                           }}
                         >
                           <div>
@@ -496,7 +567,8 @@ function ShoppingListModal({
                                 border: '1px solid #e9ecef',
                               }}
                               onError={(e) => {
-                                (e.target as HTMLImageElement).src = DEFAULT_FALLBACK_IMAGE;
+                                (e.target as HTMLImageElement).src =
+                                  DEFAULT_FALLBACK_IMAGE;
                               }}
                             />
                           </div>
@@ -514,16 +586,27 @@ function ShoppingListModal({
                           </div>
 
                           <div>
-                            <Badge bg="info" className="px-2 py-1" style={{ fontSize: '11px' }}>
+                            <Badge
+                              bg="info"
+                              className="px-2 py-1"
+                              style={{ fontSize: '11px' }}
+                            >
                               {item.category}
                             </Badge>
                           </div>
 
                           <div className="text-center">
                             <Button
-                              variant={addedToList.includes(item.id) ? 'outline-success' : 'success'}
+                              variant={
+                                addedToList.includes(item.id)
+                                  ? 'outline-success'
+                                  : 'success'
+                              }
                               size="sm"
-                              disabled={addedToList.includes(item.id) || isAdding === item.id}
+                              disabled={
+                                addedToList.includes(item.id) ||
+                                isAdding === item.id
+                              }
                               onClick={() => addItemToList(item)}
                               style={{
                                 width: '80px',
@@ -547,7 +630,11 @@ function ShoppingListModal({
                         <div className="text-center py-5 text-danger">
                           <h5>Search Error</h5>
                           <p>{searchError}</p>
-                          <Button variant="outline-danger" size="sm" onClick={() => searchProducts(catalogSearchTerm)}>
+                          <Button
+                            variant="outline-danger"
+                            size="sm"
+                            onClick={() => searchProducts(catalogSearchTerm)}
+                          >
                             Try Again
                           </Button>
                         </div>
@@ -564,6 +651,7 @@ function ShoppingListModal({
                       </div>
                     )}
                   </div>
+                  {/* eslint-enable no-nested-ternary */}
                 </div>
               </div>
             </div>

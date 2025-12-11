@@ -8,9 +8,7 @@ interface DashboardTileButtonProps {
   icon: string;
   title: string;
   count: number;
-  // eslint-disable-next-line react/require-default-props
   onClick?: () => void;
-  // eslint-disable-next-line react/require-default-props
   className?: string;
 }
 

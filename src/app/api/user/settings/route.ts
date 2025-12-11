@@ -48,7 +48,7 @@ export async function POST(req: Request) {
     revalidatePath('/settings');
 
     return NextResponse.json({ success: true, settings: updatedSettings });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Internal Server Error' },
       { status: 500 },

@@ -1,7 +1,7 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import Dashboard from '@/app/dashboard/page';
+import DashboardPage from '@/app/dashboard/page';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import Welcome from '@/components/Welcome';
 
@@ -14,7 +14,7 @@ function Home() {
   }
 
   if (session) {
-    return <Dashboard />;
+    return <DashboardPage />;
   }
   return <Welcome />;
 }

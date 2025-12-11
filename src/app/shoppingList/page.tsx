@@ -92,7 +92,9 @@ function ShoppingListPage() {
         setShoppingLists(data);
         // Also update the selected list if it's open
         if (selectedList) {
-          const updatedList = data.find((list: ShoppingList) => list.id === selectedList.id);
+          const updatedList = data.find(
+            (list: ShoppingList) => list.id === selectedList.id,
+          );
           if (updatedList) {
             setSelectedList(updatedList);
           }
@@ -135,7 +137,9 @@ function ShoppingListPage() {
   };
 
   const handleDeleteList = async (listId: string) => {
-    if (!confirm('Are you sure you want to delete this shopping list?')) return;
+    // eslint-disable-next-line no-alert
+    if (!window.confirm('Are you sure you want to delete this shopping list?'))
+      return;
 
     setIsDeleting(listId);
     try {
@@ -186,7 +190,10 @@ function ShoppingListPage() {
         }}
         className="d-flex justify-content-center bg-success p-1 rounded mb-4"
       >
-        <Row className="align-items-center justify-content-center py-3" style={{ height: '50px' }}>
+        <Row
+          className="align-items-center justify-content-center py-3"
+          style={{ height: '50px' }}
+        >
           <Col xs="auto" className="ps-1">
             <Button variant="light" onClick={() => setShowCreateModal(true)}>
               + Create Shopping List
@@ -218,7 +225,11 @@ function ShoppingListPage() {
       </Row>
 
       {/* Create Shopping List Modal */}
-      <Modal show={showCreateModal} onHide={() => setShowCreateModal(false)} centered>
+      <Modal
+        show={showCreateModal}
+        onHide={() => setShowCreateModal(false)}
+        centered
+      >
         <Modal.Header closeButton className="bg-success text-white">
           <Modal.Title>Create Shopping List</Modal.Title>
         </Modal.Header>
@@ -243,8 +254,16 @@ function ShoppingListPage() {
           <Button variant="secondary" onClick={() => setShowCreateModal(false)}>
             Cancel
           </Button>
-          <Button variant="success" onClick={handleCreateList} disabled={isCreating || !newListName.trim()}>
-            {isCreating ? <Spinner animation="border" size="sm" /> : 'Create List'}
+          <Button
+            variant="success"
+            onClick={handleCreateList}
+            disabled={isCreating || !newListName.trim()}
+          >
+            {isCreating ? (
+              <Spinner animation="border" size="sm" />
+            ) : (
+              'Create List'
+            )}
           </Button>
         </Modal.Footer>
       </Modal>

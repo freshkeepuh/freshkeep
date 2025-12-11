@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import getResponseError from '@/lib/routeHelpers';
-import { createShoppingListItem, deleteShoppingListItem, readShoppingListItem } from '@/lib/dbShoppingListActions';
+import {
+  createShoppingListItem,
+  deleteShoppingListItem,
+  readShoppingListItem,
+} from '@/lib/dbShoppingListActions';
 
 export const runtime = 'nodejs';
 
@@ -15,7 +19,10 @@ export async function POST(request: NextRequest) {
     const { listId, name, image, category, quantity } = body;
 
     if (!listId || !name) {
-      return NextResponse.json({ error: 'listId and name are required' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'listId and name are required' },
+        { status: 400 },
+      );
     }
 
     const newItem = await createShoppingListItem({
@@ -30,7 +37,10 @@ export async function POST(request: NextRequest) {
   } catch (error: Error | any) {
     // Handle unique constraint violation (item already exists)
     if (error.code === 'P2002') {
-      return NextResponse.json({ error: 'Item already exists in this shopping list' }, { status: 409 });
+      return NextResponse.json(
+        { error: 'Item already exists in this shopping list' },
+        { status: 409 },
+      );
     }
     return getResponseError(error);
   }
@@ -46,13 +56,19 @@ export async function GET(request: NextRequest, context: any) {
   try {
     const { id } = context.params;
     if (!id) {
-      return NextResponse.json({ error: 'ShoppingListItem ID is required' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'ShoppingListItem ID is required' },
+        { status: 400 },
+      );
     }
 
     const shoppingListItem = await readShoppingListItem(id);
 
     if (!shoppingListItem) {
-      return NextResponse.json({ error: 'ShoppingListItem not found' }, { status: 404 });
+      return NextResponse.json(
+        { error: 'ShoppingListItem not found' },
+        { status: 404 },
+      );
     }
 
     return NextResponse.json(shoppingListItem);
@@ -71,7 +87,10 @@ export async function DELETE(request: NextRequest, context: any) {
   try {
     const { id } = context.params;
     if (!id) {
-      return NextResponse.json({ error: 'ShoppingListItem ID is required' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'ShoppingListItem ID is required' },
+        { status: 400 },
+      );
     }
 
     await deleteShoppingListItem(id);

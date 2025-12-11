@@ -68,7 +68,7 @@ function StoreCard({ store, onUpdate, onDelete }: StoreCardProps) {
           message: 'Failed to delete store',
         });
       }
-    } catch (error) {
+    } catch {
       methods.setError('name', {
         type: 'manual',
         message: 'Failed to delete store. Please try again.',
@@ -99,7 +99,7 @@ function StoreCard({ store, onUpdate, onDelete }: StoreCardProps) {
           message: 'Failed to update store',
         });
       }
-    } catch (error) {
+    } catch {
       methods.setError('name', {
         type: 'manual',
         message: 'Failed to save changes. Please try again.',
@@ -128,7 +128,9 @@ function StoreCard({ store, onUpdate, onDelete }: StoreCardProps) {
             <Card>
               <Card.Body>
                 <Form.Group className="mb-3">
-                  <RequiredLabel aria-required="true">Store Name:</RequiredLabel>
+                  <RequiredLabel htmlFor="StoreName" aria-required="true">
+                    Store Name:
+                  </RequiredLabel>
                   <Form.Control
                     id="name"
                     type="text"
@@ -138,13 +140,11 @@ function StoreCard({ store, onUpdate, onDelete }: StoreCardProps) {
                     isInvalid={!!methods.formState.errors.name}
                   />
                   <Form.Control.Feedback type="invalid">
-                    {methods.formState.errors.name && methods.formState.errors.name.message}
+                    {methods.formState.errors.name &&
+                      methods.formState.errors.name.message}
                   </Form.Control.Feedback>
                 </Form.Group>
-                <AddressSubForm
-                  address={store}
-                  isEditing={isEditing}
-                />
+                <AddressSubForm address={store} isEditing={isEditing} />
                 <Form.Group className="mb-3">
                   <Form.Label>Phone:</Form.Label>
                   <Form.Control
@@ -156,7 +156,8 @@ function StoreCard({ store, onUpdate, onDelete }: StoreCardProps) {
                     isInvalid={!!methods.formState.errors.phone}
                   />
                   <Form.Control.Feedback type="invalid">
-                    {methods.formState.errors.phone && methods.formState.errors.phone.message}
+                    {methods.formState.errors.phone &&
+                      methods.formState.errors.phone.message}
                   </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group className="mb-3">
@@ -170,7 +171,8 @@ function StoreCard({ store, onUpdate, onDelete }: StoreCardProps) {
                     isInvalid={!!methods.formState.errors.website}
                   />
                   <Form.Control.Feedback type="invalid">
-                    {methods.formState.errors.website && methods.formState.errors.website.message}
+                    {methods.formState.errors.website &&
+                      methods.formState.errors.website.message}
                   </Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group className="mb-3">
@@ -184,7 +186,8 @@ function StoreCard({ store, onUpdate, onDelete }: StoreCardProps) {
                     isInvalid={!!methods.formState.errors.picture}
                   />
                   <Form.Control.Feedback type="invalid">
-                    {methods.formState.errors.picture && methods.formState.errors.picture.message}
+                    {methods.formState.errors.picture &&
+                      methods.formState.errors.picture.message}
                   </Form.Control.Feedback>
                 </Form.Group>
               </Card.Body>
