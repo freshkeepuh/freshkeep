@@ -98,11 +98,18 @@ export async function GET(request: NextRequest) {
       url = `https://world.openfoodfacts.org/category/${encodeURIComponent(category!)}.json?page_size=20&fields=code,product_name,image_url,image_small_url,categories_tags,brands`;
     }
 
+    // Add timeout to prevent hanging requests (Open Food Facts can be slow - up to 30s)
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+
     const response = await fetch(url, {
       headers: {
         'User-Agent': 'FreshKeep/1.0 (contact@freshkeep.com)',
       },
+      signal: controller.signal,
     });
+
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       throw new Error(`Open Food Facts API error: ${response.status}`);
@@ -133,6 +140,15 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error('Error fetching products:', error);
-    return NextResponse.json({ error: 'Failed to fetch products' }, { status: 500 });
+
+    // Handle timeout errors specifically
+    if (error instanceof Error && error.name === 'AbortError') {
+      return NextResponse.json({ error: 'Search timed out. Please try again.' }, { status: 504 });
+    }
+
+    return NextResponse.json(
+      { error: 'Failed to fetch products. The catalog service may be temporarily unavailable.' },
+      { status: 500 },
+    );
   }
 }

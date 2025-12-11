@@ -74,6 +74,7 @@ function ShoppingListModal({
   const [catalogItems, setCatalogItems] = useState<CatalogItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
   const [itemQuantities, setItemQuantities] = useState<Record<string, number>>({});
   const [isAdding, setIsAdding] = useState<string | null>(null);
 
@@ -139,36 +140,38 @@ function ShoppingListModal({
     if (!query || query.trim().length < 2) {
       setCatalogItems([]);
       setHasSearched(false);
+      setSearchError(null);
       return;
     }
 
     setIsLoading(true);
     setHasSearched(true);
+    setSearchError(null);
     try {
       const response = await fetch(`/api/products/search?q=${encodeURIComponent(query)}`);
       if (response.ok) {
         const data = await response.json();
         setCatalogItems(data);
+      } else {
+        const errorData = await response.json().catch(() => ({}));
+        setSearchError(errorData.error || 'Search failed. Please try again.');
+        setCatalogItems([]);
       }
     } catch (error) {
       console.error('Error searching products:', error);
+      setSearchError('Network error. Please check your connection and try again.');
+      setCatalogItems([]);
     } finally {
       setIsLoading(false);
     }
   }, []);
 
-  // Debounce the search (300ms for faster response)
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (catalogSearchTerm) {
-        searchProducts(catalogSearchTerm);
-      }
-    }, 300);
-
-    return () => clearTimeout(timer);
-  }, [catalogSearchTerm, searchProducts]);
-
-  // No auto-fetch - user must search for products
+  // Handle search button click
+  const handleSearch = () => {
+    if (catalogSearchTerm.trim().length >= 2) {
+      searchProducts(catalogSearchTerm);
+    }
+  };
 
   const handleButtonClick = (itemTitle: string, inList: boolean) => {
     console.log(`${inList ? 'Removing' : 'Adding'} ${itemTitle} ${inList ? 'from' : 'to'} list`);
@@ -387,13 +390,22 @@ function ShoppingListModal({
 
           <Tab eventKey="catalog" title="🛒 Catalog">
             <div style={{ padding: '1rem 1.5rem' }}>
-              <Form.Control
-                type="search"
-                placeholder="Search products (e.g., milk, bread, eggs)..."
-                value={catalogSearchTerm}
-                onChange={(e) => setCatalogSearchTerm(e.target.value)}
-                style={{ maxWidth: '400px' }}
-              />
+              <div className="d-flex gap-2" style={{ maxWidth: '500px' }}>
+                <Form.Control
+                  type="text"
+                  placeholder="Search products (e.g., milk, bread, eggs)..."
+                  value={catalogSearchTerm}
+                  onChange={(e) => setCatalogSearchTerm(e.target.value)}
+                  style={{ flex: 1 }}
+                />
+                <Button
+                  variant="success"
+                  onClick={handleSearch}
+                  disabled={isLoading || catalogSearchTerm.trim().length < 2}
+                >
+                  {isLoading ? <Spinner animation="border" size="sm" /> : 'Search'}
+                </Button>
+              </div>
               <div className="mt-2 d-flex flex-wrap gap-1">
                 {categoryButtons.map((cat) => (
                   <Button
@@ -412,7 +424,7 @@ function ShoppingListModal({
               </div>
               <div className="mt-2 text-muted" style={{ fontSize: '14px' }}>
                 {isLoading
-                  ? 'Searching...'
+                  ? 'Searching catalog... (this may take up to 30 seconds)'
                   : catalogItems.length > 0
                     ? `Showing ${catalogItems.length} products`
                     : 'Search for products to add to your list'}
@@ -531,10 +543,20 @@ function ShoppingListModal({
                         </div>
                       ))
                     ) : hasSearched ? (
-                      <div className="text-center py-5 text-muted">
-                        <h5>No products found</h5>
-                        <p>Try a different search term</p>
-                      </div>
+                      searchError ? (
+                        <div className="text-center py-5 text-danger">
+                          <h5>Search Error</h5>
+                          <p>{searchError}</p>
+                          <Button variant="outline-danger" size="sm" onClick={() => searchProducts(catalogSearchTerm)}>
+                            Try Again
+                          </Button>
+                        </div>
+                      ) : (
+                        <div className="text-center py-5 text-muted">
+                          <h5>No products found</h5>
+                          <p>Try a different search term</p>
+                        </div>
+                      )
                     ) : (
                       <div className="text-center py-5 text-muted">
                         <h5>Search for products</h5>
