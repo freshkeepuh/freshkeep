@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export const runtime = 'nodejs';
 
+// Simple in-memory cache for search results (persists between requests in dev)
+const searchCache = new Map<string, { data: CatalogProduct[]; timestamp: number }>();
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
 interface OpenFoodFactsProduct {
   code: string;
   product_name: string;
@@ -72,6 +76,19 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Query parameter "q" or "category" is required' }, { status: 400 });
   }
 
+  const cacheKey = `${query || ''}-${category || ''}`;
+
+  // Check cache first
+  const cached = searchCache.get(cacheKey);
+  if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
+    return NextResponse.json(cached.data, {
+      headers: {
+        'Cache-Control': 'public, max-age=300',
+        'X-Cache': 'HIT',
+      },
+    });
+  }
+
   try {
     // Search Open Food Facts API
     let url: string;
@@ -105,7 +122,15 @@ export async function GET(request: NextRequest) {
         brand: p.brands || 'Generic',
       }));
 
-    return NextResponse.json(catalogProducts);
+    // Save to cache
+    searchCache.set(cacheKey, { data: catalogProducts, timestamp: Date.now() });
+
+    return NextResponse.json(catalogProducts, {
+      headers: {
+        'Cache-Control': 'public, max-age=300',
+        'X-Cache': 'MISS',
+      },
+    });
   } catch (error) {
     console.error('Error fetching products:', error);
     return NextResponse.json({ error: 'Failed to fetch products' }, { status: 500 });

@@ -83,13 +83,13 @@ function ShoppingListModal({ show, onHide, listTitle, items }: ShoppingListModal
     }
   }, []);
 
-  // Debounce the search
+  // Debounce the search (300ms for faster response)
   useEffect(() => {
     const timer = setTimeout(() => {
       if (catalogSearchTerm) {
         searchProducts(catalogSearchTerm);
       }
-    }, 500);
+    }, 300);
 
     return () => clearTimeout(timer);
   }, [catalogSearchTerm, searchProducts]);
@@ -100,6 +100,17 @@ function ShoppingListModal({ show, onHide, listTitle, items }: ShoppingListModal
       searchProducts('milk');
     }
   }, [activeTab, catalogItems.length, hasSearched, searchProducts]);
+
+  // Preload popular categories in the background when modal opens
+  useEffect(() => {
+    if (show) {
+      const preloadCategories = ['milk', 'bread', 'eggs'];
+      preloadCategories.forEach((query) => {
+        // Fire and forget - just warm up the cache
+        fetch(`/api/products/search?q=${encodeURIComponent(query)}`).catch(() => {});
+      });
+    }
+  }, [show]);
 
   const handleButtonClick = (itemTitle: string, inList: boolean) => {
     console.log(`${inList ? 'Removing' : 'Adding'} ${itemTitle} ${inList ? 'from' : 'to'} list`);
