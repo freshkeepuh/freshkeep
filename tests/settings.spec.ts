@@ -1,21 +1,22 @@
 import { test, expect } from './auth-utils';
 
-const BASE_URL = process.env.BASE_URL || 'http://localhost:3000';
+const BASE_URL =
+  process.env.PLAYWRIGHT_TEST_BASE_URL || 'http://localhost:3000';
 const SETTINGS_URL = `${BASE_URL}/settings`;
 
-const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const TEST_EMAIL = process.env.PLAYWRIGHT_TEST_USER_EMAIL || 'admin@foo.com';
+const TEST_PASSWORD = process.env.PLAYWRIGHT_TEST_USER_PASSWORD || 'changeme';
 
 test.describe('Settings', () => {
-  test.beforeEach(async ({ page }) => {
+  test('renders and toggles theme (light ↔ dark)', async ({ getUserPage }) => {
+    const page = await getUserPage(TEST_EMAIL, TEST_PASSWORD);
+
     await page.goto(SETTINGS_URL);
     await page.waitForLoadState('networkidle');
-    // Sanity check
     await expect(
       page.getByRole('heading', { name: 'User Settings' }),
     ).toBeVisible();
-  });
 
-  test('renders and toggles theme (light ↔ dark)', async ({ page }) => {
     // Default should be light (no .dark on body)
     await expect
       .poll(async () =>
@@ -32,7 +33,6 @@ test.describe('Settings', () => {
       )
       .toBe(true);
 
-    // dark should now be the checked/active option
     await expect(page.locator('#theme-dark')).toBeChecked();
     await expect(page.locator('#theme-light')).not.toBeChecked();
 
@@ -45,19 +45,25 @@ test.describe('Settings', () => {
       )
       .toBe(false);
 
-    // light should now be checked
     await expect(page.locator('#theme-light')).toBeChecked();
     await expect(page.locator('#theme-dark')).not.toBeChecked();
   });
 
   test('updates profile form (no navigation, controlled input stays)', async ({
-    page,
+    getUserPage,
   }) => {
+    const page = await getUserPage(TEST_EMAIL, TEST_PASSWORD);
+
+    await page.goto(SETTINGS_URL);
+    await page.waitForLoadState('networkidle');
+    await expect(
+      page.getByRole('heading', { name: 'User Settings' }),
+    ).toBeVisible();
+
     const nameInput = page.locator('#firstName');
     await expect(nameInput).toBeVisible();
     await nameInput.fill('Josh Tester');
 
-    // Submit
     await page.getByRole('button', { name: 'Update Profile' }).click();
 
     // Form is client-side only right now; ensure we didn't navigate and value persisted
@@ -65,7 +71,12 @@ test.describe('Settings', () => {
     await expect(nameInput).toHaveValue('Josh Tester');
   });
 
-  test('basic UI is present', async ({ page }) => {
+  test('basic UI is present', async ({ getUserPage }) => {
+    const page = await getUserPage(TEST_EMAIL, TEST_PASSWORD);
+
+    await page.goto(SETTINGS_URL);
+    await page.waitForLoadState('networkidle');
+
     // Section headings
     await expect(
       page.getByRole('heading', { name: 'User Information' }),
@@ -77,7 +88,7 @@ test.describe('Settings', () => {
       page.getByRole('heading', { name: 'Account Actions' }),
     ).toBeVisible();
 
-    // Buttons visible
+    // Buttons / inputs visible
     await expect(
       page.getByRole('button', { name: 'Update Profile' }),
     ).toBeVisible();

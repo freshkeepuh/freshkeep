@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/settings.css';
 import {
@@ -13,6 +12,8 @@ import {
   Form,
   ButtonGroup,
   ToggleButton,
+  Toast,
+  ToastContainer,
 } from 'react-bootstrap';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Modal from 'react-bootstrap/Modal';
@@ -21,14 +22,14 @@ import {
   Palette,
   ExclamationTriangle,
   BoxArrowRight,
-  Camera,
+  CheckCircleFill,
+  ExclamationCircleFill,
 } from 'react-bootstrap-icons';
 
 interface UserData {
   firstName?: string;
   lastName?: string;
   email?: string;
-  profilePicture?: string | null;
   theme?: 'light' | 'dark';
   units?: 'Imperial' | 'Metric';
   country?: string;
@@ -44,32 +45,10 @@ const DEFAULT_USER: UserData = {
   firstName: '',
   lastName: '',
   email: '',
-  profilePicture: null,
   theme: 'light',
   units: DEFAULT_UNITS,
   country: DEFAULT_COUNTRY,
 };
-
-const AVATAR_PLACEHOLDER_CLASS = [
-  'avatar-xl',
-  'rounded-circle',
-  'd-flex',
-  'align-items-center',
-  'justify-content-center',
-  'border',
-  'bg-surface',
-].join(' ');
-
-const AVATAR_ROW_CLASS = [
-  'd-flex',
-  'flex-column',
-  'flex-sm-row',
-  'align-items-center',
-  'justify-content-center',
-  'gap-3',
-  'avatar-row',
-  'w-100',
-].join(' ');
 
 const applyTheme = (t: 'light' | 'dark') => {
   if (typeof document === 'undefined') return;
@@ -83,6 +62,7 @@ const applyTheme = (t: 'light' | 'dark') => {
 
 function Settings({ user = DEFAULT_USER }: Props) {
   const router = useRouter();
+
   const [theme, setTheme] = useState<'light' | 'dark'>(user.theme ?? 'light');
   const [firstName, setFirstName] = useState<string>(user.firstName ?? '');
   const [lastName, setLastName] = useState<string>(user.lastName ?? '');
@@ -93,54 +73,132 @@ function Settings({ user = DEFAULT_USER }: Props) {
   const [country, setCountry] = useState<string>(
     user.country ?? DEFAULT_COUNTRY,
   );
-  const [profilePicture] = useState<string | null>(user.profilePicture ?? null);
-  const [confirmOpen, setConfirmOpen] = useState(false);
 
-  const initials = useMemo(() => {
-    const f = (firstName?.trim()?.[0] ?? '').toUpperCase();
-    const l = (lastName?.trim()?.[0] ?? '').toUpperCase();
-    return f + l || 'U';
-  }, [firstName, lastName]);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+
+  // pop up notif
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastVariant, setToastVariant] = useState<'success' | 'danger'>(
+    'success',
+  );
 
   useEffect(() => {
-    if (typeof window === 'undefined') {
-      return () => {};
+    if (user) {
+      setFirstName(user.firstName ?? '');
+      setLastName(user.lastName ?? '');
+      setEmail(user.email ?? '');
+      setUnits(user.units ?? DEFAULT_UNITS);
+      setCountry(user.country ?? DEFAULT_COUNTRY);
+
+      if (user.theme) {
+        setTheme(user.theme);
+        applyTheme(user.theme);
+      }
     }
+  }, [user]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
 
     const saved = localStorage.getItem('fk-theme') as 'light' | 'dark' | null;
     const sysDark =
       window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
-    const initial = saved ?? (sysDark ? 'dark' : 'light');
+
+    const initial = user.theme ?? saved ?? (sysDark ? 'dark' : 'light');
 
     setTheme(initial);
     applyTheme(initial);
-
-    const mq = window.matchMedia?.('(prefers-color-scheme: dark)');
-    const handler = (e: MediaQueryListEvent) => {
-      if (!localStorage.getItem('fk-theme')) {
-        const next = e.matches ? 'dark' : 'light';
-        setTheme(next);
-        applyTheme(next);
-      }
-    };
-    mq?.addEventListener?.('change', handler);
-    return () => {
-      mq?.removeEventListener?.('change', handler);
-    };
-  }, []);
+  }, [user.theme]);
 
   useEffect(() => {
     applyTheme(theme);
   }, [theme]);
 
-  const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
+  const onSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-  };
+    setIsSaving(true);
 
-  const displayName = `${firstName} ${lastName}`.trim() || 'User';
+    const payload = {
+      firstName,
+      lastName,
+      email,
+      units,
+      country,
+      theme,
+    };
+
+    try {
+      const response = await fetch('/api/user/settings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update settings');
+      }
+
+      setToastVariant('success');
+      setToastMessage('Your settings have been saved successfully.');
+      setShowToast(true);
+      router.refresh();
+    } catch {
+      setToastVariant('danger');
+      setToastMessage('Failed to save settings. Please try again.');
+      setShowToast(true);
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   return (
     <>
+      <ToastContainer
+        position="top-end"
+        className="p-3"
+        style={{ zIndex: 1050 }}
+      >
+        <Toast
+          onClose={() => setShowToast(false)}
+          show={showToast}
+          delay={3000}
+          autohide
+          bg={toastVariant}
+        >
+          <Toast.Header
+            closeButton={false}
+            className="d-flex justify-content-between"
+          >
+            <strong
+              className={
+                toastVariant === 'success'
+                  ? 'me-auto text-success'
+                  : 'me-auto text-danger'
+              }
+            >
+              {toastVariant === 'success' ? (
+                <CheckCircleFill className="me-2" />
+              ) : (
+                <ExclamationCircleFill className="me-2" />
+              )}
+              {toastVariant === 'success' ? 'Success' : 'Error'}
+            </strong>
+            <small>Just now</small>
+            <button
+              type="button"
+              className="btn-close"
+              onClick={() => setShowToast(false)}
+              aria-label="Close"
+            />
+          </Toast.Header>
+          <Toast.Body className="text-white">{toastMessage}</Toast.Body>
+        </Toast>
+      </ToastContainer>
+
       <section className="rounded-4 p-4 p-md-5 mb-4 mb-md-5 header-hero border-0 shadow-xs">
         <h1 className="fw-bold lh-sm m-0 text-body">User Settings</h1>
         <p className="m-0 text-body-secondary mt-2">
@@ -165,37 +223,8 @@ function Settings({ user = DEFAULT_USER }: Props) {
               </div>
             </Card.Header>
 
-            <Card.Body className="pt-3">
+            <Card.Body className="pt-4">
               <form className="vstack gap-3" noValidate onSubmit={onSubmit}>
-                <div className={AVATAR_ROW_CLASS}>
-                  {profilePicture ? (
-                    <Image
-                      src={profilePicture}
-                      alt={`${displayName} avatar`}
-                      className="rounded-circle border object-fit-cover"
-                      width={84}
-                      height={84}
-                    />
-                  ) : (
-                    <div
-                      aria-label="avatar placeholder"
-                      className={AVATAR_PLACEHOLDER_CLASS}
-                    >
-                      <span className="fw-bold">{initials}</span>
-                    </div>
-                  )}
-
-                  <Button
-                    type="button"
-                    variant="outline-secondary"
-                    className="btn-ghost"
-                    aria-label="Change profile picture (placeholder)"
-                  >
-                    <Camera className="me-2" />
-                    Change
-                  </Button>
-                </div>
-
                 <Row className="g-3">
                   <Col md={6}>
                     <FloatingLabel controlId="firstName" label="First Name">
@@ -229,7 +258,9 @@ function Settings({ user = DEFAULT_USER }: Props) {
                         placeholder=""
                         aria-label="Email"
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        readOnly
+                        disabled
+                        className="bg-light"
                       />
                     </FloatingLabel>
                   </Col>
@@ -261,18 +292,23 @@ function Settings({ user = DEFAULT_USER }: Props) {
                       >
                         <option value="USA">USA</option>
                         <option value="Canada">Canada</option>
+                        <option value="UK">United Kingdom</option>
+                        <option value="Australia">Australia</option>
+                        <option value="Japan">Japan</option>
+                        <option value="Other">Other</option>
                       </Form.Select>
                     </FloatingLabel>
                   </Col>
                 </Row>
 
-                <div className="d-grid">
+                <div className="d-grid mt-2">
                   <Button
                     type="submit"
                     variant="primary"
                     className="btn-gradient btn-lg"
+                    disabled={isSaving}
                   >
-                    Update Profile
+                    {isSaving ? 'Updating...' : 'Update Profile'}
                   </Button>
                 </div>
               </form>
@@ -296,7 +332,7 @@ function Settings({ user = DEFAULT_USER }: Props) {
               </div>
             </Card.Header>
 
-            <Card.Body className="pt-3">
+            <Card.Body className="pt-4">
               <div className="vstack gap-2">
                 <span className="form-label mb-1">Theme</span>
                 <ButtonGroup className="segmented w-100">
@@ -352,7 +388,7 @@ function Settings({ user = DEFAULT_USER }: Props) {
               </div>
             </Card.Header>
 
-            <Card.Body className="pt-3">
+            <Card.Body className="pt-4">
               <Button
                 type="button"
                 variant="outline-danger"
