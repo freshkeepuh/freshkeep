@@ -11,7 +11,8 @@ export async function GET() {
   try {
     const session = await getServerSession(authOptions);
 
-    let userSystem = 'imperial';
+    // Default to 'Imperial'
+    let userSystem = 'Imperial';
 
     if (session?.user?.email) {
       const user = await prisma.user.findUnique({
@@ -24,9 +25,10 @@ export async function GET() {
         typeof user.settings === 'object' &&
         !Array.isArray(user.settings)
       ) {
+        // Fetch the saved setting
         const savedSystem = (
-          user.settings as { unitSystem?: string } | null | undefined
-        )?.unitSystem;
+          user.settings as { units?: string } | null | undefined
+        )?.units;
 
         if (savedSystem) {
           userSystem = savedSystem;
@@ -36,7 +38,14 @@ export async function GET() {
 
     const units = await prisma.unit.findMany({
       where: {
-        OR: [{ system: 'universal' }, { system: userSystem }],
+        OR: [
+          // Universal units
+          { system: 'universal' },
+          { system: 'Both' },
+          // Convert to LowerCase
+          { system: userSystem },
+          { system: userSystem.toLowerCase() },
+        ],
       },
       orderBy: {
         name: 'asc',
