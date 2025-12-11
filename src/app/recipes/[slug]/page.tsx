@@ -6,7 +6,21 @@ import Link from 'next/link';
 import styles from '@/app/recipes/page.module.css';
 import slugify from '@/lib/slug';
 import FavoriteHeart from '@/components/FavoriteHeart';
-import { splitIngredientsByStock } from '@/lib/ingredientMatch';
+import DeleteRecipeButton from '@/components/DeleteRecipeButton';
+import RecipeTimerCard from '@/components/RecipeTimerCard';
+import {
+  DIET_META,
+  DIFFICULTY_META,
+  buildInstructionList,
+} from '@/lib/recipeUI';
+import {
+  splitIngredientsByStock,
+  getIngredientName,
+  normalizeIngredients,
+  normalizeInstructions,
+  normalizeNameKey,
+  formatIngredientDisplay,
+} from '@/lib/ingredientMatch';
 
 export const dynamic = 'force-dynamic';
 
@@ -44,12 +58,8 @@ export default async function RecipeViewPage(props: any) {
 
   if (!recipe) notFound();
 
-  const ingredients: string[] = Array.isArray(recipe.ingredients)
-    ? (recipe.ingredients as any)
-    : [];
-  const instructions: string[] = Array.isArray(recipe.instructions)
-    ? (recipe.instructions as any)
-    : [];
+  const ingredients = normalizeIngredients(recipe.ingredients as unknown);
+  const instructions = normalizeInstructions(recipe.instructions as unknown);
 
   // Load all locations for the dropdown (no user filter for now)
   const locations = await prisma.location.findMany({
@@ -62,35 +72,46 @@ export default async function RecipeViewPage(props: any) {
       quantity: { gt: 0 },
       ...(selectedLocationId ? { locId: selectedLocationId } : {}),
     },
-    include: { product: true },
+    include: {
+      product: {
+        include: {
+          unit: true,
+        },
+      },
+    },
+  });
+
+  // Aggregate pantry quantity by normalized product name and unit
+  const pantryQuantities: Record<string, Record<string, number>> = {};
+  instances.forEach((inst) => {
+    const productName = inst.product?.name;
+    if (!productName) return;
+    const key = normalizeNameKey(productName);
+    // Use the DB unit
+    const dbUnit =
+      inst.product.unit?.abbr ?? inst.product.unit?.name ?? 'units';
+    if (!pantryQuantities[key]) {
+      pantryQuantities[key] = {};
+    }
+    pantryQuantities[key][dbUnit] =
+      (pantryQuantities[key][dbUnit] ?? 0) + inst.quantity;
   });
 
   const haveNames = instances
     .map((inst) => inst.product?.name)
     .filter((name): name is string => !!name);
 
-  const { inStock, missing } = splitIngredientsByStock(ingredients, haveNames);
-
-  const difficultyMeta = {
-    EASY: { label: 'Easy', icon: '⭐️' },
-    NORMAL: { label: 'Normal', icon: '⭐️⭐️' },
-    HARD: { label: 'Hard', icon: '⭐️⭐️⭐️' },
-    ANY: { label: 'Any', icon: '🎯' },
-  } as const;
-
-  const dietMeta = {
-    ANY: { label: 'Any', icon: '🍽️' },
-    VEGAN: { label: 'Vegan', icon: '🌱' },
-    VEGETARIAN: { label: 'Vegetarian', icon: '🥕' },
-    PESCETARIAN: { label: 'Pescetarian', icon: '🐟' },
-  } as const;
+  const { inStock, missing } = splitIngredientsByStock(
+    ingredients as any,
+    haveNames,
+  );
 
   const { label: difficultyLabel, icon: difficultyIcon } =
-    difficultyMeta[recipe.difficulty as keyof typeof difficultyMeta] ??
-    difficultyMeta.ANY;
+    DIFFICULTY_META[recipe.difficulty as keyof typeof DIFFICULTY_META] ??
+    DIFFICULTY_META.ANY;
 
   const { label: dietLabel, icon: dietIcon } =
-    dietMeta[recipe.diet as keyof typeof dietMeta] ?? dietMeta.ANY;
+    DIET_META[recipe.diet as keyof typeof DIET_META] ?? DIET_META.ANY;
 
   return (
     <main
@@ -203,23 +224,56 @@ export default async function RecipeViewPage(props: any) {
                     In Stock:
                   </h3>
                   <div className={styles.rpIngredientsGrid}>
-                    {inStock.map((item, idx) => {
-                      const id = `have-${item.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}-${idx}`;
+                    {inStock.map((item: any, idx: number) => {
+                      const name = getIngredientName(item);
+                      const label = formatIngredientDisplay(item);
+                      const id = `have-${name
+                        .replace(/[^a-z0-9]+/gi, '-')
+                        .toLowerCase()}-${idx}`;
+
+                      // Helper text using pantry quantities (may have multiple units)
+                      const pantryKey = normalizeNameKey(name);
+                      const pantryInfo = pantryQuantities[pantryKey];
+
+                      const pantrySummary = pantryInfo
+                        ? Object.entries(pantryInfo)
+                            .filter(([, qty]) => qty > 0)
+                            .map(
+                              ([unitLabel, qty]) =>
+                                `${qty} ${unitLabel ?? 'units'}`,
+                            )
+                            .join(', ')
+                        : '';
+
                       return (
-                        <div key={id} className={styles.rpIngredientItem}>
-                          <input
-                            id={id}
-                            type="checkbox"
-                            className={styles.rpCheckbox}
-                            name="ingredients-have"
-                            value={item}
-                          />
-                          <label htmlFor={id} className={styles.rpMedium}>
-                            {item}
-                          </label>
+                        <div
+                          key={id}
+                          className={`${styles.rpIngredientItem} ${styles.rpIngredientItemColumn}`}
+                        >
+                          <div className={styles.rpIngredientLabelRow}>
+                            <span className={styles.rpMedium}>{label}</span>
+                          </div>
+
+                          {pantryInfo && (
+                            <div
+                              className={styles.rpPantryInfo}
+                              aria-label={`Pantry stock: ${pantrySummary}`}
+                            >
+                              You have:{' '}
+                              {Object.entries(pantryInfo)
+                                .filter(([, qty]) => qty > 0)
+                                .map(([unitLabel, qty], unitIndex) => (
+                                  <span key={unitLabel ?? `unit-${unitIndex}`}>
+                                    {unitIndex > 0 ? ' + ' : ''}
+                                    {qty} {unitLabel ?? 'units'}
+                                  </span>
+                                ))}
+                            </div>
+                          )}
                         </div>
                       );
                     })}
+
                     {inStock.length === 0 && (
                       <p className={styles.rpText}>
                         No ingredients in stock at this location.
@@ -234,20 +288,15 @@ export default async function RecipeViewPage(props: any) {
                     Missing:
                   </h3>
                   <div className={styles.rpIngredientsGrid}>
-                    {missing.map((item, idx) => {
-                      const id = `miss-${item.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}-${idx}`;
+                    {missing.map((item: any, idx: number) => {
+                      const name = getIngredientName(item);
+                      const label = formatIngredientDisplay(item);
+                      const id = `miss-${name
+                        .replace(/[^a-z0-9]+/gi, '-')
+                        .toLowerCase()}-${idx}`;
                       return (
                         <div key={id} className={styles.rpIngredientItem}>
-                          <input
-                            id={id}
-                            type="checkbox"
-                            className={styles.rpCheckbox}
-                            name="ingredients-miss"
-                            value={item}
-                          />
-                          <label htmlFor={id} className={styles.rpMedium}>
-                            {item}
-                          </label>
+                          <span className={styles.rpMedium}>{label}</span>
                         </div>
                       );
                     })}
@@ -257,17 +306,6 @@ export default async function RecipeViewPage(props: any) {
                       </p>
                     )}
                   </div>
-                </div>
-
-                {/* Action Buttons */}
-                <div className={styles.rpRow}>
-                  <button
-                    className={styles.rpBtnDark}
-                    type="button"
-                    style={{ flex: 1 }}
-                  >
-                    Add to Shopping List
-                  </button>
                 </div>
               </div>
             </div>
@@ -294,8 +332,14 @@ export default async function RecipeViewPage(props: any) {
                 >
                   <h1 className={styles.rpViewTitle}>{recipe.title}</h1>
 
-                  {/* Favorite toggle */}
-                  <FavoriteHeart recipeId={recipe.id} variant="ondetail" />
+                  {/* Favorite and Delete toggle */}
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    <FavoriteHeart recipeId={recipe.id} variant="ondetail" />
+                    <DeleteRecipeButton
+                      recipeId={recipe.id}
+                      variant="ondetail"
+                    />
+                  </div>
                 </div>
                 {/* Stats (time, difficulty, and diet) */}
                 <div className={styles.rpRow}>
@@ -323,6 +367,9 @@ export default async function RecipeViewPage(props: any) {
                 </div>
               </div>
 
+              {/* Cooking Timer Card */}
+              <RecipeTimerCard defaultMinutes={recipe.cookTime} />
+
               {/* Instructions Card */}
               <div className={styles.rpCard} style={{ flex: 1 }}>
                 <div
@@ -333,29 +380,17 @@ export default async function RecipeViewPage(props: any) {
                   <h2 className={styles.rpH1}>Instructions</h2>
                 </div>
 
-                {/* Instruction Steps */}
                 <ol className={styles.rpSteps}>
-                  {(() => {
-                    const seen = new Map<string, number>();
-                    return instructions.map((step, idx) => {
-                      const slug = step
-                        .toLowerCase()
-                        .replace(/[^a-z0-9]+/g, '-')
-                        .replace(/(^-|-$)/g, '');
-                      const n = (seen.get(slug) ?? 0) + 1;
-                      seen.set(slug, n);
-                      const key = `step-${slug}-${n}`;
-
-                      return (
-                        <li key={key} className={styles.rpStep}>
-                          <div className={styles.rpStepNumber}>{idx + 1}</div>
-                          <p className={styles.rpMedium} style={{ margin: 0 }}>
-                            {step}
-                          </p>
-                        </li>
-                      );
-                    });
-                  })()}
+                  {buildInstructionList(instructions).map(
+                    ({ key, step, index }) => (
+                      <li key={key} className={styles.rpStep}>
+                        <div className={styles.rpStepNumber}>{index}</div>
+                        <p className={styles.rpMedium} style={{ margin: 0 }}>
+                          {step}
+                        </p>
+                      </li>
+                    ),
+                  )}
                 </ol>
               </div>
             </div>
