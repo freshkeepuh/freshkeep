@@ -3,13 +3,14 @@
   grid-template-columns: 2fr;
   gap: 2rem;
   padding: 2rem;
+  /*
   background: #f9fafc;
-  background-color: #d7ede5;
+  background-color: #d7ede5; */
 }
 
 .dashboardHeader {
   grid-column: 1 / -1;
-  background: #fff;
+  /*background: #fff;*/
   padding: 1.5rem;
   border-radius: 12px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
@@ -27,7 +28,7 @@
 
 .btnGreen {
   background-color: #2ecc71;
-  color: white;
+ /* color: white;*/
   border: none;
   border-radius: 8px;
   padding: 0.5rem 1rem;
@@ -64,7 +65,7 @@
 
 .card {
   flex: 1;
-  background: #fff;
+ /* background: #fff;*/
   border-radius: 10px;
   padding: 1rem;
   text-align: center;
@@ -76,7 +77,7 @@
 }
 
 .card:hover {
-  background-color: #e9eff5;
+  /*background-color: #e9eff5;*/
   transform: scale(1.03);
   cursor: pointer;
 }
@@ -94,7 +95,7 @@
 }
 
 .totalItems .cardIcon {
-  background-color: #e6f7ec;
+ /* background-color: #e6f7ec;*/
   text-align: center;
   align-items: center;
   justify-content: center;
@@ -102,7 +103,7 @@
 }
 
 .expiringSoon .cardIcon {
-  background-color: #f7f6e6;
+/*  background-color: #f7f6e6; */
   text-align: center;
   align-items: center;
   justify-content: center;
@@ -110,7 +111,7 @@
 }
 
 .shoppingListCount .cardIcon {
-  background-color: #e6f1f7;
+ /* background-color: #e6f1f7;*/
   text-align: center;
   align-items: center;
   justify-content: center;
@@ -118,7 +119,7 @@
 }
 
 .storageSection {
-  background: #fff;
+/*  background: #fff; */
   padding: 1.5rem;
   border-radius: 12px;
 }
@@ -132,10 +133,10 @@
 }
 
 .locationGroup {
-  background: #ffffff;
+ /* background: #ffffff;*/
   border-radius: 10px;
   padding: 0.75rem 0 1rem;
-  border: 1px solid #e5e7eb;
+  /*border: 1px solid #e5e7eb;*/
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
   width: 100%;
 }
@@ -191,10 +192,10 @@
   justify-content: center;
 }
 
-.storageCard:hover {
-  outline: 2px solid #e6f1f7;
+/*.storageCard:hover {
+ outline: 2px solid #e6f1f7;
   background-color: #f7fbff;
-}
+}*/
 
 .storageIcon {
   font-size: 2.25rem;
@@ -221,14 +222,14 @@
 .removeBtn {
   color: #c0392b;
   &:hover {
-    background-color: #fdecea;
+    /*background-color: #fdecea;*/
     color: #e74c3c;
   }
 }
 
 .expiringSoonBox,
 .quickActions {
-  background: #fff;
+  /*background: #fff;*/
   border-radius: 12px;
   margin-bottom: 2rem;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
@@ -240,7 +241,7 @@
   color: black;
   margin-top: 0.5rem;
   border: none;
-  background: #eaf3ff;
+  /*background: #eaf3ff;*/
   padding: 0.5rem;
   border-radius: 6px;
   cursor: pointer;
@@ -250,4 +251,9 @@
 .mobileFixed {
   max-width: 420px;
   margin: 0 auto;
+}
+
+.dark h1,
+.dark h2 {
+  color: rgb(25,28,31);
 }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
 import React, { useEffect, useMemo, useState } from 'react';
@@ -54,7 +55,7 @@ function DashboardPage(): React.JSX.Element {
       }
     };
     load().catch((err) => {
-      console.error('Failed to load dashboard data', err);
+      //  console.error('Failed to load dashboard data', err);
     });
   }, []);
 
@@ -88,7 +89,7 @@ function DashboardPage(): React.JSX.Element {
       setStorages((prev) => [...prev, createdStorage]);
       setTotalItems((prev) => prev + (createdStorage.itemCount || 0));
     } catch (error) {
-      console.error('Error adding storage:', error);
+      // console.error('Error adding storage:', error);
       const message =
         error instanceof Error ? error.message : 'Failed to add storage';
       await swal('Error', message, 'error');

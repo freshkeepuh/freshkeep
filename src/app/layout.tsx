@@ -16,12 +16,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className="light" suppressHydrationWarning>
       <body className="wrapper">
         <Providers>
           <div className="d-flex flex-column min-vh-100">
             <NavBar />
-            <main className="flex-grow-1">{children}</main>
+            <main className="flex-grow-1">
+              <Providers>{children}</Providers>
+            </main>
             <Footer />
           </div>
         </Providers>

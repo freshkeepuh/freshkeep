@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 'use client';
 
 import React, { ChangeEvent, useEffect, useState } from 'react';
@@ -163,13 +164,13 @@ function CreateCatalogItemForm() {
 
       const apiUrl = `https://www.googleapis.com/customsearch/v1?${params.toString()}`;
 
-      console.log('Search query:', enhancedQuery);
+      // console.log('Search query:', enhancedQuery);
 
       const response = await fetch(apiUrl);
       const data = await response.json();
 
       if (!response.ok) {
-        console.error('API Error:', data);
+        // console.error('API Error:', data);
 
         if (response.status === 403) {
           throw new Error(
@@ -194,10 +195,10 @@ function CreateCatalogItemForm() {
         setSearchResults([]);
       } else {
         setSearchResults(data.items);
-        console.log('Found', data.items.length, 'images');
+        // console.log('Found', data.items.length, 'images');
       }
     } catch (error: any) {
-      console.error('Search error:', error);
+      // console.error('Search error:', error);
       setSearchError(error.message || 'Image search failed. Please try again.');
       setSearchResults([]);
     } finally {
@@ -289,7 +290,7 @@ function CreateCatalogItemForm() {
       setUploadProgress('Upload complete!');
       return fileUrl;
     } catch (error) {
-      console.error('Image upload error:', error);
+      // console.error('Image upload error:', error);
       setUploadProgress(null);
       throw error;
     }
@@ -334,13 +335,13 @@ function CreateCatalogItemForm() {
 
       if (selectedImageUrl) {
         finalImageUrl = selectedImageUrl;
-        console.log('Using Google image URL:', selectedImageUrl);
+        // console.log('Using Google image URL:', selectedImageUrl);
       } else if (imageFile) {
         try {
           finalImageUrl = await uploadImageToS3(imageFile);
-          console.log('Uploaded to S3:', finalImageUrl);
+          // console.log('Uploaded to S3:', finalImageUrl);
         } catch (uploadError) {
-          console.error('Image upload failed:', uploadError);
+          // console.error('Image upload failed:', uploadError);
           setMessage({
             type: 'error',
             text: 'Image upload failed. Please try again or create item without image.',
@@ -379,7 +380,7 @@ function CreateCatalogItemForm() {
         router.push('/catalog');
       }, 1500);
     } catch (error) {
-      console.error('Error creating catalog item:', error);
+      // console.error('Error creating catalog item:', error);
       setMessage({
         type: 'error',
         text: 'Failed to create catalog item. Please try again.',

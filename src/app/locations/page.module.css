@@ -1,5 +1,5 @@
 .main {
-  background: #f4f4f4;
+ /* background: #f4f4f4;*/
   min-height: 100vh;
   padding-top: 2rem;
   padding-bottom: 2rem;
@@ -31,7 +31,7 @@
 }
 
 .panel {
-  background: #fff;
+  /*background: #fff;*/
   border-radius: 8px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   padding: 1.5rem;

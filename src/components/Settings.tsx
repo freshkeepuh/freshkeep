@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/settings.css';
+import { useTheme as useNextTheme } from 'next-themes';
 import {
   Row,
   Col,
@@ -83,7 +84,13 @@ const applyTheme = (t: 'light' | 'dark') => {
 
 function Settings({ user = DEFAULT_USER }: Props) {
   const router = useRouter();
-  const [theme, setTheme] = useState<'light' | 'dark'>(user.theme ?? 'light');
+
+  const {
+    theme: nextTheme,
+    setTheme: setNextTheme,
+    resolvedTheme,
+  } = useNextTheme();
+
   const [firstName, setFirstName] = useState<string>(user.firstName ?? '');
   const [lastName, setLastName] = useState<string>(user.lastName ?? '');
   const [email, setEmail] = useState<string>(user.email ?? '');
@@ -112,14 +119,14 @@ function Settings({ user = DEFAULT_USER }: Props) {
       window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
     const initial = saved ?? (sysDark ? 'dark' : 'light');
 
-    setTheme(initial);
+    setNextTheme(initial);
     applyTheme(initial);
 
     const mq = window.matchMedia?.('(prefers-color-scheme: dark)');
     const handler = (e: MediaQueryListEvent) => {
       if (!localStorage.getItem('fk-theme')) {
         const next = e.matches ? 'dark' : 'light';
-        setTheme(next);
+        setNextTheme(next);
         applyTheme(next);
       }
     };
@@ -127,11 +134,15 @@ function Settings({ user = DEFAULT_USER }: Props) {
     return () => {
       mq?.removeEventListener?.('change', handler);
     };
-  }, []);
+  }, [setNextTheme]);
 
   useEffect(() => {
-    applyTheme(theme);
-  }, [theme]);
+    const t = resolvedTheme ?? nextTheme ?? 'light';
+    if (typeof document !== 'undefined') {
+      document.body.classList.remove('light', 'dark');
+      document.body.classList.add(t);
+    }
+  }, [resolvedTheme, nextTheme]);
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
@@ -303,13 +314,15 @@ function Settings({ user = DEFAULT_USER }: Props) {
                   <ToggleButton
                     id="theme-light"
                     type="radio"
-                    variant={theme === 'light' ? 'light' : 'outline-secondary'}
+                    variant={
+                      resolvedTheme === 'light' ? 'light' : 'outline-secondary'
+                    }
                     name="theme"
                     value="light"
-                    checked={theme === 'light'}
-                    onChange={() => setTheme('light')}
+                    checked={resolvedTheme === 'light'}
+                    onChange={() => setNextTheme('light')}
                     className="segmented-item"
-                    aria-pressed={theme === 'light'}
+                    aria-pressed={resolvedTheme === 'light'}
                   >
                     <span className="swatch swatch-light rounded-2 border me-2" />
                     Light
@@ -318,14 +331,14 @@ function Settings({ user = DEFAULT_USER }: Props) {
                     id="theme-dark"
                     type="radio"
                     variant={
-                      theme === 'dark' ? 'secondary' : 'outline-secondary'
+                      nextTheme === 'dark' ? 'secondary' : 'outline-secondary'
                     }
                     name="theme"
                     value="dark"
-                    checked={theme === 'dark'}
-                    onChange={() => setTheme('dark')}
+                    checked={nextTheme === 'dark'}
+                    onChange={() => setNextTheme('dark')}
                     className="segmented-item"
-                    aria-pressed={theme === 'dark'}
+                    aria-pressed={nextTheme === 'dark'}
                   >
                     <span className="swatch swatch-dark rounded-2 me-2" />
                     Dark

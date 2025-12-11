@@ -1,6 +1,7 @@
 'use client';
 
 import { SessionProvider } from 'next-auth/react';
+import { ThemeProvider } from 'next-themes';
 import React from 'react';
 
 interface Props {
@@ -8,8 +9,16 @@ interface Props {
   children?: React.ReactNode;
 }
 
-function Providers({ children }: Props) {
-  return <SessionProvider>{children}</SessionProvider>;
+export default function Providers({ children }: Props) {
+  return (
+    <SessionProvider>
+      <ThemeProvider
+        attribute="class"
+        storageKey="fk-theme"
+        defaultTheme="system"
+      >
+        {children}
+      </ThemeProvider>
+    </SessionProvider>
+  );
 }
-
-export default Providers;
