@@ -128,7 +128,7 @@ function StoreCard({ store, onUpdate, onDelete }: StoreCardProps) {
             <Card>
               <Card.Body>
                 <Form.Group className="mb-3">
-                  <RequiredLabel aria-required="true">
+                  <RequiredLabel htmlFor="StoreName" aria-required="true">
                     Store Name:
                   </RequiredLabel>
                   <Form.Control
