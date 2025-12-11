@@ -13,7 +13,7 @@ export interface IAddressSubForm {
   city: string;
   state: string;
   zipcode: string;
-  country: Country; // Country;
+  country: Country;
 }
 
 interface AddressSubFormProps {
@@ -34,7 +34,7 @@ function AddressSubForm({ address, isEditing }: AddressSubFormProps) {
     return (
       <>
         <Form.Group>
-          <RequiredLabel htmlFor="address1">Address 1:</RequiredLabel>
+          <RequiredLabel>Address 1:</RequiredLabel>
           <Form.Control
             id="address1"
             type="text"
@@ -47,7 +47,8 @@ function AddressSubForm({ address, isEditing }: AddressSubFormProps) {
             {errors.address1 && errors.address1.message?.toString()}
           </Form.Control.Feedback>
         </Form.Group>
-        <Form.Group>
+
+        <Form.Group className="mb-3 pt-3">
           <Form.Label>Address 2:</Form.Label>
           <Form.Control
             id="address2"
@@ -65,7 +66,7 @@ function AddressSubForm({ address, isEditing }: AddressSubFormProps) {
           <Row>
             <Col>
               <Form.Group>
-                <RequiredLabel htmlFor="city">City:</RequiredLabel>
+                <RequiredLabel>City:</RequiredLabel>
                 <Form.Control
                   id="city"
                   type="text"
@@ -81,7 +82,7 @@ function AddressSubForm({ address, isEditing }: AddressSubFormProps) {
             </Col>
             <Col>
               <Form.Group>
-                <RequiredLabel htmlFor="state">State:</RequiredLabel>
+                <RequiredLabel>State:</RequiredLabel>
                 <Form.Control
                   id="state"
                   type="text"
@@ -97,7 +98,7 @@ function AddressSubForm({ address, isEditing }: AddressSubFormProps) {
             </Col>
             <Col>
               <Form.Group>
-                <RequiredLabel htmlFor="zipcode">Zipcode:</RequiredLabel>
+                <RequiredLabel>Zipcode:</RequiredLabel>
                 <Form.Control
                   id="zipcode"
                   type="text"
@@ -113,13 +114,13 @@ function AddressSubForm({ address, isEditing }: AddressSubFormProps) {
             </Col>
           </Row>
         </Container>
-        <Form.Group>
-          <CountryDropDown
-            label="Country:"
-            required
-            onChange={() => {}}
-            disabled={false}
-          />
+
+        <Form.Group className="mb-3 pt-3">
+          <Form.Label>Country:</Form.Label>
+          <CountryDropDown />
+          <Form.Control.Feedback type="invalid">
+            {errors.country && errors.country.message?.toString()}
+          </Form.Control.Feedback>
         </Form.Group>
       </>
     );

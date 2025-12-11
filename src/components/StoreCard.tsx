@@ -10,6 +10,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import AddressSubForm, { IAddressSubForm } from '@/components/AddressSubForm';
 import { storeValidation } from '@/lib/validationSchemas';
 import MapComponent from '@/components/MapDisplay';
+import RequiredLabel from './RequiredLabel';
 
 interface IStoreForm extends IAddressSubForm {
   id?: string | undefined;
@@ -122,92 +123,93 @@ function StoreCard({ store, onUpdate, onDelete }: StoreCardProps) {
   if (isEditing) {
     return (
       <FormProvider {...methods}>
-        <Form onSubmit={methods.handleSubmit(handleSaveClick)}>
-          <Card>
-            <Card.Body>
-              <Form.Group className="mb-3">
-                <Form.Label aria-required="true">Store Name: *</Form.Label>
-                <Form.Control
-                  id="name"
-                  type="text"
-                  placeholder="Store Name"
-                  size="lg"
-                  {...methods.register('name')}
-                  isInvalid={!!methods.formState.errors.name}
+        <Modal show={isEditing} onHide={handleCancelClick} size="lg" centered>
+          <Form onSubmit={methods.handleSubmit(handleSaveClick)}>
+            <Card>
+              <Card.Body>
+                <Form.Group className="mb-3">
+                  <RequiredLabel aria-required="true">Store Name:</RequiredLabel>
+                  <Form.Control
+                    id="name"
+                    type="text"
+                    placeholder="Store Name"
+                    size="lg"
+                    {...methods.register('name')}
+                    isInvalid={!!methods.formState.errors.name}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {methods.formState.errors.name && methods.formState.errors.name.message}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <AddressSubForm
+                  address={store}
+                  isEditing={isEditing}
                 />
-                <Form.Control.Feedback type="invalid">
-                  {methods.formState.errors.name &&
-                    methods.formState.errors.name.message}
-                </Form.Control.Feedback>
-              </Form.Group>
-              <AddressSubForm address={store} isEditing={isEditing} />
-              <Form.Group className="mb-3">
-                <Form.Label>Phone:</Form.Label>
-                <Form.Control
-                  id="phone"
-                  type="text"
-                  placeholder="Phone"
-                  size="lg"
-                  {...methods.register('phone')}
-                  isInvalid={!!methods.formState.errors.phone}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {methods.formState.errors.phone &&
-                    methods.formState.errors.phone.message}
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Website:</Form.Label>
-                <Form.Control
-                  id="website"
-                  type="text"
-                  placeholder="Website"
-                  size="lg"
-                  {...methods.register('website')}
-                  isInvalid={!!methods.formState.errors.website}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {methods.formState.errors.website &&
-                    methods.formState.errors.website.message}
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Picture URL:</Form.Label>
-                <Form.Control
-                  id="picture"
-                  type="text"
-                  placeholder="Picture URL"
-                  size="lg"
-                  {...methods.register('picture')}
-                  isInvalid={!!methods.formState.errors.picture}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {methods.formState.errors.picture &&
-                    methods.formState.errors.picture.message}
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Card.Body>
-            <Card.Footer className="d-flex justify-content-end">
-              <Button
-                variant="outline-secondary"
-                type="button"
-                className="me-2"
-                onClick={handleCancelClick}
-                disabled={isSubmitting}
-              >
-                <X className="mb-1" />
-              </Button>
-              <Button
-                variant="success"
-                type="submit"
-                className="me-2"
-                disabled={isSubmitting}
-              >
-                <Check className="mb-1" />
-              </Button>
-            </Card.Footer>
-          </Card>
-        </Form>
+                <Form.Group className="mb-3">
+                  <Form.Label>Phone:</Form.Label>
+                  <Form.Control
+                    id="phone"
+                    type="text"
+                    placeholder="Phone"
+                    size="lg"
+                    {...methods.register('phone')}
+                    isInvalid={!!methods.formState.errors.phone}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {methods.formState.errors.phone && methods.formState.errors.phone.message}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Website:</Form.Label>
+                  <Form.Control
+                    id="website"
+                    type="text"
+                    placeholder="Website"
+                    size="lg"
+                    {...methods.register('website')}
+                    isInvalid={!!methods.formState.errors.website}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {methods.formState.errors.website && methods.formState.errors.website.message}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Picture URL:</Form.Label>
+                  <Form.Control
+                    id="picture"
+                    type="text"
+                    placeholder="Picture URL"
+                    size="lg"
+                    {...methods.register('picture')}
+                    isInvalid={!!methods.formState.errors.picture}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {methods.formState.errors.picture && methods.formState.errors.picture.message}
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </Card.Body>
+              <Card.Footer className="d-flex justify-content-end">
+                <Button
+                  variant="outline-secondary"
+                  type="button"
+                  className="me-2"
+                  onClick={handleCancelClick}
+                  disabled={isSubmitting}
+                >
+                  <X className="mb-1" />
+                </Button>
+                <Button
+                  variant="success"
+                  type="submit"
+                  className="me-2"
+                  disabled={isSubmitting}
+                >
+                  <Check className="mb-1" />
+                </Button>
+              </Card.Footer>
+            </Card>
+          </Form>
+        </Modal>
       </FormProvider>
     );
   }
