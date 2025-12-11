@@ -20,12 +20,30 @@ ALTER TABLE "public"."ShoppingListItem" DROP CONSTRAINT "ShoppingListItem_unitId
 -- DropIndex
 DROP INDEX "public"."ShoppingListItem_listId_prodId_unitId_key";
 
--- AlterTable
-ALTER TABLE "ShoppingListItem" DROP COLUMN "prodId",
-DROP COLUMN "unitId",
+-- Step 1: Add new columns as nullable first
+ALTER TABLE "ShoppingListItem" 
 ADD COLUMN     "category" TEXT,
 ADD COLUMN     "image" TEXT,
-ADD COLUMN     "name" TEXT NOT NULL,
+ADD COLUMN     "name" TEXT;
+
+-- Step 2: Populate name from the related Product table before dropping prodId
+UPDATE "ShoppingListItem" sli
+SET "name" = p."name",
+    "image" = p."image",
+    "category" = p."category"
+FROM "Product" p
+WHERE sli."prodId" = p."_id";
+
+-- Step 3: Set a default name for any items that didn't have a valid product reference
+UPDATE "ShoppingListItem"
+SET "name" = 'Unknown Item'
+WHERE "name" IS NULL;
+
+-- Step 4: Now make name NOT NULL and drop old columns
+ALTER TABLE "ShoppingListItem" 
+DROP COLUMN "prodId",
+DROP COLUMN "unitId",
+ALTER COLUMN "name" SET NOT NULL,
 ALTER COLUMN "quantity" SET DEFAULT 1,
 ALTER COLUMN "quantity" SET DATA TYPE INTEGER;
 
