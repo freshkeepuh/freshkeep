@@ -29,7 +29,7 @@ export async function PUT(req: Request) {
         quantity: numericQuantity,
         expiresAt: expiresAt ? new Date(expiresAt) : null,
         // allow null to clear the unit, or omit to keep existing
-        unitId: unitId ?? undefined,
+        unitId: unitId && unitId !== '' ? unitId : null,
       },
       include: {
         product: true,
