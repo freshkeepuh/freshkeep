@@ -83,9 +83,24 @@ function ShoppingListPage() {
     setShowModal(true);
   };
 
-  const handleItemAdded = () => {
+  const handleItemAdded = async () => {
     // Refresh the list data after adding an item
-    fetchShoppingLists();
+    try {
+      const response = await fetch('/api/shoppingList');
+      if (response.ok) {
+        const data = await response.json();
+        setShoppingLists(data);
+        // Also update the selected list if it's open
+        if (selectedList) {
+          const updatedList = data.find((list: ShoppingList) => list.id === selectedList.id);
+          if (updatedList) {
+            setSelectedList(updatedList);
+          }
+        }
+      }
+    } catch (err) {
+      console.error('Error refreshing shopping lists:', err);
+    }
   };
 
   const handleCreateList = async () => {
