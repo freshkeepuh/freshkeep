@@ -515,3 +515,45 @@
   align-items: center;
   gap: 6px;
 }
+
+/* Base timer display */
+.rpTimerDisplay {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin: 8px 0 16px;
+  color: #2d5f3e;
+  letter-spacing: 0.1em;
+}
+
+/* Last 10 seconds (orange) */
+.rpTimerWarn {
+  color: #d97706;
+}
+
+/* When timer reaches 0 */
+.rpTimerDone {
+  color: #d11a2a; /* bright red */
+  animation: timerPulse 0.8s ease-in-out;
+  animation-iteration-count: 10;
+}
+
+@keyframes timerPulse {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+/* Timer input */
+.rpTimerInput {
+  width: 80px;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 8px 10px;
+  font-size: 0.9rem;
+  outline: none;
+}
+.rpTimerInput:focus {
+  box-shadow: 0 0 0 3px rgba(0,0,0,0.08);
+}
+

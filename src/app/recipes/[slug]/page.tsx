@@ -6,6 +6,8 @@ import Link from 'next/link';
 import styles from '@/app/recipes/page.module.css';
 import slugify from '@/lib/slug';
 import FavoriteHeart from '@/components/FavoriteHeart';
+import DeleteRecipeButton from '@/components/DeleteRecipeButton';
+import RecipeTimerCard from '@/components/RecipeTimerCard';
 import { splitIngredientsByStock } from '@/lib/ingredientMatch';
 
 export const dynamic = 'force-dynamic';
@@ -406,8 +408,14 @@ export default async function RecipeViewPage(props: any) {
                 >
                   <h1 className={styles.rpViewTitle}>{recipe.title}</h1>
 
-                  {/* Favorite toggle */}
-                  <FavoriteHeart recipeId={recipe.id} variant="ondetail" />
+                  {/* Favorite and Delete toggle */}
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    <FavoriteHeart recipeId={recipe.id} variant="ondetail" />
+                    <DeleteRecipeButton
+                      recipeId={recipe.id}
+                      variant="ondetail"
+                    />
+                  </div>
                 </div>
                 {/* Stats (time, difficulty, and diet) */}
                 <div className={styles.rpRow}>
@@ -434,7 +442,8 @@ export default async function RecipeViewPage(props: any) {
                   </div>
                 </div>
               </div>
-
+              {/* Cooking Timer Card */}
+              <RecipeTimerCard defaultMinutes={recipe.cookTime} />
               {/* Instructions Card */}
               <div className={styles.rpCard} style={{ flex: 1 }}>
                 <div
