@@ -70,20 +70,32 @@ function StoresForm() {
         <Row className="g-3 w-100">
           {stores.map((store) => (
             <Col key={store.id} xs={12} sm={6} md={4} lg={3}>
-              <div style={{ background: '#c2edcb', padding: '18px', borderRadius: '5px' }}>
+              <div
+                style={{
+                  background: '#c2edcb',
+                  padding: '18px',
+                  borderRadius: '5px',
+                }}
+              >
                 <StoreCard
                   key={store.id}
                   store={store}
                   onUpdate={async (updatedStore: Store) => {
                     try {
-                      setStores((prevStores) => prevStores.map((s) => (s.id === updatedStore.id ? updatedStore : s)));
+                      setStores((prevStores) =>
+                        prevStores.map((s) =>
+                          s.id === updatedStore.id ? updatedStore : s,
+                        ),
+                      );
                     } catch (err) {
                       console.error('Failed to update store:', err);
                     }
                   }}
                   onDelete={async (id) => {
                     try {
-                      setStores((prevStores) => prevStores.filter((s) => s.id !== id));
+                      setStores((prevStores) =>
+                        prevStores.filter((s) => s.id !== id),
+                      );
                     } catch (err) {
                       console.error('Failed to delete store:', err);
                     }

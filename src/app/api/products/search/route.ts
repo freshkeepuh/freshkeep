@@ -3,7 +3,10 @@ import { NextRequest, NextResponse } from 'next/server';
 export const runtime = 'nodejs';
 
 // Simple in-memory cache for search results (persists between requests in dev)
-const searchCache = new Map<string, { data: CatalogProduct[]; timestamp: number }>();
+const searchCache = new Map<
+  string,
+  { data: CatalogProduct[]; timestamp: number }
+>();
 const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
 
 interface OpenFoodFactsProduct {
@@ -68,12 +71,15 @@ function mapCategory(categories: string[] | undefined): string {
 }
 
 export async function GET(request: NextRequest) {
-  const searchParams = request.nextUrl.searchParams;
+  const { searchParams } = request.nextUrl;
   const query = searchParams.get('q');
   const category = searchParams.get('category');
 
   if (!query && !category) {
-    return NextResponse.json({ error: 'Query parameter "q" or "category" is required' }, { status: 400 });
+    return NextResponse.json(
+      { error: 'Query parameter "q" or "category" is required' },
+      { status: 400 },
+    );
   }
 
   const cacheKey = `${query || ''}-${category || ''}`;
@@ -143,11 +149,17 @@ export async function GET(request: NextRequest) {
 
     // Handle timeout errors specifically
     if (error instanceof Error && error.name === 'AbortError') {
-      return NextResponse.json({ error: 'Search timed out. Please try again.' }, { status: 504 });
+      return NextResponse.json(
+        { error: 'Search timed out. Please try again.' },
+        { status: 504 },
+      );
     }
 
     return NextResponse.json(
-      { error: 'Failed to fetch products. The catalog service may be temporarily unavailable.' },
+      {
+        error:
+          'Failed to fetch products. The catalog service may be temporarily unavailable.',
+      },
       { status: 500 },
     );
   }

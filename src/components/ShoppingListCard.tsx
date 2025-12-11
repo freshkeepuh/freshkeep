@@ -13,7 +13,13 @@ interface ShoppingListCardProps {
 
 const MAX_VISIBLE_ITEMS = 4;
 
-function ShoppingListCard({ listTitle, items, onEdit, onDelete, isDeleting }: ShoppingListCardProps) {
+function ShoppingListCard({
+  listTitle,
+  items,
+  onEdit,
+  onDelete,
+  isDeleting,
+}: ShoppingListCardProps) {
   const visibleItems = items.slice(0, MAX_VISIBLE_ITEMS);
   const remainingCount = items.length - MAX_VISIBLE_ITEMS;
   const hasMoreItems = remainingCount > 0;
@@ -40,8 +46,15 @@ function ShoppingListCard({ listTitle, items, onEdit, onDelete, isDeleting }: Sh
         }}
       >
         <div className="d-flex justify-content-between align-items-center">
-          <h5 style={{ margin: 0, fontWeight: 600, fontSize: '1.1rem' }}>{listTitle}</h5>
-          <Badge bg="light" text="success" pill style={{ fontSize: '0.75rem', fontWeight: 600 }}>
+          <h5 style={{ margin: 0, fontWeight: 600, fontSize: '1.1rem' }}>
+            {listTitle}
+          </h5>
+          <Badge
+            bg="light"
+            text="success"
+            pill
+            style={{ fontSize: '0.75rem', fontWeight: 600 }}
+          >
             {items.length} {items.length === 1 ? 'item' : 'items'}
           </Badge>
         </div>
@@ -113,7 +126,8 @@ function ShoppingListCard({ listTitle, items, onEdit, onDelete, isDeleting }: Sh
                   fontStyle: 'italic',
                 }}
               >
-                +{remainingCount} more {remainingCount === 1 ? 'item' : 'items'}...
+                +{remainingCount} more {remainingCount === 1 ? 'item' : 'items'}
+                ...
               </div>
             )}
           </div>

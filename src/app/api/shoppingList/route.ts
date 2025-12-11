@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import getResponseError from '@/lib/routeHelpers';
-import { createShoppingList, readShoppingLists } from '@/lib/dbShoppingListActions';
+import {
+  createShoppingList,
+  readShoppingLists,
+} from '@/lib/dbShoppingListActions';
 
 export const runtime = 'nodejs';
 
