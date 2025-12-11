@@ -59,6 +59,16 @@ function ShoppingListModal({ show, onHide, listTitle, items }: ShoppingListModal
   const [catalogItems, setCatalogItems] = useState<CatalogItem[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
+  const [itemQuantities, setItemQuantities] = useState<Record<string, number>>({});
+
+  // Get quantity for an item (default to 1)
+  const getQuantity = (itemId: string) => itemQuantities[itemId] || 1;
+
+  // Update quantity for an item
+  const updateQuantity = (itemId: string, newQuantity: number) => {
+    if (newQuantity < 1) return;
+    setItemQuantities((prev) => ({ ...prev, [itemId]: newQuantity }));
+  };
 
   // Debounced search function
   const searchProducts = useCallback(async (query: string) => {
@@ -94,23 +104,7 @@ function ShoppingListModal({ show, onHide, listTitle, items }: ShoppingListModal
     return () => clearTimeout(timer);
   }, [catalogSearchTerm, searchProducts]);
 
-  // Load initial products when catalog tab is opened
-  useEffect(() => {
-    if (activeTab === 'catalog' && catalogItems.length === 0 && !hasSearched) {
-      searchProducts('milk');
-    }
-  }, [activeTab, catalogItems.length, hasSearched, searchProducts]);
-
-  // Preload popular categories in the background when modal opens
-  useEffect(() => {
-    if (show) {
-      const preloadCategories = ['milk', 'bread', 'eggs'];
-      preloadCategories.forEach((query) => {
-        // Fire and forget - just warm up the cache
-        fetch(`/api/products/search?q=${encodeURIComponent(query)}`).catch(() => {});
-      });
-    }
-  }, [show]);
+  // No auto-fetch - user must search for products
 
   const handleButtonClick = (itemTitle: string, inList: boolean) => {
     console.log(`${inList ? 'Removing' : 'Adding'} ${itemTitle} ${inList ? 'from' : 'to'} list`);
@@ -169,7 +163,7 @@ function ShoppingListModal({ show, onHide, listTitle, items }: ShoppingListModal
                   className="bg-success bg-opacity-10 border-bottom border-success border-2 py-2"
                   style={{
                     display: 'grid',
-                    gridTemplateColumns: '40px 80px 1fr 100px 100px 100px 90px',
+                    gridTemplateColumns: '40px 80px 1fr 120px 100px 90px',
                     gap: '12px',
                     paddingLeft: '1.5rem',
                     paddingRight: '1.5rem',
@@ -196,10 +190,9 @@ function ShoppingListModal({ show, onHide, listTitle, items }: ShoppingListModal
                     />
                   </div>
                   <div>Image</div>
-                  <div>Item Name</div>
-                  <div>Type</div>
-                  <div>Storage</div>
-                  <div>Store</div>
+                  <div>Product Name</div>
+                  <div>Category</div>
+                  <div>Quantity</div>
                   <div className="text-center">Actions</div>
                 </div>
 
@@ -212,7 +205,7 @@ function ShoppingListModal({ show, onHide, listTitle, items }: ShoppingListModal
                           className="bg-white border rounded mb-2 py-2 px-3"
                           style={{
                             display: 'grid',
-                            gridTemplateColumns: '40px 80px 1fr 100px 100px 100px 90px',
+                            gridTemplateColumns: '40px 80px 1fr 120px 100px 90px',
                             gap: '12px',
                             alignItems: 'center',
                             transition: 'all 0.2s',
@@ -269,15 +262,33 @@ function ShoppingListModal({ show, onHide, listTitle, items }: ShoppingListModal
                           </div>
 
                           <div>
-                            <Badge bg="secondary" className="px-2 py-1" style={{ fontSize: '11px' }}>
-                              {item.storageType}
-                            </Badge>
-                          </div>
-
-                          <div>
-                            <Badge bg="secondary" className="px-2 py-1" style={{ fontSize: '11px' }}>
-                              {item.store}
-                            </Badge>
+                            <div
+                              className="d-flex align-items-center rounded-pill overflow-hidden"
+                              style={{ border: '1px solid #dee2e6', width: 'fit-content' }}
+                            >
+                              <Button
+                                variant="light"
+                                size="sm"
+                                onClick={() => updateQuantity(item.id, getQuantity(item.id) - 1)}
+                                className="border-0 px-2 py-1 rounded-0"
+                                style={{ fontSize: '14px', color: 'var(--bs-danger)' }}
+                                disabled={getQuantity(item.id) <= 1}
+                              >
+                                −
+                              </Button>
+                              <span className="px-2 fw-bold text-center" style={{ fontSize: '13px', minWidth: '30px' }}>
+                                {getQuantity(item.id)}
+                              </span>
+                              <Button
+                                variant="light"
+                                size="sm"
+                                onClick={() => updateQuantity(item.id, getQuantity(item.id) + 1)}
+                                className="border-0 px-2 py-1 rounded-0"
+                                style={{ fontSize: '14px', color: 'var(--bs-success)' }}
+                              >
+                                +
+                              </Button>
+                            </div>
                           </div>
 
                           <div className="text-center">
@@ -333,7 +344,11 @@ function ShoppingListModal({ show, onHide, listTitle, items }: ShoppingListModal
                 ))}
               </div>
               <div className="mt-2 text-muted" style={{ fontSize: '14px' }}>
-                {isLoading ? 'Searching...' : `Showing ${catalogItems.length} products from Open Food Facts`}
+                {isLoading
+                  ? 'Searching...'
+                  : catalogItems.length > 0
+                    ? `Showing ${catalogItems.length} products`
+                    : 'Search for products to add to your list'}
               </div>
             </div>
 
@@ -343,7 +358,7 @@ function ShoppingListModal({ show, onHide, listTitle, items }: ShoppingListModal
                   className="bg-primary bg-opacity-10 border-bottom border-primary border-2 py-2"
                   style={{
                     display: 'grid',
-                    gridTemplateColumns: '80px 1fr 120px 100px 100px',
+                    gridTemplateColumns: '80px 1fr 120px 100px',
                     gap: '12px',
                     paddingLeft: '1.5rem',
                     paddingRight: '1.5rem',
@@ -358,7 +373,6 @@ function ShoppingListModal({ show, onHide, listTitle, items }: ShoppingListModal
                   <div>Image</div>
                   <div>Product Name</div>
                   <div>Category</div>
-                  <div>Brand</div>
                   <div className="text-center">Actions</div>
                 </div>
 
@@ -376,7 +390,7 @@ function ShoppingListModal({ show, onHide, listTitle, items }: ShoppingListModal
                           className="bg-white border rounded mb-2 py-2 px-3"
                           style={{
                             display: 'grid',
-                            gridTemplateColumns: '80px 1fr 120px 100px 100px',
+                            gridTemplateColumns: '80px 1fr 120px 100px',
                             gap: '12px',
                             alignItems: 'center',
                             transition: 'all 0.2s',
@@ -423,12 +437,6 @@ function ShoppingListModal({ show, onHide, listTitle, items }: ShoppingListModal
                           <div>
                             <Badge bg="info" className="px-2 py-1" style={{ fontSize: '11px' }}>
                               {item.category}
-                            </Badge>
-                          </div>
-
-                          <div>
-                            <Badge bg="secondary" className="px-2 py-1" style={{ fontSize: '11px' }}>
-                              {item.brand}
                             </Badge>
                           </div>
 
