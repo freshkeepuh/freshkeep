@@ -34,7 +34,7 @@ function AddressSubForm({ address, isEditing }: AddressSubFormProps) {
     return (
       <>
         <Form.Group>
-          <RequiredLabel>Address 1:</RequiredLabel>
+          <RequiredLabel htmlFor="address1">Address 1:</RequiredLabel>
           <Form.Control
             id="address1"
             type="text"
@@ -66,7 +66,7 @@ function AddressSubForm({ address, isEditing }: AddressSubFormProps) {
           <Row>
             <Col>
               <Form.Group>
-                <RequiredLabel>City:</RequiredLabel>
+                <RequiredLabel htmlFor="city">City:</RequiredLabel>
                 <Form.Control
                   id="city"
                   type="text"
@@ -82,7 +82,7 @@ function AddressSubForm({ address, isEditing }: AddressSubFormProps) {
             </Col>
             <Col>
               <Form.Group>
-                <RequiredLabel>State:</RequiredLabel>
+                <RequiredLabel htmlFor="state">State:</RequiredLabel>
                 <Form.Control
                   id="state"
                   type="text"
@@ -98,7 +98,7 @@ function AddressSubForm({ address, isEditing }: AddressSubFormProps) {
             </Col>
             <Col>
               <Form.Group>
-                <RequiredLabel>Zipcode:</RequiredLabel>
+                <RequiredLabel htmlFor="zipcode">Zipcode:</RequiredLabel>
                 <Form.Control
                   id="zipcode"
                   type="text"
