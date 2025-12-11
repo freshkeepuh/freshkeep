@@ -690,7 +690,7 @@
       "difficulty": "NORMAL",
       "diet": "ANY",
       "ingredients": [
-        { "name": "chicken cutlets", "quantity": 2, "unitName": "each" },
+        { "name": "chicken breast", "quantity": 2, "unitName": "each" },
         { "name": "panko breadcrumbs", "quantity": 1, "unitName": "cup" },
         { "name": "eggs", "quantity": 1, "unitName": "each", "note": "beaten" },
         { "name": "flour", "quantity": 0.5, "unitName": "cup" },
@@ -719,7 +719,7 @@
           "note": "diced"
         },
         {
-          "name": "steamed rice",
+          "name": "rice",
           "quantity": 2,
           "unitName": "cup",
           "note": "cooked"
@@ -815,7 +815,7 @@
         { "name": "paprika", "quantity": 1, "unitName": "teaspoon" },
         { "name": "lemon", "quantity": 1, "unitName": "each" },
         {
-          "name": "white rice",
+          "name": "rice",
           "quantity": 2,
           "unitName": "cup",
           "note": "cooked"
@@ -851,7 +851,7 @@
           "note": "sliced"
         },
         {
-          "name": "white rice",
+          "name": "rice",
           "quantity": 2,
           "unitName": "cup",
           "note": "cooked"
@@ -1023,7 +1023,7 @@
         { "name": "ground beef", "quantity": 1, "unitName": "pound" },
         { "name": "egg", "quantity": 4, "unitName": "each" },
         {
-          "name": "white rice",
+          "name": "rice",
           "quantity": 3,
           "unitName": "cup",
           "note": "cooked"
@@ -1094,7 +1094,7 @@
       "ingredients": [
         { "name": "spam", "quantity": 1, "unitName": "each", "note": "1 can" },
         {
-          "name": "white rice",
+          "name": "rice",
           "quantity": 3,
           "unitName": "cup",
           "note": "cooked"
@@ -1123,7 +1123,7 @@
       "difficulty": "EASY",
       "diet": "ANY",
       "ingredients": [
-        { "name": "day-old rice", "quantity": 2, "unitName": "cup" },
+        { "name": "rice", "quantity": 2, "unitName": "cup" },
         {
           "name": "kimchi",
           "quantity": 1,
@@ -1269,7 +1269,7 @@
       "difficulty": "EASY",
       "diet": "VEGAN",
       "ingredients": [
-        { "name": "day-old rice", "quantity": 3, "unitName": "cup" },
+        { "name": "rice", "quantity": 3, "unitName": "cup" },
         {
           "name": "frozen peas and carrots",
           "quantity": 1,
@@ -1314,7 +1314,7 @@
           "note": "block, pressed"
         },
         { "name": "flour", "quantity": 0.5, "unitName": "cup" },
-        { "name": "plant milk", "quantity": 0.5, "unitName": "cup" },
+        { "name": "milk", "quantity": 0.5, "unitName": "cup" },
         { "name": "panko", "quantity": 1, "unitName": "cup" },
         {
           "name": "Japanese curry roux",
@@ -1410,7 +1410,7 @@
         },
         { "name": "butter", "quantity": 3, "unitName": "tablespoon" },
         {
-          "name": "milk or cream",
+          "name": "milk",
           "quantity": 0.33,
           "unitName": "cup"
         },
@@ -1459,7 +1459,7 @@
         },
         { "name": "lemon", "quantity": 1, "unitName": "each" },
         {
-          "name": "white rice",
+          "name": "rice",
           "quantity": 2,
           "unitName": "cup",
           "note": "cooked"

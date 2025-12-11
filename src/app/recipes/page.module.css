@@ -353,12 +353,6 @@
   cursor: pointer;
 }
 
-.rpCheckbox {
-  width: 16px;
-  height: 16px;
-  cursor: pointer;
-}
-
 /* Secondary Button */
 .rpBtnSecondary {
   background: #f5f5f5;
