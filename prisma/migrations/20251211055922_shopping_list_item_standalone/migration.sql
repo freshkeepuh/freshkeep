@@ -47,6 +47,13 @@ ALTER COLUMN "name" SET NOT NULL,
 ALTER COLUMN "quantity" SET DEFAULT 1,
 ALTER COLUMN "quantity" SET DATA TYPE INTEGER;
 
+-- Step 5: Remove duplicate items (keep the one with highest quantity, or first if same)
+DELETE FROM "ShoppingListItem" a
+USING "ShoppingListItem" b
+WHERE a."listId" = b."listId"
+  AND a."name" = b."name"
+  AND a."_id" > b."_id";
+
 -- CreateIndex
 CREATE UNIQUE INDEX "ShoppingListItem_listId_name_key" ON "ShoppingListItem"("listId", "name");
 
