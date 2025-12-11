@@ -116,8 +116,13 @@ function AddressSubForm({ address, isEditing }: AddressSubFormProps) {
         </Container>
 
         <Form.Group className="mb-3 pt-3">
-          <Form.Label>Country:</Form.Label>
-          <CountryDropDown />
+          <RequiredLabel htmlFor="country">Country:</RequiredLabel>
+          <CountryDropDown
+            label="country"
+            disabled={false}
+            required={true}
+            onChange={() => {}}
+          />
           <Form.Control.Feedback type="invalid">
             {errors.country && errors.country.message?.toString()}
           </Form.Control.Feedback>
