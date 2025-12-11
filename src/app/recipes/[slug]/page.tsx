@@ -8,114 +8,21 @@ import slugify from '@/lib/slug';
 import FavoriteHeart from '@/components/FavoriteHeart';
 import DeleteRecipeButton from '@/components/DeleteRecipeButton';
 import RecipeTimerCard from '@/components/RecipeTimerCard';
-import { splitIngredientsByStock } from '@/lib/ingredientMatch';
+import {
+  DIET_META,
+  DIFFICULTY_META,
+  buildInstructionList,
+} from '@/lib/recipeUI';
+import {
+  splitIngredientsByStock,
+  getIngredientName,
+  normalizeIngredients,
+  normalizeInstructions,
+  normalizeNameKey,
+  formatIngredientDisplay,
+} from '@/lib/ingredientMatch';
 
 export const dynamic = 'force-dynamic';
-
-interface UiIngredient {
-  name: string;
-  quantity?: number;
-  unitName?: string;
-  note?: string;
-}
-
-/**
- * Normalize raw DB ingredients (string[] or object[]) into UiIngredient[].
- */
-const normalizeIngredients = (value: unknown): UiIngredient[] => {
-  if (!Array.isArray(value)) return [];
-
-  return value.map((ing: any) => {
-    // Old shape: "chicken thighs"
-    if (typeof ing === 'string') {
-      return { name: ing };
-    }
-
-    // New shape: { name, quantity, unitName, note }
-    if (ing && typeof ing === 'object') {
-      let name: any;
-      if (typeof ing.name === 'string') {
-        name = ing.name;
-      } else {
-        name = ing.name != null ? String(ing.name) : '';
-      }
-
-      return {
-        name,
-        quantity: typeof ing.quantity === 'number' ? ing.quantity : undefined,
-        unitName:
-          typeof ing.unitName === 'string' && ing.unitName.length > 0
-            ? ing.unitName
-            : undefined,
-        note:
-          typeof ing.note === 'string' && ing.note.length > 0
-            ? ing.note
-            : undefined,
-      };
-    }
-
-    // Fallback – weird value, just stringify
-    return { name: String(ing ?? '') };
-  });
-};
-
-/**
- * Normalize instructions from JSON into string[]
- */
-const normalizeInstructions = (value: unknown): string[] => {
-  if (!Array.isArray(value)) return [];
-  return value.map((step) => String(step ?? ''));
-};
-
-/**
- * Get just the ingredient name (no quantity) from either a string or object.
- */
-const getIngredientName = (item: UiIngredient | string): string => {
-  if (typeof item === 'string') return item;
-  if (item && typeof item.name === 'string') return item.name;
-  return '';
-};
-
-/**
- * Format ingredient for display like "2 cups flour" or "1 nori".
- * Treats "each"/"piece"/"ea"/"pc" as a plain count, so you get
- * "2 saimin noodles" instead of "2 each saimin noodles".
- */
-const formatIngredientDisplay = (item: UiIngredient | string): string => {
-  if (typeof item === 'string') return item;
-
-  const name = item?.name ?? '';
-  if (!name) return '';
-
-  const qty =
-    typeof item.quantity === 'number' && Number.isFinite(item.quantity)
-      ? item.quantity
-      : undefined;
-
-  const unitRaw =
-    typeof item.unitName === 'string' && item.unitName.length > 0
-      ? item.unitName
-      : undefined;
-
-  let qtyStr: string;
-  if (Number.isInteger(qty)) {
-    qtyStr = qty != null ? String(qty) : '';
-  } else {
-    qtyStr = qty != null ? String(qty) : '';
-  }
-
-  // Units that should be treated as a plain count
-  const COUNT_UNITS = ['each', 'ea', 'piece', 'pc', 'pieces'];
-
-  const useUnit = unitRaw && !COUNT_UNITS.includes(unitRaw.toLowerCase());
-
-  const parts: string[] = [];
-  if (qtyStr) parts.push(qtyStr);
-  if (useUnit) parts.push(unitRaw); // e.g. "cup", "tbsp", "oz"
-  parts.push(name); // ingredient name
-
-  return parts.join(' ');
-};
 
 export default async function RecipeViewPage(props: any) {
   const { slug: routeSlug } = await Promise.resolve(props?.params);
@@ -165,7 +72,29 @@ export default async function RecipeViewPage(props: any) {
       quantity: { gt: 0 },
       ...(selectedLocationId ? { locId: selectedLocationId } : {}),
     },
-    include: { product: true },
+    include: {
+      product: {
+        include: {
+          unit: true,
+        },
+      },
+    },
+  });
+
+  // Aggregate pantry quantity by normalized product name and unit
+  const pantryQuantities: Record<string, Record<string, number>> = {};
+  instances.forEach((inst) => {
+    const productName = inst.product?.name;
+    if (!productName) return;
+    const key = normalizeNameKey(productName);
+    // Use the DB unit
+    const dbUnit =
+      inst.product.unit?.abbr ?? inst.product.unit?.name ?? 'units';
+    if (!pantryQuantities[key]) {
+      pantryQuantities[key] = {};
+    }
+    pantryQuantities[key][dbUnit] =
+      (pantryQuantities[key][dbUnit] ?? 0) + inst.quantity;
   });
 
   const haveNames = instances
@@ -177,26 +106,12 @@ export default async function RecipeViewPage(props: any) {
     haveNames,
   );
 
-  const difficultyMeta = {
-    EASY: { label: 'Easy', icon: '⭐️' },
-    NORMAL: { label: 'Normal', icon: '⭐️⭐️' },
-    HARD: { label: 'Hard', icon: '⭐️⭐️⭐️' },
-    ANY: { label: 'Any', icon: '🎯' },
-  } as const;
-
-  const dietMeta = {
-    ANY: { label: 'Any', icon: '🍽️' },
-    VEGAN: { label: 'Vegan', icon: '🌱' },
-    VEGETARIAN: { label: 'Vegetarian', icon: '🥕' },
-    PESCETARIAN: { label: 'Pescetarian', icon: '🐟' },
-  } as const;
-
   const { label: difficultyLabel, icon: difficultyIcon } =
-    difficultyMeta[recipe.difficulty as keyof typeof difficultyMeta] ??
-    difficultyMeta.ANY;
+    DIFFICULTY_META[recipe.difficulty as keyof typeof DIFFICULTY_META] ??
+    DIFFICULTY_META.ANY;
 
   const { label: dietLabel, icon: dietIcon } =
-    dietMeta[recipe.diet as keyof typeof dietMeta] ?? dietMeta.ANY;
+    DIET_META[recipe.diet as keyof typeof DIET_META] ?? DIET_META.ANY;
 
   return (
     <main
@@ -315,21 +230,50 @@ export default async function RecipeViewPage(props: any) {
                       const id = `have-${name
                         .replace(/[^a-z0-9]+/gi, '-')
                         .toLowerCase()}-${idx}`;
+
+                      // Helper text using pantry quantities (may have multiple units)
+                      const pantryKey = normalizeNameKey(name);
+                      const pantryInfo = pantryQuantities[pantryKey];
+
+                      const pantrySummary = pantryInfo
+                        ? Object.entries(pantryInfo)
+                            .filter(([, qty]) => qty > 0)
+                            .map(
+                              ([unitLabel, qty]) =>
+                                `${qty} ${unitLabel ?? 'units'}`,
+                            )
+                            .join(', ')
+                        : '';
+
                       return (
-                        <div key={id} className={styles.rpIngredientItem}>
-                          <input
-                            id={id}
-                            type="checkbox"
-                            className={styles.rpCheckbox}
-                            name="ingredients-have"
-                            value={label}
-                          />
-                          <label htmlFor={id} className={styles.rpMedium}>
-                            {label}
-                          </label>
+                        <div
+                          key={id}
+                          className={`${styles.rpIngredientItem} ${styles.rpIngredientItemColumn}`}
+                        >
+                          <div className={styles.rpIngredientLabelRow}>
+                            <span className={styles.rpMedium}>{label}</span>
+                          </div>
+
+                          {pantryInfo && (
+                            <div
+                              className={styles.rpPantryInfo}
+                              aria-label={`Pantry stock: ${pantrySummary}`}
+                            >
+                              You have:{' '}
+                              {Object.entries(pantryInfo)
+                                .filter(([, qty]) => qty > 0)
+                                .map(([unitLabel, qty], unitIndex) => (
+                                  <span key={unitLabel ?? `unit-${unitIndex}`}>
+                                    {unitIndex > 0 ? ' + ' : ''}
+                                    {qty} {unitLabel ?? 'units'}
+                                  </span>
+                                ))}
+                            </div>
+                          )}
                         </div>
                       );
                     })}
+
                     {inStock.length === 0 && (
                       <p className={styles.rpText}>
                         No ingredients in stock at this location.
@@ -352,16 +296,7 @@ export default async function RecipeViewPage(props: any) {
                         .toLowerCase()}-${idx}`;
                       return (
                         <div key={id} className={styles.rpIngredientItem}>
-                          <input
-                            id={id}
-                            type="checkbox"
-                            className={styles.rpCheckbox}
-                            name="ingredients-miss"
-                            value={label}
-                          />
-                          <label htmlFor={id} className={styles.rpMedium}>
-                            {label}
-                          </label>
+                          <span className={styles.rpMedium}>{label}</span>
                         </div>
                       );
                     })}
@@ -371,17 +306,6 @@ export default async function RecipeViewPage(props: any) {
                       </p>
                     )}
                   </div>
-                </div>
-
-                {/* Action Buttons */}
-                <div className={styles.rpRow}>
-                  <button
-                    className={styles.rpBtnDark}
-                    type="button"
-                    style={{ flex: 1 }}
-                  >
-                    Add to Shopping List
-                  </button>
                 </div>
               </div>
             </div>
@@ -442,8 +366,10 @@ export default async function RecipeViewPage(props: any) {
                   </div>
                 </div>
               </div>
+
               {/* Cooking Timer Card */}
               <RecipeTimerCard defaultMinutes={recipe.cookTime} />
+
               {/* Instructions Card */}
               <div className={styles.rpCard} style={{ flex: 1 }}>
                 <div
@@ -454,29 +380,17 @@ export default async function RecipeViewPage(props: any) {
                   <h2 className={styles.rpH1}>Instructions</h2>
                 </div>
 
-                {/* Instruction Steps */}
                 <ol className={styles.rpSteps}>
-                  {(() => {
-                    const seen = new Map<string, number>();
-                    return instructions.map((step, idx) => {
-                      const slug = step
-                        .toLowerCase()
-                        .replace(/[^a-z0-9]+/g, '-')
-                        .replace(/(^-|-$)/g, '');
-                      const n = (seen.get(slug) ?? 0) + 1;
-                      seen.set(slug, n);
-                      const key = `step-${slug}-${n}`;
-
-                      return (
-                        <li key={key} className={styles.rpStep}>
-                          <div className={styles.rpStepNumber}>{idx + 1}</div>
-                          <p className={styles.rpMedium} style={{ margin: 0 }}>
-                            {step}
-                          </p>
-                        </li>
-                      );
-                    });
-                  })()}
+                  {buildInstructionList(instructions).map(
+                    ({ key, step, index }) => (
+                      <li key={key} className={styles.rpStep}>
+                        <div className={styles.rpStepNumber}>{index}</div>
+                        <p className={styles.rpMedium} style={{ margin: 0 }}>
+                          {step}
+                        </p>
+                      </li>
+                    ),
+                  )}
                 </ol>
               </div>
             </div>

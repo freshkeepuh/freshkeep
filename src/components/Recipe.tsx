@@ -5,15 +5,12 @@ import styles from '@/app/recipes/page.module.css';
 import Image from 'next/image';
 import Link from 'next/link';
 import slugify from '@/lib/slug';
+import {
+  type UiIngredient,
+  formatIngredientDisplay,
+} from '@/lib/ingredientMatch';
+import { DIFFICULTY_EMOJI, DIET_EMOJI } from '@/lib/recipeUI';
 import FavoriteHeart from './FavoriteHeart';
-
-// Ingredient UI type
-export interface RecipeIngredient {
-  name: string;
-  quantity?: number;
-  unitName?: string;
-  note?: string;
-}
 
 // Strict UI type
 export interface Recipe {
@@ -23,7 +20,7 @@ export interface Recipe {
   cookTime: number;
   difficulty: 'Easy' | 'Normal' | 'Hard' | 'Any';
   diet: 'Vegan' | 'Vegetarian' | 'Pescetarian' | 'Any';
-  ingredients: RecipeIngredient[]; // 👈 was string[]
+  ingredients: UiIngredient[];
   image?: string;
   haveCount?: number;
   missingCount?: number;
@@ -47,27 +44,9 @@ type MaxTimeFilter = '< 15 min' | '< 30 min' | '< 45 min' | '< 60 min' | 'Any';
 type DifficultyFilter = Recipe['difficulty'];
 type DietFilter = Recipe['diet'];
 
-// Small helpers to show emojis for labels
-const DIFFICULTY_EMOJI: Record<DifficultyFilter, string> = {
-  Easy: '⭐️',
-  Normal: '⭐️⭐️',
-  Hard: '⭐️⭐️⭐️',
-  Any: '🎯',
-};
-
-const DIET_EMOJI: Record<DietFilter, string> = {
-  Vegan: '🌱',
-  Vegetarian: '🥕',
-  Pescetarian: '🐟',
-  Any: '🍽️',
-};
-
+// Helpers that read from the emoji maps
 const getDifficultyEmoji = (d: DifficultyFilter) => DIFFICULTY_EMOJI[d];
 const getDietEmoji = (d: DietFilter) => DIET_EMOJI[d];
-
-// Turn an ingredient object into a display string
-const ingredientLabel = (ing: RecipeIngredient | string): string =>
-  typeof ing === 'string' ? ing : ing.name;
 
 export default function RecipesPage({
   initialRecipes,
@@ -100,9 +79,7 @@ export default function RecipesPage({
 
     setIngredients((prev) => {
       const exists = prev.some((i) => i.toLowerCase() === v.toLowerCase());
-      if (exists) {
-        return prev;
-      }
+      if (exists) return prev;
       return [...prev, v];
     });
 
@@ -130,10 +107,11 @@ export default function RecipesPage({
     const maxMinutes = parseMaxTime(maxTime);
     const q = committedQuery.toLowerCase();
 
-    // Filter logic
     const result = recipes.filter((r) => {
       const ingredientNames = Array.isArray(r.ingredients)
-        ? r.ingredients.map((ing) => ingredientLabel(ing).toLowerCase())
+        ? r.ingredients
+            .map((ing) => formatIngredientDisplay(ing).toLowerCase())
+            .filter(Boolean)
         : [];
 
       const matchesQuery =
@@ -381,7 +359,6 @@ export default function RecipesPage({
                     <p className={styles.rpH2}>{r.title}</p>
                   </div>
                   <div className={styles.rpMeta}>
-                    {/* Cook time, difficulty & diet with emojis */}
                     <div>
                       <span>⏳</span>
                       <span>
@@ -402,7 +379,7 @@ export default function RecipesPage({
                     <p className={styles.rpH3}>Ingredients:</p>
                     <p className={styles.rpText}>
                       {r.ingredients
-                        .map((ing) => ingredientLabel(ing))
+                        .map((ing) => formatIngredientDisplay(ing))
                         .join(', ')}
                     </p>
                   </div>

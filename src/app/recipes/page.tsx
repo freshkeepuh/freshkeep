@@ -1,87 +1,14 @@
 import { prisma } from '@/lib/prisma';
 import RecipesPage from '@/components/Recipe';
 import type { Recipe as UiRecipe } from '@/components/Recipe';
-import type { RecipeDifficulty, RecipeDiet } from '@prisma/client';
-import { splitIngredientsByStock } from '@/lib/ingredientMatch';
+import {
+  splitIngredientsByStock,
+  normalizeIngredients,
+} from '@/lib/ingredientMatch';
+import { DIFFICULTY_META, DIET_META } from '@/lib/recipeUI';
 
-/**
- * Normalize raw DB ingredients (string[] or object[]) into UiRecipe ingredients.
- */
-const normalizeIngredients = (value: unknown): UiRecipe['ingredients'] => {
-  if (!Array.isArray(value)) return [];
-
-  return value.map((ing: any) => {
-    // Old shape: "chicken thighs"
-    if (typeof ing === 'string') {
-      return { name: ing };
-    }
-
-    // New shape: { name, quantity, unitName, note }
-    if (ing && typeof ing === 'object') {
-      let name: any;
-      if (typeof ing.name === 'string') {
-        name = ing.name;
-      } else {
-        name = ing.name != null ? String(ing.name) : '';
-      }
-
-      return {
-        name,
-        quantity: typeof ing.quantity === 'number' ? ing.quantity : undefined,
-        unitName:
-          typeof ing.unitName === 'string' && ing.unitName.length > 0
-            ? ing.unitName
-            : undefined,
-        note:
-          typeof ing.note === 'string' && ing.note.length > 0
-            ? ing.note
-            : undefined,
-      };
-    }
-
-    // Fallback – weird value, just stringify
-    return { name: String(ing ?? '') };
-  });
-};
-
-/**
- * Maps Prisma RecipeDifficulty enum to UI difficulty label.
- */
-const toUiDifficulty = (d: RecipeDifficulty): UiRecipe['difficulty'] => {
-  switch (d) {
-    case 'EASY':
-      return 'Easy';
-    case 'NORMAL':
-      return 'Normal';
-    case 'HARD':
-      return 'Hard';
-    default:
-      return 'Any';
-  }
-};
-
-/**
- * Maps Prisma RecipeDiet enum to UI diet label.
- */
-const toUiDiet = (d: RecipeDiet): UiRecipe['diet'] => {
-  switch (d) {
-    case 'VEGAN':
-      return 'Vegan';
-    case 'VEGETARIAN':
-      return 'Vegetarian';
-    case 'PESCETARIAN':
-      return 'Pescetarian';
-    default:
-      return 'Any';
-  }
-};
-
-/**
- * Server component for /recipes.
- * Loads recipes, stock, and locations, then passes data to the client page.
- */
 export default async function Page(props: any) {
-  // Normalize searchParams (Next may give it as a Promise)
+  // Normalize searchParams
   const rawSearchParams = await Promise.resolve(props?.searchParams ?? {});
   const selectedLocationId =
     typeof rawSearchParams.locationId === 'string' &&
@@ -89,7 +16,7 @@ export default async function Page(props: any) {
       ? rawSearchParams.locationId
       : '';
 
-  // Load recipes, in-stock product instances and locations
+  // Load recipes, in-stock product instances, and locations
   const [rows, instances, locations] = await Promise.all([
     prisma.recipe.findMany({ orderBy: { createdAt: 'asc' } }),
     prisma.productInstance.findMany({
@@ -102,27 +29,30 @@ export default async function Page(props: any) {
     prisma.location.findMany({ orderBy: { name: 'asc' } }),
   ]);
 
-  // Collect product names that are in stock at the selected location
+  // Check Which ingredient names we have
   const haveNames = instances
     .map((inst) => inst.product?.name)
     .filter((name): name is string => !!name);
 
-  // Build recipe objects with have/missing counts
+  // Build UI recipes
   const initialRecipes: UiRecipe[] = rows.map((r) => {
-    // r.ingredients can be string[] (old) or object[] (new)
-    const ingredients = normalizeIngredients(r.ingredients as unknown);
+    const ingredients = normalizeIngredients(r.ingredients);
 
     const { haveCount, missingCount, totalIngredients } =
       splitIngredientsByStock(ingredients, haveNames);
+
+    // Use meta maps from recipeUI
+    const difficultyMeta = DIFFICULTY_META[r.difficulty] ?? DIFFICULTY_META.ANY;
+    const dietMeta = DIET_META[r.diet] ?? DIET_META.ANY;
 
     return {
       id: r.id,
       slug: r.slug!,
       title: r.title,
       cookTime: r.cookTime,
-      difficulty: toUiDifficulty(r.difficulty),
-      diet: toUiDiet(r.diet),
-      ingredients, // full ingredient objects
+      difficulty: difficultyMeta.label,
+      diet: dietMeta.label,
+      ingredients,
       image: r.image ?? undefined,
       haveCount,
       missingCount,
@@ -130,13 +60,11 @@ export default async function Page(props: any) {
     };
   });
 
-  // Shape locations for the dropdown
   const locationOptions = locations.map((loc) => ({
     id: loc.id,
     name: loc.name,
   }));
 
-  // Render client-side recipes page with initial data
   return (
     <RecipesPage
       initialRecipes={initialRecipes}
