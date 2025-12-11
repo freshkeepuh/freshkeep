@@ -29,8 +29,8 @@ ADD COLUMN     "name" TEXT;
 -- Step 2: Populate name from the related Product table before dropping prodId
 UPDATE "ShoppingListItem" sli
 SET "name" = p."name",
-    "image" = p."image",
-    "category" = p."category"
+    "image" = p."picture",
+    "category" = p."category"::TEXT
 FROM "Product" p
 WHERE sli."prodId" = p."_id";
 
