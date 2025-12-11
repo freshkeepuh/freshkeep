@@ -28,10 +28,7 @@ const prisma = new PrismaClient();
  * @returns The found item.
  * @throws If the array is empty, name is empty, or item is not found.
  */
-const findByName = <T extends { name: string }>(
-  array: T[],
-  name: string,
-): T => {
+const findByName = <T extends { name: string }>(array: T[], name: string): T => {
   if (!array || array.length === 0) {
     throw new Error('Array is empty or undefined.');
   }
@@ -129,8 +126,7 @@ async function seedUsers(): Promise<User[]> {
       users.push(created);
     } else {
       // on reseed, do NOT clobber existing settings (user changes win)
-      const prevSettings =
-        (existing.settings as Record<string, any> | null) ?? {};
+      const prevSettings = (existing.settings as Record<string, any> | null) ?? {};
       const settingsForUpdate = {
         ...DEFAULT_SETTINGS,
         ...(account.settings ?? {}),
@@ -231,16 +227,12 @@ async function seedLocations(owner: User): Promise<Array<Location>> {
  * @param locations The Locations in which the StorageAreas are found.
  * @returns {Promise<Array<StorageArea>>} A promise that resolves to an array of created or existing storageAreas.
  */
-async function seedStorageAreas(
-  locations: Array<Location>,
-  owner: User,
-): Promise<Array<StorageArea>> {
+async function seedStorageAreas(locations: Array<Location>, owner: User): Promise<Array<StorageArea>> {
   const storageAreas: Array<StorageArea> = [];
   for (const defaultStorageArea of config.defaultStorageAreas) {
     const location = findByName(locations, defaultStorageArea.locationName);
 
-    const storageType =
-      (defaultStorageArea.type as StorageType) || StorageType.Pantry;
+    const storageType = (defaultStorageArea.type as StorageType) || StorageType.Pantry;
 
     const storageArea = await prisma.storageArea.upsert({
       where: {
@@ -274,7 +266,6 @@ async function seedStorageAreas(
  * @returns {Promise<Array<Unit>>} A promise that resolves to an array of created or existing units.
  */
 async function seedUnits(): Promise<Array<Unit>> {
-
   const units: Array<Unit> = [];
 
   const unitsData = [
@@ -332,10 +323,7 @@ async function seedUnits(): Promise<Array<Unit>> {
  * @param {Array<Unit>} units - An array of Unit objects to associate with products.
  * @returns {Promise<Array<Product>>} A promise that resolves to an array of created or existing products.
  */
-async function seedProducts(
-  units: Array<Unit>,
-  stores: Array<Store>,
-): Promise<Array<Product>> {
+async function seedProducts(units: Array<Unit>, stores: Array<Store>): Promise<Array<Product>> {
   const products: Array<Product> = [];
 
   // Optional: if you DON'T want products to accumulate on repeated seeds in dev,
@@ -348,8 +336,7 @@ async function seedProducts(
     // Find the store to associate with the product
     const store = findByName(stores, defaultProduct.storeName);
 
-    const category =
-      (defaultProduct.category as ProductCategory) || ProductCategory.Other;
+    const category = (defaultProduct.category as ProductCategory) || ProductCategory.Other;
 
     const created = await prisma.product.create({
       data: {
@@ -417,9 +404,7 @@ async function seedProductInstances(
  * @param stores The Stores to which the lists belong.
  * @returns A promise that resolves to an array of created or existing Shopping Lists.
  */
-const seedShoppingList = async (
-  stores: Array<Store>,
-): Promise<Array<ShoppingList>> => {
+const seedShoppingList = async (stores: Array<Store>): Promise<Array<ShoppingList>> => {
   const shoppingLists: Array<ShoppingList> = [];
   for (const defaultList of config.defaultShoppingLists) {
     const store = findByName(stores, defaultList.storeName);
@@ -444,40 +429,33 @@ const seedShoppingList = async (
  * Seed Shopping List Items
  * @param shoppingLists The Shopping Lists to which the items belong.
  * @param products The Products that the items are based on.
- * @param units The Units of measurement for the items.
  * @returns A promise that resolves to an array of created or existing Shopping List Items.
  */
 const seedShoppingListItems = async (
   shoppingLists: Array<ShoppingList>,
   products: Array<Product>,
-  units: Array<Unit>,
 ): Promise<Array<ShoppingListItem>> => {
   const shoppingListItems: Array<ShoppingListItem> = [];
   for (const defaultItem of config.defaultShoppingListItems) {
     // Find the Shopping List to which the item belongs
-    const shoppingList = findByName(
-      shoppingLists,
-      defaultItem.shoppingListName,
-    );
-    // Find the Product to associate with the item
+    const shoppingList = findByName(shoppingLists, defaultItem.shoppingListName);
+    // Find the Product to get name and category
     const product = findByName(products, defaultItem.productName);
-    // Find the Unit to associate with the item
-    const unit = findByName(units, defaultItem.unitName);
     // Create the Shopping List Item
     const item = await prisma.shoppingListItem.upsert({
       where: {
-        listId_prodId_unitId: {
+        listId_name: {
           listId: shoppingList.id,
-          prodId: product.id,
-          unitId: unit.id,
+          name: product.name,
         },
       },
       update: {},
       create: {
         listId: shoppingList.id,
-        prodId: product.id,
-        unitId: unit.id,
-        quantity: defaultItem.quantity || 1.0,
+        name: product.name,
+        image: product.picture || null,
+        category: product.category,
+        quantity: defaultItem.quantity || 1,
         isPurchased: defaultItem.isPurchased || false,
       },
     });
@@ -561,7 +539,7 @@ async function main() {
   const products = await seedProducts(units, stores);
   await seedProductInstances(locations, storageAreas, products, units);
   const shoppingList = await seedShoppingList(stores);
-  await seedShoppingListItems(shoppingList, products, units);
+  await seedShoppingListItems(shoppingList, products);
   await seedRecipes();
 }
 

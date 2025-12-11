@@ -35,20 +35,19 @@ enum Role {
  * Uses: Role
  */
 model User {
-  id        String    @id @default(uuid()) @map("_id")
-  email     String    @unique
+  id        String   @id @default(uuid()) @map("_id")
+  email     String   @unique
   password  String
-  role      Role      @default(USER)
+  role      Role     @default(USER)
   settings  Json?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   catalog         Catalog[]
   favoriteRecipes Recipe[]
   locations       Location[]
   storages        StorageArea[]
 }
-
 
 /**
  * Unit of Measure
@@ -58,19 +57,18 @@ model User {
  * Uses: Unit
  */
 model Unit {
-  id         String              @id @default(uuid()) @map("_id")
-  name       String              @unique
-  abbr       String              @unique
-  system    String   @default("universal") // Values: "metric", "imperial", "universal"
-  base       Unit?               @relation("UnitsToUnits", fields: [baseId], references: [id])
-  baseId     String?
-  factor     Float               @default(1.0)
-  children   Unit[]              @relation("UnitsToUnits")
-  products   Product[]
-  instances  ProductInstance[]
-  items      ShoppingListItem[]
-  createdAt  DateTime            @default(now())
-  updatedAt  DateTime            @updatedAt
+  id        String            @id @default(uuid()) @map("_id")
+  name      String            @unique
+  abbr      String            @unique
+  system    String            @default("universal") // Values: "metric", "imperial", "universal"
+  base      Unit?             @relation("UnitsToUnits", fields: [baseId], references: [id])
+  baseId    String?
+  factor    Float             @default(1.0)
+  children  Unit[]            @relation("UnitsToUnits")
+  products  Product[]
+  instances ProductInstance[]
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
 }
 
 // TODO: Create Icons in public/icons/{country}.svg, flags?
@@ -91,27 +89,26 @@ enum Country {
  * Uses: Country, Container, ProductInstance
  */
 model Location {
-  id        String             @id @default(uuid()) @map("_id")
-  name      String
-  address1  String
-  address2  String?
-  city      String
-  state     String
-  zipcode   String
-  country   Country            @default(USA)
-  picture   String?
+  id       String  @id @default(uuid()) @map("_id")
+  name     String
+  address1 String
+  address2 String?
+  city     String
+  state    String
+  zipcode  String
+  country  Country @default(USA)
+  picture  String?
 
-  userId    String
-  user      User               @relation(fields: [userId], references: [id])
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 
   areas     StorageArea[]
   instances ProductInstance[]
-  createdAt DateTime           @default(now())
-  updatedAt DateTime           @updatedAt
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
 
   @@unique([userId, name])
 }
-
 
 // TODO: Create Icons in public/icons/{storagetype}.svg
 /**
@@ -132,23 +129,22 @@ enum StorageType {
  * Uses: ContainerType, Location, ProductInstance
  */
 model StorageArea {
-  id        String             @id @default(uuid()) @map("_id")
-  location  Location           @relation(fields: [locId], references: [id])
-  locId     String
-  name      String
-  type      StorageType
-  picture   String?
+  id       String      @id @default(uuid()) @map("_id")
+  location Location    @relation(fields: [locId], references: [id])
+  locId    String
+  name     String
+  type     StorageType
+  picture  String?
 
-  userId    String
-  user      User               @relation(fields: [userId], references: [id])
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 
   instances ProductInstance[]
-  createdAt DateTime           @default(now())
-  updatedAt DateTime           @updatedAt
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
 
   @@unique([userId, name])
 }
-
 
 // TODO: Create Icons in public/icons/{category}.svg
 /**
@@ -184,20 +180,19 @@ enum ProductCategory {
  * Uses: ProductCategory, Unit
  */
 model Product {
-  id         String              @id @default(uuid()) @map("_id")
+  id         String            @id @default(uuid()) @map("_id")
   name       String
   brand      String?
   category   ProductCategory
   unitId     String
-  defaultQty Float               @default(1.0)
-  isNeeded   Boolean             @default(false)
+  defaultQty Float             @default(1.0)
+  isNeeded   Boolean           @default(false)
   picture    String?
-  unit       Unit                @relation(fields: [unitId], references: [id])
+  unit       Unit              @relation(fields: [unitId], references: [id])
   instances  ProductInstance[]
-  items      ShoppingListItem[]
   stores     Store[]
-  createdAt  DateTime            @default(now())
-  updatedAt  DateTime            @updatedAt
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
   catalog    Catalog[]
 
   @@index([category, name], name: "category_name_idx")
@@ -210,19 +205,19 @@ model Product {
  * Uses: Location, Container, Product, and Unit
  */
 model ProductInstance {
-  id        String       @id @default(uuid()) @map("_id")
+  id        String      @id @default(uuid()) @map("_id")
   locId     String
   storId    String
   prodId    String
   unitId    String
-  quantity  Float        @default(0.0)
+  quantity  Float       @default(0.0)
   expiresAt DateTime?
-  location  Location     @relation(fields: [locId], references: [id])
-  storage   StorageArea  @relation(fields: [storId], references: [id])
-  product   Product      @relation(fields: [prodId], references: [id])
-  unit      Unit         @relation(fields: [unitId], references: [id])
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
+  location  Location    @relation(fields: [locId], references: [id])
+  storage   StorageArea @relation(fields: [storId], references: [id])
+  product   Product     @relation(fields: [prodId], references: [id])
+  unit      Unit        @relation(fields: [unitId], references: [id])
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
 
   @@unique([locId, storId, prodId, unitId, expiresAt])
 }
@@ -232,36 +227,36 @@ model ProductInstance {
  * Uses: User, Store, ShoppingListItem
  */
 model ShoppingList {
-  id        String              @id @default(uuid()) @map("_id")
-  name      String              @unique
+  id        String             @id @default(uuid()) @map("_id")
+  name      String             @unique
   storeId   String
-  isDefault Boolean             @default(false)
-  store     Store               @relation(fields: [storeId], references: [id])
+  isDefault Boolean            @default(false)
+  store     Store              @relation(fields: [storeId], references: [id])
   items     ShoppingListItem[]
-  createdAt DateTime            @default(now())
-  updatedAt DateTime            @updatedAt
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
 
   @@unique([storeId, createdAt])
 }
 
 /**
  * Shopping List Items
- * Uses: Product, ShoppingList, Unit
+ * Standalone items - stores product data directly (not referencing Product table)
+ * Uses: ShoppingList
  */
 model ShoppingListItem {
-  id          String         @id @default(uuid()) @map("_id")
+  id          String       @id @default(uuid()) @map("_id")
   listId      String
-  prodId      String
-  unitId      String
-  quantity    Float          @default(1.0)
-  isPurchased Boolean        @default(false)
-  list        ShoppingList   @relation(fields: [listId], references: [id])
-  product     Product        @relation(fields: [prodId], references: [id])
-  unit        Unit           @relation(fields: [unitId], references: [id])
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+  name        String // Product name
+  image       String? // Product image URL
+  category    String? // Category (e.g., Dairy, Produce, etc.)
+  quantity    Int          @default(1)
+  isPurchased Boolean      @default(false)
+  list        ShoppingList @relation(fields: [listId], references: [id], onDelete: Cascade)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
 
-  @@unique([listId, prodId, unitId])
+  @@unique([listId, name])
 }
 
 /**
@@ -270,21 +265,21 @@ model ShoppingListItem {
  * Used By: Product, ShoppingList
  */
 model Store {
-  id            String          @id @default(uuid()) @map("_id")
+  id            String         @id @default(uuid()) @map("_id")
   name          String
   address1      String?
   address2      String?
   city          String?
   state         String?
   zipcode       String?
-  country       Country         @default(USA)
+  country       Country        @default(USA)
   phone         String?
   website       String?
   picture       String?
   shoppingLists ShoppingList[]
   products      Product[]
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 
   @@unique([name])
 }
@@ -314,17 +309,17 @@ enum RecipeDiet {
  * Uses: RecipeDifficulty, RecipeDiet, User
  */
 model Recipe {
-  id           String            @id @default(uuid()) @map("_id")
+  id           String           @id @default(uuid()) @map("_id")
   title        String
-  slug         String?           @unique
+  slug         String?          @unique
   cookTime     Int
   difficulty   RecipeDifficulty
   diet         RecipeDiet
   ingredients  Json
   instructions Json?
   image        String?
-  createdAt    DateTime          @default(now())
-  updatedAt    DateTime          @updatedAt
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
   favoredBy    User[]
 }
 

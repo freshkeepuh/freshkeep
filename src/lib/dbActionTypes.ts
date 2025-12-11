@@ -127,6 +127,10 @@ export const productsSelect = {
  */
 export const shoppingListItemSelect = {
   id: true,
+  listId: true,
+  name: true,
+  image: true,
+  category: true,
   quantity: true,
   isPurchased: true,
   createdAt: true,

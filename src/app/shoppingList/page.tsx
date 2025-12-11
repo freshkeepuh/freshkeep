@@ -1,187 +1,102 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import Badge from 'react-bootstrap/Badge';
+import Spinner from 'react-bootstrap/Spinner';
 import ShoppingListCard from '@/components/ShoppingListCard';
 import ShoppingListModal from '@/components/ShoppingListModal';
 
+interface ShoppingListItem {
+  id: string;
+  listId: string;
+  name: string;
+  image: string | null;
+  category: string | null;
+  quantity: number;
+  isPurchased: boolean;
+}
+
+interface ShoppingList {
+  id: string;
+  name: string;
+  isDefault: boolean;
+  items: ShoppingListItem[];
+}
+
+// Convert ShoppingListItem to the format expected by ShoppingListModal
+function convertToGroceryItem(item: ShoppingListItem) {
+  return {
+    id: item.id,
+    groceryItemImage: item.image || '/images/recipes/placeholder.jpg',
+    groceryItemTitle: item.name,
+    store: '',
+    storageType: '',
+    groceryItemType: item.category || 'Other',
+    inList: true,
+  };
+}
+
 function ShoppingListPage() {
   const [showModal, setShowModal] = useState(false);
-  const [selectedList, setSelectedList] = useState<{
-    title: string;
-    items: typeof samplegroceryItems;
-  } | null>(null);
+  const [selectedList, setSelectedList] = useState<ShoppingList | null>(null);
+  const [shoppingLists, setShoppingLists] = useState<ShoppingList[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const samplegroceryItems = useMemo(
-    () => [
-      {
-        id: 'groceryItem-1',
-        groceryItemImage:
-          'https://images.cdn.shop.foodland.com/detail/4011.jpg',
-        groceryItemTitle: 'Bananas',
-        store: 'Foodland',
-        storageType: 'Counter',
-        groceryItemType: 'Fruit',
-        inList: true,
-      },
-      {
-        id: 'groceryItem-2',
-        groceryItemImage: 'https://bit.ly/464OM4c',
-        groceryItemTitle: 'Greek Yogurt',
-        store: 'Walmart',
-        storageType: 'Refrigerator',
-        groceryItemType: 'Dairy',
-        inList: true,
-      },
-      {
-        id: 'groceryItem-3',
-        groceryItemImage:
-          'https://target.scene7.com/is/image/Target/GUEST_ed5b1220-2654-467f-bb70-0a4ad8fe9c13?wid=750&qlt=80',
-        groceryItemTitle: 'Whole Wheat Bread',
-        store: 'Target',
-        storageType: 'Pantry',
-        groceryItemType: 'Bakery',
-        inList: true,
-      },
-      {
-        id: 'groceryItem-5',
-        groceryItemImage: 'https://bit.ly/4npYvJI',
-        groceryItemTitle: 'Garlic Powder',
-        store: 'Walmart',
-        storageType: 'Spice Rack',
-        groceryItemType: 'Spices',
-        inList: true,
-      },
-      {
-        id: 'groceryItem-6',
-        groceryItemImage:
-          'https://target.scene7.com/is/image/Target/GUEST_ea9257fa-2303-4444-b10f-57e2937a1b4e?wid=750&qlt=80',
-        groceryItemTitle: 'Chicken Breast',
-        store: 'Foodland',
-        storageType: 'Refrigerator',
-        groceryItemType: 'Meat',
-        inList: true,
-      },
-      {
-        id: 'groceryItem-7',
-        groceryItemImage:
-          'https://target.scene7.com/is/image/Target/GUEST_5ae5aa78-6d3d-4691-add6-e74acd3c45d4?wid=750&qlt=80',
-        groceryItemTitle: 'Pasta',
-        store: 'Target',
-        storageType: 'Pantry',
-        groceryItemType: 'Grain',
-        inList: true,
-      },
-      {
-        id: 'groceryItem-8',
-        groceryItemImage:
-          'https://target.scene7.com/is/image/Target/GUEST_8cc36efc-6e13-4cd6-aac4-dc0d79de2851',
-        groceryItemTitle: 'Oreos',
-        store: 'Walmart',
-        storageType: 'Pantry',
-        groceryItemType: 'Snacks',
-        inList: true,
-      },
-    ],
-    [],
-  );
-
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedStores, setSelectedStores] = useState<string[]>([]);
-  const [selectedStorageTypes, setSelectedStorageTypes] = useState<string[]>(
-    [],
-  );
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-  const [showFilters, setShowFilters] = useState(false);
-
-  const uniqueStores = useMemo(
-    () => [...new Set(samplegroceryItems.map((item) => item.store))],
-    [samplegroceryItems],
-  );
-  const uniqueStorageTypes = useMemo(
-    () => [...new Set(samplegroceryItems.map((item) => item.storageType))],
-    [samplegroceryItems],
-  );
-  const uniqueTypes = useMemo(
-    () => [...new Set(samplegroceryItems.map((item) => item.groceryItemType))],
-    [samplegroceryItems],
-  );
-
-  const toggleFilter = (
-    value: string,
-    filterArray: string[],
-    setFilterArray: React.Dispatch<React.SetStateAction<string[]>>,
-  ) => {
-    if (filterArray.includes(value)) {
-      setFilterArray(filterArray.filter((item) => item !== value));
-    } else {
-      setFilterArray([...filterArray, value]);
+  // Fetch shopping lists from API
+  const fetchShoppingLists = useCallback(async () => {
+    try {
+      const response = await fetch('/api/shoppingList');
+      if (!response.ok) {
+        throw new Error('Failed to fetch shopping lists');
+      }
+      const data = await response.json();
+      setShoppingLists(data);
+      setError(null);
+    } catch (err) {
+      console.error('Error fetching shopping lists:', err);
+      setError('Failed to load shopping lists');
+    } finally {
+      setIsLoading(false);
     }
-  };
+  }, []);
 
-  const clearAllFilters = () => {
-    setSelectedStores([]);
-    setSelectedStorageTypes([]);
-    setSelectedTypes([]);
-    setSearchTerm('');
-  };
+  useEffect(() => {
+    fetchShoppingLists();
+  }, [fetchShoppingLists]);
 
-  const activeFiltersCount =
-    selectedStores.length + selectedStorageTypes.length + selectedTypes.length;
-
-  // Test data for shopping list cards
-  const shoppingLists = [
-    {
-      id: 1,
-      title: 'Weekly Groceries',
-      items: [
-        'Bananas',
-        'Greek Yogurt',
-        'Whole Wheat Bread',
-        'Chicken Breasts',
-        'Olive Oil',
-      ],
-      fullItems: samplegroceryItems.slice(0, 5),
-    },
-    {
-      id: 2,
-      title: 'Party Supplies',
-      items: ['Chips', 'Soda', 'Paper Plates', 'Napkins', 'Ice Cream'],
-      fullItems: samplegroceryItems.slice(0, 5),
-    },
-    {
-      id: 3,
-      title: 'Breakfast Essentials',
-      items: ['Eggs', 'Bacon', 'Orange Juice', 'Cereal', 'Milk'],
-      fullItems: samplegroceryItems.slice(0, 5),
-    },
-    {
-      id: 4,
-      title: 'Meal Prep',
-      items: [
-        'Rice',
-        'Beans',
-        'Ground Beef',
-        'Tomatoes',
-        'Onions',
-        'Bell Peppers',
-      ],
-      fullItems: samplegroceryItems.slice(0, 6),
-    },
-  ];
-
-  const handleEditList = (list: (typeof shoppingLists)[0]) => {
-    setSelectedList({
-      title: list.title,
-      items: list.fullItems,
-    });
+  const handleEditList = (list: ShoppingList) => {
+    setSelectedList(list);
     setShowModal(true);
   };
+
+  const handleItemAdded = () => {
+    // Refresh the list data after adding an item
+    fetchShoppingLists();
+  };
+
+  if (isLoading) {
+    return (
+      <Container fluid className="p-5 text-center">
+        <Spinner animation="border" variant="success" />
+        <p className="mt-3">Loading shopping lists...</p>
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Container fluid className="p-5 text-center">
+        <h3 className="text-danger">{error}</h3>
+        <Button variant="success" onClick={fetchShoppingLists}>
+          Try Again
+        </Button>
+      </Container>
+    );
+  }
 
   return (
     <Container fluid className="p-5">
@@ -194,30 +109,7 @@ function ShoppingListPage() {
         }}
         className="d-flex justify-content-center bg-success p-1 rounded mb-4"
       >
-        <Row
-          className="align-items-center justify-content-center py-3"
-          style={{ height: '50px' }}
-        >
-          <Col xs="auto" className="px-1">
-            <Form.Control
-              type="search"
-              placeholder="Search Grocery Item"
-              style={{ width: '400px' }}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </Col>
-          <Col xs="auto" className="ps-1">
-            <Button
-              variant="light"
-              onClick={() => setShowFilters(!showFilters)}
-            >
-              Filters
-              {activeFiltersCount > 0 && (
-                <Badge bg="success">{activeFiltersCount}</Badge>
-              )}
-            </Button>
-          </Col>
+        <Row className="align-items-center justify-content-center py-3" style={{ height: '50px' }}>
           <Col xs="auto" className="ps-1">
             <Button variant="light" href="/catalog">
               Add To List
@@ -226,129 +118,24 @@ function ShoppingListPage() {
         </Row>
       </div>
 
-      {showFilters && (
-        <div
-          className="border rounded shadow-sm p-4 mb-4"
-          style={{
-            maxWidth: '800px',
-            margin: '0 auto 1rem auto',
-            background: '#F4FAF4',
-            borderColor: '#D8E8D8',
-            borderRadius: '12px',
-          }}
-        >
-          <div className="d-flex justify-content-between align-items-center mb-3">
-            <h4 className="mb-0">Filters</h4>
-            <Button
-              variant="link"
-              size="sm"
-              className="p-0"
-              style={{ color: '#3b633bff', textDecoration: 'underline' }}
-              onClick={clearAllFilters}
-            >
-              Clear All
-            </Button>
-          </div>
-          <Row className="g-4">
-            <Col md={4} className="d-flex flex-column ps-3">
-              <div
-                className="mb-2"
-                style={{
-                  fontSize: '18px',
-                  fontWeight: '640',
-                  color: '#3B593B',
-                }}
-              >
-                Store
-              </div>
-              {uniqueStores.map((store) => (
-                <Form.Check
-                  key={store}
-                  type="checkbox"
-                  id={`store-${store}`}
-                  label={store}
-                  checked={selectedStores.includes(store)}
-                  onChange={() =>
-                    toggleFilter(store, selectedStores, setSelectedStores)
-                  }
-                  className="mb-1"
-                  style={{ fontSize: '16px' }}
-                />
-              ))}
-            </Col>
-
-            <Col md={4}>
-              <div
-                className="mb-2"
-                style={{
-                  fontSize: '18px',
-                  fontWeight: '640',
-                  color: '#3B593B',
-                }}
-              >
-                Storage Type
-              </div>
-              {uniqueStorageTypes.map((storage) => (
-                <Form.Check
-                  key={storage}
-                  type="checkbox"
-                  id={`storage-${storage}`}
-                  label={storage}
-                  checked={selectedStorageTypes.includes(storage)}
-                  onChange={() =>
-                    toggleFilter(
-                      storage,
-                      selectedStorageTypes,
-                      setSelectedStorageTypes,
-                    )
-                  }
-                  className="mb-1"
-                  style={{ fontSize: '16px' }}
-                />
-              ))}
-            </Col>
-
-            <Col md={4}>
-              <div
-                className="mb-2"
-                style={{
-                  fontSize: '18px',
-                  fontWeight: '640',
-                  color: '#3B593B',
-                }}
-              >
-                Type
-              </div>
-              {uniqueTypes.map((type) => (
-                <Form.Check
-                  key={type}
-                  type="checkbox"
-                  id={`type-${type}`}
-                  label={type}
-                  checked={selectedTypes.includes(type)}
-                  onChange={() =>
-                    toggleFilter(type, selectedTypes, setSelectedTypes)
-                  }
-                  className="mb-1"
-                  style={{ fontSize: '16px' }}
-                />
-              ))}
-            </Col>
-          </Row>
-        </div>
-      )}
-
       {/* Shopping List Cards */}
       <Row className="mb-5">
-        {shoppingLists.map((list) => (
-          <Col key={list.id} lg={3} md={6} sm={12} className="mb-4">
-            <ShoppingListCard
-              listTitle={list.title}
-              items={list.items}
-              onEdit={() => handleEditList(list)}
-            />
+        {shoppingLists.length > 0 ? (
+          shoppingLists.map((list) => (
+            <Col key={list.id} lg={3} md={6} sm={12} className="mb-4">
+              <ShoppingListCard
+                listTitle={list.name}
+                items={list.items.map((item) => item.name)}
+                onEdit={() => handleEditList(list)}
+              />
+            </Col>
+          ))
+        ) : (
+          <Col className="text-center py-5">
+            <h4 className="text-muted">No shopping lists found</h4>
+            <p>Create a new shopping list to get started</p>
           </Col>
-        ))}
+        )}
       </Row>
 
       {/* Shopping List Modal */}
@@ -356,8 +143,10 @@ function ShoppingListPage() {
         <ShoppingListModal
           show={showModal}
           onHide={() => setShowModal(false)}
-          listTitle={selectedList.title}
-          items={selectedList.items}
+          listTitle={selectedList.name}
+          listId={selectedList.id}
+          items={selectedList.items.map(convertToGroceryItem)}
+          onItemAdded={handleItemAdded}
         />
       )}
     </Container>

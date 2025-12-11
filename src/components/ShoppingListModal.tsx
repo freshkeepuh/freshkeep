@@ -47,10 +47,12 @@ interface ShoppingListModalProps {
   show: boolean;
   onHide: () => void;
   listTitle: string;
+  listId: string;
   items: GroceryItem[];
+  onItemAdded?: () => void;
 }
 
-function ShoppingListModal({ show, onHide, listTitle, items }: ShoppingListModalProps) {
+function ShoppingListModal({ show, onHide, listTitle, listId, items, onItemAdded }: ShoppingListModalProps) {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('list');
@@ -60,6 +62,7 @@ function ShoppingListModal({ show, onHide, listTitle, items }: ShoppingListModal
   const [isLoading, setIsLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
   const [itemQuantities, setItemQuantities] = useState<Record<string, number>>({});
+  const [isAdding, setIsAdding] = useState<string | null>(null);
 
   // Get quantity for an item (default to 1)
   const getQuantity = (itemId: string) => itemQuantities[itemId] || 1;
@@ -68,6 +71,38 @@ function ShoppingListModal({ show, onHide, listTitle, items }: ShoppingListModal
   const updateQuantity = (itemId: string, newQuantity: number) => {
     if (newQuantity < 1) return;
     setItemQuantities((prev) => ({ ...prev, [itemId]: newQuantity }));
+  };
+
+  // Add item to shopping list via API
+  const addItemToList = async (item: CatalogItem) => {
+    setIsAdding(item.id);
+    try {
+      const response = await fetch('/api/shoppingList/item', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          listId,
+          name: item.name,
+          image: item.image,
+          category: item.category,
+          quantity: getQuantity(item.id),
+        }),
+      });
+
+      if (response.ok) {
+        setAddedToList([...addedToList, item.id]);
+        onItemAdded?.();
+      } else if (response.status === 409) {
+        // Item already exists, still mark as added
+        setAddedToList([...addedToList, item.id]);
+      } else {
+        console.error('Failed to add item to list');
+      }
+    } catch (error) {
+      console.error('Error adding item to list:', error);
+    } finally {
+      setIsAdding(null);
+    }
   };
 
   // Debounced search function
@@ -444,18 +479,21 @@ function ShoppingListModal({ show, onHide, listTitle, items }: ShoppingListModal
                             <Button
                               variant={addedToList.includes(item.id) ? 'outline-success' : 'success'}
                               size="sm"
-                              disabled={addedToList.includes(item.id)}
-                              onClick={() => {
-                                setAddedToList([...addedToList, item.id]);
-                                console.log('Added to list:', item.name);
-                              }}
+                              disabled={addedToList.includes(item.id) || isAdding === item.id}
+                              onClick={() => addItemToList(item)}
                               style={{
                                 width: '80px',
                                 fontSize: '12px',
                                 padding: '4px 8px',
                               }}
                             >
-                              {addedToList.includes(item.id) ? '✓ Added' : 'Add'}
+                              {isAdding === item.id ? (
+                                <Spinner animation="border" size="sm" />
+                              ) : addedToList.includes(item.id) ? (
+                                '✓ Added'
+                              ) : (
+                                'Add'
+                              )}
                             </Button>
                           </div>
                         </div>
