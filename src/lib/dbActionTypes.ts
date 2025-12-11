@@ -54,7 +54,7 @@ export const locationsSelect = {
  * Select fields for storage entity
  * Use when selecting a single storage record
  */
-export const storageSelect = {
+export const storageAreaSelect = {
   id: true,
   name: true,
   type: true,
@@ -67,9 +67,9 @@ export const storageSelect = {
  * Select fields for storages entity
  * Use when sub-selecting storage records
  */
-export const storagesSelect = {
+export const storageAreasSelect = {
   select: {
-    ...storageSelect,
+    ...storageAreaSelect,
   },
 };
 

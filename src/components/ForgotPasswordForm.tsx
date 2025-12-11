@@ -4,10 +4,20 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, Card, Col, Container, Form, Image, Row } from 'react-bootstrap';
+import {
+  Button,
+  Card,
+  Col,
+  Container,
+  Form,
+  Image,
+  Row,
+} from 'react-bootstrap';
 import { forgotPasswordValidation } from '@/lib/validationSchemas';
 import { toast } from 'react-toastify';
-import EmailAddressField, { IEmailAddressField } from '@/components/EmailAddressField';
+import EmailAddressField, {
+  IEmailAddressField,
+} from '@/components/EmailAddressField';
 import '@/styles/auth.css';
 import ErrorPopUp from './ErrorPopUp';
 
@@ -30,12 +40,13 @@ async function emailResetlink(data: ForgotPasswordFormFields) {
 
     toast.success('Reset link sent to your email!');
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred.';
+    const errorMessage =
+      error instanceof Error ? error.message : 'An unexpected error occurred.';
     toast.error(errorMessage);
   }
 }
 
-const ForgotPasswordForm = () => {
+function ForgotPasswordForm() {
   const [showError, setShowError] = useState(false);
 
   const {
@@ -70,7 +81,12 @@ const ForgotPasswordForm = () => {
           {/* Left welcome section */}
           <Col className="welcome-section d-flex align-items-center justify-content-left mx-auto text-white">
             <div>
-              <h1 data-testid="forgot-password-welcome-title" className="welcome-title">Welcome Back!</h1>
+              <h1
+                data-testid="forgot-password-welcome-title"
+                className="welcome-title"
+              >
+                Welcome Back!
+              </h1>
               <p
                 data-testid="forgot-password-welcome-subtitle"
                 className="welcome-subtitle"
@@ -92,11 +108,21 @@ const ForgotPasswordForm = () => {
                     height={50}
                     className="me-2"
                   />
-                  <h1 data-testid="forgot-password-title" className="text-center m-0">Fresh Keep</h1>
+                  <h1
+                    data-testid="forgot-password-title"
+                    className="text-center m-0"
+                  >
+                    Fresh Keep
+                  </h1>
                 </div>
               </Card.Header>
               <Card.Body className="p-5">
-                <h2 data-testid="forgot-password-subtitle" className="mb-4 fw-bold">Forgot Password</h2>
+                <h2
+                  data-testid="forgot-password-subtitle"
+                  className="mb-4 fw-bold"
+                >
+                  Forgot Password
+                </h2>
 
                 <Form onSubmit={handleSubmit(onSubmit)}>
                   <Form.Group className="mb-4">
@@ -104,6 +130,8 @@ const ForgotPasswordForm = () => {
                       register={register}
                       errors={errors}
                       data-testid="forgot-password-email-field"
+                      placeholder=""
+                      disabled={false}
                     />
                   </Form.Group>
 
@@ -135,7 +163,11 @@ const ForgotPasswordForm = () => {
 
               <Card.Footer className="text-center py-3">
                 <span>Remember your Password?&nbsp;</span>
-                <Link data-testid="forgot-password-signin-link" href="/auth/signin" className="fw-bold text-success">
+                <Link
+                  data-testid="forgot-password-signin-link"
+                  href="/auth/signin"
+                  className="fw-bold text-success"
+                >
                   Sign In
                 </Link>
               </Card.Footer>
@@ -145,6 +177,6 @@ const ForgotPasswordForm = () => {
       </Container>
     </main>
   );
-};
+}
 
 export default ForgotPasswordForm;

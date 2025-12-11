@@ -4,7 +4,7 @@ test.slow();
 test.use({ viewport: { width: 1280, height: 800 } });
 test('test access to navigation bar (not signed in)', async ({ page }) => {
   // Navigate to the home page
-  await page.goto(`${BASE_URL}`);
+  await page.goto(BASE_URL);
   await page.waitForLoadState('networkidle');
 
   // Check that the FreshKeep Link is visible and works
@@ -27,6 +27,7 @@ test('test access to navigation bar (signed in)', async ({ getUserPage }) => {
   // Check that the FreshKeep Link is visible and works
   const freshKeepLink = await page.getByTestId('navbar-brand');
   await expect(freshKeepLink).toBeVisible();
+
   await freshKeepLink.click();
   await page.waitForLoadState();
   await expect(page).toHaveURL(`${BASE_URL}/`);

@@ -3,7 +3,10 @@
 import { useId } from 'react';
 import styles from './add.module.css';
 
-type Props = { name: string; onChange: (v: string) => void };
+interface Props {
+  name: string;
+  onChange: (v: string) => void;
+}
 
 export default function ProductBasics({ name, onChange }: Props) {
   const inputId = useId();

@@ -74,9 +74,7 @@ async function createRecipe(formData: FormData) {
 
   const slug = slugify(title);
 
-  const cookTimeStr = (formData.get('cookTime') ?? '')
-    .toString()
-    .trim();
+  const cookTimeStr = (formData.get('cookTime') ?? '').toString().trim();
   const cookTime = Number(cookTimeStr || '0');
   if (Number.isNaN(cookTime) || cookTime <= 0) {
     throw new Error('Cook time must be a positive number of minutes.');

@@ -7,14 +7,22 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Badge from 'react-bootstrap/Badge';
-import Image from 'react-bootstrap/Image';
+import ShoppingListCard from '@/components/ShoppingListCard';
+import ShoppingListModal from '@/components/ShoppingListModal';
 
-const ShoppingListPage = () => {
+function ShoppingListPage() {
+  const [showModal, setShowModal] = useState(false);
+  const [selectedList, setSelectedList] = useState<{
+    title: string;
+    items: typeof samplegroceryItems;
+  } | null>(null);
+
   const samplegroceryItems = useMemo(
     () => [
       {
         id: 'groceryItem-1',
-        groceryItemImage: 'https://images.cdn.shop.foodland.com/detail/4011.jpg',
+        groceryItemImage:
+          'https://images.cdn.shop.foodland.com/detail/4011.jpg',
         groceryItemTitle: 'Bananas',
         store: 'Foodland',
         storageType: 'Counter',
@@ -71,7 +79,8 @@ const ShoppingListPage = () => {
       },
       {
         id: 'groceryItem-8',
-        groceryItemImage: 'https://target.scene7.com/is/image/Target/GUEST_8cc36efc-6e13-4cd6-aac4-dc0d79de2851',
+        groceryItemImage:
+          'https://target.scene7.com/is/image/Target/GUEST_8cc36efc-6e13-4cd6-aac4-dc0d79de2851',
         groceryItemTitle: 'Oreos',
         store: 'Walmart',
         storageType: 'Pantry',
@@ -84,11 +93,16 @@ const ShoppingListPage = () => {
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedStores, setSelectedStores] = useState<string[]>([]);
-  const [selectedStorageTypes, setSelectedStorageTypes] = useState<string[]>([]);
+  const [selectedStorageTypes, setSelectedStorageTypes] = useState<string[]>(
+    [],
+  );
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
   const [showFilters, setShowFilters] = useState(false);
 
-  const uniqueStores = useMemo(() => [...new Set(samplegroceryItems.map((item) => item.store))], [samplegroceryItems]);
+  const uniqueStores = useMemo(
+    () => [...new Set(samplegroceryItems.map((item) => item.store))],
+    [samplegroceryItems],
+  );
   const uniqueStorageTypes = useMemo(
     () => [...new Set(samplegroceryItems.map((item) => item.storageType))],
     [samplegroceryItems],
@@ -96,17 +110,6 @@ const ShoppingListPage = () => {
   const uniqueTypes = useMemo(
     () => [...new Set(samplegroceryItems.map((item) => item.groceryItemType))],
     [samplegroceryItems],
-  );
-
-  const filteredItems = useMemo(
-    () => samplegroceryItems.filter((item) => {
-      const matchesSearch = item.groceryItemTitle.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesStore = selectedStores.length === 0 || selectedStores.includes(item.store);
-      const matchesStorage = selectedStorageTypes.length === 0 || selectedStorageTypes.includes(item.storageType);
-      const matchesType = selectedTypes.length === 0 || selectedTypes.includes(item.groceryItemType);
-      return matchesSearch && matchesStore && matchesStorage && matchesType;
-    }),
-    [searchTerm, selectedStores, selectedStorageTypes, selectedTypes, samplegroceryItems],
   );
 
   const toggleFilter = (
@@ -128,11 +131,57 @@ const ShoppingListPage = () => {
     setSearchTerm('');
   };
 
-  const handleButtonClick = (itemTitle: string, inList: boolean) => {
-    console.log(`${inList ? 'Removing' : 'Adding'} ${itemTitle} ${inList ? 'from' : 'to'} list`);
-  };
+  const activeFiltersCount =
+    selectedStores.length + selectedStorageTypes.length + selectedTypes.length;
 
-  const activeFiltersCount = selectedStores.length + selectedStorageTypes.length + selectedTypes.length;
+  // Test data for shopping list cards
+  const shoppingLists = [
+    {
+      id: 1,
+      title: 'Weekly Groceries',
+      items: [
+        'Bananas',
+        'Greek Yogurt',
+        'Whole Wheat Bread',
+        'Chicken Breasts',
+        'Olive Oil',
+      ],
+      fullItems: samplegroceryItems.slice(0, 5),
+    },
+    {
+      id: 2,
+      title: 'Party Supplies',
+      items: ['Chips', 'Soda', 'Paper Plates', 'Napkins', 'Ice Cream'],
+      fullItems: samplegroceryItems.slice(0, 5),
+    },
+    {
+      id: 3,
+      title: 'Breakfast Essentials',
+      items: ['Eggs', 'Bacon', 'Orange Juice', 'Cereal', 'Milk'],
+      fullItems: samplegroceryItems.slice(0, 5),
+    },
+    {
+      id: 4,
+      title: 'Meal Prep',
+      items: [
+        'Rice',
+        'Beans',
+        'Ground Beef',
+        'Tomatoes',
+        'Onions',
+        'Bell Peppers',
+      ],
+      fullItems: samplegroceryItems.slice(0, 6),
+    },
+  ];
+
+  const handleEditList = (list: (typeof shoppingLists)[0]) => {
+    setSelectedList({
+      title: list.title,
+      items: list.fullItems,
+    });
+    setShowModal(true);
+  };
 
   return (
     <Container fluid className="p-5">
@@ -145,7 +194,10 @@ const ShoppingListPage = () => {
         }}
         className="d-flex justify-content-center bg-success p-1 rounded mb-4"
       >
-        <Row className="align-items-center justify-content-center py-3" style={{ height: '50px' }}>
+        <Row
+          className="align-items-center justify-content-center py-3"
+          style={{ height: '50px' }}
+        >
           <Col xs="auto" className="px-1">
             <Form.Control
               type="search"
@@ -156,9 +208,14 @@ const ShoppingListPage = () => {
             />
           </Col>
           <Col xs="auto" className="ps-1">
-            <Button variant="light" onClick={() => setShowFilters(!showFilters)}>
+            <Button
+              variant="light"
+              onClick={() => setShowFilters(!showFilters)}
+            >
               Filters
-              {activeFiltersCount > 0 && <Badge bg="success">{activeFiltersCount}</Badge>}
+              {activeFiltersCount > 0 && (
+                <Badge bg="success">{activeFiltersCount}</Badge>
+              )}
             </Button>
           </Col>
           <Col xs="auto" className="ps-1">
@@ -170,16 +227,38 @@ const ShoppingListPage = () => {
       </div>
 
       {showFilters && (
-        <div className="bg-light border rounded p-3 mb-3" style={{ maxWidth: '800px', margin: '0 auto 1rem auto' }}>
-          <div className="d-flex justify-content-between align-items-center mb-2">
-            <h6 className="mb-0">Filters</h6>
-            <Button variant="link" size="sm" className="text-decoration-none p-0" onClick={clearAllFilters}>
+        <div
+          className="border rounded shadow-sm p-4 mb-4"
+          style={{
+            maxWidth: '800px',
+            margin: '0 auto 1rem auto',
+            background: '#F4FAF4',
+            borderColor: '#D8E8D8',
+            borderRadius: '12px',
+          }}
+        >
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h4 className="mb-0">Filters</h4>
+            <Button
+              variant="link"
+              size="sm"
+              className="p-0"
+              style={{ color: '#3b633bff', textDecoration: 'underline' }}
+              onClick={clearAllFilters}
+            >
               Clear All
             </Button>
           </div>
-          <Row className="g-3">
-            <Col md={4}>
-              <div className="mb-1" style={{ fontSize: '13px', fontWeight: '600', color: '#495057' }}>
+          <Row className="g-4">
+            <Col md={4} className="d-flex flex-column ps-3">
+              <div
+                className="mb-2"
+                style={{
+                  fontSize: '18px',
+                  fontWeight: '640',
+                  color: '#3B593B',
+                }}
+              >
                 Store
               </div>
               {uniqueStores.map((store) => (
@@ -189,14 +268,24 @@ const ShoppingListPage = () => {
                   id={`store-${store}`}
                   label={store}
                   checked={selectedStores.includes(store)}
-                  onChange={() => toggleFilter(store, selectedStores, setSelectedStores)}
+                  onChange={() =>
+                    toggleFilter(store, selectedStores, setSelectedStores)
+                  }
                   className="mb-1"
-                  style={{ fontSize: '14px' }}
+                  style={{ fontSize: '16px' }}
                 />
               ))}
             </Col>
+
             <Col md={4}>
-              <div className="mb-1" style={{ fontSize: '13px', fontWeight: '600', color: '#495057' }}>
+              <div
+                className="mb-2"
+                style={{
+                  fontSize: '18px',
+                  fontWeight: '640',
+                  color: '#3B593B',
+                }}
+              >
                 Storage Type
               </div>
               {uniqueStorageTypes.map((storage) => (
@@ -206,14 +295,28 @@ const ShoppingListPage = () => {
                   id={`storage-${storage}`}
                   label={storage}
                   checked={selectedStorageTypes.includes(storage)}
-                  onChange={() => toggleFilter(storage, selectedStorageTypes, setSelectedStorageTypes)}
+                  onChange={() =>
+                    toggleFilter(
+                      storage,
+                      selectedStorageTypes,
+                      setSelectedStorageTypes,
+                    )
+                  }
                   className="mb-1"
-                  style={{ fontSize: '14px' }}
+                  style={{ fontSize: '16px' }}
                 />
               ))}
             </Col>
+
             <Col md={4}>
-              <div className="mb-1" style={{ fontSize: '13px', fontWeight: '600', color: '#495057' }}>
+              <div
+                className="mb-2"
+                style={{
+                  fontSize: '18px',
+                  fontWeight: '640',
+                  color: '#3B593B',
+                }}
+              >
                 Type
               </div>
               {uniqueTypes.map((type) => (
@@ -223,9 +326,11 @@ const ShoppingListPage = () => {
                   id={`type-${type}`}
                   label={type}
                   checked={selectedTypes.includes(type)}
-                  onChange={() => toggleFilter(type, selectedTypes, setSelectedTypes)}
+                  onChange={() =>
+                    toggleFilter(type, selectedTypes, setSelectedTypes)
+                  }
                   className="mb-1"
-                  style={{ fontSize: '14px' }}
+                  style={{ fontSize: '16px' }}
                 />
               ))}
             </Col>
@@ -233,123 +338,30 @@ const ShoppingListPage = () => {
         </div>
       )}
 
-      <div className="mb-3 text-muted" style={{ fontSize: '14px' }}>
-        Showing
-        {' '}
-        {' '}
-        {filteredItems.length}
-        {' '}
-        {' '}
-        of
-        {' '}
-        {' '}
-        {samplegroceryItems.length}
-        {' '}
-        {' '}
-        items
-      </div>
+      {/* Shopping List Cards */}
+      <Row className="mb-5">
+        {shoppingLists.map((list) => (
+          <Col key={list.id} lg={3} md={6} sm={12} className="mb-4">
+            <ShoppingListCard
+              listTitle={list.title}
+              items={list.items}
+              onEdit={() => handleEditList(list)}
+            />
+          </Col>
+        ))}
+      </Row>
 
-      <div
-        className="bg-success bg-opacity-10 border-bottom border-success border-2 py-3 px-4 mb-3"
-        style={{
-          display: 'grid',
-          gridTemplateColumns: '100px 1fr 140px 140px 140px 120px',
-          gap: '20px',
-          fontWeight: '600',
-          fontSize: '12px',
-          textTransform: 'uppercase',
-          letterSpacing: '0.5px',
-          color: '#198754',
-        }}
-      >
-        <div>Image</div>
-        <div>Item Name</div>
-        <div>Type</div>
-        <div>Storage</div>
-        <div>Store</div>
-        <div className="text-center">Actions</div>
-      </div>
-
-      <div>
-        {filteredItems.length > 0 ? (
-          filteredItems.map((item) => (
-            <div
-              key={item.id}
-              className="bg-white border rounded mb-2 py-3 px-4"
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '100px 1fr 140px 140px 140px 120px',
-                gap: '20px',
-                alignItems: 'center',
-                transition: 'all 0.2s',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#f8f9fa';
-                e.currentTarget.style.boxShadow = '0 2px 8px rgba(25, 135, 84, 0.15)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'white';
-                e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.05)';
-              }}
-            >
-              <div>
-                <Image
-                  src={item.groceryItemImage}
-                  alt={item.groceryItemTitle}
-                  width={80}
-                  height={80}
-                  style={{
-                    objectFit: 'cover',
-                    borderRadius: '8px',
-                    border: '1px solid #e9ecef',
-                  }}
-                />
-              </div>
-
-              <div>
-                <div style={{ fontSize: '16px', fontWeight: '600', color: '#212529' }}>{item.groceryItemTitle}</div>
-              </div>
-
-              <div>
-                <Badge bg="success" className="px-3 py-2">
-                  {item.groceryItemType}
-                </Badge>
-              </div>
-
-              <div>
-                <Badge bg="secondary" className="px-3 py-2">
-                  {item.storageType}
-                </Badge>
-              </div>
-
-              <div>
-                <Badge bg="secondary" className="px-3 py-2">
-                  {item.store}
-                </Badge>
-              </div>
-
-              <div className="text-center">
-                <Button
-                  variant={item.inList ? 'outline-danger' : 'success'}
-                  size="sm"
-                  onClick={() => handleButtonClick(item.groceryItemTitle, item.inList)}
-                  style={{ width: '100px' }}
-                >
-                  {item.inList ? 'Remove' : 'Add'}
-                </Button>
-              </div>
-            </div>
-          ))
-        ) : (
-          <div className="text-center py-5 text-muted">
-            <h5>No items found</h5>
-            <p>Try adjusting your search or filters</p>
-          </div>
-        )}
-      </div>
+      {/* Shopping List Modal */}
+      {selectedList && (
+        <ShoppingListModal
+          show={showModal}
+          onHide={() => setShowModal(false)}
+          listTitle={selectedList.title}
+          items={selectedList.items}
+        />
+      )}
     </Container>
   );
-};
+}
 
 export default ShoppingListPage;

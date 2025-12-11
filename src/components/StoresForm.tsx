@@ -7,7 +7,7 @@ import { Store } from '@prisma/client';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import StoreCard from '@/components/StoreCard';
 
-const StoresForm = () => {
+function StoresForm() {
   const { data: session } = useSession();
   const [stores, setStores] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,7 +27,8 @@ const StoresForm = () => {
         setStores(data);
         setError(null);
       } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : 'Unknown error';
+        const errorMessage =
+          err instanceof Error ? err.message : 'Unknown error';
         setError(errorMessage);
         setStores([]);
       } finally {
@@ -95,6 +96,6 @@ const StoresForm = () => {
       )}
     </Container>
   );
-};
+}
 
 export default StoresForm;

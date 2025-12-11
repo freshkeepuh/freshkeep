@@ -1,8 +1,42 @@
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
+import styles from '../page.module.css';
+
 export default function NotFound() {
   return (
-    <main className="max-w-3xl mx-auto p-6">
-      <h1 className="text-2xl font-semibold mb-2">Recipe not found</h1>
-      <p>We couldn’t find that recipe. It may have been removed or renamed.</p>
+    <main
+      className={styles.rpPage}
+      style={{ background: 'rgb(236, 255, 239)' }}
+    >
+      <div className={styles.rpMain}>
+        <div className={styles.rpMainInner}>
+          {/* Back Button */}
+          <Link href="/recipes" className={styles.rpBackBtn}>
+            <span className={styles.rpBackIcon} aria-hidden>
+              <ArrowLeft />
+            </span>
+            <span>Back to Recipes</span>
+          </Link>
+
+          {/* Card */}
+          <div className={styles.rpCard}>
+            <div className={styles.rpBlock}>
+              <h1 className={styles.rpH2}>Oops… this recipe is missing!</h1>
+              <p className={styles.rpMedium}>
+                We couldn&apos;t find this recipe. It might have been moved,
+                renamed, or the link may be a little off.
+              </p>
+            </div>
+
+            <div className={styles.rpBlock}>
+              <p className={styles.rpMedium}>
+                Don&apos;t worry! You can browse all recipes or search for
+                something new! 🧑‍🍳✨
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </main>
   );
 }

@@ -1,0 +1,68 @@
+'use client';
+
+import React from 'react';
+import { Form } from 'react-bootstrap';
+import { useFormContext } from 'react-hook-form';
+import { Country } from '@prisma/client'; // Update the path as needed
+import { getCountryDisplayName } from '@/lib/dbEnums';
+
+interface CountryFilterProps {
+  label: string;
+  disabled: boolean;
+  onChange: React.ChangeEventHandler<HTMLSelectElement>;
+}
+
+// @ts-ignore
+/**
+ * CountryFilter component.
+ *
+ * Note: The default value for the country field should be set via useForm initialization,
+ * not via a prop or defaultValue on the select element. Example:
+ *   useForm({ defaultValues: { country: Country.Freezer } })
+ */
+function CountryFilter({
+  label = 'Country',
+  disabled = false,
+  onChange = () => {},
+}: CountryFilterProps): React.JSX.Element {
+  const [isDisabled] = React.useState(disabled);
+  const context = useFormContext();
+  if (!context) {
+    throw new Error('CountryFilter must be used within a FormProvider');
+  }
+  const {
+    register,
+    formState: { errors },
+  } = context;
+  return (
+    <>
+      {label && <Form.Label htmlFor="countryFilter">{label}</Form.Label>}
+      <Form.Select
+        id="countryFilter"
+        size="lg"
+        aria-label="Country Filter"
+        {...register('country')}
+        disabled={isDisabled}
+        onChange={onChange}
+        isInvalid={!!errors.country}
+      >
+        <option key="all" value="">
+          All
+        </option>
+        {Object.values(Country)
+          .filter((country) => typeof country === 'string')
+          .sort()
+          .map((country) => (
+            <option key={country} value={country}>
+              {getCountryDisplayName(country as Country)}
+            </option>
+          ))}
+      </Form.Select>
+      <Form.Control.Feedback type="invalid">
+        {errors.country ? errors.country.message?.toString() : null}
+      </Form.Control.Feedback>
+    </>
+  );
+}
+
+export default CountryFilter;

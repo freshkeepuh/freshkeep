@@ -4,22 +4,15 @@ import React from 'react';
 import { Form } from 'react-bootstrap';
 import { useFormContext } from 'react-hook-form';
 import { Country } from '@prisma/client'; // Update the path as needed
+import { getCountryDisplayName } from '@/lib/dbEnums';
+import RequiredLabel from './RequiredLabel';
 
-const displayNames: Record<Country, string> = {
-  [Country.USA]: 'United States',
-  [Country.CAN]: 'Canada',
-};
-
-// Helper function to get display name for country
-const getCountryDisplayName = (country: Country): string => (
-  displayNames[country] ?? country
-);
-
-export interface ICountryField {
-  country: Country;
+interface CountryDropDownProps {
+  label: string;
+  disabled: boolean;
+  required: boolean;
+  onChange: React.ChangeEventHandler<HTMLSelectElement>;
 }
-
-export interface CountryDropDownProps { }
 
 /**
  * CountryDropDown component.
@@ -28,36 +21,50 @@ export interface CountryDropDownProps { }
  * not via a prop or defaultValue on the select element. Example:
  *   useForm({ defaultValues: { country: Country.USA } })
  */
-const CountryDropDown: React.FC<CountryDropDownProps> = () => {
+function CountryDropDown({
+  label = 'Country',
+  disabled = false,
+  required = false,
+  onChange = () => {},
+}: CountryDropDownProps): React.JSX.Element {
   const context = useFormContext();
   if (!context) {
     throw new Error('CountryDropDown must be used within a FormProvider');
   }
   const {
     register,
+    formState: { errors },
   } = context;
   return (
     <>
-      {/* defaultValue removed; set default in useForm initialization */}
+      {label && !required && <Form.Label htmlFor="country">{label}</Form.Label>}
+      {label && required && (
+        <RequiredLabel htmlFor="country">{label}</RequiredLabel>
+      )}
       <Form.Select
         id="country"
         size="lg"
         aria-label="Country"
         {...register('country')}
+        disabled={disabled}
+        required={required}
+        isInvalid={!!errors.country}
+        onChange={onChange}
       >
-        {
-          // If Country is a TypeScript enum, filter out numeric keys
-          Object.values(Country)
-            .filter((country) => typeof country === 'string')
-            .map((country) => (
-              <option key={country} value={country}>
-                {getCountryDisplayName(country as Country)}
-              </option>
-            ))
-        }
+        {Object.values(Country)
+          .filter((country) => typeof country === 'string')
+          .sort()
+          .map((country) => (
+            <option key={country} value={country}>
+              {getCountryDisplayName(country as Country)}
+            </option>
+          ))}
       </Form.Select>
+      <Form.Control.Feedback type="invalid">
+        {errors.country ? errors.country.message?.toString() : null}
+      </Form.Control.Feedback>
     </>
   );
-};
+}
 
 export default CountryDropDown;

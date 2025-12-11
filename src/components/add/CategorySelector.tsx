@@ -3,25 +3,27 @@
 import styles from './add.module.css';
 import type { Category } from './types';
 
-type Props = {
+interface Props {
   selected: Category | null;
   onSelect: (c: Category) => void;
-};
+}
 
-const CATS: Array<{ id: Category; emoji: string; label: string }> = [
-  { id: 'dairy', emoji: '🥛', label: 'Dairy' },
-  { id: 'fruits', emoji: '🍎', label: 'Fruits' },
-  { id: 'vegetables', emoji: '🥕', label: 'Veggies' },
-  { id: 'meat', emoji: '🥩', label: 'Meat' },
-  { id: 'pantry', emoji: '🍞', label: 'Pantry' },
-  { id: 'other', emoji: '📦', label: 'Other' },
+const CATS: { id: Category; emoji: string; label: string }[] = [
+  { id: 'Dairy', emoji: '🥛', label: 'Dairy' },
+  { id: 'Fruits', emoji: '🍎', label: 'Fruits' },
+  { id: 'Vegetables', emoji: '🥕', label: 'Veggies' },
+  { id: 'Meat', emoji: '🥩', label: 'Meat' },
+  { id: 'Pantry', emoji: '🍞', label: 'Pantry' },
+  { id: 'Other', emoji: '📦', label: 'Other' },
 ];
 
 export default function CategorySelector({ selected, onSelect }: Props) {
   const labelId = 'category-label';
   return (
     <div style={{ marginTop: 8 }}>
-      <span id={labelId} className={styles.label}>Category</span>
+      <span id={labelId} className={styles.label}>
+        Category
+      </span>
       <div className={styles.catGrid} role="group" aria-labelledby={labelId}>
         {CATS.map((c) => {
           const active = c.id === selected;

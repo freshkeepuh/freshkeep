@@ -1,7 +1,3 @@
-/* eslint-disable function-paren-newline */
-/* eslint-disable implicit-arrow-linebreak */
-/* eslint-disable react/jsx-one-expression-per-line */
-
 'use client';
 
 import React, { ChangeEvent, useEffect, useState } from 'react';
@@ -60,9 +56,16 @@ const getCategoryDisplayName = (category: ProductCategory): string => {
   return displayNames[category];
 };
 
-const storageOptions = ['Pantry', 'Refrigerator', 'Freezer', 'Counter', 'Cabinet', 'Other'];
+const storageOptions = [
+  'Pantry',
+  'Refrigerator',
+  'Freezer',
+  'Counter',
+  'Cabinet',
+  'Other',
+];
 
-const CreateCatalogItemForm = () => {
+function CreateCatalogItemForm() {
   const { data: session } = useSession();
   const router = useRouter();
   const [formData, setFormData] = useState<{
@@ -77,7 +80,10 @@ const CreateCatalogItemForm = () => {
 
   const [loading, setLoading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState<string | null>(null);
-  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [message, setMessage] = useState<{
+    type: 'success' | 'error';
+    text: string;
+  } | null>(null);
 
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -166,9 +172,13 @@ const CreateCatalogItemForm = () => {
         console.error('API Error:', data);
 
         if (response.status === 403) {
-          throw new Error('API key issue. Please check your Google API key configuration.');
+          throw new Error(
+            'API key issue. Please check your Google API key configuration.',
+          );
         } else if (response.status === 429) {
-          throw new Error('Too many requests. Please try again in a few minutes.');
+          throw new Error(
+            'Too many requests. Please try again in a few minutes.',
+          );
         } else if (data.error?.message?.includes('index')) {
           setSearchOffset(1);
           throw new Error('Reached end of results. Starting from beginning...');
@@ -214,7 +224,10 @@ const CreateCatalogItemForm = () => {
     setImagePreview(imageUrl);
     setImageFile(null);
     setShowImageSearch(false);
-    setMessage({ type: 'success', text: '✓ Image selected from Google search!' });
+    setMessage({
+      type: 'success',
+      text: '✓ Image selected from Google search!',
+    });
 
     setTimeout(() => {
       setMessage(null);
@@ -286,19 +299,29 @@ const CreateCatalogItemForm = () => {
     e.preventDefault();
 
     if (!formData.name || !formData.category || !formData.storeName) {
-      setMessage({ type: 'error', text: 'Please fill in all required fields.' });
+      setMessage({
+        type: 'error',
+        text: 'Please fill in all required fields.',
+      });
       return;
     }
 
     if (!session?.user) {
-      setMessage({ type: 'error', text: 'You must be logged in to create items.' });
+      setMessage({
+        type: 'error',
+        text: 'You must be logged in to create items.',
+      });
       return;
     }
 
-    const userId = session.user.id || (session.user as any).sub || session.user.email;
+    const userId =
+      session.user.id || (session.user as any).sub || session.user.email;
 
     if (!userId) {
-      setMessage({ type: 'error', text: 'Unable to identify user. Please try logging out and back in.' });
+      setMessage({
+        type: 'error',
+        text: 'Unable to identify user. Please try logging out and back in.',
+      });
       return;
     }
 
@@ -332,13 +355,16 @@ const CreateCatalogItemForm = () => {
 
       await createCatalogItem({
         name: formData.name,
-        category: formData.category as ProductCategory,
+        category: formData.category,
         storeName: formData.storeName,
         userId,
         picture: finalImageUrl,
       });
 
-      setMessage({ type: 'success', text: 'Catalog item created successfully! Redirecting...' });
+      setMessage({
+        type: 'success',
+        text: 'Catalog item created successfully! Redirecting...',
+      });
 
       setFormData({
         name: '',
@@ -354,7 +380,10 @@ const CreateCatalogItemForm = () => {
       }, 1500);
     } catch (error) {
       console.error('Error creating catalog item:', error);
-      setMessage({ type: 'error', text: 'Failed to create catalog item. Please try again.' });
+      setMessage({
+        type: 'error',
+        text: 'Failed to create catalog item. Please try again.',
+      });
     } finally {
       setLoading(false);
       setUploadProgress(null);
@@ -368,45 +397,64 @@ const CreateCatalogItemForm = () => {
 
   const PLACEHOLDER_SVG_DATA_URL = `data:image/svg+xml,${encodeURIComponent(PLACEHOLDER_SVG)}`;
   return (
-    <div className="create-catalog-page" style={{ backgroundColor: '#f0f8f0', minHeight: '100vh', padding: '2rem 0' }}>
+    <div
+      className="create-catalog-page"
+      style={{
+        backgroundColor: '#f0f8f0',
+        minHeight: '100vh',
+        padding: '2rem 0',
+      }}
+    >
       <Container>
         <Row className="mb-5">
           <Col className="text-center">
-            <h1 className="fw-bold text-success mb-3">Add New Catalog Product</h1>
+            <h1 className="fw-bold text-success mb-3">
+              Add New Catalog Product
+            </h1>
           </Col>
         </Row>
 
         {message && (
           <Row className="mb-4">
             <Col>
-              <Alert variant={message.type === 'success' ? 'success' : 'danger'} className="text-center">
+              <Alert
+                variant={message.type === 'success' ? 'success' : 'danger'}
+                className="text-center"
+              >
                 {message.text}
               </Alert>
             </Col>
           </Row>
         )}
-        {message?.type === 'success' && message.text.includes('Redirecting') && (
-          <div
-            style={{
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-              backgroundColor: 'rgba(255, 255, 255, 0.5)',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              zIndex: 9999,
-            }}
-          >
-            <div className="spinner-border text-success" role="status" style={{ width: '4rem', height: '4rem' }}>
-              <span className="visually-hidden">Redirecting...</span>
+        {message?.type === 'success' &&
+          message.text.includes('Redirecting') && (
+            <div
+              style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                width: '100%',
+                height: '100%',
+                backgroundColor: 'rgba(255, 255, 255, 0.5)',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                zIndex: 9999,
+              }}
+            >
+              <div
+                className="spinner-border text-success"
+                role="status"
+                style={{ width: '4rem', height: '4rem' }}
+              >
+                <span className="visually-hidden">Redirecting...</span>
+              </div>
+              <div className="mt-3 text-success fw-bold fs-5">
+                Redirecting...
+              </div>
             </div>
-            <div className="mt-3 text-success fw-bold fs-5">Redirecting...</div>
-          </div>
-        )}
+          )}
         {uploadProgress && (
           <Row className="mb-4">
             <Col>
@@ -420,15 +468,25 @@ const CreateCatalogItemForm = () => {
         <Form onSubmit={handleSubmit}>
           <Row>
             <Col lg={8}>
-              <Card className="shadow-sm mb-4" style={{ borderTop: '4px solid #28a745' }}>
-                <Card.Header style={{ backgroundColor: '#d4edda', borderBottom: '1px solid #c3e6cb' }}>
+              <Card
+                className="shadow-sm mb-4"
+                style={{ borderTop: '4px solid #28a745' }}
+              >
+                <Card.Header
+                  style={{
+                    backgroundColor: '#d4edda',
+                    borderBottom: '1px solid #c3e6cb',
+                  }}
+                >
                   <h5 className="mb-0 text-success fw-bold">Item Details</h5>
                 </Card.Header>
                 <Card.Body className="p-4">
                   <Row>
                     <Col md={6}>
                       <Form.Group className="mb-4">
-                        <Form.Label className="fw-bold">Catalog Item Name *</Form.Label>
+                        <Form.Label className="fw-bold">
+                          Catalog Item Name *
+                        </Form.Label>
                         <Form.Control
                           type="text"
                           name="name"
@@ -476,7 +534,9 @@ const CreateCatalogItemForm = () => {
                               backgroundColor: 'white',
                             }}
                           >
-                            {formData.category ? getCategoryDisplayName(formData.category) : 'Select a category'}
+                            {formData.category
+                              ? getCategoryDisplayName(formData.category)
+                              : 'Select a category'}
                           </Dropdown.Toggle>
                           <Dropdown.Menu
                             className="w-100"
@@ -498,7 +558,9 @@ const CreateCatalogItemForm = () => {
                                 type="text"
                                 placeholder="Search categories..."
                                 value={categorySearch}
-                                onChange={(e) => setCategorySearch(e.target.value)}
+                                onChange={(e) =>
+                                  setCategorySearch(e.target.value)
+                                }
                                 onClick={(e) => e.stopPropagation()}
                                 autoFocus
                               />
@@ -513,7 +575,10 @@ const CreateCatalogItemForm = () => {
                                 <Dropdown.Item
                                   key={category}
                                   onClick={() => {
-                                    setFormData((prev) => ({ ...prev, category }));
+                                    setFormData((prev) => ({
+                                      ...prev,
+                                      category,
+                                    }));
                                     setCategorySearch('');
                                   }}
                                   active={formData.category === category}
@@ -524,12 +589,19 @@ const CreateCatalogItemForm = () => {
                             </div>
                           </Dropdown.Menu>
                         </Dropdown>
-                        <input type="hidden" name="category" value={formData.category} required />
+                        <input
+                          type="hidden"
+                          name="category"
+                          value={formData.category}
+                          required
+                        />
                       </Form.Group>
                     </Col>
                     <Col>
                       <Form.Group className="mb-4">
-                        <Form.Label className="fw-bold">Storage Location (Coming Soon)</Form.Label>
+                        <Form.Label className="fw-bold">
+                          Storage Location (Coming Soon)
+                        </Form.Label>
                         <Dropdown autoClose="inside">
                           <Dropdown.Toggle
                             variant="light"
@@ -560,8 +632,16 @@ const CreateCatalogItemForm = () => {
             </Col>
 
             <Col lg={4}>
-              <Card className="shadow-sm mb-4" style={{ borderTop: '4px solid #28a745' }}>
-                <Card.Header style={{ backgroundColor: '#d4edda', borderBottom: '1px solid #c3e6cb' }}>
+              <Card
+                className="shadow-sm mb-4"
+                style={{ borderTop: '4px solid #28a745' }}
+              >
+                <Card.Header
+                  style={{
+                    backgroundColor: '#d4edda',
+                    borderBottom: '1px solid #c3e6cb',
+                  }}
+                >
                   <h5 className="mb-0 text-success fw-bold">Product Image</h5>
                 </Card.Header>
                 <Card.Body className="text-center p-4">
@@ -584,13 +664,19 @@ const CreateCatalogItemForm = () => {
                         <Image
                           src={imagePreview}
                           alt="Preview"
-                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                          style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                          }}
                         />
                       ) : (
                         <div className="text-center p-3">
                           <div className="display-1 text-muted mb-2">📷</div>
                           <p className="text-muted mb-0">No image selected</p>
-                          <small className="text-muted">Click search or upload</small>
+                          <small className="text-muted">
+                            Click search or upload
+                          </small>
                         </div>
                       )}
                     </div>
@@ -611,7 +697,9 @@ const CreateCatalogItemForm = () => {
 
                     <Button
                       variant={imagePreview ? 'outline-success' : 'success'}
-                      onClick={() => document.getElementById('catalog-image')?.click()}
+                      onClick={() =>
+                        document.getElementById('catalog-image')?.click()
+                      }
                       disabled={loading}
                       size="lg"
                     >
@@ -628,7 +716,9 @@ const CreateCatalogItemForm = () => {
                             URL.revokeObjectURL(imagePreview);
                           }
                           setImagePreview(null);
-                          const input = document.getElementById('catalog-image') as HTMLInputElement | null;
+                          const input = document.getElementById(
+                            'catalog-image',
+                          ) as HTMLInputElement | null;
                           if (input) input.value = '';
                         }}
                         disabled={loading}
@@ -656,7 +746,9 @@ const CreateCatalogItemForm = () => {
 
                   {!formData.category && formData.name && (
                     <Alert variant="warning" className="mt-3 mb-0 py-2">
-                      <small>⚠️ Select category for better search results</small>
+                      <small>
+                        ⚠️ Select category for better search results
+                      </small>
                     </Alert>
                   )}
                 </Card.Body>
@@ -676,7 +768,13 @@ const CreateCatalogItemForm = () => {
                 >
                   Cancel
                 </Button>
-                <Button variant="success" type="submit" size="lg" disabled={loading} className="px-4">
+                <Button
+                  variant="success"
+                  type="submit"
+                  size="lg"
+                  disabled={loading}
+                  className="px-4"
+                >
                   {loading ? 'Creating...' : 'Create Item'}
                 </Button>
               </div>
@@ -686,13 +784,19 @@ const CreateCatalogItemForm = () => {
       </Container>
 
       {/* Google Image Search Modal */}
-      <Modal show={showImageSearch} onHide={() => setShowImageSearch(false)} size="xl">
+      <Modal
+        show={showImageSearch}
+        onHide={() => setShowImageSearch(false)}
+        size="xl"
+      >
         <Modal.Header closeButton className="bg-light">
           <Modal.Title>
             <span className="text-success">🔍</span>
             <span>Google Image Search</span>
             {formData.category && (
-              <small className="text-muted ms-2">( Category: {getCategoryDisplayName(formData.category)})</small>
+              <small className="text-muted ms-2">
+                ( Category: {getCategoryDisplayName(formData.category)})
+              </small>
             )}
           </Modal.Title>
         </Modal.Header>
@@ -706,10 +810,18 @@ const CreateCatalogItemForm = () => {
                 onChange={(e) => setSearchQuery(e.target.value)}
                 disabled={searching}
               />
-              <Button variant="success" type="submit" disabled={searching || !searchQuery.trim()}>
+              <Button
+                variant="success"
+                type="submit"
+                disabled={searching || !searchQuery.trim()}
+              >
                 {searching ? (
                   <>
-                    <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" />
+                    <span
+                      className="spinner-border spinner-border-sm me-2"
+                      role="status"
+                      aria-hidden="true"
+                    />
                     Searching...
                   </>
                 ) : (
@@ -728,7 +840,12 @@ const CreateCatalogItemForm = () => {
             <Alert variant="warning" className="mb-3">
               <div className="d-flex justify-content-between align-items-center">
                 <span>{searchError}</span>
-                <Button variant="outline-warning" size="sm" onClick={handleTryDifferentResults} disabled={searching}>
+                <Button
+                  variant="outline-warning"
+                  size="sm"
+                  onClick={handleTryDifferentResults}
+                  disabled={searching}
+                >
                   🔄 Try Different Results
                 </Button>
               </div>
@@ -737,7 +854,11 @@ const CreateCatalogItemForm = () => {
 
           {searching && (
             <div className="text-center py-5">
-              <div className="spinner-border text-success" role="status" style={{ width: '3rem', height: '3rem' }}>
+              <div
+                className="spinner-border text-success"
+                role="status"
+                style={{ width: '3rem', height: '3rem' }}
+              >
                 <span className="visually-hidden">Searching...</span>
               </div>
               <p className="mt-3 text-muted">Searching Google Images...</p>
@@ -753,7 +874,11 @@ const CreateCatalogItemForm = () => {
                   {searchResults.length}
                   <span> results</span>
                 </Alert>
-                <Button variant="outline-success" onClick={handleTryDifferentResults} disabled={searching}>
+                <Button
+                  variant="outline-success"
+                  onClick={handleTryDifferentResults}
+                  disabled={searching}
+                >
                   🔄 Try Different Results
                 </Button>
               </div>
@@ -790,7 +915,8 @@ const CreateCatalogItemForm = () => {
                           display: 'block',
                         }}
                         onError={(e) => {
-                          (e.target as HTMLImageElement).src = PLACEHOLDER_SVG_DATA_URL;
+                          (e.target as HTMLImageElement).src =
+                            PLACEHOLDER_SVG_DATA_URL;
                         }}
                       />
                       <div className="image-overlay">
@@ -825,14 +951,18 @@ const CreateCatalogItemForm = () => {
           {!searching && searchResults.length === 0 && !searchError && (
             <div className="text-center text-muted py-5">
               <div className="display-1 mb-3">🔍</div>
-              <p className="mb-0">Enter a search term and click &quot;Search&quot;</p>
-              <small>Enhanced search will use category context automatically</small>
+              <p className="mb-0">
+                Enter a search term and click &quot;Search&quot;
+              </p>
+              <small>
+                Enhanced search will use category context automatically
+              </small>
             </div>
           )}
         </Modal.Body>
       </Modal>
     </div>
   );
-};
+}
 
 export default CreateCatalogItemForm;

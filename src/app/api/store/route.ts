@@ -6,7 +6,6 @@ export const runtime = 'nodejs';
 
 /**
  * Handles GET requests for retrieving stores.
- * @param request The incoming request
  * @returns A JSON response containing the list of stores or an error message
  */
 export async function GET() {
@@ -26,10 +25,24 @@ export async function GET() {
  */
 export async function POST(request: NextRequest) {
   try {
-    const { name, address1, address2, city, state, zipcode, country, phone, website, picture } = await request.json();
+    const {
+      name,
+      address1,
+      address2,
+      city,
+      state,
+      zipcode,
+      country,
+      phone,
+      website,
+      picture,
+    } = await request.json();
 
     if (!name || !address1 || !city || !state || !zipcode || !country) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Missing required fields' },
+        { status: 400 },
+      );
     }
 
     const newStore = await createStore({
@@ -73,7 +86,10 @@ export async function PUT(request: NextRequest) {
     } = await request.json();
 
     if (!id || !name || !address1 || !city || !state || !zipcode || !country) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Missing required fields' },
+        { status: 400 },
+      );
     }
 
     const updatedStore = await updateStore(id, {

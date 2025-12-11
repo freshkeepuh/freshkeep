@@ -10,37 +10,37 @@ export interface IUnitField {
 interface UnitDropDownProps {
   register: UseFormRegister<IUnitField>;
   errors: { unit?: { message?: string } };
-  disabled?: boolean;
+  disabled: boolean;
   units: Unit[];
 }
 
-export const UnitDropDown: React.FC<UnitDropDownProps> = ({
+export function UnitDropDown({
   register,
   errors,
   disabled = false,
   units,
-}) => (
-  <>
-    <Form.Select
-      id="unit"
-      size="lg"
-      as="select"
-      aria-label="Unit of Measurement Dropdown"
-      {...register('unit')}
-      disabled={disabled}
-      isInvalid={!!errors.unit}
-      defaultValue={units.length > 0 ? units[0].id : ''}
-    >
-      {
-        units.map(unit => (
+}: UnitDropDownProps): React.JSX.Element {
+  return (
+    <>
+      <Form.Select
+        id="unit"
+        size="lg"
+        as="select"
+        aria-label="Unit of Measurement Dropdown"
+        {...register('unit')}
+        disabled={disabled}
+        isInvalid={!!errors.unit}
+        defaultValue={units.length > 0 ? units[0].id : ''}
+      >
+        {units.map((unit) => (
           <option key={unit.id} value={unit.id}>
             {unit.abbr}
           </option>
-        ))
-      }
-    </Form.Select>
-    <Form.Control.Feedback type="invalid">
-      {errors.unit?.message}
-    </Form.Control.Feedback>
-  </>
-);
+        ))}
+      </Form.Select>
+      <Form.Control.Feedback type="invalid">
+        {errors.unit?.message}
+      </Form.Control.Feedback>
+    </>
+  );
+}

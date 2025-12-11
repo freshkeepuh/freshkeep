@@ -14,13 +14,13 @@ interface CatalogItemCardProps {
   catalogItemType: string;
 }
 
-const CatalogItemCard = ({
+function CatalogItemCard({
   picture,
   catalogItemTitle,
   storeName,
   storageType,
   catalogItemType,
-}: CatalogItemCardProps) => {
+}: CatalogItemCardProps) {
   const [isInList, setIsInList] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [inputValue, setInputValue] = useState('1');
@@ -59,7 +59,11 @@ const CatalogItemCard = ({
   return (
     <div
       className="rounded-5 bg-success d-flex justify-content-center align-items-center px-2 py-2"
-      style={{ width: '320px', height: '400px', transition: 'transform 0.3s ease' }}
+      style={{
+        width: '320px',
+        height: '400px',
+        transition: 'transform 0.3s ease',
+      }}
       onMouseEnter={(e) => {
         e.currentTarget.style.transform = 'translateY(-10px)';
       }}
@@ -113,7 +117,11 @@ const CatalogItemCard = ({
 
           <Row className="mt-auto px-3">
             {!isInList ? (
-              <Button variant="success" onClick={handleButtonClick} style={{ height: '46px' }}>
+              <Button
+                variant="success"
+                onClick={handleButtonClick}
+                style={{ height: '46px' }}
+              >
                 Add to list
               </Button>
             ) : (
@@ -143,13 +151,18 @@ const CatalogItemCard = ({
                           fontSize: '1.2rem',
                           color: 'var(--bs-danger)',
                         }}
-                        onMouseDown={(e) => (e.currentTarget.style.backgroundColor = 'var(--bs-danger)')}
+                        onMouseDown={(e) => {
+                          e.currentTarget.style.backgroundColor =
+                            'var(--bs-danger)';
+                        }}
                         onMouseUp={(e) => {
-                          e.currentTarget.style.backgroundColor = 'var(--bs-light)';
+                          e.currentTarget.style.backgroundColor =
+                            'var(--bs-light)';
                           e.currentTarget.style.color = 'var(--bs-danger)';
                         }}
                         onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = 'var(--bs-light)';
+                          e.currentTarget.style.backgroundColor =
+                            'var(--bs-light)';
                           e.currentTarget.style.color = 'var(--bs-danger)';
                         }}
                       >
@@ -161,7 +174,10 @@ const CatalogItemCard = ({
                         pattern="[0-9]*"
                         value={inputValue}
                         onChange={(e) => {
-                          const newValue = e.target.value.replace(/[^0-9]/g, '');
+                          const newValue = e.target.value.replace(
+                            /[^0-9]/g,
+                            '',
+                          );
                           setInputValue(newValue);
                           const val = parseInt(newValue, 10);
                           if (Number.isFinite(val)) {
@@ -198,15 +214,18 @@ const CatalogItemCard = ({
                           color: 'var(--bs-success)',
                         }}
                         onMouseDown={(e) => {
-                          e.currentTarget.style.backgroundColor = 'var(--bs-success)';
+                          e.currentTarget.style.backgroundColor =
+                            'var(--bs-success)';
                           e.currentTarget.style.color = 'white';
                         }}
                         onMouseUp={(e) => {
-                          e.currentTarget.style.backgroundColor = 'var(--bs-light)';
+                          e.currentTarget.style.backgroundColor =
+                            'var(--bs-light)';
                           e.currentTarget.style.color = 'var(--bs-success)';
                         }}
                         onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = 'var(--bs-light)';
+                          e.currentTarget.style.backgroundColor =
+                            'var(--bs-light)';
                           e.currentTarget.style.color = 'var(--bs-success)';
                         }}
                       >
@@ -222,6 +241,6 @@ const CatalogItemCard = ({
       </Card>
     </div>
   );
-};
+}
 
 export default CatalogItemCard;

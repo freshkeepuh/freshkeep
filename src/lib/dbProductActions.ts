@@ -11,7 +11,7 @@ import {
   productInstanceSelect,
   productSelect,
   productsSelect,
-  storagesSelect,
+  storageAreasSelect,
   unitsSelect,
 } from '@/lib/dbActionTypes';
 
@@ -21,13 +21,13 @@ import {
  * @returns The created product.
  */
 export async function createProduct(data: {
-  name: string,
-  brand?: string,
-  category: string,
-  unitId: string,
-  defaultQty?: number,
-  isNeeded?: boolean,
-  picture?: string,
+  name: string;
+  brand?: string;
+  category: string;
+  unitId: string;
+  defaultQty?: number;
+  isNeeded?: boolean;
+  picture?: string;
 }) {
   const newProduct = await prisma.product.create({
     data: {
@@ -55,12 +55,12 @@ export async function createProduct(data: {
  * @returns The created product instance.
  */
 export async function createProductInstance(data: {
-  locId: string,
-  storId: string,
-  prodId: string,
-  unitId: string,
-  quantity: number,
-  expiresAt?: Date,
+  locId: string;
+  storId: string;
+  prodId: string;
+  unitId: string;
+  quantity: number;
+  expiresAt?: Date;
 }) {
   const newProductInstance = await prisma.productInstance.create({
     data: {
@@ -76,7 +76,7 @@ export async function createProductInstance(data: {
         ...locationsSelect,
       },
       storage: {
-        ...storagesSelect,
+        ...storageAreasSelect,
       },
       product: {
         ...productsSelect,
@@ -95,19 +95,9 @@ export async function createProductInstance(data: {
  * @returns All products.
  */
 export async function readProducts() {
-  const products = await prisma.product.findMany(
-    {
-      select: {
-        instances: {
-          ...unitsSelect,
-          ...productInstanceSelect,
-        },
-        ...unitsSelect,
-        ...productSelect,
-      },
-      orderBy: { category: 'asc', name: 'asc' },
-    },
-  );
+  const products = await prisma.product.findMany({
+    select: productSelect,
+  });
   return products;
 }
 
@@ -116,25 +106,23 @@ export async function readProducts() {
  * @returns All product instances.
  */
 export async function readProductInstances() {
-  const productInstances = await prisma.productInstance.findMany(
-    {
-      select: {
-        location: {
-          ...locationsSelect,
-        },
-        storage: {
-          ...storagesSelect,
-        },
-        product: {
-          ...productsSelect,
-        },
-        unit: {
-          ...unitsSelect,
-        },
-        ...productInstanceSelect,
+  const productInstances = await prisma.productInstance.findMany({
+    select: {
+      location: {
+        ...locationsSelect,
       },
+      storage: {
+        ...storageAreasSelect,
+      },
+      product: {
+        ...productsSelect,
+      },
+      unit: {
+        ...unitsSelect,
+      },
+      ...productInstanceSelect,
     },
-  );
+  });
   return productInstances;
 }
 
@@ -173,7 +161,7 @@ export async function readProductInstance(id: string | null | undefined) {
         ...locationsSelect,
       },
       storage: {
-        ...storagesSelect,
+        ...storageAreasSelect,
       },
       product: {
         ...productsSelect,
@@ -193,15 +181,18 @@ export async function readProductInstance(id: string | null | undefined) {
  * @param data The new data for the product.
  * @returns The updated product if found, otherwise null.
  */
-export async function updateProduct(id: string, data: {
-  name: string,
-  brand?: string,
-  category: string,
-  unitId: string,
-  defaultQty?: number,
-  isNeeded?: boolean,
-  picture?: string,
-}) {
+export async function updateProduct(
+  id: string,
+  data: {
+    name: string;
+    brand?: string;
+    category: string;
+    unitId: string;
+    defaultQty?: number;
+    isNeeded?: boolean;
+    picture?: string;
+  },
+) {
   const updatedProduct = await prisma.product.update({
     where: { id },
     data: {
@@ -224,14 +215,17 @@ export async function updateProduct(id: string, data: {
  * @param data The new data for the product instance.
  * @returns The updated product instance if found, otherwise null.
  */
-export async function updateProductInstance(id: string, data: {
-  locId: string,
-  storId: string,
-  prodId: string,
-  unitId: string,
-  quantity: number,
-  expiresAt?: Date,
-}) {
+export async function updateProductInstance(
+  id: string,
+  data: {
+    locId: string;
+    storId: string;
+    prodId: string;
+    unitId: string;
+    quantity: number;
+    expiresAt?: Date;
+  },
+) {
   const updatedProductInstance = await prisma.productInstance.update({
     where: { id },
     data: {

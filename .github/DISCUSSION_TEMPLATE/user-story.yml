@@ -1,5 +1,5 @@
-title: "[User Story] "
-labels: ["User Story"]
+title: '[User Story] '
+labels: ['User Story']
 body:
   - type: markdown
     attributes:
@@ -11,15 +11,15 @@ body:
     id: user-story
     attributes:
       label: User Story
-      description: "As a <type of user>, I want <some goal> so that <some reason>."
-      placeholder: "As a ____, I want ____ so that ____."
+      description: 'As a <type of user>, I want <some goal> so that <some reason>.'
+      placeholder: 'As a ____, I want ____ so that ____.'
     validations:
       required: true
   - type: textarea
     id: additional-context
     attributes:
       label: Additional Context
-      description: "Is there any other context or information that would be helpful to know?"
-      placeholder: "Add any other context or screenshots about the feature request here."
+      description: 'Is there any other context or information that would be helpful to know?'
+      placeholder: 'Add any other context or screenshots about the feature request here.'
     validations:
       required: true

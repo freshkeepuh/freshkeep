@@ -2,34 +2,56 @@ import type { $Enums } from '@prisma/client';
 
 export type Mode = 'existing' | 'new';
 
-export type LocationOption = { id: string; name: string };
-export type ContainerOption = { id: string; name: string; locId: string };
-export type UnitOption = { id: string; name: string; abbr?: string | null };
+export interface LocationOption {
+  id: string;
+  name: string;
+}
+export interface ContainerOption {
+  id: string;
+  name: string;
+  locId: string;
+}
+export interface UnitOption {
+  id: string;
+  name: string;
+  abbr?: string | null;
+}
 
 export type GroceryCategory = $Enums.ProductCategory;
 
-export type GroceryOption = {
+export interface GroceryOption {
   id: string;
   name: string;
   category: GroceryCategory;
   defaultQty?: number | null;
   unitId?: string | null;
-};
+}
 
-export type Category = 'dairy' | 'fruits' | 'vegetables' | 'meat' | 'pantry' | 'other';
+export type Category =
+  | 'Dairy'
+  | 'Fruits'
+  | 'Vegetables'
+  | 'Meat'
+  | 'Pantry'
+  | 'Other';
 
-export type StorageUnit =
-  | { id: number; name: string; items: number; temperature: string; type: 'fridge' }
-  | { id: number; name: string; items: number; type: 'pantry' };
+export interface StorageUnit {
+  id: string;
+  name: string;
+  items: number;
+  type: 'fridge' | 'freezer' | 'pantry' | 'spice-rack' | 'other';
+  locId: string | null;
+  locationName?: string | null;
+}
 
 export const CATEGORY_META: Record<
-Category,
-{ label: string; emoji: string; borderClass: string }
+  Category,
+  { label: string; emoji: string; borderClass: string }
 > = {
-  dairy: { label: 'Dairy', emoji: '🥛', borderClass: 'bdBlue' },
-  fruits: { label: 'Fruits', emoji: '🍎', borderClass: 'bdGreen' },
-  vegetables: { label: 'Veggies', emoji: '🥕', borderClass: 'bdGreen' },
-  meat: { label: 'Meat', emoji: '🥩', borderClass: 'bdRed' },
-  pantry: { label: 'Pantry', emoji: '🍞', borderClass: 'bdYellow' },
-  other: { label: 'Other', emoji: '📦', borderClass: 'bdPurple' },
+  Dairy: { label: 'Dairy', emoji: '🥛', borderClass: 'bdBlue' },
+  Fruits: { label: 'Fruits', emoji: '🍎', borderClass: 'bdGreen' },
+  Vegetables: { label: 'Veggies', emoji: '🥕', borderClass: 'bdGreen' },
+  Meat: { label: 'Meat', emoji: '🥩', borderClass: 'bdRed' },
+  Pantry: { label: 'Pantry', emoji: '🍞', borderClass: 'bdYellow' },
+  Other: { label: 'Other', emoji: '📦', borderClass: 'bdPurple' },
 };

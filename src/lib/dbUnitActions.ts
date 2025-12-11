@@ -1,13 +1,7 @@
-/**
- * CRUD Actions for the Unit Model.
- */
-
 'use server';
 
 import { prisma } from '@/lib/prisma';
-import {
-  unitSelect,
-} from './dbActionTypes';
+import { unitSelect } from './dbActionTypes';
 
 /**
  * Create a new unit.
@@ -15,10 +9,10 @@ import {
  * @returns The created unit.
  */
 export async function createUnit(data: {
-  name: string,
-  abbr: string,
-  baseId: string,
-  factor: number,
+  name: string;
+  abbr: string;
+  baseId?: string | null;
+  factor: number;
 }) {
   const newUnit = await prisma.unit.create({
     data: {
@@ -34,25 +28,21 @@ export async function createUnit(data: {
 
 /**
  * Read all units.
- * @returns All units.
+ * (Global data - No userId filter needed)
  */
 export async function readUnits() {
-  const units = await prisma.unit.findMany(
-    {
-      select: {
-        base: true,
-        ...unitSelect,
-      },
-      orderBy: { name: 'asc' },
+  const units = await prisma.unit.findMany({
+    select: {
+      base: true,
+      ...unitSelect,
     },
-  );
+    orderBy: { name: 'asc' },
+  });
   return units;
 }
 
 /**
  * Read a unit by ID.
- * @param id The ID of the unit to read.
- * @returns The unit if found, otherwise null.
  */
 export async function readUnit(id: string | null | undefined) {
   if (!id) return null;
@@ -68,16 +58,16 @@ export async function readUnit(id: string | null | undefined) {
 
 /**
  * Update a unit by ID.
- * @param id The ID of the unit to update.
- * @param data The new data for the unit.
- * @returns The updated unit if found, otherwise null.
  */
-export async function updateUnit(id: string, data: {
-  name: string,
-  abbr: string,
-  baseId: string,
-  factor: number,
-}) {
+export async function updateUnit(
+  id: string,
+  data: {
+    name: string;
+    abbr: string;
+    baseId?: string | null;
+    factor: number;
+  },
+) {
   const updatedUnit = await prisma.unit.update({
     where: { id },
     data: {
@@ -96,8 +86,6 @@ export async function updateUnit(id: string, data: {
 
 /**
  * Delete a unit by ID.
- * @param id The ID of the unit to delete.
- * @returns The deleted unit if found, otherwise null.
  */
 export async function deleteUnit(id: string) {
   const deletedUnit = await prisma.unit.delete({

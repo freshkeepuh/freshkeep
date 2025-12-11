@@ -15,7 +15,11 @@
   align-items: center;
   gap: 0.5rem;
   padding: 1rem 1.25rem;
-  background: linear-gradient(135deg, rgba(25, 135, 84, 0.08), rgba(25, 135, 84, 0.02));
+  background: linear-gradient(
+    135deg,
+    rgba(25, 135, 84, 0.08),
+    rgba(25, 135, 84, 0.02)
+  );
   border: 1px solid rgba(25, 135, 84, 0.15);
   border-radius: 12px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);

@@ -12,9 +12,9 @@ const unitConverter = ({
   fromQty,
   toUnit,
 }: {
-  fromUnit: Unit,
-  fromQty: number,
-  toUnit: Unit,
+  fromUnit: Unit;
+  fromQty: number;
+  toUnit: Unit;
 }): number => {
   if (fromUnit.id === toUnit.id) {
     return fromQty;

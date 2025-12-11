@@ -11,23 +11,25 @@ export interface IPasswordField {
 export interface PasswordFieldProps {
   register: UseFormRegister<IPasswordField>;
   errors: { password?: { message?: string } };
-  placeholder?: string;
+  placeholder: string;
 }
 
-const PasswordField = ({ register, errors, placeholder }: PasswordFieldProps) => (
-  <>
-    <Form.Control
-      id="password"
-      type="password"
-      placeholder={placeholder || '🔒 Password'}
-      size="lg"
-      isInvalid={!!errors.password}
-      {...register('password')}
-    />
-    <Form.Control.Feedback type="invalid">
-      {errors.password?.message}
-    </Form.Control.Feedback>
-  </>
-);
+function PasswordField({ register, errors, placeholder }: PasswordFieldProps) {
+  return (
+    <>
+      <Form.Control
+        id="password"
+        type="password"
+        placeholder={placeholder || '🔒 Password'}
+        size="lg"
+        isInvalid={!!errors.password}
+        {...register('password')}
+      />
+      <Form.Control.Feedback type="invalid">
+        {errors.password?.message}
+      </Form.Control.Feedback>
+    </>
+  );
+}
 
 export default PasswordField;

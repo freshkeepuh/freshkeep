@@ -1,32 +1,30 @@
-/**
- * CRUD Actions for the Location Model.
- */
-
 'use server';
 
 import { Country } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
-import {
-  locationSelect,
-} from './dbActionTypes';
+import { locationSelect } from './dbActionTypes';
 
 /**
  * Create a new location.
- * @param data The location data to create.
- * @returns The created location.
+ * @param userId The ID of the owner.
+ * @param data The location data.
  */
-export async function createLocation(data: {
-  name: string,
-  address1: string,
-  address2: string | undefined,
-  city: string,
-  state: string,
-  zipcode: string,
-  country: string,
-  picture: string | undefined,
-}) {
+export async function createLocation(
+  userId: string,
+  data: {
+    name: string;
+    address1: string;
+    address2: string | undefined;
+    city: string;
+    state: string;
+    zipcode: string;
+    country: string;
+    picture: string | undefined;
+  },
+) {
   const newLocation = await prisma.location.create({
     data: {
+      userId,
       name: data.name,
       address1: data.address1,
       address2: data.address2,
@@ -42,28 +40,32 @@ export async function createLocation(data: {
 }
 
 /**
- * Read all locations.
- * @returns All locations.
+ * Read all locations for the logged-in user.
+ * @param userId The ID of the user.
  */
-export async function readLocations() {
-  const locations = await prisma.location.findMany(
-    {
-      select: locationSelect,
-      orderBy: { name: 'asc' },
+export async function readLocations(userId: string) {
+  const locations = await prisma.location.findMany({
+    where: {
+      userId,
     },
-  );
+    select: locationSelect,
+  });
   return locations;
 }
 
 /**
- * Read a location by ID.
- * @param id The ID of the location to read.
- * @returns The location if found, otherwise null.
+ * Read a location by ID (and verify ownership).
  */
-export async function readLocation(id: string | null | undefined) {
+export async function readLocation(
+  userId: string,
+  id: string | null | undefined,
+) {
   if (!id) return null;
-  const location = await prisma.location.findUnique({
-    where: { id },
+  const location = await prisma.location.findFirst({
+    where: {
+      id,
+      userId,
+    },
     select: locationSelect,
   });
   return location;
@@ -71,22 +73,26 @@ export async function readLocation(id: string | null | undefined) {
 
 /**
  * Update a location by ID.
- * @param id The ID of the location to update.
- * @param data The new data for the location.
- * @returns The updated location if found, otherwise null.
  */
-export async function updateLocation(id: string, data: {
-  name: string,
-  address1: string,
-  address2: string | undefined,
-  city: string,
-  state: string,
-  zipcode: string,
-  country: string,
-  picture: string | undefined,
-}) {
-  const updatedLocation = await prisma.location.update({
-    where: { id },
+export async function updateLocation(
+  userId: string,
+  id: string,
+  data: {
+    name: string;
+    address1: string;
+    address2: string | undefined;
+    city: string;
+    state: string;
+    zipcode: string;
+    country: string;
+    picture: string | undefined;
+  },
+) {
+  const updatedBatch = await prisma.location.updateMany({
+    where: {
+      id,
+      userId,
+    },
     data: {
       name: data.name,
       address1: data.address1,
@@ -97,20 +103,21 @@ export async function updateLocation(id: string, data: {
       country: data.country as Country,
       picture: data.picture,
     },
-    select: locationSelect,
   });
-  return updatedLocation;
+
+  if (updatedBatch.count === 0) return null;
+  return readLocation(userId, id);
 }
 
 /**
  * Delete a location by ID.
- * @param id The ID of the location to delete.
- * @returns The deleted location if found, otherwise null.
  */
-export async function deleteLocation(id: string) {
-  const deletedLocation = await prisma.location.delete({
-    where: { id },
-    select: locationSelect,
+export async function deleteLocation(userId: string, id: string) {
+  const deletedBatch = await prisma.location.deleteMany({
+    where: {
+      id,
+      userId,
+    },
   });
-  return deletedLocation;
+  return deletedBatch.count > 0;
 }

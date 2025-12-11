@@ -32,7 +32,7 @@ interface StoreCardProps {
   onDelete: (id: string) => void;
 }
 
-const StoreCard = ({ store, onUpdate, onDelete }: StoreCardProps) => {
+function StoreCard({ store, onUpdate, onDelete }: StoreCardProps) {
   const methods = useForm<IStoreForm>({
     resolver: yupResolver<IStoreForm>(storeValidation),
     defaultValues: { ...store },
@@ -63,10 +63,16 @@ const StoreCard = ({ store, onUpdate, onDelete }: StoreCardProps) => {
         onDelete(store.id);
         setIsEditing(false);
       } else {
-        methods.setError('name', { type: 'manual', message: 'Failed to delete store' });
+        methods.setError('name', {
+          type: 'manual',
+          message: 'Failed to delete store',
+        });
       }
     } catch (error) {
-      methods.setError('name', { type: 'manual', message: 'Failed to delete store. Please try again.' });
+      methods.setError('name', {
+        type: 'manual',
+        message: 'Failed to delete store. Please try again.',
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -88,10 +94,16 @@ const StoreCard = ({ store, onUpdate, onDelete }: StoreCardProps) => {
         onUpdate(updated);
         setIsEditing(false);
       } else {
-        methods.setError('name', { type: 'manual', message: 'Failed to update store' });
+        methods.setError('name', {
+          type: 'manual',
+          message: 'Failed to update store',
+        });
       }
     } catch (error) {
-      methods.setError('name', { type: 'manual', message: 'Failed to save changes. Please try again.' });
+      methods.setError('name', {
+        type: 'manual',
+        message: 'Failed to save changes. Please try again.',
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -204,7 +216,10 @@ const StoreCard = ({ store, onUpdate, onDelete }: StoreCardProps) => {
 
   return (
     <Card>
-      <Card.Header as="h5" className="d-flex align-items-center justify-content-between">
+      <Card.Header
+        as="h5"
+        className="d-flex align-items-center justify-content-between"
+      >
         <div className="d-flex align-items-center">
           <Link
             href={store.website ?? '#'}
@@ -231,10 +246,7 @@ const StoreCard = ({ store, onUpdate, onDelete }: StoreCardProps) => {
       </Card.Header>
       <Card.Body>
         <Card.Text className="mb-6">
-          <AddressSubForm
-            address={store}
-            isEditing={isEditing}
-          />
+          <AddressSubForm address={store} isEditing={isEditing} />
         </Card.Text>
         <Card.Text className="text-muted small mb-6">
           <strong>Phone: </strong>
@@ -263,18 +275,19 @@ const StoreCard = ({ store, onUpdate, onDelete }: StoreCardProps) => {
           >
             <Pencil />
           </Button>
-          {(store.products?.length === 0 && store.shoppingLists?.length === 0) && (
-            <Button
-              variant="outline-danger"
-              size="sm"
-              className="p-1"
-              aria-label={`Delete ${store.name}`}
-              onClick={handleDeleteClick}
-              disabled={isSubmitting}
-            >
-              <Trash />
-            </Button>
-          )}
+          {store.products?.length === 0 &&
+            store.shoppingLists?.length === 0 && (
+              <Button
+                variant="outline-danger"
+                size="sm"
+                className="p-1"
+                aria-label={`Delete ${store.name}`}
+                onClick={handleDeleteClick}
+                disabled={isSubmitting}
+              >
+                <Trash />
+              </Button>
+            )}
         </div>
       </Card.Footer>
 
@@ -295,6 +308,6 @@ const StoreCard = ({ store, onUpdate, onDelete }: StoreCardProps) => {
       </Modal>
     </Card>
   );
-};
+}
 
 export default StoreCard;

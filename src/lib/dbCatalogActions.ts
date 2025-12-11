@@ -59,9 +59,13 @@ export async function createCatalogItem({
       finalUnitId = defaultUnit.id;
     }
 
-    // Check if product already exists
-    const existingProduct = await tx.product.findUnique({
-      where: { name },
+    // Check if product already exists (name is NOT unique anymore)
+    const existingProduct = await tx.product.findFirst({
+      where: {
+        name,
+        category,
+        unitId: finalUnitId,
+      },
     });
 
     let catalogItem;
@@ -135,7 +139,9 @@ export async function createCatalogItem({
         }
 
         if (!user) {
-          throw new Error(`User with ID ${userId} not found and cannot create catalog entry`);
+          throw new Error(
+            `User with ID ${userId} not found and cannot create catalog entry`,
+          );
         }
 
         // Use the actual user ID from database
@@ -167,6 +173,7 @@ export async function createCatalogItem({
 
   return result;
 }
+
 /**
  * Adds an existing product to a user's catalog
  * @param userId - The user's ID
@@ -242,7 +249,10 @@ export async function getUserCatalogItems(userId: string) {
  * @param userId - The user's ID
  * @param storeName - The store name to filter by
  */
-export async function getUserCatalogItemsByStore(userId: string, storeName: string) {
+export async function getUserCatalogItemsByStore(
+  userId: string,
+  storeName: string,
+) {
   const catalogItems = await prisma.catalog.findMany({
     where: {
       userId,

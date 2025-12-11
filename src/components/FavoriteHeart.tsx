@@ -4,16 +4,18 @@ import React, { useEffect, useState } from 'react';
 import { Heart, HeartFill } from 'react-bootstrap-icons';
 import styles from '@/app/recipes/page.module.css';
 
-type Props = {
+interface Props {
   recipeId: string;
-  variant?: 'oncard' | 'ondetail';
-};
+  variant: 'oncard' | 'ondetail';
+}
 
 /**
  * Returns true if this recipe is favorited by the current user.
  */
 async function fetchIsFavorite(recipeId: string) {
-  const res = await fetch(`/api/recipes/${recipeId}/favorite`, { method: 'GET' });
+  const res = await fetch(`/api/recipes/${recipeId}/favorite`, {
+    method: 'GET',
+  });
   if (!res.ok) return false;
   const data = await res.json();
   return Boolean(data.favorite);
@@ -27,7 +29,9 @@ export default function FavoriteHeart({ recipeId, variant = 'oncard' }: Props) {
 
   // Load initial state whenever the recipeId changes
   useEffect(() => {
-    fetchIsFavorite(recipeId).then(setIsFavorite).finally(() => setReady(true));
+    fetchIsFavorite(recipeId)
+      .then(setIsFavorite)
+      .finally(() => setReady(true));
   }, [recipeId]);
 
   // Toggle with optimistic UI; revert if the request fails

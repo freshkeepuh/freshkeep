@@ -35,7 +35,10 @@ export async function GET(request: NextRequest, context: any) {
     return NextResponse.json(user);
   } catch (error) {
     console.error('Error fetching user by email:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 },
+    );
   } finally {
     await prisma.$disconnect();
   }

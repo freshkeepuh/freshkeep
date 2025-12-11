@@ -1,83 +1,116 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import authOptions from '@/lib/authOptions';
+import { prisma } from '@/lib/prisma';
+import {
+  readLocation,
+  updateLocation,
+  deleteLocation,
+} from '@/lib/dbLocationActions';
 import getResponseError from '@/lib/routeHelpers';
-import { deleteLocation, readLocation, updateLocation } from '@/lib/dbLocationActions';
 
 export const runtime = 'nodejs';
 
+// Helper to get the authenticated User ID
+async function getUserId() {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.email) return null;
+
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email },
+    select: { id: true },
+  });
+
+  return user?.id || null;
+}
+
 /**
- * Handles GET requests for retrieving a location.
- * @param request The incoming request
- * @param context
- * @returns A JSON response containing the location or an error message
+ * GET /api/location/[id] - Read a single location
  */
-export async function GET(request: NextRequest, context: any) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
-    const { id } = context.params;
-    if (!id) {
-      return NextResponse.json({ error: 'Location ID is required' }, { status: 400 });
+    const { id } = await params;
+    const userId = await getUserId();
+
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const location = await readLocation(id);
+    const location = await readLocation(userId, id);
 
     if (!location) {
-      return NextResponse.json({ error: 'Location not found' }, { status: 404 });
+      return NextResponse.json(
+        { error: 'Location not found' },
+        { status: 404 },
+      );
     }
 
     return NextResponse.json(location);
-  } catch (error: Error | any) {
+  } catch (error: any) {
     return getResponseError(error);
   }
 }
 
 /**
- * Handles DELETE requests for deleting a location.
- * @param request The incoming request
- * @param context
- * @returns A JSON response indicating the result of the deletion
+ * PUT /api/location/[id] - Update a location
  */
-export async function DELETE(request: NextRequest, context: any) {
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
   try {
-    const { id } = context.params;
-    if (!id) {
-      return NextResponse.json({ error: 'Location ID is required' }, { status: 400 });
-    }
-
-    await deleteLocation(id);
-
-    return NextResponse.json({ message: 'Location deleted successfully' });
-  } catch (error: Error | any) {
-    return getResponseError(error);
-  }
-}
-
-/**
- * PUT /api/location/:id - update a location (partial allowed)
- */
-export async function PUT(request: NextRequest, context: any) {
-  try {
-    const { id } = context.params;
-    if (!id) {
-      return NextResponse.json({ error: 'Location ID is required' }, { status: 400 });
-    }
-
+    const { id } = await params;
+    const userId = await getUserId();
     const body = await request.json();
-    const current = await readLocation(id);
-    if (!current) {
-      return NextResponse.json({ error: 'Location not found' }, { status: 404 });
+
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const updated = await updateLocation(id, {
-      name: body.name ?? current.name,
-      address1: body.address1 ?? current.address1,
-      address2: body.address2 ?? current.address2,
-      city: body.city ?? current.city,
-      state: body.state ?? current.state,
-      zipcode: body.zipcode ?? current.zipcode,
-      country: body.country ?? current.country,
-      picture: body.picture || current.picture,
-    });
-    return NextResponse.json(updated, { status: 200 });
-  } catch (error: Error | any) {
+    const updated = await updateLocation(userId, id, body);
+
+    if (!updated) {
+      return NextResponse.json(
+        { error: 'Location not found or update failed' },
+        { status: 404 },
+      );
+    }
+
+    return NextResponse.json(updated);
+  } catch (error: any) {
+    return getResponseError(error);
+  }
+}
+
+/**
+ * DELETE /api/location/[id] - Delete a location
+ */
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  try {
+    const { id } = await params;
+    const userId = await getUserId();
+
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const success = await deleteLocation(userId, id);
+
+    if (!success) {
+      return NextResponse.json(
+        { error: 'Location not found or delete failed' },
+        { status: 404 },
+      );
+    }
+
+    return NextResponse.json({ success: true });
+  } catch (error: any) {
     return getResponseError(error);
   }
 }

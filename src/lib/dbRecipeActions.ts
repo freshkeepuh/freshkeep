@@ -6,9 +6,7 @@
 
 import { RecipeDiet, RecipeDifficulty } from '@prisma/client';
 import { prisma } from '@/lib/prisma';
-import {
-  recipeSelect,
-} from './dbActionTypes';
+import { recipeSelect } from './dbActionTypes';
 
 /**
  * Create a new recipe.
@@ -16,14 +14,14 @@ import {
  * @returns The created recipe.
  */
 export async function createRecipe(data: {
-  title: string,
-  slug: string | null,
-  cookTime: number,
-  difficulty: string,
-  diet: string,
-  ingredients: any,
-  instructions: any | null,
-  image: string | null,
+  title: string;
+  slug: string | null;
+  cookTime: number;
+  difficulty: string;
+  diet: string;
+  ingredients: any;
+  instructions: any | null;
+  image: string | null;
 }) {
   const newRecipe = await prisma.recipe.create({
     data: {
@@ -46,12 +44,10 @@ export async function createRecipe(data: {
  * @returns All recipes.
  */
 export async function readRecipes() {
-  const recipes = await prisma.recipe.findMany(
-    {
-      select: recipeSelect,
-      orderBy: { title: 'asc' },
-    },
-  );
+  const recipes = await prisma.recipe.findMany({
+    select: recipeSelect,
+    orderBy: { title: 'asc' },
+  });
   return recipes;
 }
 
@@ -75,16 +71,19 @@ export async function readRecipe(id: string | null | undefined) {
  * @param data The new data for the recipe.
  * @returns The updated recipe if found, otherwise null.
  */
-export async function updateRecipe(id: string, data: {
-  title: string,
-  slug: string | null,
-  cookTime: number,
-  difficulty: string,
-  diet: string,
-  ingredients: any,
-  instructions: any | null,
-  image: string | null,
-}) {
+export async function updateRecipe(
+  id: string,
+  data: {
+    title: string;
+    slug: string | null;
+    cookTime: number;
+    difficulty: string;
+    diet: string;
+    ingredients: any;
+    instructions: any | null;
+    image: string | null;
+  },
+) {
   const updatedRecipe = await prisma.recipe.update({
     where: { id },
     data: {

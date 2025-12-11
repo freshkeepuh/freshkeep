@@ -18,9 +18,9 @@ import {
  * @returns The created shoppingList.
  */
 export async function createShoppingList(data: {
-  name: string,
-  storeId: string,
-  isDefault: boolean,
+  name: string;
+  storeId: string;
+  isDefault: boolean;
 }) {
   const newShoppingList = await prisma.shoppingList.create({
     data: {
@@ -39,10 +39,10 @@ export async function createShoppingList(data: {
  * @returns The created shoppingList instance.
  */
 export async function createShoppingListItem(data: {
-  listId: string,
-  prodId: string,
-  unitId: string,
-  quantity: number,
+  listId: string;
+  prodId: string;
+  unitId: string;
+  quantity: number;
 }) {
   const newShoppingListItem = await prisma.shoppingListItem.create({
     data: {
@@ -61,21 +61,19 @@ export async function createShoppingListItem(data: {
  * @returns All shoppingLists.
  */
 export async function readShoppingLists() {
-  const shoppingLists = await prisma.shoppingList.findMany(
-    {
-      select: {
-        items: {
-          select: {
-            product: productsSelect,
-            unit: unitsSelect,
-            ...shoppingListItemSelect,
-          },
+  const shoppingLists = await prisma.shoppingList.findMany({
+    select: {
+      items: {
+        select: {
+          product: productsSelect,
+          unit: unitsSelect,
+          ...shoppingListItemSelect,
         },
-        ...shoppingListSelect,
       },
-      orderBy: { name: 'asc' },
+      ...shoppingListSelect,
     },
-  );
+    orderBy: { name: 'asc' },
+  });
   return shoppingLists;
 }
 
@@ -122,11 +120,14 @@ export async function readShoppingListItem(id: string | null | undefined) {
  * @param data The new data for the shoppingList.
  * @returns The updated shoppingList if found, otherwise null.
  */
-export async function updateShoppingList(id: string, data: {
-  name: string,
-  storeId: string,
-  isDefault: boolean,
-}) {
+export async function updateShoppingList(
+  id: string,
+  data: {
+    name: string;
+    storeId: string;
+    isDefault: boolean;
+  },
+) {
   const updatedShoppingList = await prisma.shoppingList.update({
     where: { id },
     data: {
@@ -145,12 +146,15 @@ export async function updateShoppingList(id: string, data: {
  * @param data The new data for the shoppingList instance.
  * @returns The updated shoppingList instance if found, otherwise null.
  */
-export async function updateShoppingListItem(id: string, data: {
-  listId: string,
-  prodId: string,
-  unitId: string,
-  quantity: number,
-}) {
+export async function updateShoppingListItem(
+  id: string,
+  data: {
+    listId: string;
+    prodId: string;
+    unitId: string;
+    quantity: number;
+  },
+) {
   const updatedShoppingListItem = await prisma.shoppingListItem.update({
     where: { id },
     data: {

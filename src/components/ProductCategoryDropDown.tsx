@@ -2,68 +2,78 @@
 
 import React from 'react';
 import { Form } from 'react-bootstrap';
-import { UseFormRegister } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 import { ProductCategory } from '@prisma/client'; // Update the path as needed
+import { getProductCategoryDisplayName } from '@/lib/dbEnums';
+import RequiredLabel from '@/components/RequiredLabel';
 
-// Helper function to get display name for category
-const getCategoryDisplayName = (category: ProductCategory): string => {
-  const displayNames: Record<ProductCategory, string> = {
-    [ProductCategory.Fruits]: 'Fruits',
-    [ProductCategory.Vegetables]: 'Vegetables',
-    [ProductCategory.CannedGoods]: 'Canned Goods',
-    [ProductCategory.Dairy]: 'Dairy',
-    [ProductCategory.Meat]: 'Meat',
-    [ProductCategory.FishSeafood]: 'Fish & Seafood',
-    [ProductCategory.Deli]: 'Deli',
-    [ProductCategory.Condiments]: 'Condiments',
-    [ProductCategory.Spices]: 'Spices',
-    [ProductCategory.Snacks]: 'Snacks',
-    [ProductCategory.Bakery]: 'Bakery',
-    [ProductCategory.Beverages]: 'Beverages',
-    [ProductCategory.Pasta]: 'Pasta',
-    [ProductCategory.Grains]: 'Grains',
-    [ProductCategory.Cereal]: 'Cereal',
-    [ProductCategory.Baking]: 'Baking',
-    [ProductCategory.FrozenFoods]: 'Frozen Foods',
-    [ProductCategory.Other]: 'Other',
-  };
-  return displayNames[category];
-};
-
-export interface IProductCategoryField {
-  productCategory: ProductCategory;
+interface ProductCategoryDropDownProps {
+  label: string;
+  disabled: boolean;
+  required: boolean;
+  onChange: React.ChangeEventHandler<HTMLSelectElement>;
 }
 
-export interface ProductCategoryDropDownProps {
-  register: UseFormRegister<IProductCategoryField>;
-  errors: { productCategory?: { message?: string } };
-  disabled?: boolean;
+/**
+ * ProductCategoryDropDown component.
+ *
+ * Note: The default value for the productCategory field should be set via useForm initialization,
+ * not via a prop or defaultValue on the select element. Example:
+ *   useForm({ defaultValues: { productCategory: ProductCategory.Food } })
+ */
+function ProductCategoryDropDown({
+  label = 'Product Category',
+  disabled = false,
+  required = false,
+  onChange = () => {},
+}: ProductCategoryDropDownProps): React.JSX.Element {
+  const [isDisabled] = React.useState(disabled);
+  const context = useFormContext();
+  if (!context) {
+    throw new Error(
+      'ProductCategoryDropDown must be used within a FormProvider',
+    );
+  }
+  const {
+    register,
+    formState: { errors },
+  } = context;
+  return (
+    <>
+      {label && !required && (
+        <Form.Label htmlFor="productCategory">{label}</Form.Label>
+      )}
+      {label && required && (
+        <RequiredLabel htmlFor="productCategory">{label}</RequiredLabel>
+      )}
+      <Form.Select
+        id="productCategory"
+        size="lg"
+        aria-label="Product Category Dropdown"
+        {...register('productCategory')}
+        disabled={isDisabled}
+        required={required}
+        isInvalid={!!errors.productCategory}
+        onChange={onChange}
+      >
+        {Object.values(ProductCategory)
+          .filter((productCategory) => typeof productCategory === 'string')
+          .sort()
+          .map((productCategory) => (
+            <option key={productCategory} value={productCategory}>
+              {getProductCategoryDisplayName(
+                productCategory as ProductCategory,
+              )}
+            </option>
+          ))}
+      </Form.Select>
+      <Form.Control.Feedback type="invalid">
+        {errors.productCategory
+          ? errors.productCategory.message?.toString()
+          : null}
+      </Form.Control.Feedback>
+    </>
+  );
 }
-
-const ProductCategoryDropDown = ({ register, errors, disabled }: ProductCategoryDropDownProps) => (
-  <>
-    <Form.Select
-      id="productCategory"
-      size="lg"
-      as="select"
-      aria-label="Product Category"
-      {...register('productCategory')}
-      disabled={disabled}
-      isInvalid={!!errors.productCategory}
-      defaultValue={ProductCategory.Other}
-    >
-      {
-        Object.values(ProductCategory).map((category) => (
-          <option key={category} value={category}>
-            {getCategoryDisplayName(category)}
-          </option>
-        ))
-      }
-    </Form.Select>
-    <Form.Control.Feedback type="invalid">
-      {errors.productCategory?.message}
-    </Form.Control.Feedback>
-  </>
-);
 
 export default ProductCategoryDropDown;

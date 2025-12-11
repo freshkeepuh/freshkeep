@@ -3,11 +3,11 @@
 import React from 'react';
 import { Col, Container, Form, Row } from 'react-bootstrap';
 import { useFormContext } from 'react-hook-form';
-import CountryDropDown, { ICountryField } from '@/components/CountryDropDown';
+import CountryDropDown from '@/components/CountryDropDown';
 import { Country } from '@prisma/client';
-import RequiredLabel from './RequiredLabel';
+import RequiredLabel from '@/components/RequiredLabel';
 
-export interface IAddressSubForm extends ICountryField {
+export interface IAddressSubForm {
   address1: string;
   address2?: string | undefined;
   city: string;
@@ -21,7 +21,7 @@ interface AddressSubFormProps {
   isEditing: boolean;
 }
 
-const AddressSubForm = ({ address, isEditing }: AddressSubFormProps) => {
+function AddressSubForm({ address, isEditing }: AddressSubFormProps) {
   const context = useFormContext();
   if (isEditing) {
     if (!context) {
@@ -128,7 +128,9 @@ const AddressSubForm = ({ address, isEditing }: AddressSubFormProps) => {
 
   return (
     <>
-      <span className="fw-bold mb-3">{address.address1 || 'No Address Provided'}</span>
+      <span className="fw-bold mb-3">
+        {address.address1 || 'No Address Provided'}
+      </span>
       {address.address1 && (
         <>
           <br />
@@ -151,6 +153,6 @@ const AddressSubForm = ({ address, isEditing }: AddressSubFormProps) => {
       )}
     </>
   );
-};
+}
 
 export default AddressSubForm;

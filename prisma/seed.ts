@@ -28,7 +28,10 @@ const prisma = new PrismaClient();
  * @returns The found item.
  * @throws If the array is empty, name is empty, or item is not found.
  */
-const findByName = <T extends { name: string }>(array: Array<T>, name: string): T => {
+const findByName = <T extends { name: string }>(
+  array: T[],
+  name: string,
+): T => {
   if (!array || array.length === 0) {
     throw new Error('Array is empty or undefined.');
   }
@@ -50,9 +53,9 @@ const findByName = <T extends { name: string }>(array: Array<T>, name: string): 
  * - password: Optional raw password from the config (defaults to 'changeme' if not provided).
  * - role: Optional Role enum (defaults to USER if not provided).
  * - settings: Optional JSON object containing user preferences
- *   such as units, country, theme and profile picture.
+ * such as units, country, theme and profile picture.
  */
-type AccountFromConfig = {
+interface AccountFromConfig {
   email: string;
   password?: string;
   role?: Role;
@@ -62,7 +65,7 @@ type AccountFromConfig = {
     theme?: 'light' | 'dark';
     profilePicture?: string;
   };
-};
+}
 
 /**
  * Runtime type validation for defaultAccounts.
@@ -77,6 +80,7 @@ function assertAccounts(x: any): asserts x is AccountFromConfig[] {
     }
   });
 }
+
 /**
  * Seed users into the database
  * This function creates users based on the default accounts specified in the configuration file.
@@ -85,8 +89,8 @@ function assertAccounts(x: any): asserts x is AccountFromConfig[] {
  * If a user already exists, it updates their password, role, and settings.
  * @returns {Promise<Array<User>>} A promise that resolves to an array of created or existing users.
  */
-async function seedUsers(): Promise<Array<User>> {
-  const users: Array<User> = [];
+async function seedUsers(): Promise<User[]> {
+  const users: User[] = [];
 
   // Tell TypeScript that the config accounts conform to AccountFromConfig
   const accountsRaw: unknown = config.defaultAccounts;
@@ -125,7 +129,8 @@ async function seedUsers(): Promise<Array<User>> {
       users.push(created);
     } else {
       // on reseed, do NOT clobber existing settings (user changes win)
-      const prevSettings = (existing.settings as Record<string, any> | null) ?? {};
+      const prevSettings =
+        (existing.settings as Record<string, any> | null) ?? {};
       const settingsForUpdate = {
         ...DEFAULT_SETTINGS,
         ...(account.settings ?? {}),
@@ -182,18 +187,20 @@ async function seedStores(): Promise<Array<Store>> {
 /**
  * Seed locations into the database
  * This function creates locations based on the default locations specified in the configuration file.
- * If a location already exists, it skips creation for that location.
+ * Locations are now tied to a specific owner user via userId.
  * @returns {Promise<Array<Location>>} A promise that resolves to an array of created or existing locations.
  */
-async function seedLocations(): Promise<Array<Location>> {
+async function seedLocations(owner: User): Promise<Array<Location>> {
   const locations: Array<Location> = [];
-  // Wait for all Locations to complete
   for (const defaultLocation of config.defaultLocations) {
-    // Get the Country
     const country = (defaultLocation.country as Country) || Country.USA;
-    // Upsert the Location to avoid duplicates
     const location = await prisma.location.upsert({
-      where: { name: defaultLocation.name },
+      where: {
+        userId_name: {
+          userId: owner.id,
+          name: defaultLocation.name,
+        },
+      },
       update: {},
       create: {
         name: defaultLocation.name,
@@ -204,6 +211,9 @@ async function seedLocations(): Promise<Array<Location>> {
         zipcode: defaultLocation.zipcode,
         country,
         picture: defaultLocation.picture || undefined,
+        user: {
+          connect: { id: owner.id },
+        },
       },
     });
     // Push the Location onto the array
@@ -216,30 +226,40 @@ async function seedLocations(): Promise<Array<Location>> {
 /**
  * Seed storageAreas into the database
  * This function creates storageAreas based on the default storageAreas specified in the configuration file.
- * It associates each storageArea with a location.
- * If a storageArea already exists, it skips creation for that storageArea.
+ * It associates each storageArea with a location and owner user.
+ * If a storageArea already exists (per user), it skips creation for that storageArea.
  * @param locations The Locations in which the StorageAreas are found.
  * @returns {Promise<Array<StorageArea>>} A promise that resolves to an array of created or existing storageAreas.
  */
-async function seedStorageAreas(locations: Array<Location>): Promise<Array<StorageArea>> {
+async function seedStorageAreas(
+  locations: Array<Location>,
+  owner: User,
+): Promise<Array<StorageArea>> {
   const storageAreas: Array<StorageArea> = [];
-  // Process the default storageAreas
   for (const defaultStorageArea of config.defaultStorageAreas) {
-    // Find the Location in which the storageArea belongs
     const location = findByName(locations, defaultStorageArea.locationName);
-    // Get the StorageArea Type
-    const storageType = (defaultStorageArea.type as StorageType) || StorageType.Pantry;
-    // Upsert the StorageArea to avoid duplicates
+
+    const storageType =
+      (defaultStorageArea.type as StorageType) || StorageType.Pantry;
+
     const storageArea = await prisma.storageArea.upsert({
-      where: { name: defaultStorageArea.name },
+      where: {
+        userId_name: {
+          userId: owner.id,
+          name: defaultStorageArea.name,
+        },
+      },
       update: {},
       create: {
         name: defaultStorageArea.name,
         type: storageType,
         locId: location.id,
         picture: defaultStorageArea.picture || undefined,
+        // use scalar FK instead of nested relation
+        userId: owner.id,
       },
     });
+
     // Push the storageArea into the array
     storageAreas.push(storageArea);
   }
@@ -249,56 +269,58 @@ async function seedStorageAreas(locations: Array<Location>): Promise<Array<Stora
 
 /**
  * Seed units into the database
- * This function creates measurement units based on the default units specified in the configuration file.
- * It handles both base units and derived units, ensuring proper relationships are established.
- * If a unit already exists, it skips creation for that unit.
+ * This function creates measurement units based on the hardcoded standard list.
+ * It handles system tags (Metric/Imperial/Universal) and factors.
  * @returns {Promise<Array<Unit>>} A promise that resolves to an array of created or existing units.
  */
 async function seedUnits(): Promise<Array<Unit>> {
+
   const units: Array<Unit> = [];
-  // First, create all base units
-  for (const defaultUnit of config.defaultUnits.filter((unit) => unit.name === unit.baseName)) {
-    // Upsert base unit to avoid duplicates
+
+  const unitsData = [
+    //UNIVERSAL (Visible to everyone)
+    { name: 'each', abbr: 'ea', factor: 1, system: 'universal' },
+    { name: 'piece', abbr: 'pc', factor: 1, system: 'universal' },
+    { name: 'dozen', abbr: 'dz', factor: 12, system: 'universal' },
+
+    //METRIC ONLY
+    { name: 'milligram', abbr: 'mg', factor: 0.001, system: 'metric' },
+    { name: 'gram', abbr: 'g', factor: 1, system: 'metric' },
+    { name: 'kilogram', abbr: 'kg', factor: 1000, system: 'metric' },
+    { name: 'milliliter', abbr: 'ml', factor: 1, system: 'metric' },
+    { name: 'deciliter', abbr: 'dl', factor: 100, system: 'metric' },
+    { name: 'liter', abbr: 'l', factor: 1000, system: 'metric' },
+
+    //IMPERIAL ONLY
+    { name: 'teaspoon', abbr: 'tsp', factor: 5, system: 'imperial' },
+    { name: 'tablespoon', abbr: 'tbsp', factor: 15, system: 'imperial' },
+    { name: 'fluid ounce', abbr: 'fl oz', factor: 29.5735, system: 'imperial' },
+    { name: 'cup', abbr: 'cp', factor: 236.588, system: 'imperial' },
+    { name: 'pint', abbr: 'pt', factor: 473.176, system: 'imperial' },
+    { name: 'quart', abbr: 'qt', factor: 946.353, system: 'imperial' },
+    { name: 'gallon', abbr: 'gal', factor: 3785.41, system: 'imperial' },
+    { name: 'ounce', abbr: 'oz', factor: 28.3495, system: 'imperial' },
+    { name: 'pound', abbr: 'lb', factor: 453.592, system: 'imperial' },
+  ];
+
+  for (const unitData of unitsData) {
     const unit = await prisma.unit.upsert({
-      where: { name: defaultUnit.name },
-      update: {},
+      where: { name: unitData.name },
+      update: {
+        abbr: unitData.abbr,
+        factor: unitData.factor,
+        system: unitData.system,
+      },
       create: {
-        name: defaultUnit.name,
-        abbr: defaultUnit.abbr,
-        baseId: null,
-        factor: defaultUnit.factor || 1.0,
+        name: unitData.name,
+        abbr: unitData.abbr,
+        factor: unitData.factor,
+        system: unitData.system,
       },
     });
-    // After creation, set the baseId to its own id for self reference
-    unit.baseId = unit.id;
-    // Update the unit with the new baseId
-    await prisma.unit.update({
-      where: { id: unit.id },
-      data: { baseId: unit.id },
-    });
-    // Add the unit to the array
     units.push(unit);
   }
 
-  // Then, create all derived units
-  for (const defaultUnit of config.defaultUnits.filter((unit) => unit.name !== unit.baseName)) {
-    // Find the parent unit to establish the relationship
-    const parentUnit = findByName(units, defaultUnit.baseName);
-    // Upsert derived unit to avoid duplicates
-    const unit = await prisma.unit.upsert({
-      where: { name: defaultUnit.name },
-      update: {},
-      create: {
-        name: defaultUnit.name,
-        abbr: defaultUnit.abbr,
-        baseId: parentUnit.id,
-        factor: defaultUnit.factor || 1.0,
-      },
-    });
-    // Add the unit to the array
-    units.push(unit);
-  }
-  // Return the array of units
   return units;
 }
 
@@ -310,23 +332,29 @@ async function seedUnits(): Promise<Array<Unit>> {
  * @param {Array<Unit>} units - An array of Unit objects to associate with products.
  * @returns {Promise<Array<Product>>} A promise that resolves to an array of created or existing products.
  */
-async function seedProducts(units: Array<Unit>, stores: Array<Store>): Promise<Array<Product>> {
+async function seedProducts(
+  units: Array<Unit>,
+  stores: Array<Store>,
+): Promise<Array<Product>> {
   const products: Array<Product> = [];
-  // Wait for all Products to complete
+
+  // Optional: if you DON'T want products to accumulate on repeated seeds in dev,
+  // uncomment the next line. In CI the DB is fresh anyway.
+  // await prisma.product.deleteMany({});
+
   for (const defaultProduct of config.defaultProducts) {
     // Find the unit to associate with the product
     const unit = findByName(units, defaultProduct.unitName);
     // Find the store to associate with the product
     const store = findByName(stores, defaultProduct.storeName);
-    // Set the category, defaulting to Other if not specified
-    // const category = (defaultProduct.category as ProductCategory) || ProductCategory.Other;
-    // Upsert product to avoid duplicates
-    const product = await prisma.product.upsert({
-      where: { name: defaultProduct.name },
-      update: {},
-      create: {
+
+    const category =
+      (defaultProduct.category as ProductCategory) || ProductCategory.Other;
+
+    const created = await prisma.product.create({
+      data: {
         name: defaultProduct.name,
-        category: ProductCategory.Other,
+        category,
         unitId: unit.id,
         stores: {
           connect: [{ id: store.id }],
@@ -336,10 +364,10 @@ async function seedProducts(units: Array<Unit>, stores: Array<Store>): Promise<A
         picture: defaultProduct.picture || undefined,
       },
     });
-    // Add the product to the array
-    products.push(product);
+
+    products.push(created);
   }
-  // Return the array of products
+
   return products;
 }
 
@@ -352,7 +380,7 @@ async function seedProducts(units: Array<Unit>, stores: Array<Store>): Promise<A
  * @param storageAreas The StorageAreas in which the Items can be stored.
  * @param products The Products that the Items are based on.
  * @param units The Units of measurement for the Items.
- * @returns {Promise<Array<Item>>} A promise that resolves to an array of created or existing items.
+ * @returns {Promise<void>} A promise that resolves when done.
  */
 async function seedProductInstances(
   locations: Array<Location>,
@@ -381,7 +409,6 @@ async function seedProductInstances(
         quantity: defaultItem.quantity || 0.0,
       },
     });
-    console.log('Created item:', instance);
   }
 }
 
@@ -390,7 +417,9 @@ async function seedProductInstances(
  * @param stores The Stores to which the lists belong.
  * @returns A promise that resolves to an array of created or existing Shopping Lists.
  */
-const seedShoppingList = async (stores: Array<Store>): Promise<Array<ShoppingList>> => {
+const seedShoppingList = async (
+  stores: Array<Store>,
+): Promise<Array<ShoppingList>> => {
   const shoppingLists: Array<ShoppingList> = [];
   for (const defaultList of config.defaultShoppingLists) {
     const store = findByName(stores, defaultList.storeName);
@@ -480,7 +509,7 @@ type SeedRecipe = {
   difficulty: 'EASY' | 'NORMAL' | 'HARD';
   diet: 'ANY' | 'VEGAN' | 'VEGETARIAN' | 'PESCETARIAN';
   ingredients: string[];
-  instructions?: { step: number; text: string }[];
+  instructions?: string[];
   image?: string | null;
 };
 
@@ -522,10 +551,12 @@ async function seedRecipes(): Promise<void> {
  * Main seeding function
  */
 async function main() {
-  await seedUsers();
+  const users = await seedUsers();
+  const primaryUser = users[0]; // first default account gets the seeded locations & storages
+
   const stores = await seedStores();
-  const locations = await seedLocations();
-  const storageAreas = await seedStorageAreas(locations);
+  const locations = await seedLocations(primaryUser);
+  const storageAreas = await seedStorageAreas(locations, primaryUser);
   const units = await seedUnits();
   const products = await seedProducts(units, stores);
   await seedProductInstances(locations, storageAreas, products, units);
