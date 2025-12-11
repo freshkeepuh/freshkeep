@@ -59,15 +59,19 @@ function mapCategory(categories: string[] | undefined): string {
     'en:canned-foods': 'Pantry',
   };
 
-  for (const cat of categories) {
-    for (const [key, value] of Object.entries(categoryMap)) {
-      if (cat.includes(key.replace('en:', ''))) {
-        return value;
-      }
+  let foundCategory = 'Other';
+  categories.some((cat) => {
+    const match = Object.entries(categoryMap).find(([key]) =>
+      cat.includes(key.replace('en:', '')),
+    );
+    if (match) {
+      [, foundCategory] = match;
+      return true;
     }
-  }
+    return false;
+  });
 
-  return 'Other';
+  return foundCategory;
 }
 
 export async function GET(request: NextRequest) {

@@ -46,7 +46,7 @@ function SignUpPage() {
 
       // ✅ Redirect to sign-in instead of auto sign-in
       router.push('/auth/signin?registered=1');
-    } catch (error) {
+    } catch {
       setShowError(true);
     }
   };

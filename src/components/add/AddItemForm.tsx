@@ -4,7 +4,7 @@ import { useMemo, useState, useCallback } from 'react';
 import { $Enums, ProductCategory } from '@prisma/client';
 import { Button, Card, Col, Form, Row } from 'react-bootstrap';
 import ProductInformation from './ProductInformation';
-import Expiration from './ExpirySection';
+import ExpirySection from './ExpirySection';
 import type {
   ContainerOption,
   GroceryOption,
@@ -220,7 +220,7 @@ export default function AddItemForm({
           </Row>
 
           <div className="mt-2">
-            <Expiration
+            <ExpirySection
               expiresAt={expiresAt}
               setExpiresAt={(v) => setExpiresAt(v)}
               picture={picture}

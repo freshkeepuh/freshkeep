@@ -12,6 +12,7 @@ export const runtime = 'nodejs';
  * @param request The incoming request
  * @returns A JSON response containing all shopping lists or an error message
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export async function GET(request: NextRequest) {
   try {
     const shoppingLists = await readShoppingLists();

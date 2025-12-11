@@ -63,7 +63,7 @@ function ShoppingListModal({
   listTitle,
   listId,
   items,
-  onItemAdded,
+  onItemAdded = undefined,
   defaultTab = 'list',
 }: ShoppingListModalProps) {
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
@@ -490,6 +490,7 @@ function ShoppingListModal({
                 ))}
               </div>
               <div className="mt-2 text-muted" style={{ fontSize: '14px' }}>
+                {/* eslint-disable-next-line no-nested-ternary */}
                 {isLoading
                   ? 'Searching catalog... (this may take up to 30 seconds)'
                   : catalogItems.length > 0
@@ -523,6 +524,7 @@ function ShoppingListModal({
                 </div>
 
                 <div style={{ height: '40vh', overflowY: 'auto' }}>
+                  {/* eslint-disable no-nested-ternary */}
                   <div className="px-3 py-2">
                     {isLoading ? (
                       <div className="text-center py-5">
@@ -649,6 +651,7 @@ function ShoppingListModal({
                       </div>
                     )}
                   </div>
+                  {/* eslint-enable no-nested-ternary */}
                 </div>
               </div>
             </div>

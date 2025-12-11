@@ -68,7 +68,7 @@ function StoreCard({ store, onUpdate, onDelete }: StoreCardProps) {
           message: 'Failed to delete store',
         });
       }
-    } catch (error) {
+    } catch {
       methods.setError('name', {
         type: 'manual',
         message: 'Failed to delete store. Please try again.',
@@ -99,7 +99,7 @@ function StoreCard({ store, onUpdate, onDelete }: StoreCardProps) {
           message: 'Failed to update store',
         });
       }
-    } catch (error) {
+    } catch {
       methods.setError('name', {
         type: 'manual',
         message: 'Failed to save changes. Please try again.',

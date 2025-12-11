@@ -69,6 +69,17 @@ const prettierConfig = [
   },
 ];
 
+// Custom rule overrides
+const customConfig = [
+  {
+    name: 'custom/config',
+    rules: {
+      // Disable require-default-props - default arguments in function params are sufficient
+      'react/require-default-props': 'off',
+    },
+  },
+];
+
 export default [
   // Ignore .gitignore files/folder in eslint
   includeIgnoreFile(gitignorePath),
@@ -80,4 +91,6 @@ export default [
   ...typescriptConfig,
   // Prettier Config
   ...prettierConfig,
+  // Custom Config
+  ...customConfig,
 ];

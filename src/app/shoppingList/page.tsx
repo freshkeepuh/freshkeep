@@ -137,7 +137,9 @@ function ShoppingListPage() {
   };
 
   const handleDeleteList = async (listId: string) => {
-    if (!confirm('Are you sure you want to delete this shopping list?')) return;
+    // eslint-disable-next-line no-alert
+    if (!window.confirm('Are you sure you want to delete this shopping list?'))
+      return;
 
     setIsDeleting(listId);
     try {

@@ -17,8 +17,8 @@ function ShoppingListCard({
   listTitle,
   items,
   onEdit,
-  onDelete,
-  isDeleting,
+  onDelete = undefined,
+  isDeleting = false,
 }: ShoppingListCardProps) {
   const visibleItems = items.slice(0, MAX_VISIBLE_ITEMS);
   const remainingCount = items.length - MAX_VISIBLE_ITEMS;
