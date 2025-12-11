@@ -263,7 +263,7 @@ export default function StorageDetail({ storage }: StorageDetailProps) {
           id: editingItem.id,
           quantity: editForm.quantity,
           expiresAt: editForm.expiresAt || null,
-          unitId: editForm.unitId || null,
+          unitId: editForm.unitId === "" ? null : editForm.unitId,
         }),
       });
 
