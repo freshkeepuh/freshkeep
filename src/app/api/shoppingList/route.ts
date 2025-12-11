@@ -1,62 +1,44 @@
 import { NextRequest, NextResponse } from 'next/server';
 import getResponseError from '@/lib/routeHelpers';
-import {
-  deleteShoppingList,
-  readShoppingList,
-} from '@/lib/dbShoppingListActions';
+import { createShoppingList, readShoppingLists } from '@/lib/dbShoppingListActions';
 
 export const runtime = 'nodejs';
 
 /**
- * Handles GET requests for retrieving a shoppingList.
+ * Handles GET requests for retrieving all shopping lists.
  * @param request The incoming request
- * @param context
- * @returns A JSON response containing the shoppingList or an error message
+ * @returns A JSON response containing all shopping lists or an error message
  */
-export async function GET(request: NextRequest, context: any) {
+export async function GET(request: NextRequest) {
   try {
-    const { id } = context.params;
-    if (!id) {
-      return NextResponse.json(
-        { error: 'ShoppingList ID is required' },
-        { status: 400 },
-      );
-    }
-
-    const shoppingList = await readShoppingList(id);
-
-    if (!shoppingList) {
-      return NextResponse.json(
-        { error: 'ShoppingList not found' },
-        { status: 404 },
-      );
-    }
-
-    return NextResponse.json(shoppingList);
+    const shoppingLists = await readShoppingLists();
+    return NextResponse.json(shoppingLists);
   } catch (error: Error | any) {
     return getResponseError(error);
   }
 }
 
 /**
- * Handles DELETE requests for deleting a shoppingList.
+ * Handles POST requests for creating a new shopping list.
  * @param request The incoming request
- * @param context
- * @returns A JSON response indicating the result of the deletion
+ * @returns A JSON response containing the created shopping list or an error message
  */
-export async function DELETE(request: NextRequest, context: any) {
+export async function POST(request: NextRequest) {
   try {
-    const { id } = context.params;
-    if (!id) {
-      return NextResponse.json(
-        { error: 'ShoppingList ID is required' },
-        { status: 400 },
-      );
+    const body = await request.json();
+    const { name, storeId, isDefault = false } = body;
+
+    if (!name) {
+      return NextResponse.json({ error: 'Name is required' }, { status: 400 });
     }
 
-    await deleteShoppingList(id);
+    const shoppingList = await createShoppingList({
+      name,
+      storeId: storeId || undefined,
+      isDefault,
+    });
 
-    return NextResponse.json({ message: 'ShoppingList deleted successfully' });
+    return NextResponse.json(shoppingList, { status: 201 });
   } catch (error: Error | any) {
     return getResponseError(error);
   }

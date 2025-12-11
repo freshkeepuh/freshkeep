@@ -5,28 +5,29 @@
 'use server';
 
 import { prisma } from '@/lib/prisma';
-import {
-  productsSelect,
-  shoppingListItemSelect,
-  shoppingListSelect,
-  unitsSelect,
-} from '@/lib/dbActionTypes';
+import { shoppingListItemSelect, shoppingListSelect } from '@/lib/dbActionTypes';
 
 /**
  * Create a new shoppingList.
  * @param data The shoppingList data to create.
  * @returns The created shoppingList.
  */
-export async function createShoppingList(data: {
-  name: string;
-  storeId: string;
-  isDefault: boolean;
-}) {
+export async function createShoppingList(data: { name: string; storeId?: string; isDefault?: boolean }) {
+  // If no storeId provided, get the first available store
+  let storeId = data.storeId;
+  if (!storeId) {
+    const store = await prisma.store.findFirst();
+    if (!store) {
+      throw new Error('No stores available. Please create a store first.');
+    }
+    storeId = store.id;
+  }
+
   const newShoppingList = await prisma.shoppingList.create({
     data: {
       name: data.name,
-      storeId: data.storeId,
-      isDefault: data.isDefault,
+      storeId: storeId,
+      isDefault: data.isDefault ?? false,
     },
     select: shoppingListSelect,
   });
@@ -40,15 +41,17 @@ export async function createShoppingList(data: {
  */
 export async function createShoppingListItem(data: {
   listId: string;
-  prodId: string;
-  unitId: string;
+  name: string;
+  image?: string | null;
+  category?: string | null;
   quantity: number;
 }) {
   const newShoppingListItem = await prisma.shoppingListItem.create({
     data: {
       listId: data.listId,
-      prodId: data.prodId,
-      unitId: data.unitId,
+      name: data.name,
+      image: data.image,
+      category: data.category,
       quantity: data.quantity,
     },
     select: shoppingListItemSelect,
@@ -64,11 +67,7 @@ export async function readShoppingLists() {
   const shoppingLists = await prisma.shoppingList.findMany({
     select: {
       items: {
-        select: {
-          product: productsSelect,
-          unit: unitsSelect,
-          ...shoppingListItemSelect,
-        },
+        select: shoppingListItemSelect,
       },
       ...shoppingListSelect,
     },
@@ -88,11 +87,7 @@ export async function readShoppingList(id: string | null | undefined) {
     where: { id },
     select: {
       items: {
-        select: {
-          product: productsSelect,
-          unit: unitsSelect,
-          ...shoppingListItemSelect,
-        },
+        select: shoppingListItemSelect,
       },
       ...shoppingListSelect,
     },
@@ -149,25 +144,23 @@ export async function updateShoppingList(
 export async function updateShoppingListItem(
   id: string,
   data: {
-    listId: string;
-    prodId: string;
-    unitId: string;
-    quantity: number;
+    name?: string;
+    image?: string | null;
+    category?: string | null;
+    quantity?: number;
+    isPurchased?: boolean;
   },
 ) {
   const updatedShoppingListItem = await prisma.shoppingListItem.update({
     where: { id },
     data: {
-      listId: data.listId,
-      prodId: data.prodId,
-      unitId: data.unitId,
-      quantity: data.quantity,
+      ...(data.name !== undefined && { name: data.name }),
+      ...(data.image !== undefined && { image: data.image }),
+      ...(data.category !== undefined && { category: data.category }),
+      ...(data.quantity !== undefined && { quantity: data.quantity }),
+      ...(data.isPurchased !== undefined && { isPurchased: data.isPurchased }),
     },
-    select: {
-      product: productsSelect,
-      unit: unitsSelect,
-      ...shoppingListItemSelect,
-    },
+    select: shoppingListItemSelect,
   });
   return updatedShoppingListItem;
 }
