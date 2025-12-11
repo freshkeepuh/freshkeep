@@ -16,27 +16,29 @@ export default function RecipeTimerCard({
   const [secondsLeft, setSecondsLeft] = useState(defaultMinutes * 60);
   // Whether the timer is running
   const [running, setRunning] = useState(false);
+  // Simple input error message
+  const [inputError, setInputError] = useState<string | null>(null);
 
   // Countdown
   useEffect(() => {
-    let id: ReturnType<typeof setInterval> | null = null;
-
-    if (running) {
-      id = setInterval(() => {
-        setSecondsLeft((s) => {
-          if (s <= 1) {
-            // stop at 0
-            return 0;
-          }
-          return s - 1;
-        });
-      }, 1000);
+    if (!running) {
+      return () => {};
     }
 
+    const id = setInterval(() => {
+      setSecondsLeft((s) => {
+        if (s <= 1) {
+          // stop at 0
+          clearInterval(id);
+          setRunning(false);
+          return 0;
+        }
+        return s - 1;
+      });
+    }, 1000);
+
     return () => {
-      if (id) {
-        clearInterval(id);
-      }
+      clearInterval(id);
     };
   }, [running]);
 
@@ -46,26 +48,50 @@ export default function RecipeTimerCard({
     .padStart(2, '0');
   const s = (secondsLeft % 60).toString().padStart(2, '0');
 
+  // Handle minutes input + basic validation
+  const handleMinutesChange = ({
+    target: { value },
+  }: React.ChangeEvent<HTMLInputElement>) => {
+    setMinutesInput(value);
+
+    const mins = Number(value);
+    if (value === '') {
+      setInputError('Please enter minutes.');
+    } else if (!Number.isFinite(mins) || mins < 1) {
+      setInputError('Minutes must be at least 1.');
+    } else {
+      setInputError(null);
+    }
+  };
+
   // Set new minutes
   const applyMinutes = () => {
     const mins = Number(minutesInput);
-    if (!mins || mins <= 0) return;
+    if (!Number.isFinite(mins) || mins < 1) {
+      return;
+    }
     setRunning(false);
     setSecondsLeft(mins * 60);
   };
 
   // Reset timer
   const reset = () => {
-    const mins = Number(minutesInput) || defaultMinutes;
+    const parsed = Number(minutesInput);
+    const mins =
+      !Number.isFinite(parsed) || parsed < 1 ? defaultMinutes : parsed;
+
     setRunning(false);
     setSecondsLeft(mins * 60);
+    setMinutesInput(String(mins));
+    setInputError(null);
   };
 
-  // Extra class for warning / done (no nested ternary)
+  // For warning / done
   let extraClass = '';
   if (secondsLeft === 0) {
     extraClass = styles.rpTimerDone; // Red + Animation
-  } else if (secondsLeft <= 10) {
+  } else if (secondsLeft < 10) {
+    // "fewer than 10 seconds remaining"
     extraClass = styles.rpTimerWarn; // Orange
   }
 
@@ -81,21 +107,36 @@ export default function RecipeTimerCard({
       </div>
 
       {/* Minutes input */}
-      <div className={styles.rpRow} style={{ marginBottom: 12 }}>
-        <input
-          type="number"
-          min="1"
-          value={minutesInput}
-          onChange={(e) => setMinutesInput(e.target.value)}
-          className={styles.rpTimerInput}
-        />
-        <button
-          type="button"
-          className={styles.rpBtnSecondary}
-          onClick={applyMinutes}
-        >
-          Set
-        </button>
+      <div
+        className={styles.rpRow}
+        style={{
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          marginBottom: 12,
+        }}
+      >
+        <div style={{ display: 'flex', gap: 10, width: '100%' }}>
+          <input
+            type="number"
+            min="1"
+            value={minutesInput}
+            onChange={handleMinutesChange}
+            className={styles.rpTimerInput}
+          />
+          <button
+            type="button"
+            className={styles.rpBtnSecondary}
+            onClick={applyMinutes}
+            disabled={!!inputError}
+          >
+            Set
+          </button>
+        </div>
+        {inputError && (
+          <p style={{ color: 'red', fontSize: 14, marginTop: 4 }}>
+            {inputError}
+          </p>
+        )}
       </div>
 
       {/* Timer display with warning color + time-up animation */}

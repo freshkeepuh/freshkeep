@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { X } from 'react-bootstrap-icons';
+import { useRouter } from 'next/navigation';
 import styles from '@/app/recipes/page.module.css';
 import ConfirmModal from './ConfirmModal';
 
@@ -15,17 +16,34 @@ export default function DeleteRecipeButton({
   variant = 'ondetail',
 }: DeleteRecipeButtonProps) {
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   const wrapperClass =
     variant === 'ondetail' ? styles.rpFavOnDetail : styles.rpFavOnCard;
 
   const handleDelete = async () => {
-    const res = await fetch(`/api/recipes/${recipeId}`, {
-      method: 'DELETE',
-    });
+    setError(null);
 
-    if (res.ok) {
-      window.location.href = '/recipes';
+    try {
+      const res = await fetch(`/api/recipes/${recipeId}`, {
+        method: 'DELETE',
+      });
+
+      if (!res.ok) {
+        // Error message
+        const message = await res.text().catch(() => '');
+        setError(message || 'Failed to delete recipe. Please try again.');
+        return;
+      }
+
+      // Client-side navigation
+      router.push('/recipes');
+    } catch {
+      setError('Network error. Please try again.');
+    } finally {
+      // Close the modal regardless of success/failure
+      setOpen(false);
     }
   };
 
@@ -49,6 +67,18 @@ export default function DeleteRecipeButton({
         onCancel={() => setOpen(false)}
         onConfirm={handleDelete}
       />
+
+      {error && (
+        <p
+          style={{
+            color: '#b91c1c',
+            marginTop: 8,
+            fontSize: 14,
+          }}
+        >
+          {error}
+        </p>
+      )}
     </>
   );
 }

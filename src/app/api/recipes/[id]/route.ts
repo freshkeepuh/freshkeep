@@ -1,11 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import authOptions from '@/lib/authOptions';
 import { prisma } from '@/lib/prisma';
 
 export const runtime = 'nodejs';
 
 // Delete recipe
 export async function DELETE(_req: NextRequest, context: any) {
-  const id = context?.params?.id as string | undefined;
+  // Require authentication
+  const session = await getServerSession(authOptions);
+
+  if (!session || !session.user?.id) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const { id } = (context?.params || {}) as { id?: string };
 
   if (!id) {
     return NextResponse.json(
@@ -15,6 +24,7 @@ export async function DELETE(_req: NextRequest, context: any) {
   }
 
   try {
+    // Delete recipe
     await prisma.recipe.delete({
       where: { id },
     });
