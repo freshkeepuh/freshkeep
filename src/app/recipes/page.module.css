@@ -551,3 +551,22 @@
   box-shadow: 0 0 0 3px rgba(0,0,0,0.08);
 }
 
+/* Ingredient item layout (view page, in-stock list) */
+.rpIngredientItemColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+}
+
+.rpIngredientLabelRow {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rpPantryInfo {
+  font-size: 14px;
+  color: #127e3c;
+  margin-left: 26px;
+}

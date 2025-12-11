@@ -81,29 +81,20 @@ export default async function RecipeViewPage(props: any) {
     },
   });
 
-  // Aggregate pantry quantity + unit by normalized product name
-  const pantryQuantities: Record<string, { qty: number; unit: string | null }> =
-    {};
-
+  // Aggregate pantry quantity by normalized product name and unit
+  const pantryQuantities: Record<string, Record<string, number>> = {};
   instances.forEach((inst) => {
     const productName = inst.product?.name;
     if (!productName) return;
-
     const key = normalizeNameKey(productName);
-    const existing = pantryQuantities[key];
-
-    const newQty = (existing?.qty ?? 0) + inst.quantity;
-
     // Use the DB unit
     const dbUnit =
-      (inst.product as any).unit?.abbr ??
-      (inst.product as any).unit?.name ??
-      null;
-
-    pantryQuantities[key] = {
-      qty: newQty,
-      unit: existing?.unit ?? dbUnit, // keep first non-null unit we see
-    };
+      inst.product.unit?.abbr ?? inst.product.unit?.name ?? 'units';
+    if (!pantryQuantities[key]) {
+      pantryQuantities[key] = {};
+    }
+    pantryQuantities[key][dbUnit] =
+      (pantryQuantities[key][dbUnit] ?? 0) + inst.quantity;
   });
 
   const haveNames = instances
@@ -240,46 +231,49 @@ export default async function RecipeViewPage(props: any) {
                         .replace(/[^a-z0-9]+/gi, '-')
                         .toLowerCase()}-${idx}`;
 
-                      // Helper text using pantry quantities
+                      // Helper text using pantry quantities (may have multiple units)
                       const pantryKey = normalizeNameKey(name);
                       const pantryInfo = pantryQuantities[pantryKey];
+
+                      const pantrySummary = pantryInfo
+                        ? Object.entries(pantryInfo)
+                            .filter(([, qty]) => qty > 0)
+                            .map(
+                              ([unitLabel, qty]) =>
+                                `${qty} ${unitLabel ?? 'units'}`,
+                            )
+                            .join(', ')
+                        : '';
 
                       return (
                         <div
                           key={id}
-                          className={styles.rpIngredientItem}
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'flex-start',
-                            gap: 2,
-                          }}
+                          className={`${styles.rpIngredientItem} ${styles.rpIngredientItemColumn}`}
                         >
-                          <div
-                            style={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: 6,
-                            }}
-                          >
+                          <div className={styles.rpIngredientLabelRow}>
                             <span className={styles.rpMedium}>{label}</span>
                           </div>
 
                           {pantryInfo && (
                             <div
-                              style={{
-                                fontSize: 14,
-                                color: '#127e3cff',
-                                marginLeft: 26,
-                              }}
+                              className={styles.rpPantryInfo}
+                              aria-label={`Pantry stock: ${pantrySummary}`}
                             >
-                              You have: {pantryInfo.qty}{' '}
-                              {pantryInfo.unit ?? 'units'}
+                              You have:{' '}
+                              {Object.entries(pantryInfo)
+                                .filter(([, qty]) => qty > 0)
+                                .map(([unitLabel, qty], unitIndex) => (
+                                  <span key={unitLabel ?? `unit-${unitIndex}`}>
+                                    {unitIndex > 0 ? ' + ' : ''}
+                                    {qty} {unitLabel ?? 'units'}
+                                  </span>
+                                ))}
                             </div>
                           )}
                         </div>
                       );
                     })}
+
                     {inStock.length === 0 && (
                       <p className={styles.rpText}>
                         No ingredients in stock at this location.

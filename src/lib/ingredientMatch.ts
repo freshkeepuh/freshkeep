@@ -38,9 +38,14 @@ export const norm = (s: string | null | undefined) =>
  * Normalize a product/ingredient name into a key for lookups.
  * Lowercase, collapse spaces, and drop a trailing "s".
  */
-export const normalizeNameKey = (name: string): string =>
-  norm(name).replace(/\s+/g, ' ').replace(/s$/, '');
-
+export const normalizeNameKey = (name: string): string => {
+  const base = norm(name).replace(/\s+/g, ' ');
+  // Remove a basic trailing "s" without affecting words ending in "ss"
+  if (base.endsWith('s') && !base.endsWith('ss')) {
+    return base.slice(0, -1);
+  }
+  return base;
+};
 /**
  * Returns true if an ingredient name loosely matches a product name.
  */
