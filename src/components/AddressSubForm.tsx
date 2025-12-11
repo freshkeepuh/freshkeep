@@ -120,7 +120,7 @@ function AddressSubForm({ address, isEditing }: AddressSubFormProps) {
           <CountryDropDown
             label="country"
             disabled={false}
-            required={true}
+            required
             onChange={() => {}}
           />
           <Form.Control.Feedback type="invalid">
