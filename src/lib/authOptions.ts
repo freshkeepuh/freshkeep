@@ -6,14 +6,33 @@ import prisma from '@/lib/prisma';
 
 // Get secret with fallback for development and build time
 // During build, Next.js may not have access to env vars, so we provide a fallback
-const secret =
-  process.env.NEXTAUTH_SECRET ??
-  process.env.AUTH_SECRET ??
-  // Always provide a fallback to prevent build-time errors
-  // In production runtime, this should be set via environment variables
-  'dev-nextauth-secret-fallback-for-build';
+const getSecret = () => {
+  const secret =
+    process.env.NEXTAUTH_SECRET ??
+    process.env.AUTH_SECRET ??
+    // Only use fallback in non-production environments
+    (process.env.NODE_ENV !== 'production'
+      ? 'dev-nextauth-secret-fallback-for-build'
+      : undefined);
+
+  // In production, we must have a secret set
+  if (!secret && process.env.NODE_ENV === 'production') {
+    // eslint-disable-next-line no-console
+    console.error(
+      'ERROR: NEXTAUTH_SECRET or AUTH_SECRET must be set in production environment variables.',
+    );
+    throw new Error(
+      'NEXTAUTH_SECRET (or AUTH_SECRET) is required in production. Set it in your environment variables.',
+    );
+  }
+
+  return secret || 'dev-nextauth-secret-fallback-for-build';
+};
+
+const secret = getSecret();
 
 const authOptions: NextAuthOptions = {
+  debug: process.env.NODE_ENV === 'development',
   session: {
     strategy: 'jwt',
   },
@@ -29,33 +48,44 @@ const authOptions: NextAuthOptions = {
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials.password) {
-          return null;
-        }
-        const user = await prisma.user.findUnique({
-          where: {
-            email: credentials.email,
-          },
-        });
-        if (!user) {
-          return null;
-        }
+        try {
+          if (!credentials?.email || !credentials.password) {
+            return null;
+          }
 
-        const isPasswordValid = await compare(
-          credentials.password,
-          user.password,
-        );
-        if (!isPasswordValid) {
+          const user = await prisma.user.findUnique({
+            where: {
+              email: credentials.email,
+            },
+          });
+
+          if (!user) {
+            return null;
+          }
+
+          const isPasswordValid = await compare(
+            credentials.password,
+            user.password,
+          );
+
+          if (!isPasswordValid) {
+            return null;
+          }
+
+          return {
+            id: user.id,
+            email: user.email,
+            role: user.role,
+            settings: user.settings,
+            randomKey: Math.random().toString(36).substring(2, 15),
+          };
+        } catch (error) {
+          // Log error for debugging in production
+          // eslint-disable-next-line no-console
+          console.error('Authentication error:', error);
+          // Return null to indicate authentication failure
           return null;
         }
-
-        return {
-          id: user.id,
-          email: user.email,
-          role: user.role,
-          settings: user.settings,
-          randomKey: Math.random().toString(36).substring(2, 15),
-        };
       },
     }),
   ],
