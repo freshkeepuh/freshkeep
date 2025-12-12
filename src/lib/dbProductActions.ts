@@ -5,7 +5,7 @@
 'use server';
 
 import { ProductCategory } from '@prisma/client';
-import prisma from '@/lib/prisma';
+import { prisma } from '@/lib/prisma';
 import {
   locationsSelect,
   productInstanceSelect,

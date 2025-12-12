@@ -2,7 +2,7 @@
 
 import { hash } from 'bcryptjs';
 import { User } from '@prisma/client';
-import prisma from '@/lib/prisma';
+import { prisma } from '@/lib/prisma';
 import DEFAULT_SETTINGS from '@/lib/user-defaults';
 
 /**

@@ -3,7 +3,7 @@ import authOptions from '@/lib/authOptions';
 import { loggedInProtectedPage } from '@/lib/page-protection';
 import { readStorageArea } from '@/lib/dbStorageAreaActions';
 import StorageDetail from '@/components/dashboard/StorageDetail';
-import prisma from '@/lib/prisma';
+import { prisma } from '@/lib/prisma';
 
 export default async function StorageDetailPage({
   params,

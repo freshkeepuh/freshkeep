@@ -5,7 +5,7 @@
 'use server';
 
 import { Country } from '@prisma/client';
-import prisma from '@/lib/prisma';
+import { prisma } from '@/lib/prisma';
 import { storeSelect } from './dbActionTypes';
 
 /**

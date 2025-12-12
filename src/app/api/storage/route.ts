@@ -5,7 +5,7 @@ import {
 } from '@/lib/dbStorageAreaActions';
 import { getServerSession } from 'next-auth';
 import authOptions from '@/lib/authOptions';
-import prisma from '@/lib/prisma';
+import { prisma } from '@/lib/prisma';
 
 export const runtime = 'nodejs';
 

@@ -3,7 +3,7 @@ import { Container } from 'react-bootstrap';
 import Settings from '@/components/Settings';
 import { getServerSession } from 'next-auth';
 import authOptions from '@/lib/authOptions';
-import prisma from '@/lib/prisma';
+import { prisma } from '@/lib/prisma';
 import { redirect } from 'next/navigation';
 
 export const dynamic = 'force-dynamic';
