@@ -1,18 +1,18 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
+/**
+ * The DB Datasource
+ */
+datasource db {
+  provider = "postgresql"
+  // url      = env("DATABASE_URL")
+}
 
 /**
  * Prisma Client Generator
  */
 generator client {
   provider = "prisma-client-js"
-}
-
-/**
- * The DB Datasource
- */
-datasource db {
-  provider = "postgresql"
 }
 
 /**
