@@ -24,7 +24,6 @@
     "bcryptjs": "^3.0.2",
     "bootstrap": "^5.3.3",
     "bootstrap-icons": "^1.13.1",
-    "dotenv": "^17.2.3",
     "lucide-react": "^0.546.0",
     "multiselect-react-dropdown": "^2.0.25",
     "next": "15.5.9",
