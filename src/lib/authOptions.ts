@@ -4,14 +4,16 @@ import { type NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import prisma from '@/lib/prisma';
 
-// Get secret with fallback for development and build time
-// During build, Next.js may not have access to env vars, so we provide a fallback
 const secret =
   process.env.NEXTAUTH_SECRET ??
   process.env.AUTH_SECRET ??
-  // Always provide a fallback to prevent build-time errors
-  // In production runtime, this should be set via environment variables
-  'dev-nextauth-secret-fallback-for-build';
+  (process.env.NODE_ENV === 'production' ? undefined : 'dev-nextauth-secret');
+
+if (!secret) {
+  throw new Error(
+    'NEXTAUTH_SECRET (or AUTH_SECRET) is required. Set it in your environment.',
+  );
+}
 
 const authOptions: NextAuthOptions = {
   session: {
