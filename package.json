@@ -18,7 +18,7 @@
     "@aws-sdk/s3-presigned-post": "^3.906.0",
     "@hookform/resolvers": "^3.6.0",
     "@ngneat/falso": "^7.2.0",
-    "@prisma/client": "^7.1.0",
+    "@prisma/client": "^6.16.3",
     "@vis.gl/react-google-maps": "^1.5.5",
     "bcryptjs": "^3.0.2",
     "bootstrap": "^5.3.3",
@@ -59,7 +59,7 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "prettier": "^3.7.4",
     "prettier-eslint": "^16.3.0",
-    "prisma": "^7.1.0",
+    "prisma": "^6.18.0",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.48.1"
   },
