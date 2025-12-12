@@ -1,7 +1,7 @@
 'use server';
 
 import { ProductCategory } from '@prisma/client';
-import { prisma } from './prisma';
+import prisma from './prisma';
 
 export interface CreateCatalogItemData {
   name: string;
