@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/prisma';
+import prisma from '@/lib/prisma';
 import RecipesPage from '@/components/Recipe';
 import type { Recipe as UiRecipe } from '@/components/Recipe';
 import {

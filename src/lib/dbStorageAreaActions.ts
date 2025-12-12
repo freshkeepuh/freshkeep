@@ -1,7 +1,7 @@
 'use server';
 
 import { StorageType } from '@prisma/client';
-import { prisma } from '@/lib/prisma';
+import prisma from '@/lib/prisma';
 import {
   productInstanceSelect,
   productsSelect,

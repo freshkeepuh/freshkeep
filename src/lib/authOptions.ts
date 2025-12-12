@@ -2,7 +2,18 @@
 import { compare } from 'bcryptjs';
 import { type NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-import { prisma } from '@/lib/prisma';
+import prisma from '@/lib/prisma';
+
+const secret =
+  process.env.NEXTAUTH_SECRET ??
+  process.env.AUTH_SECRET ??
+  (process.env.NODE_ENV === 'production' ? undefined : 'dev-nextauth-secret');
+
+if (!secret) {
+  throw new Error(
+    'NEXTAUTH_SECRET (or AUTH_SECRET) is required. Set it in your environment.',
+  );
+}
 
 const authOptions: NextAuthOptions = {
   session: {
@@ -82,7 +93,7 @@ const authOptions: NextAuthOptions = {
       return token;
     },
   },
-  secret: process.env.NEXTAUTH_SECRET,
+  secret,
 };
 
 export default authOptions;

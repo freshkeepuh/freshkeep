@@ -5,7 +5,7 @@
 'use server';
 
 import { RecipeDiet, RecipeDifficulty } from '@prisma/client';
-import { prisma } from '@/lib/prisma';
+import prisma from '@/lib/prisma';
 import { recipeSelect } from './dbActionTypes';
 
 /**

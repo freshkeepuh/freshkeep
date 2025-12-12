@@ -2,7 +2,7 @@ import path from 'node:path';
 import fs from 'node:fs/promises';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { prisma } from '@/lib/prisma';
+import prisma from '@/lib/prisma';
 import type { RecipeDifficulty, RecipeDiet } from '@prisma/client';
 import AddRecipeForm from '@/components/AddRecipeForm';
 import styles from './recipesPage.module.css';
